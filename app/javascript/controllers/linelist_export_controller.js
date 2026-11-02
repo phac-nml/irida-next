@@ -27,6 +27,7 @@ import { closeDialog } from "utilities/dialog";
 
 let activeExports = 0;
 let beforeUnloadHandler = null;
+const BASENAME_PATTERN = /^[\w-]*$/;
 
 function bindExportBeforeUnload() {
   if (beforeUnloadHandler) return;
@@ -66,7 +67,14 @@ function stopExportBeforeUnloadGuard() {
 }
 
 export default class extends Controller {
-  static targets = ["basename", "sampleStatus", "progressTemplate"];
+  static targets = [
+    "basename",
+    "basenameError",
+    "basenameField",
+    "formErrorSummary",
+    "sampleStatus",
+    "progressTemplate",
+  ];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
@@ -109,6 +117,14 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
+    basenameInvalidMessage: {
+      type: String,
+      default: "File basename is invalid",
+    },
+    basenameTooLongMessage: {
+      type: String,
+      default: "File basename is too long",
+    },
   };
 
   connect() {
@@ -130,10 +146,113 @@ export default class extends Controller {
   }
 
   submit(event) {
+    if (!this.validateFormInputs(event)) {
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
     closeDialog(this.element, this.application);
     this.startExport();
+  }
+
+  validateFormInputs(event) {
+    const basename = this.hasBasenameTarget ? this.basenameTarget.value : "";
+    const errorMessages = [];
+    if (basename.length > 100) {
+      errorMessages.push(this.basenameTooLongMessageValue);
+    }
+    if (!BASENAME_PATTERN.test(basename)) {
+      errorMessages.push(this.basenameInvalidMessageValue);
+    }
+
+    if (this.hasBasenameTarget && errorMessages.length > 0) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showBasenameErrorState(errorMessages);
+      this.showFormErrorSummary(errorMessages);
+      this.basenameTarget.reportValidity();
+      return false;
+    }
+
+    this.clearBasenameErrorState();
+    this.hideFormErrorSummary();
+    return true;
+  }
+
+  showBasenameErrorState(errorMessages) {
+    if (this.hasBasenameFieldTarget) {
+      this.basenameFieldTarget.classList.add("invalid");
+    }
+    if (this.hasBasenameTarget) {
+      this.basenameTarget.setAttribute("aria-invalid", "true");
+      this.addBasenameErrorDescription();
+    }
+    if (this.hasBasenameErrorTarget) {
+      this.basenameErrorTarget.classList.remove("hidden");
+      this.basenameErrorTarget.querySelector(".grow").textContent =
+        errorMessages.join("\n");
+    }
+  }
+
+  clearBasenameErrorState() {
+    if (this.hasBasenameFieldTarget) {
+      this.basenameFieldTarget.classList.remove("invalid");
+    }
+    if (this.hasBasenameTarget) {
+      this.basenameTarget.removeAttribute("aria-invalid");
+      this.removeBasenameErrorDescription();
+    }
+    if (this.hasBasenameErrorTarget) {
+      this.basenameErrorTarget.classList.add("hidden");
+      this.basenameErrorTarget.querySelector(".grow").textContent = "";
+    }
+  }
+
+  addBasenameErrorDescription() {
+    if (!this.hasBasenameTarget || !this.hasBasenameErrorTarget) return;
+
+    const describedBy = new Set(
+      (this.basenameTarget.getAttribute("aria-describedby") || "")
+        .split(" ")
+        .filter(Boolean),
+    );
+    describedBy.add(this.basenameErrorTarget.id);
+    this.basenameTarget.setAttribute(
+      "aria-describedby",
+      [...describedBy].join(" "),
+    );
+  }
+
+  removeBasenameErrorDescription() {
+    if (!this.hasBasenameTarget || !this.hasBasenameErrorTarget) return;
+
+    const describedBy = (
+      this.basenameTarget.getAttribute("aria-describedby") || ""
+    )
+      .split(" ")
+      .filter((id) => id && id !== this.basenameErrorTarget.id);
+    this.basenameTarget.setAttribute("aria-describedby", describedBy.join(" "));
+  }
+
+  showFormErrorSummary(errorMessages) {
+    if (!this.hasFormErrorSummaryTarget) return;
+
+    this.formErrorSummaryTarget.querySelectorAll("a").forEach((link, index) => {
+      link.textContent = errorMessages[index] || "";
+      link.closest("li")?.classList.toggle("hidden", !errorMessages[index]);
+    });
+    this.formErrorSummaryTarget.classList.remove("hidden");
+    this.formErrorSummaryTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  hideFormErrorSummary() {
+    if (!this.hasFormErrorSummaryTarget) return;
+
+    this.formErrorSummaryTarget.classList.add("hidden");
   }
 
   startExport() {
