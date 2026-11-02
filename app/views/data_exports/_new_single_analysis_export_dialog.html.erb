@@ -79,9 +79,13 @@
         </div>
       </div>
 
-      <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
+      <%= turbo_frame_tag("data-export-form-error-summary") %>
+
+      <%= form_for(@data_export || DataExport.new, as: :data_export, url: data_exports_path, method: :post, html: { novalidate: true }) do |form| %>
         <div class="grid gap-4">
-          <%= render partial: "name_and_email", locals: { form: } %>
+          <%= turbo_frame_tag("data-export-name-and-email") do %>
+            <%= render partial: "name_and_email", locals: { form: } %>
+          <% end %>
 
           <div>
             <%= form.hidden_field :export_type, value: "analysis" %>

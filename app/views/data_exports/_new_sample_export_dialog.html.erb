@@ -81,6 +81,8 @@
           </div>
         </div>
 
+        <%= turbo_frame_tag("data-export-form-error-summary") %>
+
         <%= render partial: "shared/form/required_field_legend" %>
 
         <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100"><%= t(".select_formats") %></h2>
@@ -117,7 +119,8 @@
           ) %>
         <% end %>
 
-        <%= form_for(:data_export, url: data_exports_path, method: :post,
+        <%= form_for(@data_export || DataExport.new, as: :data_export, url: data_exports_path, method: :post,
+              html: { novalidate: true },
               data: {
                 controller: "form--json-submission",
                 "form--json-submission-selection-outlet": '#samples-table',
@@ -127,7 +130,9 @@
               }
             ) do |form| %>
           <div class="grid gap-4">
-            <%= render partial: "name_and_email", locals: { form: } %>
+            <%= turbo_frame_tag("data-export-name-and-email") do %>
+              <%= render partial: "name_and_email", locals: { form: } %>
+            <% end %>
 
             <div>
               <%= form.hidden_field :export_type, value: "sample" %>
