@@ -46,7 +46,7 @@ function markup({
           data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/"
           data-linelist-export-form-error-summary-title-one-value="There is 1 field with problems preventing submission"
           data-linelist-export-form-error-summary-title-other-value="There are %{count} fields with problems preventing submission"
-          data-linelist-export-basename-invalid-message-value="Basename can only contain letters, numbers, spaces, '-', '.', and '_'"
+          data-linelist-export-basename-invalid-message-value="Basename can only contain letters, numbers, '-', and '_'"
           data-linelist-export-basename-too-long-message-value="File basename is too long (maximum is 100 characters)">
       ${withSampleStatus ? '<span data-linelist-export-target="sampleStatus"></span>' : ""}
       ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden">${withFormErrorSummaryHeading ? "<h2></h2>" : ""}<ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
@@ -400,13 +400,11 @@ describe("linelist export controller", () => {
     );
     expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
     expect(controller.basenameErrorTarget.textContent).toContain(
-      `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
+      `Basename can only contain letters, numbers, '-', and '_'`,
     );
     expect(
       controller.formErrorSummaryTarget.querySelector("a").textContent,
-    ).toBe(
-      `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
-    );
+    ).toBe(`Basename can only contain letters, numbers, '-', and '_'`);
     expect(
       controller.formErrorSummaryTarget.querySelector("h2").textContent,
     ).toBe("There is 1 field with problems preventing submission");
@@ -462,7 +460,7 @@ describe("linelist export controller", () => {
       "File basename is too long (maximum is 100 characters)",
     );
     expect(controller.basenameErrorTarget.textContent).toContain(
-      "Basename can only contain letters, numbers, spaces, '-', '.', and '_'",
+      "Basename can only contain letters, numbers, '-', and '_'",
     );
     const summaryLinks =
       controller.formErrorSummaryTarget.querySelectorAll("a");
@@ -471,7 +469,7 @@ describe("linelist export controller", () => {
       "File basename is too long (maximum is 100 characters)",
     );
     expect(summaryLinks[1].textContent).toBe(
-      `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
+      `Basename can only contain letters, numbers, '-', and '_'`,
     );
     expect(
       controller.formErrorSummaryTarget.querySelector("h2").textContent,
