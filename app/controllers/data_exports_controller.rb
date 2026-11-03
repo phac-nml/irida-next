@@ -35,6 +35,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     authorize! @namespace.project, to: :export_data? if @namespace&.project_namespace?
     authorize! @namespace, to: :export_data? if @namespace&.group_namespace?
 
+    @data_export = DataExport.new
+
     send(export_dialog_render_method)
   end
 
@@ -189,12 +191,14 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     when 'analysis'
       analysis_locals
     when 'sample'
-      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
+      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort,
+        data_export: @data_export, selected: false }
     when 'linelist'
       templates = metadata_templates_ancestral.map do |template|
         { id: template.id, name: template.name, fields: template.fields }
       end
-      { open: true, namespace_id: params[:namespace_id], namespace: @namespace, templates: templates }
+      { open: true, namespace_id: params[:namespace_id], namespace: @namespace, templates: templates,
+        data_export: @data_export, selected: false }
     else
       raise ActionController::BadRequest, "Unsupported data export type: #{params[:export_type]}"
     end
@@ -203,7 +207,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def analysis_locals
     local = { open: true,
               analysis_type: params['analysis_type'],
-              namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil }
+              namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil,
+              data_export: @data_export,
+              selected: false }
     if params[:single_workflow]
       local[:workflow_execution] =
         WorkflowExecution.find(params.expect(:workflow_execution_id))
