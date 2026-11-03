@@ -58,7 +58,7 @@ function markup({
       ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden">${withFormErrorSummaryHeading ? "<h2></h2>" : ""}<ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
       <input name="data_export[export_parameters][namespace_id]" value="7">
       <input type="radio" name="data_export[export_parameters][linelist_format]" value="csv" checked>
-      ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? `<span id="basename_error" data-linelist-export-target="basenameError" class="hidden">${withBasenameErrorMessage ? '<span class="grow"></span>' : ""}</span>` : ""}</div>` : ""}
+      ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename" data-linelist-export-target="basenameLabel">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? `<span id="basename_error" data-linelist-export-target="basenameError" class="hidden">${withBasenameErrorMessage ? '<span class="grow"></span>' : ""}</span>` : ""}</div>` : ""}
       <ul id="selected-list"><li><span>x</span><span>age</span></li></ul>
       ${PROGRESS_TEMPLATE}
     </div>`;
@@ -377,6 +377,12 @@ describe("linelist export controller", () => {
       "basename_hint",
     );
     expect(controller.basenameErrorTarget.classList).toContain("hidden");
+    expect(controller.basenameTarget.parentElement.classList).not.toContain(
+      "field_with_errors",
+    );
+    expect(
+      controller.basenameLabelTarget.parentElement.classList,
+    ).not.toContain("field_with_errors");
   });
 
   it("blocks submission when the basename is invalid", async () => {
@@ -407,6 +413,12 @@ describe("linelist export controller", () => {
     expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
     expect(controller.basenameErrorTarget.textContent).toContain(
       BASENAME_INVALID_MESSAGE,
+    );
+    expect(controller.basenameTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(controller.basenameLabelTarget.parentElement.classList).toContain(
+      "field_with_errors",
     );
     expect(
       controller.formErrorSummaryTarget.querySelector("a").textContent,
@@ -445,6 +457,63 @@ describe("linelist export controller", () => {
     expect(
       controller.formErrorSummaryTarget.querySelector("h2").textContent,
     ).toBe("There is 1 field with problems preventing submission");
+  });
+
+  it("unwraps the field_with_errors wrapper once the basename becomes valid", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "invalid basename" });
+    vi.spyOn(controller, "startExport").mockImplementation(() => {});
+    vi.spyOn(controller.basenameTarget, "reportValidity").mockImplementation(
+      () => {},
+    );
+
+    controller.submit(new Event("submit", { cancelable: true }));
+    expect(controller.basenameTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(controller.basenameLabelTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+
+    controller.basenameTarget.value = "valid-basename";
+    controller.submit(new Event("submit", { cancelable: true }));
+
+    expect(controller.basenameTarget.parentElement.classList).not.toContain(
+      "field_with_errors",
+    );
+    expect(
+      controller.basenameLabelTarget.parentElement.classList,
+    ).not.toContain("field_with_errors");
+    expect(controller.basenameTarget.parentElement).toBe(
+      controller.basenameFieldTarget,
+    );
+    expect(controller.basenameLabelTarget.parentElement).toBe(
+      controller.basenameFieldTarget,
+    );
+  });
+
+  it("does not re-wrap an already wrapped field_with_errors element on repeated invalid submissions", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "invalid basename" });
+    vi.spyOn(controller, "startExport").mockImplementation(() => {});
+    vi.spyOn(controller.basenameTarget, "reportValidity").mockImplementation(
+      () => {},
+    );
+
+    controller.submit(new Event("submit", { cancelable: true }));
+    const inputWrapper = controller.basenameTarget.parentElement;
+    const labelWrapper = controller.basenameLabelTarget.parentElement;
+
+    controller.submit(new Event("submit", { cancelable: true }));
+
+    expect(controller.basenameTarget.parentElement).toBe(inputWrapper);
+    expect(controller.basenameLabelTarget.parentElement).toBe(labelWrapper);
+    expect(controller.basenameTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(controller.basenameLabelTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
   });
 
   it("displays both errors when the basename violates both constraints", async () => {

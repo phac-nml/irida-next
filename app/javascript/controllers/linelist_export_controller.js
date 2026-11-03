@@ -72,6 +72,7 @@ export default class extends Controller {
     "basename",
     "basenameError",
     "basenameField",
+    "basenameLabel",
     "formErrorSummary",
     "sampleStatus",
     "progressTemplate",
@@ -195,6 +196,10 @@ export default class extends Controller {
     }
     if (this.hasBasenameTarget) {
       this.basenameTarget.setAttribute("aria-invalid", "true");
+      this.wrapWithFieldError(this.basenameTarget);
+    }
+    if (this.hasBasenameLabelTarget) {
+      this.wrapWithFieldError(this.basenameLabelTarget);
     }
     if (this.hasBasenameErrorTarget) {
       this.basenameErrorTarget.classList.remove("hidden");
@@ -208,10 +213,35 @@ export default class extends Controller {
     }
     if (this.hasBasenameTarget) {
       this.basenameTarget.removeAttribute("aria-invalid");
+      this.unwrapFromFieldError(this.basenameTarget);
+    }
+    if (this.hasBasenameLabelTarget) {
+      this.unwrapFromFieldError(this.basenameLabelTarget);
     }
     if (this.hasBasenameErrorTarget) {
       this.basenameErrorTarget.classList.add("hidden");
       this.setBasenameErrorMessage("");
+    }
+  }
+
+  // Mirrors Rails' default field_error_proc, which wraps each erroring form
+  // tag (e.g. label and input) in its own `div.field_with_errors` so it
+  // picks up the same error styling as server-rendered forms.
+  wrapWithFieldError(element) {
+    if (element.parentElement?.classList.contains("field_with_errors")) {
+      return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("field_with_errors");
+    element.replaceWith(wrapper);
+    wrapper.appendChild(element);
+  }
+
+  unwrapFromFieldError(element) {
+    const wrapper = element.parentElement;
+    if (wrapper?.classList.contains("field_with_errors")) {
+      wrapper.replaceWith(element);
     }
   }
 

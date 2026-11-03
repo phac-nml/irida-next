@@ -138,7 +138,9 @@
 
         <% if Flipper.enabled?(:data_export_custom_basename, Current.user) %>
           <div class="form-field mt-2" data-linelist-export-target="basenameField">
-            <%= form.label :basename, t(:"data_exports.new_linelist_export_dialog.basename_label") %>
+            <%= form.label :basename,
+                    t(:"data_exports.new_linelist_export_dialog.basename_label"),
+                    data: { "linelist-export-target": "basenameLabel" } %>
 
             <%= form.text_field :basename,
                     title: t(:"data_exports.new_linelist_export_dialog.basename_help"),
