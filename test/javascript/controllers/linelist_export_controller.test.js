@@ -31,10 +31,16 @@ const PROGRESS_TEMPLATE = `
     </div>
   </template>`;
 
+const BASENAME_INVALID_MESSAGE =
+  "Basename can only contain letters, numbers, '-', and '_'";
+const BASENAME_TOO_LONG_MESSAGE =
+  "File basename is too long (maximum is 100 characters)";
+
 function markup({
   basename = "",
   withBasename = true,
   withBasenameErrorTargets = true,
+  withBasenameErrorMessage = true,
   withFormErrorSummary = true,
   withFormErrorSummaryHeading = true,
   withSampleStatus = true,
@@ -46,13 +52,13 @@ function markup({
           data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/"
           data-linelist-export-form-error-summary-title-one-value="There is 1 field with problems preventing submission"
           data-linelist-export-form-error-summary-title-other-value="There are %{count} fields with problems preventing submission"
-          data-linelist-export-basename-invalid-message-value="Basename can only contain letters, numbers, '-', and '_'"
-          data-linelist-export-basename-too-long-message-value="File basename is too long (maximum is 100 characters)">
+          data-linelist-export-basename-invalid-message-value="${BASENAME_INVALID_MESSAGE}"
+          data-linelist-export-basename-too-long-message-value="${BASENAME_TOO_LONG_MESSAGE}">
       ${withSampleStatus ? '<span data-linelist-export-target="sampleStatus"></span>' : ""}
       ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden">${withFormErrorSummaryHeading ? "<h2></h2>" : ""}<ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
       <input name="data_export[export_parameters][namespace_id]" value="7">
       <input type="radio" name="data_export[export_parameters][linelist_format]" value="csv" checked>
-          ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? '<span id="basename_error" data-linelist-export-target="basenameError" class="hidden"><span class="grow"></span></span>' : ""}</div>` : ""}
+      ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? `<span id="basename_error" data-linelist-export-target="basenameError" class="hidden">${withBasenameErrorMessage ? '<span class="grow"></span>' : ""}</span>` : ""}</div>` : ""}
       <ul id="selected-list"><li><span>x</span><span>age</span></li></ul>
       ${PROGRESS_TEMPLATE}
     </div>`;
@@ -400,11 +406,11 @@ describe("linelist export controller", () => {
     );
     expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
     expect(controller.basenameErrorTarget.textContent).toContain(
-      `Basename can only contain letters, numbers, '-', and '_'`,
+      BASENAME_INVALID_MESSAGE,
     );
     expect(
       controller.formErrorSummaryTarget.querySelector("a").textContent,
-    ).toBe(`Basename can only contain letters, numbers, '-', and '_'`);
+    ).toBe(BASENAME_INVALID_MESSAGE);
     expect(
       controller.formErrorSummaryTarget.querySelector("h2").textContent,
     ).toBe("There is 1 field with problems preventing submission");
@@ -431,11 +437,11 @@ describe("linelist export controller", () => {
     expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
     expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
     expect(controller.basenameErrorTarget.textContent).toContain(
-      "File basename is too long (maximum is 100 characters)",
+      BASENAME_TOO_LONG_MESSAGE,
     );
     expect(
       controller.formErrorSummaryTarget.querySelector("a").textContent,
-    ).toBe("File basename is too long (maximum is 100 characters)");
+    ).toBe(BASENAME_TOO_LONG_MESSAGE);
     expect(
       controller.formErrorSummaryTarget.querySelector("h2").textContent,
     ).toBe("There is 1 field with problems preventing submission");
@@ -457,24 +463,30 @@ describe("linelist export controller", () => {
     expect(event.defaultPrevented).toBe(true);
     expect(start).not.toHaveBeenCalled();
     expect(controller.basenameErrorTarget.textContent).toContain(
-      "File basename is too long (maximum is 100 characters)",
+      BASENAME_TOO_LONG_MESSAGE,
     );
     expect(controller.basenameErrorTarget.textContent).toContain(
-      "Basename can only contain letters, numbers, '-', and '_'",
+      BASENAME_INVALID_MESSAGE,
     );
     const summaryLinks =
       controller.formErrorSummaryTarget.querySelectorAll("a");
     expect(summaryLinks).toHaveLength(2);
-    expect(summaryLinks[0].textContent).toBe(
-      "File basename is too long (maximum is 100 characters)",
-    );
-    expect(summaryLinks[1].textContent).toBe(
-      `Basename can only contain letters, numbers, '-', and '_'`,
-    );
+    expect(summaryLinks[0].textContent).toBe(BASENAME_TOO_LONG_MESSAGE);
+    expect(summaryLinks[1].textContent).toBe(BASENAME_INVALID_MESSAGE);
     expect(
       controller.formErrorSummaryTarget.querySelector("h2").textContent,
     ).toBe("There are 2 fields with problems preventing submission");
     expect(reportValidity).toHaveBeenCalled();
+  });
+
+  it("renders a basename error when the message child is absent", async () => {
+    const controller = await mount({ withBasenameErrorMessage: false });
+
+    controller.showBasenameErrorState(["Basename is invalid"]);
+
+    expect(controller.basenameErrorTarget.textContent).toBe(
+      "Basename is invalid",
+    );
   });
 
   it("updates summary links without requiring a heading", async () => {

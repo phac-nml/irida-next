@@ -27,6 +27,7 @@ import { closeDialog } from "utilities/dialog";
 
 let activeExports = 0;
 let beforeUnloadHandler = null;
+const BASENAME_MAX_LENGTH = 100;
 const BASENAME_PATTERN = /^[\w-]*$/;
 
 function bindExportBeforeUnload() {
@@ -167,7 +168,7 @@ export default class extends Controller {
   validateFormInputs(event) {
     const basename = this.hasBasenameTarget ? this.basenameTarget.value : "";
     const errorMessages = [];
-    if (basename.length > 100) {
+    if (basename.length > BASENAME_MAX_LENGTH) {
       errorMessages.push(this.basenameTooLongMessageValue);
     }
     if (!BASENAME_PATTERN.test(basename)) {
@@ -197,8 +198,7 @@ export default class extends Controller {
     }
     if (this.hasBasenameErrorTarget) {
       this.basenameErrorTarget.classList.remove("hidden");
-      this.basenameErrorTarget.querySelector(".grow").textContent =
-        errorMessages.join("\n");
+      this.setBasenameErrorMessage(errorMessages.join("\n"));
     }
   }
 
@@ -211,7 +211,16 @@ export default class extends Controller {
     }
     if (this.hasBasenameErrorTarget) {
       this.basenameErrorTarget.classList.add("hidden");
-      this.basenameErrorTarget.querySelector(".grow").textContent = "";
+      this.setBasenameErrorMessage("");
+    }
+  }
+
+  setBasenameErrorMessage(message) {
+    const messageElement = this.basenameErrorTarget.querySelector(".grow");
+    if (messageElement) {
+      messageElement.textContent = message;
+    } else {
+      this.basenameErrorTarget.textContent = message;
     }
   }
 
@@ -261,7 +270,6 @@ export default class extends Controller {
     }
 
     const filename = `${this.getFilename()}.${format}`;
-    const totalCount = selectedCount;
     this.clearProgressWindowDismissTimeout();
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
@@ -270,13 +278,13 @@ export default class extends Controller {
     if (this.hasSampleStatusTarget) {
       this.sampleStatusTarget.textContent = t(
         this.preparingExportMessageValue,
-        { count: totalCount },
+        { count: selectedCount },
       );
     }
 
     try {
       this.showProgressWindow(
-        t(this.preparingRowsMessageValue, { count: totalCount }),
+        t(this.preparingRowsMessageValue, { count: selectedCount }),
       );
 
       startExportBeforeUnloadGuard();
@@ -290,7 +298,7 @@ export default class extends Controller {
         sample_graphql_id_prefix: sampleGraphqlIdPrefix,
         format,
         filename,
-        total_count: totalCount,
+        total_count: selectedCount,
       });
     } catch (error) {
       this.updateProgress(
@@ -392,8 +400,9 @@ export default class extends Controller {
   }
 
   getFilename() {
-    if (this.hasBasenameTarget && this.basenameTarget.value)
+    if (this.hasBasenameTarget && this.basenameTarget.value) {
       return this.basenameTarget.value;
+    }
 
     return `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}`;
   }
