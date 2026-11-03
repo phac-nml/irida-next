@@ -36,6 +36,7 @@ function markup({
   withBasename = true,
   withBasenameErrorTargets = true,
   withFormErrorSummary = true,
+  withFormErrorSummaryHeading = true,
   withSampleStatus = true,
 } = {}) {
   return `
@@ -43,10 +44,12 @@ function markup({
          data-linelist-export-worker-url-value="worker.js"
          data-linelist-export-graphql-url-value="/graphql"
           data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/"
+          data-linelist-export-form-error-summary-title-one-value="There is 1 field with problems preventing submission"
+          data-linelist-export-form-error-summary-title-other-value="There are %{count} fields with problems preventing submission"
           data-linelist-export-basename-invalid-message-value="Basename can only contain letters, numbers, spaces, '-', '.', and '_'"
           data-linelist-export-basename-too-long-message-value="File basename is too long (maximum is 100 characters)">
       ${withSampleStatus ? '<span data-linelist-export-target="sampleStatus"></span>' : ""}
-      ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden"><ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
+      ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden">${withFormErrorSummaryHeading ? "<h2></h2>" : ""}<ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
       <input name="data_export[export_parameters][namespace_id]" value="7">
       <input type="radio" name="data_export[export_parameters][linelist_format]" value="csv" checked>
           ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? '<span id="basename_error" data-linelist-export-target="basenameError" class="hidden"><span class="grow"></span></span>' : ""}</div>` : ""}
@@ -404,6 +407,9 @@ describe("linelist export controller", () => {
     ).toBe(
       `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
     );
+    expect(
+      controller.formErrorSummaryTarget.querySelector("h2").textContent,
+    ).toBe("There is 1 field with problems preventing submission");
   });
 
   it("blocks submission when the basename is over 100 characters", async () => {
@@ -432,6 +438,9 @@ describe("linelist export controller", () => {
     expect(
       controller.formErrorSummaryTarget.querySelector("a").textContent,
     ).toBe("File basename is too long (maximum is 100 characters)");
+    expect(
+      controller.formErrorSummaryTarget.querySelector("h2").textContent,
+    ).toBe("There is 1 field with problems preventing submission");
   });
 
   it("displays both errors when the basename violates both constraints", async () => {
@@ -464,7 +473,21 @@ describe("linelist export controller", () => {
     expect(summaryLinks[1].textContent).toBe(
       `Basename can only contain letters, numbers, spaces, '-', '.', and '_'`,
     );
+    expect(
+      controller.formErrorSummaryTarget.querySelector("h2").textContent,
+    ).toBe("There are 2 fields with problems preventing submission");
     expect(reportValidity).toHaveBeenCalled();
+  });
+
+  it("updates summary links without requiring a heading", async () => {
+    const controller = await mount({ withFormErrorSummaryHeading: false });
+
+    controller.showFormErrorSummary(["Basename is invalid"]);
+
+    expect(controller.formErrorSummaryTarget.classList).not.toContain("hidden");
+    expect(
+      controller.formErrorSummaryTarget.querySelector("a").textContent,
+    ).toBe("Basename is invalid");
   });
 
   it("guards against navigation while an export is in flight", async () => {
