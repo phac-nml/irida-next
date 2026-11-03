@@ -172,7 +172,7 @@ fr:
         data_export:
           attributes:
             basename:
-              invalid: ne peut contenir que des lettres, des chiffres, des espaces, '-', '.' et '_'
+              invalid: ne peut contenir que des lettres, des chiffres, '-', et '_'
               too_long: est trop long (maximum %{count} caractères)
             export_parameters:
               invalid_analysis_type: Type d’analyse non valide
