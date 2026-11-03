@@ -31,10 +31,9 @@
       <li class="p-2 whitespace-nowrap" data-breadcrumb-target="crumb">
         <% if index == @links.length - 1 %>
           <!-- Current page (last item) -->
-          <span <%# herb:disable html-no-title-attribute %>
+          <span
             class="block truncate py-3 text-sm font-medium text-slate-900 focus-visible:-outline-offset-3 dark:text-white"
             aria-current="page"
-            title="<%= link[:name] %>"
             tabindex="0"
             aria-describedby="<%= @tooltip_id %>"
             data-pathogen--tooltip-target="trigger"
