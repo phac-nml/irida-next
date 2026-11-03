@@ -92,6 +92,8 @@ en:
       attachment:
         file: File
         metadata: Metadata
+      data_export:
+        basename: File basename
       group:
         description: Description
         name: Group name
