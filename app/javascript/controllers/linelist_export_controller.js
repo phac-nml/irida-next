@@ -117,6 +117,14 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
+    formErrorSummaryTitleOne: {
+      type: String,
+      default: "There is 1 field with problems preventing submission",
+    },
+    formErrorSummaryTitleOther: {
+      type: String,
+      default: "There are %{count} fields with problems preventing submission",
+    },
     basenameInvalidMessage: {
       type: String,
       default: "File basename is invalid",
@@ -209,6 +217,17 @@ export default class extends Controller {
 
   showFormErrorSummary(errorMessages) {
     if (!this.hasFormErrorSummaryTarget) return;
+
+    const title = this.formErrorSummaryTarget.querySelector("h2");
+    if (title) {
+      title.textContent =
+        errorMessages.length === 1
+          ? this.formErrorSummaryTitleOneValue
+          : this.formErrorSummaryTitleOtherValue.replace(
+              "%{count}",
+              errorMessages.length.toString(),
+            );
+    }
 
     this.formErrorSummaryTarget.querySelectorAll("a").forEach((link, index) => {
       link.textContent = errorMessages[index] || "";
