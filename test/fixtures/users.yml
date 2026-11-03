@@ -88,6 +88,14 @@ alph_abet:
   first_name: Alph
   last_name: Abet
 
+entra_doe:
+  <<: *DEFAULTS
+  email: entra.doe@localhost
+  first_name: Entra
+  last_name: Doe
+  provider: entra_id
+  uid: tenant-1234user-oid
+
 <% 25.times do |n| %>
 user<%= (n) %>:
   <<: *DEFAULTS

@@ -32,11 +32,11 @@ test:
   # entra_id_icon:
 
 # production:
-  # omniauth_providers: []
-  # saml_text:
-  # saml_icon:
-  # entra_id_text:
-  # entra_id_icon:
+# omniauth_providers: []
+# saml_text:
+# saml_icon:
+# entra_id_text:
+# entra_id_icon:
 ```
 
 Pour votre environnement de production, décommentez et modifiez les lignes `production` pertinentes.
@@ -74,7 +74,18 @@ entra_id:
   client_id: VOTRE_ID_CLIENT
   client_secret: VOTRE_SECRET_CLIENT
   tenant_id: VOTRE_ID_LOCATAIRE
+  # Facultatif. Remplace l'audience attendue (revendication 'aud') pour les jetons
+  # porteurs de l'API (voir « Authentification avec les jetons Entra ID » dans la
+  # documentation GraphQL). Par défaut, il s'agit du client_id et de sa forme
+  # URI d'ID d'application (api://VOTRE_ID_CLIENT).
+  # api_audience: VOTRE_URI_ID_APPLICATION_API
 ```
+
+Pour permettre aux intégrations d'authentifier les requêtes de l'API GraphQL en tant qu'utilisateur Entra ID connecté (au lieu
+d'un jeton d'accès personnel partagé), l'inscription d'application doit exposer une permission déléguée (portée) `access_as_user`,
+en plus des portées `api`/`read_api` utilisées pour contrôler l'accès aux requêtes/mutations. Voir
+[Authentification avec les jetons Entra ID](../extend/graphql.md#authentication-with-entra-id-bearer-tokens) pour plus de
+détails.
 
 #### SAML
 
