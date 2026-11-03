@@ -92,6 +92,8 @@ fr:
       attachment:
         file: Fichier
         metadata: Métadonnées
+      data_export:
+        basename: Nom de base du fichier
       group:
         description: Description
         name: Nom du groupe
