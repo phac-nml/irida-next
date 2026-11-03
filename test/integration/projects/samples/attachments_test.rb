@@ -780,6 +780,31 @@ module Projects
         end
       end
 
+      test 'advanced search renders enum dropdowns for attachment metadata fields' do
+        sign_in users(:john_doe)
+        Flipper.enable(:attachments_advanced_search)
+
+        {
+          'metadata.type' => %w[assembly pe illumina_pe],
+          'metadata.format' => Attachment::FORMAT_REGEX.keys,
+          'metadata.compression' => %w[none gzip]
+        }.each do |field, values|
+          get namespace_project_sample_path(@group, @project, @sample1, tab: 'files'),
+              params: advanced_search_params(
+                [[{ field:, operator: '=', value: values.first }]]
+              )
+
+          assert_response :success
+          assert_select "select[name$='[value]']" do
+            values.each do |value|
+              assert_select "option[value='#{value}']", count: 1
+            end
+          end
+        end
+      ensure
+        Flipper.disable(:attachments_advanced_search)
+      end
+
       test 'advanced search filters sample attachments by filename' do
         sign_in users(:john_doe)
         attachment1 = attachments(:attachment1)
