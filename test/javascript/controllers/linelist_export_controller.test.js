@@ -393,7 +393,7 @@ describe("linelist export controller", () => {
     expect(controller.basenameFieldTarget.classList).toContain("invalid");
     expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
     expect(controller.basenameTarget.getAttribute("aria-describedby")).toBe(
-      "basename_hint basename_error",
+      "basename_hint",
     );
     expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
     expect(controller.basenameErrorTarget.textContent).toContain(

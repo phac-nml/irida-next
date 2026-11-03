@@ -143,9 +143,10 @@
                     data: {
                       "linelist-export-target": "basename",
                     },
-                    aria: {
-                      describedby: form.field_id(:basename, "hint"),
-                    },
+                    describedby: [
+                        form.field_id(:basename, "error"),
+                        form.field_id(:basename, "hint"),
+                      ].join(" "),
                     class: "form-control" %>
 
             <%= render Viral::Form::HelpTextComponent.new(

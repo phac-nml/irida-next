@@ -186,7 +186,6 @@ export default class extends Controller {
     }
     if (this.hasBasenameTarget) {
       this.basenameTarget.setAttribute("aria-invalid", "true");
-      this.addBasenameErrorDescription();
     }
     if (this.hasBasenameErrorTarget) {
       this.basenameErrorTarget.classList.remove("hidden");
@@ -201,38 +200,11 @@ export default class extends Controller {
     }
     if (this.hasBasenameTarget) {
       this.basenameTarget.removeAttribute("aria-invalid");
-      this.removeBasenameErrorDescription();
     }
     if (this.hasBasenameErrorTarget) {
       this.basenameErrorTarget.classList.add("hidden");
       this.basenameErrorTarget.querySelector(".grow").textContent = "";
     }
-  }
-
-  addBasenameErrorDescription() {
-    if (!this.hasBasenameTarget || !this.hasBasenameErrorTarget) return;
-
-    const describedBy = new Set(
-      (this.basenameTarget.getAttribute("aria-describedby") || "")
-        .split(" ")
-        .filter(Boolean),
-    );
-    describedBy.add(this.basenameErrorTarget.id);
-    this.basenameTarget.setAttribute(
-      "aria-describedby",
-      [...describedBy].join(" "),
-    );
-  }
-
-  removeBasenameErrorDescription() {
-    if (!this.hasBasenameTarget || !this.hasBasenameErrorTarget) return;
-
-    const describedBy = (
-      this.basenameTarget.getAttribute("aria-describedby") || ""
-    )
-      .split(" ")
-      .filter((id) => id && id !== this.basenameErrorTarget.id);
-    this.basenameTarget.setAttribute("aria-describedby", describedBy.join(" "));
   }
 
   showFormErrorSummary(errorMessages) {
