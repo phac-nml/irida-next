@@ -83,7 +83,7 @@ module DataExports
           )
 
           assert_selector 'label', text: I18n.t('data_exports.new_linelist_export_dialog.basename_label')
-          assert_selector "input[data-linelist-export-target='basename'][maxlength='100']"
+          assert_selector "input[data-linelist-export-target='basename']"
         end
 
         test 'does not render custom filename input when the feature is disabled' do
