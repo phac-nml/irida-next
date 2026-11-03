@@ -32,11 +32,11 @@ test:
   # entra_id_icon:
 
 # production:
-  # omniauth_providers: []
-  # saml_text:
-  # saml_icon:
-  # entra_id_text:
-  # entra_id_icon:
+# omniauth_providers: []
+# saml_text:
+# saml_icon:
+# entra_id_text:
+# entra_id_icon:
 ```
 
 For your production environment, uncomment and edit the relevant `production` lines.
@@ -74,7 +74,17 @@ entra_id:
   client_id: YOUR_CLIENT_ID
   client_secret: YOUR_CLIENT_SECRET
   tenant_id: YOUR_TENANT_ID
+  # Optional. Overrides the expected audience ('aud' claim) for API bearer tokens
+  # (see "Authentication with Entra ID Bearer Tokens" in the GraphQL docs). Defaults
+  # to client_id and its Application ID URI form (api://YOUR_CLIENT_ID).
+  # api_audience: YOUR_API_APPLICATION_ID_URI
 ```
+
+To allow integrations to authenticate GraphQL API requests as the signed-in Entra ID user (instead of a shared
+Personal Access Token), the app registration must expose an `access_as_user` delegated permission (scope), in
+addition to any `api`/`read_api` scopes used to control query/mutation access. See
+[Authentication with Entra ID Bearer Tokens](../extend/graphql.md#authentication-with-entra-id-bearer-tokens) for
+details.
 
 #### SAML
 
