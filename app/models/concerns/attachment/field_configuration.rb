@@ -26,12 +26,7 @@ class Attachment::FieldConfiguration # rubocop:disable Style/ClassAndModuleChild
     NUMERIC_FIELDS.dup
   end
 
-  # Returns enum field configurations for select dropdowns.
-  #
-  # @return [Hash{String => Hash}] configuration for each enum field
-  #   - :values [Array<String>] valid values for the enum
-  #   - :labels [Hash, nil] optional mapping of values to display labels
-  #   - :translation_key [String, nil] I18n key prefix for translating values
+  # Enum field configurations for select dropdowns, keyed by field name.
   def enum_fields
     {
       'metadata.type' => { values: %w[assembly pe illumina_pe] },
