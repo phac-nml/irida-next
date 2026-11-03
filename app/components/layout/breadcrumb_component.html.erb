@@ -54,4 +54,6 @@
       </li>
     <% end %>
   </ol>
+
+  <%= render Pathogen::Tooltip.new(text: @links.last[:name], id: @tooltip_id, placement: :top) %>
 </nav>
