@@ -28,8 +28,8 @@ module Projects
       travel_to(@sample1.updated_at + 3.hours)
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # verifies navigation to page
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
 
@@ -72,8 +72,8 @@ module Projects
     test 'filter highlighting for sample name' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -86,8 +86,8 @@ module Projects
 
       ### VERIFY START ###
       # verify table still contains all samples
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # checks highlighting
       assert_selector 'mark', text: 'Sample', count: 3
       ### VERIFY END ###
@@ -96,8 +96,8 @@ module Projects
     test 'filter highlighting for sample puid' do
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -110,8 +110,8 @@ module Projects
 
       ### VERIFY START ###
       # verify table only contains sample1
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 1, count: 1,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 1, count: 1, locale: @user.locale)))
       # checks highlighting
       assert_selector 'mark', text: @sample1.puid
       ### VERIFY END ###
@@ -121,8 +121,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -195,8 +195,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -274,8 +274,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -349,8 +349,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -399,8 +399,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -431,8 +431,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html.one', count: 1,
-                                                                                                                       locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html.one',
+                                                            count: 1, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -489,8 +489,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@subgroup12a, @project29)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html.one', count: 1,
-                                                                                                                       locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html.one',
+                                                            count: 1, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -546,8 +546,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -618,8 +618,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -659,8 +659,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -700,8 +700,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       ### SETUP END ###
 
       ### ACTIONS START ###
@@ -721,8 +721,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -791,8 +791,8 @@ module Projects
       project31 = projects(:project31)
       visit namespace_project_samples_url(subgroup12aa, project31)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 2, count: 2,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 2, count: 2, locale: @user.locale)))
       # toggle metadata on for samples table
       click_button I18n.t('shared.samples.metadata_templates.label')
       click_button I18n.t('shared.samples.metadata_templates.fields.all')
@@ -1037,8 +1037,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       assert_selector 'table tbody tr', count: 3
       ### SETUP END ###
 
@@ -1110,8 +1110,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       assert_selector 'table tbody tr', count: 3
       ### SETUP END ###
 
@@ -1157,8 +1157,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
 
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       assert_selector 'table tbody tr', count: 3
       ### SETUP END ###
 
@@ -1223,8 +1223,8 @@ module Projects
       assert_no_selector 'dialog[open]'
 
       # Confirm new samples are displayed
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 5, count: 5,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 5, count: 5, locale: @user.locale)))
       assert_selector 'table thead tr th', count: 5
 
       click_button I18n.t('shared.samples.metadata_templates.label')
@@ -1248,8 +1248,8 @@ module Projects
     test 'selecting / deselecting all samples' do
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # no samples selected/checked
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
@@ -1281,8 +1281,8 @@ module Projects
     test 'selecting / deselecting a page of samples' do
       visit namespace_project_samples_url(@namespace, @project2)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 20, count: 20,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 20, count: 20, locale: @user.locale)))
       within('div#limit-component') do
         # set table limit to 10 to split samples table into two pages
         select '10', from: 'limit'
@@ -1317,8 +1317,8 @@ module Projects
     test 'selecting samples while filtering' do
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       assert_selector 'table tbody tr th input[name="sample_ids[]"]', count: 3
       assert_selector 'table tbody tr th input[name="sample_ids[]"]:checked', count: 0
       assert_selector 'table tfoot tr', text: "#{I18n.t('samples.table_component.counts.samples')}: 3"
@@ -1369,8 +1369,8 @@ module Projects
       ### SETUP START ###
       visit namespace_project_samples_url(@namespace, @project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       assert_selector 'table tbody tr th', text: @sample1.puid
       assert_selector 'table tbody tr th', text: @sample2.puid
       assert_selector 'table tbody tr th', text: @sample30.puid
@@ -1419,8 +1419,8 @@ module Projects
         page.set_viewport_size(width: 375, height: 667)
         visit namespace_project_samples_url(@namespace, @project)
         # verify samples table has loaded to prevent flakes
-        assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                     locale: @user.locale)))
+        assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                              from: 1, to: 3, count: 3, locale: @user.locale)))
         ### SETUP END ###
 
         ### actions and VERIFY START ###
@@ -1470,8 +1470,8 @@ module Projects
         page.set_viewport_size(width: 375, height: 667)
         visit namespace_project_samples_url(@namespace, @project)
         # verify samples table has loaded to prevent flakes
-        assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                     locale: @user.locale)))
+        assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                              from: 1, to: 3, count: 3, locale: @user.locale)))
         ### SETUP END ###
 
         ### actions and VERIFY START ###
@@ -1528,8 +1528,8 @@ module Projects
       namespace = groups(:group_metadata)
       visit namespace_project_samples_url(namespace, project)
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: user.locale)))
       assert_selector 'table tbody tr th', text: sample61.puid
       assert_selector 'table tbody tr th', text: sample62.puid
       assert_selector 'table tbody tr th', text: sample63.puid
@@ -1830,8 +1830,8 @@ module Projects
                       text: I18n.t('shared.samples.actions_dropdown.linelist_export')
 
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       assert_selector 'table tbody tr', count: 3
       ### SETUP END ###
 
@@ -1874,8 +1874,8 @@ module Projects
       visit namespace_project_samples_url(@namespace, @project)
 
       # verify samples table has loaded to prevent flakes
-      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html', from: 1, to: 3, count: 3,
-                                                                                                                   locale: @user.locale)))
+      assert_text ERB::Util.html_unescape(strip_tags(I18n.t(:'components.viral.pagy.limit_component.summary_html',
+                                                            from: 1, to: 3, count: 3, locale: @user.locale)))
       # verifies navigation to page
       assert_selector 'h1', text: I18n.t('projects.samples.index.title')
 
