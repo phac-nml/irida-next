@@ -98,6 +98,10 @@ class ApplicationController < ActionController::Base
     # Converts the limit parameter to an integer by clamping the limit
     # within the allowed range and redirecting to the same page
     limit = params[:limit].to_i.clamp(Pagy::OPTIONS[:limit], Pagy::OPTIONS[:max_limit])
-    redirect_to url_for(limit: limit)
+    if params[:tab].present?
+      redirect_to url_for(limit: limit, tab: params[:tab])
+    else
+      redirect_to url_for(limit: limit)
+    end
   end
 end
