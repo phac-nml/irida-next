@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'cgi'
 require 'test_helpers/axe_helpers'
 require 'test_helpers/better_rails_system_tests'
 require 'test_helpers/capybara_setup'
