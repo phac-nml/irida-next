@@ -428,7 +428,7 @@ class DataExportsTest < ApplicationSystemTestCase
       click_button I18n.t('data_exports.new_analysis_export_dialog.selection_count.non_zero').gsub! 'COUNT_PLACEHOLDER',
                                                                                                     '1'
       assert_text I18n.t('data_exports.new_analysis_export_dialog.description.singular')
-      assert_text ActionController::Base.helpers.strip_tags(I18n.t('data_exports.new.after_submission_description_html'))
+      assert_text ERB::Util.html_unescape(ActionController::Base.helpers.strip_tags(I18n.t('data_exports.new.after_submission_description_html')))
       within %(turbo-frame[id="list_selections"]) do
         assert_text @group_shared_workflow_execution1.id
         assert_text @group_shared_workflow_execution1.workflow.name
