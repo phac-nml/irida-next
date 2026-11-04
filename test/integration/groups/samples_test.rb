@@ -190,5 +190,15 @@ module Groups
       assert_response :unprocessable_content
       assert_match I18n.t('general.form.error_summary.title', count: 1), response.body
     end
+
+    test 'invalid pagy limit is handled gracefully' do
+      sign_in users(:john_doe)
+      get group_samples_url(@group),
+          params: { pagy: { limit: 'invalid' } }
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr',
+                    count: [Pagy::OPTIONS[:limit], @group.aggregated_samples_count].min
+    end
   end
 end

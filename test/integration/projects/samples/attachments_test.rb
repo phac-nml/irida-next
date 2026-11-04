@@ -1080,6 +1080,21 @@ module Projects
           end
         end
       end
+
+      test 'invalid pagy limit is handled gracefully' do
+        sign_in users(:jeff_doe)
+        namespace = namespaces_user_namespaces(:jeff_doe_namespace)
+        project = projects(:projectA)
+        sample = samples(:sampleA)
+
+        get namespace_project_sample_path(namespace, project, sample),
+            params: { pagy: { limit: 'invalid' } }
+
+        assert_response :success
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: sample.attachments.count
+        end
+      end
     end
   end
 end

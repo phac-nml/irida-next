@@ -349,6 +349,14 @@ module Projects
                             low: target_integer - 1, high: target_integer + 1)
     end
 
+    test 'invalid pagy limit is handled gracefully' do
+      get namespace_project_samples_url(@namespace, @project),
+          params: { pagy: { limit: 'invalid' } }
+
+      assert_response :success
+      assert_select '#samples-table table tbody tr', count: [Pagy::OPTIONS[:limit], @project.samples.count].min
+    end
+
     private
 
     def assert_between_filter(field:, operators:, low:, high:)

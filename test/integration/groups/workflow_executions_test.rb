@@ -264,5 +264,16 @@ module Groups
       follow_redirect!
       assert_response :success
     end
+
+    test 'invalid pagy limit is handled gracefully at group level' do
+      sign_in users(:john_doe)
+      get group_workflow_executions_path(@group),
+          params: { pagy: { limit: 'invalid' } }
+
+      assert_response :success
+      assert_select '#workflow-executions-table table tbody tr',
+                    count: [Pagy::OPTIONS[:limit],
+                            @group.workflow_executions.where(shared_with_namespace: true).count].min
+    end
   end
 end
