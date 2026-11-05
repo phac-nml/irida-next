@@ -6,21 +6,30 @@ module Namespaces
     # column (an array of the root-to-self chain of namespace ids) instead of
     # joining through the `routes` table.
     #
-    # Every scope here is defined under its `linear_`-prefixed name, with the
-    # unprefixed name as a plain alias. See the comment on
-    # `Namespaces::Traversal::Linear` for why: when both this module and
-    # `RouteBasedScopes` are mixed into `Namespace`, the last-included
-    # module's bare (unprefixed) method names win, so any internal cross-call
-    # here must use the `linear_`-prefixed name to avoid silently dispatching
-    # to `RouteBasedScopes`' implementation instead of this one.
+    # `LinearScopes` is included after `RouteBasedScopes` on `Namespace`
+    # (via `Namespaces::Traversal::Linear` being included after
+    # `Namespaces::Traversal::RouteBased`), so these bare-named scopes take
+    # precedence and are the default. Unlike the instance-level methods in
+    # `Linear`, these class-level scopes always operate on `traversal_ids`
+    # directly rather than falling back per-row, since a scope spans a whole
+    # relation rather than a single namespace; `RouteBasedScopes`'
+    # equivalents remain reachable via their `route_based_*` aliases for any
+    # caller that needs the route-based behavior explicitly.
+    #
+    # Like `RouteBasedScopes`, the bare `self_and_ancestors`/
+    # `self_and_descendants` scopes are implicitly restricted to the
+    # receiver's own STI type (e.g. `Group.where(...).self_and_descendants`
+    # only returns Groups), matching Rails' default STI query behavior. The
+    # `*_across_types` variants lift that restriction and are used
+    # internally by `Linear`'s instance-level `_of_type` methods, which
+    # explicitly query across STI types.
     module LinearScopes
       extend ActiveSupport::Concern
 
       class_methods do # rubocop:disable Metrics/BlockLength
-        def linear_as_ids
+        def as_ids
           select(Namespace.arel_table[:id])
         end
-        alias_method :as_ids, :linear_as_ids
 
         # Return a relation containing the namespaces in the receiver
         # relation and all of their ancestors.
@@ -34,22 +43,27 @@ module Namespaces
         #
         # Returns an ActiveRecord::Relation of Namespace records (self + ancestors).
         #
-        # Note: results are loaded from `Namespace.unscoped`, not
-        # `unscoped` (i.e. `self.class.unscoped`). Ancestors of a namespace
-        # are frequently a different STI subtype than the namespace itself
-        # (e.g. a Project's ancestors are Groups) and Rails always applies
-        # the receiver's STI `type` condition to a query, even past
-        # `unscoped`, so querying through the subtype would silently drop
-        # ancestors/descendants of other types.
-        def linear_self_and_ancestors
+        # Note: like `RouteBasedScopes#self_and_ancestors`, this is scoped to
+        # `unscoped` (i.e. `self.class.unscoped`), so Rails' STI `type`
+        # condition for the receiver's class is preserved (e.g.
+        # `Group.where(...).self_and_ancestors` only returns Groups). Use
+        # `self_and_ancestors_across_types` to query across STI types.
+        def self_and_ancestors
+          unscoped.where(id: select(Arel.sql('unnest(namespaces.traversal_ids)')))
+        end
+
+        def self_and_ancestor_ids
+          self_and_ancestors.as_ids
+        end
+
+        # Same as `#self_and_ancestors`, but queries `Namespace.unscoped`
+        # instead of `unscoped`, so results are not restricted to the
+        # receiver's STI type. Used internally by the instance-level
+        # `#self_and_ancestors_of_type` to find ancestors of a different STI
+        # type than the receiver (e.g. a Project's Group ancestors).
+        def self_and_ancestors_across_types
           Namespace.unscoped.where(id: select(Arel.sql('unnest(namespaces.traversal_ids)')))
         end
-        alias_method :self_and_ancestors, :linear_self_and_ancestors
-
-        def linear_self_and_ancestor_ids
-          linear_self_and_ancestors.linear_as_ids
-        end
-        alias_method :self_and_ancestor_ids, :linear_self_and_ancestor_ids
 
         # Return a relation containing the namespaces in the receiver
         # relation and all of their descendants.
@@ -69,18 +83,25 @@ module Namespaces
         #
         # Returns an ActiveRecord::Relation of Namespace records (self + descendants).
         #
-        # Note: see the comment on `#linear_self_and_ancestors` - this queries
-        # `Namespace.unscoped` rather than `unscoped` for the same reason
-        # (descendants may be a different STI subtype than the receiver).
-        def linear_self_and_descendants
+        # Note: see the comment on `#self_and_ancestors` - this is scoped to
+        # `unscoped`, preserving the receiver's STI `type` condition. Use
+        # `self_and_descendants_across_types` to query across STI types.
+        def self_and_descendants
+          unscoped.where(Arel::Nodes::Exists.new(descendant_match_subquery(select(:id).arel)))
+        end
+
+        def self_and_descendant_ids
+          self_and_descendants.as_ids
+        end
+
+        # Same as `#self_and_descendants`, but queries `Namespace.unscoped`
+        # instead of `unscoped`, so results are not restricted to the
+        # receiver's STI type. Used internally by the instance-level
+        # `#self_and_descendants_of_type` to find descendants of a different
+        # STI type than the receiver (e.g. a Group's Project descendants).
+        def self_and_descendants_across_types
           Namespace.unscoped.where(Arel::Nodes::Exists.new(descendant_match_subquery(select(:id).arel)))
         end
-        alias_method :self_and_descendants, :linear_self_and_descendants
-
-        def linear_self_and_descendant_ids
-          linear_self_and_descendants.linear_as_ids
-        end
-        alias_method :self_and_descendant_ids, :linear_self_and_descendant_ids
 
         # Return namespaces in the receiver relation that are not
         # descendants of any other namespace within the same relation. This
@@ -96,10 +117,9 @@ module Namespaces
         #
         # Returns an ActiveRecord::Relation of Namespace records that have no
         # ancestors within the given relation.
-        def linear_without_descendants
+        def without_descendants
           where.not(Arel::Nodes::Exists.new(ancestor_match_subquery(select(:id).arel)))
         end
-        alias_method :without_descendants, :linear_without_descendants
 
         private
 
