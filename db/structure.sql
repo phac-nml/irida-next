@@ -799,7 +799,8 @@ CREATE TABLE public.namespaces (
     attachments_updated_at timestamp(6) without time zone,
     samples_count integer DEFAULT 0,
     public boolean DEFAULT false NOT NULL,
-    archived_at timestamp(6) without time zone
+    archived_at timestamp(6) without time zone,
+    traversal_ids uuid[] DEFAULT '{}'::uuid[] NOT NULL
 );
 
 
@@ -1670,6 +1671,13 @@ CREATE UNIQUE INDEX index_namespaces_on_puid ON public.namespaces USING btree (p
 
 
 --
+-- Name: index_namespaces_on_traversal_ids; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_namespaces_on_traversal_ids ON public.namespaces USING gin (traversal_ids);
+
+
+--
 -- Name: index_personal_access_tokens_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2216,6 +2224,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20261105201436'),
 ('20261105120531'),
 ('20260810103000'),
 ('20260714160000'),
