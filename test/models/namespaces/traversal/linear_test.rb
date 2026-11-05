@@ -5,105 +5,172 @@ require 'test_helper'
 module Namespaces
   module Traversal
     class LinearTest < ActiveSupport::TestCase
-      test '#linear_self_and_ancestors when collection is empty' do
-        assert_equal [], Namespace.none.linear_self_and_ancestors
+      test '#use_traversal_ids? is true when traversal_ids is populated' do
+        assert groups(:group_three).use_traversal_ids?
       end
 
-      test '#linear_self_and_ancestors when collection is non empty' do
+      test '#use_traversal_ids? is false when traversal_ids is blank' do
+        group = groups(:group_three)
+        group.traversal_ids = []
+
+        assert_not group.use_traversal_ids?
+      end
+
+      test '#self_and_ancestors when collection is empty' do
+        assert_equal [], Namespace.none.self_and_ancestors
+      end
+
+      test '#self_and_ancestors when collection is non empty' do
         subgroup = groups(:subgroup_one_group_three)
         group = groups(:group_three)
 
-        result = Group.where(id: subgroup.id).linear_self_and_ancestors
+        result = Group.where(id: subgroup.id).self_and_ancestors
 
         assert_equal [group.id, subgroup.id].sort, result.pluck(:id).sort
       end
 
-      test '#linear_self_and_ancestors includes ancestors of a different STI type than the receiver' do
-        project = namespaces_project_namespaces(:project4_namespace)
-        subgroup = groups(:subgroup_one_group_three)
-        group = groups(:group_three)
-
-        result = Namespaces::ProjectNamespace.where(id: project.id).linear_self_and_ancestors
-
-        assert_equal [group.id, subgroup.id, project.id].sort, result.pluck(:id).sort
-      end
-
-      test '#linear_ancestors excludes self' do
-        subgroup = groups(:subgroup_one_group_three)
-        group = groups(:group_three)
-
-        assert_equal [group.id], subgroup.linear_ancestors.pluck(:id)
-      end
-
-      test '#linear_ancestors on a root namespace is empty' do
-        assert_equal [], groups(:group_three).linear_ancestors.pluck(:id)
-      end
-
-      test '#linear_self_and_descendants when collection is empty' do
-        assert_equal [], Namespace.none.linear_self_and_descendants
-      end
-
-      test '#linear_self_and_descendants includes descendants of a different STI type than the receiver' do
-        group = groups(:group_three)
-        subgroup = groups(:subgroup_one_group_three)
+      test '#self_and_ancestors (scope) excludes ancestors of a different STI type than the receiver' do
         project = namespaces_project_namespaces(:project4_namespace)
 
-        result = Group.where(id: group.id).linear_self_and_descendants
-
-        assert_equal [group.id, subgroup.id, project.id].sort, result.pluck(:id).sort
-      end
-
-      test '#linear_descendants excludes self' do
-        group = groups(:group_three)
-        subgroup = groups(:subgroup_one_group_three)
-        project = namespaces_project_namespaces(:project4_namespace)
-
-        assert_equal [subgroup.id, project.id].sort, group.linear_descendants.pluck(:id).sort
-      end
-
-      test '#linear_self_and_ancestors_of_type filters ancestors by STI type' do
-        project = namespaces_project_namespaces(:project4_namespace)
-        subgroup = groups(:subgroup_one_group_three)
-        group = groups(:group_three)
-
-        result = project.linear_self_and_ancestors_of_type(Group.sti_name)
-
-        assert_equal [group.id, subgroup.id].sort, result.pluck(:id).sort
-      end
-
-      test '#linear_self_and_descendants_of_type filters descendants by STI type' do
-        group = groups(:group_three)
-        project = namespaces_project_namespaces(:project4_namespace)
-
-        result = group.linear_self_and_descendants_of_type(Namespaces::ProjectNamespace.sti_name)
+        result = Namespaces::ProjectNamespace.where(id: project.id).self_and_ancestors
 
         assert_equal [project.id], result.pluck(:id)
       end
 
-      test '#linear_without_descendants when collection has related items' do
+      test '#self_and_ancestors_across_types (scope) includes ancestors of a different STI type than the receiver' do
+        project = namespaces_project_namespaces(:project4_namespace)
+        subgroup = groups(:subgroup_one_group_three)
+        group = groups(:group_three)
+
+        result = Namespaces::ProjectNamespace.where(id: project.id).self_and_ancestors_across_types
+
+        assert_equal [group.id, subgroup.id, project.id].sort, result.pluck(:id).sort
+      end
+
+      test '#ancestors excludes self' do
+        subgroup = groups(:subgroup_one_group_three)
+        group = groups(:group_three)
+
+        assert_equal [group.id], subgroup.ancestors.pluck(:id)
+      end
+
+      test '#ancestors on a root namespace is empty' do
+        assert_equal [], groups(:group_three).ancestors.pluck(:id)
+      end
+
+      test '#self_and_descendants when collection is empty' do
+        assert_equal [], Namespace.none.self_and_descendants
+      end
+
+      test '#self_and_descendants (scope) excludes descendants of a different STI type than the receiver' do
         group = groups(:group_three)
         subgroup = groups(:subgroup_one_group_three)
 
-        result = Group.where(id: [group.id, subgroup.id]).linear_without_descendants
+        result = Group.where(id: group.id).self_and_descendants
 
-        assert_equal [group.id], result.pluck(:id)
+        assert_equal [group.id, subgroup.id].sort, result.pluck(:id).sort
       end
 
-      test '#linear_without_descendants when collection has no related items' do
-        group_two = groups(:group_two)
-        group_three = groups(:group_three)
+      test '#self_and_descendants_across_types (scope) includes other-STI-type descendants' do
+        group = groups(:group_three)
+        subgroup = groups(:subgroup_one_group_three)
+        project = namespaces_project_namespaces(:project4_namespace)
 
-        result = Group.where(id: [group_two.id, group_three.id]).linear_without_descendants
+        result = Group.where(id: group.id).self_and_descendants_across_types
 
-        assert_equal [group_two.id, group_three.id].sort, result.pluck(:id).sort
+        assert_equal [group.id, subgroup.id, project.id].sort, result.pluck(:id).sort
       end
 
-      test 'bare traversal methods remain route-based and are unaffected by Linear being included' do
+      test '#descendants excludes self' do
         group = groups(:group_three)
         subgroup = groups(:subgroup_one_group_three)
 
         assert_equal [subgroup.id], group.descendants.pluck(:id)
+      end
+
+      test '#descendants (unlike #self_and_descendants_of_type) excludes namespaces of a different STI type' do
+        group = groups(:group_three)
+        project = namespaces_project_namespaces(:project4_namespace)
+
+        assert_not_includes group.descendants.pluck(:id), project.id
+      end
+
+      test '#self_and_ancestors_of_type filters ancestors by STI type' do
+        project = namespaces_project_namespaces(:project4_namespace)
+        subgroup = groups(:subgroup_one_group_three)
+        group = groups(:group_three)
+
+        result = project.self_and_ancestors_of_type(Group.sti_name)
+
+        assert_equal [group.id, subgroup.id].sort, result.pluck(:id).sort
+      end
+
+      test '#self_and_descendants_of_type filters descendants by STI type' do
+        group = groups(:group_three)
+        project = namespaces_project_namespaces(:project4_namespace)
+
+        result = group.self_and_descendants_of_type(Namespaces::ProjectNamespace.sti_name)
+
+        assert_equal [project.id], result.pluck(:id)
+      end
+
+      test '#without_descendants when collection has related items' do
+        group = groups(:group_three)
+        subgroup = groups(:subgroup_one_group_three)
+
+        result = Group.where(id: [group.id, subgroup.id]).without_descendants
+
+        assert_equal [group.id], result.pluck(:id)
+      end
+
+      test '#without_descendants when collection has no related items' do
+        group_two = groups(:group_two)
+        group_three = groups(:group_three)
+
+        result = Group.where(id: [group_two.id, group_three.id]).without_descendants
+
+        assert_equal [group_two.id, group_three.id].sort, result.pluck(:id).sort
+      end
+
+      test 'falls back to route-based ancestors when traversal_ids is blank' do
+        subgroup = groups(:subgroup_one_group_three)
+        group = groups(:group_three)
+        subgroup.traversal_ids = []
+
         assert_equal [group.id], subgroup.ancestors.pluck(:id)
+        assert_equal subgroup.route_based_ancestors.pluck(:id).sort, subgroup.ancestors.pluck(:id).sort
+      end
+
+      test 'falls back to route-based descendants when traversal_ids is blank' do
+        group = groups(:group_three)
+        subgroup = groups(:subgroup_one_group_three)
+        group.traversal_ids = []
+
+        assert_equal [subgroup.id], group.descendants.pluck(:id)
+        assert_equal group.route_based_descendants.pluck(:id).sort, group.descendants.pluck(:id).sort
+      end
+
+      test 'falls back to route-based self_and_ancestors when traversal_ids is blank' do
+        subgroup = groups(:subgroup_one_group_three)
+        subgroup.traversal_ids = []
+
+        expected = subgroup.route_based_self_and_ancestors.pluck(:id).sort
+        assert_equal expected, subgroup.self_and_ancestors.pluck(:id).sort
+      end
+
+      test 'falls back to route-based self_and_descendants when traversal_ids is blank' do
+        group = groups(:group_three)
+        group.traversal_ids = []
+
+        assert_equal group.route_based_self_and_descendants.pluck(:id).sort, group.self_and_descendants.pluck(:id).sort
+      end
+
+      test 'route_based_* aliases remain directly callable and unaffected by Linear being included' do
+        group = groups(:group_three)
+        subgroup = groups(:subgroup_one_group_three)
+
+        assert_equal [subgroup.id], group.route_based_descendants.pluck(:id)
+        assert_equal [group.id], subgroup.route_based_ancestors.pluck(:id)
       end
 
       test 'write_traversal_ids sets traversal_ids on create' do
@@ -120,7 +187,17 @@ module Namespaces
         assert_equal [new_group.id], new_group.traversal_ids
       end
 
-      test 'sync_traversal_ids updates traversal_ids for the namespace and all of its descendants on reparent' do
+      test 'creating a namespace only logs a single logidze version (no separate traversal_ids write)' do
+        parent = groups(:group_one)
+
+        new_group = Group.create!(name: 'Linear Traversal Logidze Group', path: 'linear-traversal-logidze-group',
+                                  parent:)
+        new_group.create_logidze_snapshot!
+
+        assert_equal 1, new_group.log_data.version
+      end
+
+      test 'reparenting updates traversal_ids for the namespace and all of its descendants' do
         new_root = Group.create!(name: 'Linear Traversal New Root', path: 'linear-traversal-new-root')
         subgroup = groups(:subgroup_one_group_three)
         project = namespaces_project_namespaces(:project4_namespace)
@@ -133,13 +210,41 @@ module Namespaces
         assert_equal [new_root.id, subgroup.id, project.id], project.traversal_ids
       end
 
-      test 'sync_traversal_ids is a no-op when parent_id does not change' do
+      test 'reparenting does not touch traversal_ids when parent_id does not change' do
         subgroup = groups(:subgroup_one_group_three)
         original_traversal_ids = subgroup.traversal_ids
 
         subgroup.update!(description: 'updated description')
 
         assert_equal original_traversal_ids, subgroup.reload.traversal_ids
+      end
+
+      test 'reparenting updates each affected namespace exactly once, with no extra logidze version' do
+        new_root = Group.create!(name: 'Linear Traversal New Root 2', path: 'linear-traversal-new-root-2')
+        subgroup = groups(:subgroup_one_group_three)
+        project = namespaces_project_namespaces(:project4_namespace)
+        subgroup.create_logidze_snapshot!
+        project.create_logidze_snapshot!
+
+        assert_equal 1, subgroup.log_data.version
+        assert_equal 1, project.log_data.version
+
+        subgroup.update!(parent: new_root)
+
+        # `log_data` is excluded from normal SELECTs for `Namespace` (see
+        # `config.logidze.ignore_log_data_by_default` in
+        # config/application.rb), so `#reload` won't pick up its new value -
+        # `#reload_log_data` fetches it explicitly instead.
+        subgroup.reload_log_data
+        project.reload_log_data
+
+        # Both rows are genuinely updated once (subgroup's own traversal_ids
+        # change as part of its own save; project's traversal_ids change via
+        # the separate descendants UPDATE), so each should log exactly one
+        # new logidze version - not two, which would indicate the same row
+        # was written to twice for a single reparent.
+        assert_equal 2, subgroup.log_data.version
+        assert_equal 2, project.log_data.version
       end
     end
   end
