@@ -107,7 +107,7 @@ module Samples
                      @sample33.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 10, 'source' => 'analysis', 'updated_at' => Time.current },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => 10, 'source' => 'analysis', 'updated_at' => Time.current } },
                      @sample33.metadata_provenance)
         assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
@@ -135,7 +135,7 @@ module Samples
                      @sample33.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample33.metadata_provenance)
         assert_equal({ added: %w[metadatafield3], updated: %w[metadatafield1], deleted: [],
@@ -163,9 +163,9 @@ module Samples
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2', 'metadatafield3' => 'value3' },
                      @sample34.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample34.metadata_provenance)
         assert_equal({ added: %w[metadatafield3], updated: [], deleted: [],
@@ -199,7 +199,7 @@ module Samples
         assert_equal({ 'metadatafield1' => 'value1' }, @sample34.metadata)
         assert_equal(
           { 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                  'updated_at' => '2000-01-01T00:00:00.000+00:00' } }, @sample34.metadata_provenance
+                                  'updated_at' => Time.local(2000, 1, 1).utc.as_json } }, @sample34.metadata_provenance
         )
         assert_equal({ added: [], updated: [], deleted: %w[metadatafield2], not_updated: [], unchanged: [],
                        not_found: [] }, metadata_changes)
@@ -222,7 +222,7 @@ module Samples
         assert_equal({ 'metadatafield2' => 'value2' }, @sample33.metadata)
         assert_equal(
           { 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                  'updated_at' => '2000-01-01T00:00:00.000+00:00' } }, @sample33.metadata_provenance
+                                  'updated_at' => Time.local(2000, 1, 1).utc.as_json } }, @sample33.metadata_provenance
         )
         assert_equal({ added: [], updated: [], deleted: %w[metadatafield1], not_updated: [], unchanged: [],
                        not_found: [] },      metadata_changes)
@@ -327,9 +327,9 @@ module Samples
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample32.metadata)
         # timestamps should not update as the fields are unchanged
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => Time.new(2000, 1, 1).utc.iso8601 },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => Time.new(2000, 1, 1).utc.iso8601 } },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json } },
                      @sample32.metadata_provenance)
         assert_equal({ added: [], updated: [], deleted: [], not_updated: [], unchanged: %w[metadatafield1],
                        not_found: [] }, metadata_changes)
@@ -354,7 +354,7 @@ module Samples
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => Time.new(2000, 1, 1).utc.iso8601 } },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json } },
                      @sample32.metadata_provenance)
         assert_equal({ added: [], updated: %w[metadatafield1], deleted: [], not_updated: [], unchanged: [],
                        not_found: [] }, metadata_changes)
@@ -513,9 +513,9 @@ module Samples
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, @sample34.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json } },
                      @sample34.metadata_provenance)
 
         assert_no_changes -> { @project31.reload.metadata_summary } do

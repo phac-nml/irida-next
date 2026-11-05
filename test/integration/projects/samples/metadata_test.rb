@@ -29,7 +29,7 @@ module Projects
             assert_select 'td:nth-child(3)', text: value
             assert_select 'td:nth-child(4)', text: User.find(@sample32.metadata_provenance[key]['id']).email
             assert_select 'td:nth-child(5)' do
-              assert_select 'time[datetime=?]', @sample32.metadata_provenance[key]['updated_at']
+              assert_select 'time[datetime=?]', Time.parse(@sample32.metadata_provenance[key]['updated_at']).iso8601
             end
             assert_select 'td:last-child', text: "#{I18n.t('common.actions.update')} #{I18n.t('common.actions.delete')}"
           end
@@ -53,7 +53,7 @@ module Projects
             assert_select 'td:nth-child(2)', text: value
             assert_select 'td:nth-child(3)', text: User.find(@sample32.metadata_provenance[key]['id']).email
             assert_select 'td:last-child' do
-              assert_select 'time[datetime=?]', @sample32.metadata_provenance[key]['updated_at']
+              assert_select 'time[datetime=?]', Time.parse(@sample32.metadata_provenance[key]['updated_at']).iso8601
             end
           end
         end
@@ -722,7 +722,7 @@ module Projects
             assert_select 'td:nth-child(4)',
                           text: "#{sample.metadata_provenance[key]['source'].upcase_first} #{sample.metadata_provenance[key]['id']}" # rubocop:disable Layout/LineLength
             assert_select 'td:nth-child(5)' do
-              assert_select 'time[datetime=?]', sample.metadata_provenance[key]['updated_at']
+              assert_select 'time[datetime=?]', Time.parse(sample.metadata_provenance[key]['updated_at']).iso8601
             end
             assert_select 'td:last-child', text: I18n.t('common.actions.delete')
             assert_select 'button', text: I18n.t('common.actions.update'), count: 0

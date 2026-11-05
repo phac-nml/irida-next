@@ -118,7 +118,7 @@ sample28:
   created_at: <%= 31.weeks.ago %>
   updated_at: <%= 31.days.ago %>
   metadata: { 'unique.metadata.field': 'unique_value', 'metadata field with spaces': 'spaces value' }
-  metadata_provenance: { 'unique.metadata.field': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' }, 'metadata field with spaces': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' } }
+  metadata_provenance: { 'unique.metadata.field': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' }, 'metadata field with spaces': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample29:
   name: Sample 2
@@ -137,8 +137,8 @@ sample30:
   updated_at: <%= 33.days.ago %>
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample31:
   name: Sample 2
@@ -154,8 +154,8 @@ sample32:
   project_id: <%= ActiveRecord::FixtureSet.identify(:project29, :uuid) %>
   puid: INXT_SAM_AAAAAAAABC
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.new(2000,1,1).utc.iso8601 %>' } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample33:
   name: Sample33
@@ -163,8 +163,8 @@ sample33:
   project_id: <%= ActiveRecord::FixtureSet.identify(:project30, :uuid) %>
   puid: INXT_SAM_AAAAAAAABD
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample34:
   name: Sample 34
@@ -173,8 +173,8 @@ sample34:
   puid: INXT_SAM_AAAAAAAABE
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-  'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
+  'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' }}
 
 sample35:
   name: Sample 35
@@ -197,8 +197,8 @@ sampleBravo:
   puid: INXT_SAM_AAAAAAAABH
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-  'updated_at': <%= DateTime.new(2000,1,1) %> },
-  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> }}
+  'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' }}
   created_at: <%= 36.week.ago %>
   updated_at: <%= 36.day.ago %>
 
@@ -505,9 +505,9 @@ sample61:
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata, :uuid) %>
   puid: INXT_SAM_AAAAAAAADK
   metadata: { 'example_date': '2023-10-17', 'example_float': '0.01', 'example_integer': '1' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample62:
   name: Sample 62
@@ -515,9 +515,9 @@ sample62:
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata, :uuid) %>
   puid: INXT_SAM_AAAAAAAADL
   metadata: { 'example_date': '2023-11-17', 'example_float': '0.25', 'example_integer': '25' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample63:
   name: Sample 63
@@ -525,9 +525,9 @@ sample63:
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata, :uuid) %>
   puid: INXT_SAM_AAAAAAAADM
   metadata: { 'example_date': '2023-12-17', 'example_float': '0.99', 'example_integer': '100' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample64:
   name: Sample 64
@@ -535,9 +535,9 @@ sample64:
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
   puid: INXT_SAM_AAAAAAAADN
   metadata: { 'example_date': '2023-10-17', 'example_float': '0.01', 'example_integer': '1' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample65:
   name: Sample 65
@@ -545,9 +545,9 @@ sample65:
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
   puid: INXT_SAM_AAAAAAAADO
   metadata: { 'example_date': '2023-11-17', 'example_float': '0.25', 'example_integer': '25' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample66:
   name: Sample 66
@@ -555,9 +555,9 @@ sample66:
   project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
   puid: INXT_SAM_AAAAAAAADP
   metadata: { 'example_date': '2023-12-17', 'example_float': '0.99', 'example_integer': '100' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 group_sample_transfer_sample1:
   name: "Group Sample Transfer 1"
@@ -584,8 +584,8 @@ sample67:
   puid: INXT_SAM_AAAAAAAADT
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample68:
   name: Sample 68
@@ -594,8 +594,8 @@ sample68:
   puid: INXT_SAM_AAAAAAAADU
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample69:
   name: Sample 69
@@ -604,8 +604,8 @@ sample69:
   puid: INXT_SAM_AAAAAAAADV
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample70:
   name: Sample 70
@@ -614,8 +614,8 @@ sample70:
   puid: INXT_SAM_AAAAAAAADW
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample71:
   name: Sample 71
@@ -624,8 +624,8 @@ sample71:
   puid: INXT_SAM_AAAAAAAADX
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample72:
   name: Sample 72
@@ -634,8 +634,8 @@ sample72:
   puid: INXT_SAM_AAAAAAAADY
   metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
   metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': <%= DateTime.new(2000,1,1) %> },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': <%= DateTime.new(2000,1,1) %> } }
+                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
+                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
 
 sample73:
   name: Sample 1
