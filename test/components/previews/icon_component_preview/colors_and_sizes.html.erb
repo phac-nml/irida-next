@@ -8,7 +8,7 @@
         size: :xl,
         class: "inline mr-3",
       ) %>
-      Colors & Sizes
+      Colors &amp; Sizes
     </h1>
 
     <p class="mx-auto max-w-3xl text-lg text-slate-600 dark:text-slate-400">
@@ -233,9 +233,9 @@
           Navigation Menu
         </h3>
 
-        <nav class="space-y-2">
-          <a
-            href="#"
+        <nav class="space-y-2" aria-label="Example navigation">
+          <button
+            type="button"
             class="
               flex items-center rounded-lg bg-primary-50 px-3 py-2 text-sm text-primary-700 dark:bg-primary-900/20
               dark:text-primary-300
@@ -248,37 +248,37 @@
               class: "mr-3",
             ) %>
             Dashboard
-          </a>
+          </button>
 
-          <a
-            href="#"
+          <button
+            type="button"
             class="
               flex items-center rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-400
               dark:hover:bg-slate-700
             "
           >
             <%= icon(:users, size: :sm, color: :subdued, class: "mr-3") %> Team Members
-          </a>
+          </button>
 
-          <a
-            href="#"
+          <button
+            type="button"
             class="
               flex items-center rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-400
               dark:hover:bg-slate-700
             "
           >
             <%= icon(:gear_six, size: :sm, color: :subdued, class: "mr-3") %> Settings
-          </a>
+          </button>
 
-          <a
-            href="#"
+          <button
+            type="button"
             class="
               flex items-center rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 dark:text-slate-400
               dark:hover:bg-slate-700
             "
           >
-            <%= icon(:question, size: :sm, color: :subdued, class: "mr-3") %> Help & Support
-          </a>
+            <%= icon(:question, size: :sm, color: :subdued, class: "mr-3") %> Help &amp; Support
+          </button>
         </nav>
       </div>
     </div>

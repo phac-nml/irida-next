@@ -7,9 +7,10 @@ class ClipboardComponent < Viral::Component
     @title = title
     @button_classes = class_names(button_classes, 'cursor-pointer ml-1')
     @button_name = button_name || "clipboard-button-#{SecureRandom.hex(4)}"
+    @tooltip_id = Pathogen::Tooltip.generate_id(base_name: 'clipboard-tooltip')
   end
 
   private
 
-  attr_reader :value, :button_classes, :button_name, :title
+  attr_reader :value, :button_classes, :button_name, :title, :tooltip_id
 end

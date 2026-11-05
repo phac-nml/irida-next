@@ -15,6 +15,7 @@ module Prefixed
           @form = form
           @name = name
           @id = id
+          @tooltip_id = Pathogen::Tooltip.generate_id(base_name: 'url-prefix-tooltip')
           @selected_value = selected_value
           @placeholder = options[:placeholder]
           @required = options[:required]
