@@ -2,6 +2,9 @@
 en:
   components:
     activity:
+      automated_pipelines:
+        index:
+          link_descriptive_text: "%{automated_pipeline_id} - View automated pipelines listing for project"
       dialog:
         bulk_metadata_update:
           description:
@@ -112,8 +115,6 @@ en:
         destroy:
           more_details:
             button_descriptive_text: View more details about deleted workflow executions
-        index:
-          link_descriptive_text: "%{workflow_id} - View workflow executions listing for project"
         show:
           link_descriptive_text: View workflow execution details for workflow execution with id %{workflow_id}
     advanced_search_component:
@@ -298,7 +299,7 @@ en:
       previous_version: Previous (Version %{version})
     layout:
       language_selection:
-        title: 'Language Selection: %{locale_name}'
+        title: 'Change language. Current language: %{locale_name}'
       main_content_link: Skip to content
       sidebar:
         collapsed_announcement: Sidebar collapsed
@@ -313,15 +314,15 @@ en:
           aria-label: View %{namespace_type} with name %{namespace_name} and persistent unique identifier %{namespace_puid}
         projects:
           aria-label:
-            one: 1 project in %{namespace_type} - View projects for %{namespace_type} with persistent unique identifier %{namespace_puid}
-            other: "%{count} projects in %{namespace_type} - View projects for %{namespace_type} with persistent unique identifier %{namespace_puid}"
+            one: View %{count} project for %{namespace_type} with persistent unique identifier %{namespace_puid}
+            other: View %{count} projects for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip:
             one: 1 project in %{namespace_name}
             other: "%{count} projects in %{namespace_name}"
         samples:
           aria-label:
-            one: 1 sample in %{namespace_type} - View samples for %{namespace_type} with persistent unique identifier %{namespace_puid}
-            other: "%{count} samples in %{namespace_type} - View samples for %{namespace_type} with persistent unique identifier %{namespace_puid}"
+            one: View %{count} sample for %{namespace_type} with persistent unique identifier %{namespace_puid}
+            other: View %{count} samples for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip:
             one: 1 sample in %{namespace_name}
             other: "%{count} samples in %{namespace_name}"
@@ -329,8 +330,8 @@ en:
           public: Public
         subnamespaces:
           aria-label:
-            one: 1 subgroup in %{namespace_type} - View subgroups for %{namespace_type} with persistent unique identifier %{namespace_puid}
-            other: "%{count} subgroups in %{namespace_type} - View subgroups for %{namespace_type} with persistent unique identifier %{namespace_puid}"
+            one: View %{count} subgroup for %{namespace_type} with persistent unique identifier %{namespace_puid}
+            other: View %{count} subgroups for %{namespace_type} with persistent unique identifier %{namespace_puid}
           tooltip:
             one: 1 subgroup in %{namespace_name}
             other: "%{count} subgroups in %{namespace_name}"

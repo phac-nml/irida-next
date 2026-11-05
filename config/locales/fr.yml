@@ -343,6 +343,9 @@ fr:
       attachment:
         create_html: "%{user} a joint des fichiers au projet"
         destroy_html: "%{user} a retiré des fichiers du projet"
+      automated_pipeline:
+        create_html: "%{user} a configuré le pipeline automatisé %{href} pour le projet"
+        destroy_html: "%{user} a retiré le pipeline automatisé %{href} du projet"
       create_html: "%{user} a créé le projet"
       destroy_html: "%{user} a supprimé le projet"
       import_samples:

@@ -33,7 +33,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
 
   private
 
-  def project_activity(activity) # rubocop:disable Metrics/MethodLength
+  def project_activity(activity) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     activity_trackable = activity_trackable(activity, Project)
 
     base_params = {
@@ -53,6 +53,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     params = group_link_params(activity, params)
     params = transfer_activity_parameters(params, activity)
     params = workflow_execution_activity_params(params, activity)
+    params = automated_pipeline_activity_params(params, activity)
 
     namespace_project_sample_activity_parameters(params, activity)
   end
@@ -84,7 +85,7 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
     transfer_activity_parameters(params, activity)
   end
 
-  def workflow_execution_activity(activity) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def workflow_execution_activity(activity) # rubocop:disable Metrics/MethodLength
     activity_trackable = activity_trackable(activity, Namespace)
 
     base_params = {
@@ -96,14 +97,11 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
       workflow_id: activity.parameters[:workflow_id],
       type: 'WorkflowExecution',
       sample_puid: activity.parameters[:sample_puid],
-      sample_id: activity.parameters[:sample_id],
-      automated: activity.parameters[:automated]
+      sample_id: activity.parameters[:sample_id]
     }
 
-    relation = activity.parameters[:automated] == true ? AutomatedWorkflowExecution : WorkflowExecution
-
     base_params.merge!({
-                         workflow_execution: get_object_by_id(activity.parameters[:workflow_id], relation),
+                         workflow_execution: get_object_by_id(activity.parameters[:workflow_id], WorkflowExecution),
                          sample: get_object_by_id(activity.parameters[:sample_id], Sample)
                        })
   end
@@ -234,6 +232,17 @@ module TrackActivity # rubocop:disable Metrics/ModuleLength
                       workflow_executions_deleted_count: activity.parameters[:workflow_executions_deleted_count]
                     })
     end
+
+    params
+  end
+
+  def automated_pipeline_activity_params(params, activity)
+    if %w[automated_pipeline_create automated_pipeline_destroy].include?(activity.parameters[:action])
+      params.merge!({
+                      automated_pipeline_id: activity.parameters[:automated_pipeline_id]
+                    })
+    end
+
     params
   end
 

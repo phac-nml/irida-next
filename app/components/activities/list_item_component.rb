@@ -5,6 +5,10 @@ module Activities
   class ListItemComponent < BaseActivityComponent # rubocop:disable Metrics/ClassLength
     attr_accessor :activity
 
+    def automated_pipeline_action?
+      %w[automated_pipeline_create automated_pipeline_destroy].include?(@activity[:action])
+    end
+
     def group_link_action?
       %w[group_link_create group_link_destroy group_link_update group_link_created group_link_destroyed
          group_link_updated].include?(@activity[:action])
@@ -102,7 +106,7 @@ module Activities
       end
     end
 
-    def project_namespace_activity_component # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+    def project_namespace_activity_component # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength,Metrics/AbcSize
       if group_link_action?
         Activities::NamespaceGroupLinkActivityComponent.new(activity: @activity)
       elsif metadata_template_action?
@@ -119,6 +123,8 @@ module Activities
         Activities::Projects::TransferActivityComponent.new(activity: @activity)
       elsif project_namespace_workflow_execution_action?
         Activities::Projects::WorkflowExecutionActivityComponent.new(activity: @activity)
+      elsif automated_pipeline_action?
+        Activities::Projects::AutomatedPipelineActivityComponent.new(activity: @activity)
       else
         Activities::Projects::BaseActivityComponent.new(activity: @activity)
       end

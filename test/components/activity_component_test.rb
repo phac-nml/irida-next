@@ -25,7 +25,7 @@ class ActivityComponentTest < ViewComponentTestCase
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.clone') })
     assert_equal(1, @activities.count { |activity| activity[:key].include?('project_namespace.samples.transfer') })
     assert_equal(1, @activities.count do |activity|
-      activity[:key].include?('workflow_execution.automated_workflow.create')
+      activity[:key].include?('namespaces_project_namespace.automated_pipeline.create')
     end)
     assert_equal(1, @activities.count do |activity|
                       activity[:key].include?('workflow_execution.automated_workflow.launch')
