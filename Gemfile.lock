@@ -881,7 +881,7 @@ DEPENDENCIES
   public_activity
   puma (~> 8.0)
   rack-cors
-  rails (~> 8.1.4.1)
+  rails (~> 8.1.4)
   rails_icons (~> 1.10)
   ransack (~> 6.0.1)
   reactionview (~> 0.6.0)
