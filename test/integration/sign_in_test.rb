@@ -18,7 +18,6 @@ end
 class SignInTest < ActionDispatch::IntegrationTest
   setup do
     @test_file_relative_path = '../../../test/fixtures/files/tyrell.svg'
-    I18n.locale = I18n.default_locale
   end
 
   test 'should display sign in with default text and icon' do
