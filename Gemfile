@@ -207,6 +207,9 @@ group :development do
 
   gem 'faker'
 
+  # Benchmarking namespace traversal strategies [https://github.com/evanphx/benchmark-ips]
+  gem 'benchmark-ips', require: false
+
   # LookBook
   gem 'actioncable'
   gem 'listen'
