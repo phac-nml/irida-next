@@ -14,6 +14,8 @@ group_one:
   puid: INXT_GRP_AAAAAAAAAA
   attachments_updated_at: <%= 2.hours.ago %>
   samples_count: 25
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
 
 subgroup1:
   <<: *DEFAULTS
@@ -23,6 +25,9 @@ subgroup1:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAB
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
 
 <% (Namespace::MAX_ANCESTORS-2).times do |n| %>
 subgroup<%= (n+2) %>:
@@ -33,6 +38,11 @@ subgroup<%= (n+2) %>:
   parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
   puid: <%= "INXT_GRP_AAAAAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+<% (1..(n+2)).each do |m| %>
+    - <%= ActiveRecord::FixtureSet.identify("subgroup#{m}", :uuid) %>
+<% end %>
 <% end %>
 
 group_two:
@@ -42,6 +52,8 @@ group_two:
   description: Group 2 description
   puid: INXT_GRP_AAAAAAAAAC
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
 
 group_three:
   <<: *DEFAULTS
@@ -50,6 +62,8 @@ group_three:
   description: Group 3 description
   puid: INXT_GRP_AAAAAAAAAD
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
 
 subgroup_one_group_three:
   <<: *DEFAULTS
@@ -59,6 +73,9 @@ subgroup_one_group_three:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAE
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid) %>
 
 david_doe_group_four:
   <<: *DEFAULTS
@@ -68,6 +85,8 @@ david_doe_group_four:
   puid: INXT_GRP_AAAAAAAAAF
   metadata_summary: { "unique.metadata.field": 1, "metadata field with spaces": 1 }
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
 
 group_five:
   <<: *DEFAULTS
@@ -76,6 +95,8 @@ group_five:
   description: Group 5 description
   puid: INXT_GRP_AAAAAAAAAG
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
 
 subgroup_one_group_five:
   <<: *DEFAULTS
@@ -85,6 +106,9 @@ subgroup_one_group_five:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAH
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_five, :uuid) %>
 
 group_six:
   <<: *DEFAULTS
@@ -93,6 +117,8 @@ group_six:
   description: Group 6 description
   puid: INXT_GRP_AAAAAAAAAI
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
 
 subgroup_one_group_six:
   <<: *DEFAULTS
@@ -102,6 +128,9 @@ subgroup_one_group_six:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAJ
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_six, :uuid) %>
 
 group_seven:
   <<: *DEFAULTS
@@ -110,6 +139,8 @@ group_seven:
   description: Group 7 description
   puid: INXT_GRP_AAAAAAAAAK
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_seven, :uuid) %>
 
 group_eight:
   <<: *DEFAULTS
@@ -118,6 +149,8 @@ group_eight:
   description: Group 8 description
   puid: INXT_GRP_AAAAAAAAAL
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
 
 <% [*("a".."z")].each_with_index do |letter, index| %>
 group_<%= letter %>:
@@ -129,6 +162,8 @@ group_<%= letter %>:
   updated_at: <%= (index + 1).days.ago %>
   puid: <%= "INXT_GRP_AAAAAAABA#{letter.capitalize}" %>
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify("group_#{letter}", :uuid) %>
 <% end %>
 
 namespace_group_link_group_one:
@@ -138,6 +173,8 @@ namespace_group_link_group_one:
   description: Group One description
   puid: INXT_GRP_AAAAAAAAAM
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid) %>
 
 namespace_group_link_group_two:
   <<: *DEFAULTS
@@ -146,6 +183,8 @@ namespace_group_link_group_two:
   description: Group Two description
   puid: INXT_GRP_AAAAAAAAAN
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid) %>
 
 namespace_group_link_group_three:
   <<: *DEFAULTS
@@ -154,6 +193,8 @@ namespace_group_link_group_three:
   description: Group Three description
   puid: INXT_GRP_AAAAAAAAAO
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
 
 group_nine:
   <<: *DEFAULTS
@@ -162,6 +203,8 @@ group_nine:
   description: Group 9 description
   puid: INXT_GRP_AAAAAAAAAP
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
 
 subgroup_one_group_nine:
   <<: *DEFAULTS
@@ -171,6 +214,9 @@ subgroup_one_group_nine:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAQ
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
 
 group_ten:
   <<: *DEFAULTS
@@ -180,6 +226,10 @@ group_ten:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAR
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_ten, :uuid) %>
 
 group_alpha:
   <<: *DEFAULTS
@@ -188,6 +238,8 @@ group_alpha:
   description: Group Alpha description
   puid: INXT_GRP_AAAAAAAAAS
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
 
 group_bravo:
   <<: *DEFAULTS
@@ -196,6 +248,8 @@ group_bravo:
   description: Group bravo description
   puid: INXT_GRP_AAAAAAAAAT
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_bravo, :uuid) %>
 
 group_charlie:
   <<: *DEFAULTS
@@ -204,6 +258,8 @@ group_charlie:
   description: Group Charlie description
   puid: INXT_GRP_AAAAAAAAAU
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
 
 group_alpha_subgroup1:
   <<: *DEFAULTS
@@ -213,6 +269,9 @@ group_alpha_subgroup1:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
   puid: INXT_GRP_AAAAAAAAAV
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1, :uuid) %>
 
 group_eleven:
   <<: *DEFAULTS
@@ -221,6 +280,8 @@ group_eleven:
   description: Group 11 description
   puid: INXT_GRP_AAAAAAAAAW
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_eleven, :uuid) %>
 
 group_twelve:
   <<: *DEFAULTS
@@ -231,6 +292,8 @@ group_twelve:
   metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
   puid: INXT_GRP_AAAAAAAAAX
   samples_count: 4
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
 
 subgroup_twelve_a:
   <<: *DEFAULTS
@@ -242,6 +305,9 @@ subgroup_twelve_a:
   metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
   puid: INXT_GRP_AAAAAAAAAY
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
 
 subgroup_twelve_b:
   <<: *DEFAULTS
@@ -253,6 +319,9 @@ subgroup_twelve_b:
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_GRP_AAAAAAAAAZ
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_b, :uuid) %>
 
 subgroup_twelve_a_a:
   <<: *DEFAULTS
@@ -264,6 +333,10 @@ subgroup_twelve_a_a:
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   puid: INXT_GRP_AAAAAAAAA2
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid) %>
 
 group_delta:
   <<: *DEFAULTS
@@ -272,6 +345,8 @@ group_delta:
   description: Group Delta description
   puid: INXT_GRP_AAAAAAAAA3
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
 
 group_delta_subgroupA:
   <<: *DEFAULTS
@@ -281,6 +356,9 @@ group_delta_subgroupA:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
   puid: INXT_GRP_AAAAAAAAA4
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid) %>
 
 group_echo:
   <<: *DEFAULTS
@@ -289,6 +367,8 @@ group_echo:
   description: Group Echo description
   puid: INXT_GRP_AAAAAAAAA5
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
 
 group_echo_subgroupB:
   <<: *DEFAULTS
@@ -298,6 +378,9 @@ group_echo_subgroupB:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
   puid: INXT_GRP_AAAAAAAAA6
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_echo_subgroupB, :uuid) %>
 
 group_foxtrot:
   <<: *DEFAULTS
@@ -306,6 +389,8 @@ group_foxtrot:
   description: Group Foxtrot description
   puid: INXT_GRP_AAAAAAAAA7
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
 
 group_foxtrot_subgroupA:
   <<: *DEFAULTS
@@ -315,6 +400,9 @@ group_foxtrot_subgroupA:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
   puid: INXT_GRP_AAAAAAAABA
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_foxtrot_subgroupA, :uuid) %>
 
 group_golf:
   <<: *DEFAULTS
@@ -323,6 +411,8 @@ group_golf:
   description: Group Golf description
   puid: INXT_GRP_AAAAAAAABB
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_golf, :uuid) %>
 
 group_hotel:
   <<: *DEFAULTS
@@ -332,6 +422,8 @@ group_hotel:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABC
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
 
 group_thirteen:
   <<: *DEFAULTS
@@ -340,6 +432,8 @@ group_thirteen:
   description: Group 13 description
   puid: INXT_GRP_AAAAAAAABD
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid) %>
 
 group_fourteen:
   <<: *DEFAULTS
@@ -348,6 +442,8 @@ group_fourteen:
   description: Group 14 description
   puid: INXT_GRP_AAAAAAAABE
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid) %>
 
 group_fifteen:
   <<: *DEFAULTS
@@ -356,6 +452,8 @@ group_fifteen:
   description: Group 15 description
   puid: INXT_GRP_AAAAAAAABF
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
 
 group_sixteen:
   <<: *DEFAULTS
@@ -365,6 +463,8 @@ group_sixteen:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABG
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
 
 group_seventeen:
   <<: *DEFAULTS
@@ -374,6 +474,8 @@ group_seventeen:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABI
   samples_count: 200
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_seventeen, :uuid) %>
 
 user30_group_one:
   <<: *DEFAULTS
@@ -383,6 +485,8 @@ user30_group_one:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
   puid: INXT_GRP_AAAAAAAABH
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
 
 janitor_doe_group:
   <<: *DEFAULTS
@@ -392,6 +496,8 @@ janitor_doe_group:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   puid: INXT_GRP_ABAAAAAAAA
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:janitor_doe_group, :uuid) %>
 
 empty_group:
   <<: *DEFAULTS
@@ -401,6 +507,8 @@ empty_group:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAABHI
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:empty_group, :uuid) %>
 
 group_jeff:
   <<: *DEFAULTS
@@ -410,6 +518,8 @@ group_jeff:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAJEFF
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_jeff, :uuid) %>
 
 group_india:
   <<: *DEFAULTS
@@ -418,6 +528,8 @@ group_india:
   description: Group India description
   puid: INXT_GRP_AAAAAAAACA
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
 
 group_india_subgroup1:
   <<: *DEFAULTS
@@ -427,6 +539,9 @@ group_india_subgroup1:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
   puid: INXT_GRP_AAAAAAAACB
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_india_subgroup1, :uuid) %>
 
 group_juliett:
   <<: *DEFAULTS
@@ -435,6 +550,8 @@ group_juliett:
   description: Group Juliett description
   puid: INXT_GRP_AAAAAAAACC
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
 
 group_juliett_subgroup1:
   <<: *DEFAULTS
@@ -444,6 +561,9 @@ group_juliett_subgroup1:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
   puid: INXT_GRP_AAAAAAAACD
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:group_juliett_subgroup1, :uuid) %>
 
 group_kilo:
   <<: *DEFAULTS
@@ -452,6 +572,8 @@ group_kilo:
   description: Group Kilo description
   puid: INXT_GRP_AAAAAAAACE
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_kilo, :uuid) %>
 
 group_lima:
   <<: *DEFAULTS
@@ -460,6 +582,8 @@ group_lima:
   description: Group Lima description
   puid: INXT_GRP_AAAAAAAACF
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_lima, :uuid) %>
 
 group_mike:
   <<: *DEFAULTS
@@ -468,6 +592,8 @@ group_mike:
   description: Group Mike description
   puid: INXT_GRP_AAAAAAAACG
   samples_count: 6
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
 
 subgroup_mike_a:
   <<: *DEFAULTS
@@ -477,6 +603,9 @@ subgroup_mike_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
   puid: INXT_GRP_AAAAAAAACH
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
 
 subgroup_mike_b:
   <<: *DEFAULTS
@@ -486,6 +615,9 @@ subgroup_mike_b:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
   puid: INXT_GRP_AAAAAAAACI
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid) %>
 
 subgroup_mike_a_a:
   <<: *DEFAULTS
@@ -495,6 +627,10 @@ subgroup_mike_a_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
   puid: INXT_GRP_AAAAAAAACJ
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a_a, :uuid) %>
 
 group_oscar:
   <<: *DEFAULTS
@@ -503,6 +639,8 @@ group_oscar:
   description: Group Oscar description
   puid: INXT_GRP_AAAAAAAACK
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
 
 subgroup_oscar_a:
   <<: *DEFAULTS
@@ -512,6 +650,9 @@ subgroup_oscar_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
   puid: INXT_GRP_AAAAAAAACL
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_oscar_a, :uuid) %>
 
 group_papa:
   <<: *DEFAULTS
@@ -520,6 +661,8 @@ group_papa:
   description: Group Papa description
   puid: INXT_GRP_AAAAAAAACM
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
 
 subgroup_papa_a:
   <<: *DEFAULTS
@@ -529,6 +672,9 @@ subgroup_papa_a:
   parent_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
   puid: INXT_GRP_AAAAAAAACN
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_papa_a, :uuid) %>
 
 group_metadata:
   <<: *DEFAULTS
@@ -539,6 +685,8 @@ group_metadata:
   metadata_summary: { "example_date": 3, "example_float": 3, "example_integer": 3 }
   puid: INXT_GRP_AAAAAAAACO
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_metadata, :uuid) %>
 
 group_sample_transfer:
   <<: *DEFAULTS
@@ -548,6 +696,8 @@ group_sample_transfer:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAACP
   samples_count: 3
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
 
 group_sample_transfer_target:
   <<: *DEFAULTS
@@ -557,6 +707,8 @@ group_sample_transfer_target:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   puid: INXT_GRP_AAAAAAAACQ
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid) %>
 
 group_sample_actions:
   <<: *DEFAULTS
@@ -567,6 +719,8 @@ group_sample_actions:
   puid: INXT_GRP_AAAAAAAACR
   metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
 
 subgroup_sample_actions:
   <<: *DEFAULTS
@@ -577,6 +731,9 @@ subgroup_sample_actions:
   puid: INXT_GRP_AAAAAAAACS
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
 
 shared_group_sample_actions_owner:
   <<: *DEFAULTS
@@ -587,6 +744,8 @@ shared_group_sample_actions_owner:
   puid: INXT_GRP_AAAAAAAACT
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid) %>
 
 shared_group_sample_actions_maintainer:
   <<: *DEFAULTS
@@ -597,6 +756,8 @@ shared_group_sample_actions_maintainer:
   puid: INXT_GRP_AAAAAAAACU
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
 
 shared_group_sample_actions_analyst:
   <<: *DEFAULTS
@@ -607,6 +768,8 @@ shared_group_sample_actions_analyst:
   puid: INXT_GRP_AAAAAAAACV
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
 
 shared_group_sample_actions_guest:
   <<: *DEFAULTS
@@ -617,6 +780,8 @@ shared_group_sample_actions_guest:
   puid: INXT_GRP_AAAAAAAACW
   metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
 
 
 <% (1..10).each do |n| %>
@@ -630,6 +795,8 @@ public_group<%= (n) %>:
   samples_count: 0
   created_at: <%= (n + 1).days.ago %>
   updated_at: <%= (n + 1).days.ago %>
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify("public_group#{n}", :uuid) %>
 <% end %>
 
 public_group1_subgroup1:
@@ -643,6 +810,9 @@ public_group1_subgroup1:
   samples_count: 0
   created_at: <%= 1.days.ago %>
   updated_at: <%= 1.days.ago %>
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
+    - <%= ActiveRecord::FixtureSet.identify(:public_group1_subgroup1, :uuid) %>
 
 snvphyl_group:
   <<: *DEFAULTS
@@ -655,6 +825,8 @@ snvphyl_group:
   puid: INXT_GRP_AAAAAAAACX
   attachments_updated_at: <%= 2.hours.ago %>
   samples_count: 2
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid) %>
 
 clone_test_group_one:
   <<: *DEFAULTS
@@ -664,6 +836,8 @@ clone_test_group_one:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
   puid: INXT_GRP_AAAAAAAACY
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:clone_test_group_one, :uuid) %>
 
 clone_test_group_two:
   <<: *DEFAULTS
@@ -673,3 +847,5 @@ clone_test_group_two:
   owner_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
   puid: INXT_GRP_AAAAAAAACZ
   samples_count: 0
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:clone_test_group_two, :uuid) %>
