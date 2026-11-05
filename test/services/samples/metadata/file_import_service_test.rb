@@ -352,9 +352,9 @@ module Samples
         project31 = projects(:project31)
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' }, sample34.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => '2000-01-01T00:00:00.000+00:00' } },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json } },
                      sample34.metadata_provenance)
         file = Rack::Test::UploadedFile.new(
           Rails.root.join('test/fixtures/files/metadata/contains_analysis_values.csv')

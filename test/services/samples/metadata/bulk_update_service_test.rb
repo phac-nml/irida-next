@@ -37,9 +37,9 @@ module Samples
             'metadatafield4' => 'value4' }, @sample34.reload.metadata
         )
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
@@ -79,9 +79,9 @@ module Samples
             'metadatafield4' => 'value4' }, @sample33.reload.metadata
         )
         assert_equal({ 'metadatafield1' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
@@ -154,13 +154,13 @@ module Samples
 
         assert_equal({ 'metadatafield2' => 'value2', 'metadatafield3' => 'sample33value3' }, @sample33.reload.metadata)
         assert_equal({ 'metadatafield2' => { 'id' => @user.id, 'source' => 'user',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
                      @sample33.reload.metadata_provenance)
 
         assert_equal({ 'metadatafield1' => 'value1', 'metadatafield3' => 'sample34value3' }, @sample34.reload.metadata)
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current } },
                      @sample34.reload.metadata_provenance)
@@ -200,9 +200,9 @@ module Samples
             'metadatafield4' => 'sample34value4' }, @sample34.reload.metadata
         )
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => @user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
@@ -297,9 +297,9 @@ module Samples
             'metadata field4' => 'value 4' }, @sample34.reload.metadata
         )
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadata field 3' => { 'id' => @user.id, 'source' => 'user',
                                                'updated_at' => Time.current },
                        'metadata field4' => { 'id' => @user.id, 'source' => 'user', 'updated_at' => Time.current } },
@@ -486,9 +486,9 @@ module Samples
         )
 
         assert_equal({ 'metadatafield1' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
-                                             'updated_at' => DateTime.new(2000, 1, 1) },
+                                             'updated_at' => Time.local(2000, 1, 1).utc.as_json },
                        'metadatafield3' => { 'id' => user.id, 'source' => 'user',
                                              'updated_at' => Time.current },
                        'metadatafield4' => { 'id' => user.id, 'source' => 'user', 'updated_at' => Time.current } },
