@@ -495,7 +495,7 @@ janitor_doe_group:
   description: Group 1 description
   owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   puid: INXT_GRP_ABAAAAAAAA
-  samples_count: 0
+  samples_count: 5
   traversal_ids:
     - <%= ActiveRecord::FixtureSet.identify(:janitor_doe_group, :uuid) %>
 
