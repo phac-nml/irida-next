@@ -31,15 +31,34 @@ const PROGRESS_TEMPLATE = `
     </div>
   </template>`;
 
-function markup({ withSampleStatus = true } = {}) {
+const BASENAME_INVALID_MESSAGE =
+  "Basename can only contain letters, numbers, '-', and '_'";
+const BASENAME_TOO_LONG_MESSAGE =
+  "File basename is too long (maximum is 100 characters)";
+
+function markup({
+  basename = "",
+  withBasename = true,
+  withBasenameErrorTargets = true,
+  withBasenameErrorMessage = true,
+  withFormErrorSummary = true,
+  withFormErrorSummaryHeading = true,
+  withSampleStatus = true,
+} = {}) {
   return `
     <div data-controller="linelist-export"
          data-linelist-export-worker-url-value="worker.js"
          data-linelist-export-graphql-url-value="/graphql"
-         data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/">
+          data-linelist-export-sample-graphql-id-prefix-value="gid://irida/Sample/"
+          data-linelist-export-form-error-summary-title-one-value="There is 1 field with problems preventing submission"
+          data-linelist-export-form-error-summary-title-other-value="There are %{count} fields with problems preventing submission"
+          data-linelist-export-basename-invalid-message-value="${BASENAME_INVALID_MESSAGE}"
+          data-linelist-export-basename-too-long-message-value="${BASENAME_TOO_LONG_MESSAGE}">
       ${withSampleStatus ? '<span data-linelist-export-target="sampleStatus"></span>' : ""}
+      ${withFormErrorSummary ? `<div data-linelist-export-target="formErrorSummary" class="hidden">${withFormErrorSummaryHeading ? "<h2></h2>" : ""}<ul><li><a href="#basename"></a></li><li><a href="#basename"></a></li></ul></div>` : ""}
       <input name="data_export[export_parameters][namespace_id]" value="7">
       <input type="radio" name="data_export[export_parameters][linelist_format]" value="csv" checked>
+      ${withBasename ? `<div class="form-field" ${withBasenameErrorTargets ? 'data-linelist-export-target="basenameField"' : ""}><label for="basename" data-linelist-export-target="basenameLabel">File Basename</label><input id="basename" aria-describedby="basename_hint" data-linelist-export-target="basename" maxlength="100" pattern="^[\\w\\-]*$" value="${basename}">${withBasenameErrorTargets ? `<span id="basename_error" data-linelist-export-target="basenameError" class="hidden">${withBasenameErrorMessage ? '<span class="grow"></span>' : ""}</span>` : ""}</div>` : ""}
       <ul id="selected-list"><li><span>x</span><span>age</span></li></ul>
       ${PROGRESS_TEMPLATE}
     </div>`;
@@ -135,6 +154,65 @@ describe("linelist export controller", () => {
     });
     expect(worker.posted[0].filename).toMatch(/^linelist-.*\.csv$/);
     controller.terminateWorker();
+  });
+
+  it("uses a custom basename for the export filename", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "my-linelist-export" });
+    controller.startExport();
+
+    const worker = FakeWorker.instances.at(-1);
+    expect(worker.posted[0].filename).toBe("my-linelist-export.csv");
+    controller.terminateWorker();
+  });
+
+  it("falls back to the timestamped filename when the basename field is absent", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ withBasename: false });
+    controller.startExport();
+
+    const worker = FakeWorker.instances.at(-1);
+    expect(worker.posted[0].filename).toMatch(/^linelist-.*\.csv$/);
+    controller.terminateWorker();
+  });
+
+  it("submits without optional basename and summary targets", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({
+      withBasename: false,
+      withFormErrorSummary: false,
+    });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(start).toHaveBeenCalled();
+    expect(() => controller.showBasenameErrorState(["error"])).not.toThrow();
+  });
+
+  it("handles invalid input without optional error targets", async () => {
+    const controller = await mount({
+      basename: "invalid basename",
+      withBasenameErrorTargets: false,
+      withFormErrorSummary: false,
+    });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    vi.spyOn(controller.basenameTarget, "reportValidity").mockImplementation(
+      () => {},
+    );
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
   });
 
   it("skips the sample status update when the target is absent", async () => {
@@ -293,6 +371,202 @@ describe("linelist export controller", () => {
     expect(event.defaultPrevented).toBe(true);
     expect(stop).toHaveBeenCalled();
     expect(start).toHaveBeenCalled();
+    expect(controller.basenameFieldTarget.classList).not.toContain("invalid");
+    expect(controller.basenameTarget.hasAttribute("aria-invalid")).toBe(false);
+    expect(controller.basenameTarget.getAttribute("aria-describedby")).toBe(
+      "basename_hint",
+    );
+    expect(controller.basenameErrorTarget.classList).toContain("hidden");
+    expect(controller.basenameTarget.parentElement.classList).not.toContain(
+      "field_with_errors",
+    );
+    expect(
+      controller.basenameLabelTarget.parentElement.classList,
+    ).not.toContain("field_with_errors");
+  });
+
+  it("blocks submission when the basename is invalid", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "invalid basename" });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const basename = controller.basenameTarget;
+    const reportValidity = vi
+      .spyOn(basename, "reportValidity")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+    const stop = vi.spyOn(event, "stopPropagation");
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(stop).toHaveBeenCalled();
+    expect(reportValidity).toHaveBeenCalled();
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.formErrorSummaryTarget.classList).not.toContain("hidden");
+    expect(controller.basenameFieldTarget.classList).toContain("invalid");
+    expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
+    expect(controller.basenameTarget.getAttribute("aria-describedby")).toBe(
+      "basename_hint",
+    );
+    expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      BASENAME_INVALID_MESSAGE,
+    );
+    expect(controller.basenameTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(controller.basenameLabelTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(
+      controller.formErrorSummaryTarget.querySelector("a").textContent,
+    ).toBe(BASENAME_INVALID_MESSAGE);
+    expect(
+      controller.formErrorSummaryTarget.querySelector("h2").textContent,
+    ).toBe("There is 1 field with problems preventing submission");
+  });
+
+  it("blocks submission when the basename is over 100 characters", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "a".repeat(101) });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const reportValidity = vi
+      .spyOn(controller.basenameTarget, "reportValidity")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(reportValidity).toHaveBeenCalled();
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.formErrorSummaryTarget.classList).not.toContain("hidden");
+    expect(controller.basenameFieldTarget.classList).toContain("invalid");
+    expect(controller.basenameTarget.getAttribute("aria-invalid")).toBe("true");
+    expect(controller.basenameErrorTarget.classList).not.toContain("hidden");
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      BASENAME_TOO_LONG_MESSAGE,
+    );
+    expect(
+      controller.formErrorSummaryTarget.querySelector("a").textContent,
+    ).toBe(BASENAME_TOO_LONG_MESSAGE);
+    expect(
+      controller.formErrorSummaryTarget.querySelector("h2").textContent,
+    ).toBe("There is 1 field with problems preventing submission");
+  });
+
+  it("unwraps the field_with_errors wrapper once the basename becomes valid", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "invalid basename" });
+    vi.spyOn(controller, "startExport").mockImplementation(() => {});
+    vi.spyOn(controller.basenameTarget, "reportValidity").mockImplementation(
+      () => {},
+    );
+
+    controller.submit(new Event("submit", { cancelable: true }));
+    expect(controller.basenameTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(controller.basenameLabelTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+
+    controller.basenameTarget.value = "valid-basename";
+    controller.submit(new Event("submit", { cancelable: true }));
+
+    expect(controller.basenameTarget.parentElement.classList).not.toContain(
+      "field_with_errors",
+    );
+    expect(
+      controller.basenameLabelTarget.parentElement.classList,
+    ).not.toContain("field_with_errors");
+    expect(controller.basenameTarget.parentElement).toBe(
+      controller.basenameFieldTarget,
+    );
+    expect(controller.basenameLabelTarget.parentElement).toBe(
+      controller.basenameFieldTarget,
+    );
+  });
+
+  it("does not re-wrap an already wrapped field_with_errors element on repeated invalid submissions", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: "invalid basename" });
+    vi.spyOn(controller, "startExport").mockImplementation(() => {});
+    vi.spyOn(controller.basenameTarget, "reportValidity").mockImplementation(
+      () => {},
+    );
+
+    controller.submit(new Event("submit", { cancelable: true }));
+    const inputWrapper = controller.basenameTarget.parentElement;
+    const labelWrapper = controller.basenameLabelTarget.parentElement;
+
+    controller.submit(new Event("submit", { cancelable: true }));
+
+    expect(controller.basenameTarget.parentElement).toBe(inputWrapper);
+    expect(controller.basenameLabelTarget.parentElement).toBe(labelWrapper);
+    expect(controller.basenameTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+    expect(controller.basenameLabelTarget.parentElement.classList).toContain(
+      "field_with_errors",
+    );
+  });
+
+  it("displays both errors when the basename violates both constraints", async () => {
+    storeSelection(["1"]);
+    const controller = await mount({ basename: `${"a".repeat(100)} ` });
+    const start = vi
+      .spyOn(controller, "startExport")
+      .mockImplementation(() => {});
+    const reportValidity = vi
+      .spyOn(controller.basenameTarget, "reportValidity")
+      .mockImplementation(() => {});
+    const event = new Event("submit", { cancelable: true });
+
+    controller.submit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(start).not.toHaveBeenCalled();
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      BASENAME_TOO_LONG_MESSAGE,
+    );
+    expect(controller.basenameErrorTarget.textContent).toContain(
+      BASENAME_INVALID_MESSAGE,
+    );
+    const summaryLinks =
+      controller.formErrorSummaryTarget.querySelectorAll("a");
+    expect(summaryLinks).toHaveLength(2);
+    expect(summaryLinks[0].textContent).toBe(BASENAME_TOO_LONG_MESSAGE);
+    expect(summaryLinks[1].textContent).toBe(BASENAME_INVALID_MESSAGE);
+    expect(
+      controller.formErrorSummaryTarget.querySelector("h2").textContent,
+    ).toBe("There are 2 fields with problems preventing submission");
+    expect(reportValidity).toHaveBeenCalled();
+  });
+
+  it("renders a basename error when the message child is absent", async () => {
+    const controller = await mount({ withBasenameErrorMessage: false });
+
+    controller.showBasenameErrorState(["Basename is invalid"]);
+
+    expect(controller.basenameErrorTarget.textContent).toBe(
+      "Basename is invalid",
+    );
+  });
+
+  it("updates summary links without requiring a heading", async () => {
+    const controller = await mount({ withFormErrorSummaryHeading: false });
+
+    controller.showFormErrorSummary(["Basename is invalid"]);
+
+    expect(controller.formErrorSummaryTarget.classList).not.toContain("hidden");
+    expect(
+      controller.formErrorSummaryTarget.querySelector("a").textContent,
+    ).toBe("Basename is invalid");
   });
 
   it("guards against navigation while an export is in flight", async () => {

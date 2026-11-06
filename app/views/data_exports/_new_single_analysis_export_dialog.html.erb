@@ -1,4 +1,4 @@
-<%# locals: (open:, workflow_execution:, analysis_type:, namespace_id: nil, selected: false) %>
+<%# locals: (open:, workflow_execution:, analysis_type:, namespace_id: nil, data_export:, selected:) %>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(:"data_exports.new_analysis_export_dialog.title")) %>
@@ -79,9 +79,16 @@
         </div>
       </div>
 
-      <%= form_for(:data_export, url: data_exports_path, method: :post) do |form| %>
+      <%= turbo_frame_tag("data-export-form-error-summary") %>
+
+      <%= form_with(model: data_export, as: :data_export,
+            url: data_exports_path,
+            method: :post,
+            html: { novalidate: true }) do |form| %>
         <div class="grid gap-4">
-          <%= render partial: "name_and_email", locals: { form: } %>
+          <%= turbo_frame_tag("data-export-name-and-email") do %>
+            <%= render partial: "data_exports/name_and_email", locals: { form: } %>
+          <% end %>
 
           <div>
             <%= form.hidden_field :export_type, value: "analysis" %>

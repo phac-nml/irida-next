@@ -14,9 +14,13 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Used by CreateService so authorization can run before the source-size query.
   attr_accessor :skip_source_size_validation
 
+  BASENAME_FORMAT_REGEX = /\A[\w-]+\z/
+
   validates :status, presence: true, acceptance: { accept: %w[processing ready] }
   validates :export_type, presence: true, acceptance: { accept: %w[sample analysis linelist] }
   validates :export_parameters, presence: true
+  validates :basename, format: { with: BASENAME_FORMAT_REGEX }, length: { maximum: 100 }, allow_blank: true,
+                       if: :custom_basename_enabled?
 
   validate :validate_export_parameters
   validate :validate_source_size, on: :create, if: :validate_source_size?
@@ -50,6 +54,10 @@ class DataExport < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def custom_basename_enabled?
+    Flipper.enabled?(:data_export_custom_basename, user)
+  end
 
   def validate_export_parameters
     if !export_parameters.key?('ids') || (export_parameters.key?('ids') && export_parameters['ids'].empty?)
