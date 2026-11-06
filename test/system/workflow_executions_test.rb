@@ -33,7 +33,7 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
   test 'advanced-search dialog supports apply and clear lifecycle on workflow listing' do
     visit workflow_executions_path
 
-    click_button I18n.t(:'components.advanced_search_component.v1.title')
+    click_button I18n.t(:'components.advanced_search_component.title')
 
     within('dialog') do
       select_state_advanced_search_field
@@ -45,19 +45,19 @@ class WorkflowExecutionsTest < ApplicationSystemTestCase
         find("input[name$='[value]']", visible: :visible).fill_in with: 'completed'
       end
 
-      click_button I18n.t(:'components.advanced_search_component.v1.apply_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.apply_filter_button')
     end
 
-    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.v1.title')
-    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.clear_aria_label')}']"
+    assert_no_selector 'dialog[open] h1', text: I18n.t(:'components.advanced_search_component.title')
+    assert_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
 
-    click_button I18n.t(:'components.advanced_search_component.v1.title')
+    click_button I18n.t(:'components.advanced_search_component.title')
 
     within('dialog') do
-      click_button I18n.t(:'components.advanced_search_component.v1.clear_filter_button')
+      click_button I18n.t(:'components.advanced_search_component.clear_filter_button')
     end
 
-    assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.v1.clear_aria_label')}']"
+    assert_no_selector "button[aria-label='#{I18n.t(:'components.advanced_search_component.clear_aria_label')}']"
   end
 
   test 'select page checkbox exposes mixed and all-selected accessibility state' do
