@@ -33,7 +33,9 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   delegate :project, to: :project_namespace
 
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
-                                        where(namespace:).or(where(namespace: namespace.parent&.self_and_ancestors))
+                                        where(namespace: namespace&.self_and_ancestors_of_type(
+                                          [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
+                                        ))
                                       }
 
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
