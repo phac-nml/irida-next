@@ -344,7 +344,9 @@ export default class Select2Controller extends Controller {
       dropdown: this.dropdownTarget,
       distance: 10,
       onShow: () => {
-        this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
+        const dropdownWidth = `${this.inputTarget.offsetWidth}px`;
+        this.dropdownTarget.style.width = dropdownWidth;
+        this.dropdownTarget.style.minWidth = dropdownWidth;
       },
       onHide: () => {
         if (!this.#itemSelected) this.#setInputTargetValueFromCache();
