@@ -31,7 +31,7 @@
     errors: project.namespace.errors.full_messages_for(:name) %>
   <% end %>
 
-  <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint"><%== t(:"projects.create.name_help") %></span>
+  <span id="<%= builder.field_id(:name, "hint") %>" class="field-hint"><%= t(:"projects.create.name_help_html") %></span>
 </div>
 
 <fieldset class="m-0 grid gap-4 border-0 p-0 @xs:grid-cols-1 @5xl:grid-cols-2">
