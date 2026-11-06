@@ -135,13 +135,11 @@ class ProjectMemberTest < ActiveSupport::TestCase
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     project = projects(:project1)
 
-    members = Member.for_namespace_and_ancestors(project)
+    members = Member.for_namespace_and_ancestors(project.namespace)
 
     group_and_ancestors = project.namespace.parent&.self_and_ancestors
 
-    memberships = group_and_ancestors.map(&:group_members)
-
-    memberships = memberships.flatten
+    memberships = group_and_ancestors.map(&:group_members).flatten + project.namespace.project_members
 
     assert memberships.count == members.count
     assert_same_unique_elements(members, memberships)
