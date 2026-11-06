@@ -210,7 +210,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation do |relation,
                           archived: false,
                           access_level: Member::AccessLevel.accessible,
-                          include_shared_links: true|
+                          include_shared_links: true,
+                          use_traversal_ids: true|
     relation
       .with(
         # 1. Accessible namespaces for the user based on their memberships
@@ -219,7 +220,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
                      scope_options: { access_level: access_level,
                                       include_project_namespaces: true,
                                       include_route: false,
-                                      include_shared_links: include_shared_links }
+                                      include_shared_links: include_shared_links,
+                                      use_traversal_ids: use_traversal_ids }
         ),
 
         # 2. Private project namespaces
@@ -279,10 +281,11 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
                                                 include_shared_links: false })
   end
 
-  scope_for :relation, :manageable do |relation, include_shared_links: true|
+  scope_for :relation, :manageable do |relation, include_shared_links: true, use_traversal_ids: true|
     authorized_scope(relation, type: :relation,
                                scope_options: { access_level: Member::AccessLevel.manageable,
-                                                include_shared_links: include_shared_links })
+                                                include_shared_links: include_shared_links,
+                                                use_traversal_ids: use_traversal_ids })
   end
 
   scope_for :relation, :personal do |relation|

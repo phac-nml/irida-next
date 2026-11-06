@@ -17,6 +17,15 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     assert_not scoped_namespaces.include?(namespaces_project_namespaces(:project28_namespace))
   end
 
+  test 'scope with use_traversal_ids false matches traversal_ids-based scope' do
+    traversal_ids_scope = @policy.apply_scope(Namespace, type: :relation)
+    route_based_scope = @policy.apply_scope(Namespace, type: :relation,
+                                                       scope_options: { use_traversal_ids: false })
+
+    assert_equal 12, route_based_scope.count
+    assert_equal traversal_ids_scope.pluck(:id).sort, route_based_scope.pluck(:id).sort
+  end
+
   test 'scope without shared links' do
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, scope_options: { include_shared_links: false })
 
