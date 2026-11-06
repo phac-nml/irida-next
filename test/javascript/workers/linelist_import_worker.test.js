@@ -217,6 +217,10 @@ describe("linelist import worker", () => {
 
     await handleMessage({ data: { type: "read_headers", file } });
 
+    expect(mockRead).toHaveBeenCalledWith(
+      expect.any(ArrayBuffer),
+      expect.objectContaining({ sheetRows: 1 }),
+    );
     expect(lastMessage()).toEqual({
       type: "headers",
       headers: ["sample_id", "country"],
