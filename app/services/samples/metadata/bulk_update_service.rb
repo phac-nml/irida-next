@@ -38,7 +38,9 @@ module Samples
           next if sample.nil?
 
           project_puid = sample.project.puid
-          metadata_changes = perform_metadata_update(sample, metadata, false)
+          metadata_changes = Sample.suppressing_turbo_broadcasts do
+            perform_metadata_update(sample, metadata, false)
+          end
 
           # no changes made for sample (metadata was invalid)
           next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
@@ -336,6 +338,7 @@ module Samples
                                           @metadata_summary_data[project_puid][:deleted],
                                           @metadata_summary_data[project_puid][:added],
                                           false)
+        project_namespace.project.broadcast_refresh_later_to_samples_table
       end
 
       def handle_unsuccessful_updates(unsuccessful_updates)
