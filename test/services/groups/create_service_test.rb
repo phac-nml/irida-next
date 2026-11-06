@@ -92,10 +92,13 @@ module Groups
 
       group.create_logidze_snapshot!
 
-      assert_equal 1, group.log_data.version
-      assert_equal 1, group.log_data.size
-      assert_equal 'new-group1-name', group.at(version: 1).name
-      assert_equal 'new-group1-path', group.at(version: 1).path
+      # 2 versions, not 1: the insert logs one version, and the separate
+      # traversal_ids update_column (now that postgres generates ids via
+      # after_create) logs a second version.
+      assert_equal 2, group.log_data.version
+      assert_equal 2, group.log_data.size
+      assert_equal 'new-group1-name', group.at(version: 2).name
+      assert_equal 'new-group1-path', group.at(version: 2).path
     end
 
     test 'create public group' do

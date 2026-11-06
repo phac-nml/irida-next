@@ -28,9 +28,8 @@ module Namespaces
       include LinearScopes
 
       included do
-        before_create :write_traversal_ids
-        before_update :set_traversal_ids, if: :will_save_change_to_parent_id?
-        after_update :sync_descendants_traversal_ids, if: :saved_change_to_parent_id?
+        after_create :write_traversal_ids
+        after_update :sync_traversal_ids, if: :saved_change_to_parent_id?
       end
 
       # Whether this namespace's `traversal_ids` is populated and can be used
@@ -108,43 +107,45 @@ module Namespaces
 
       private
 
-      # Set traversal_ids for a namespace before it is inserted. Runs
-      # before_create (rather than after) so that `traversal_ids` is part of
-      # the original INSERT instead of a separate UPDATE immediately after
-      # it - a separate UPDATE would otherwise log a spurious extra logidze
-      # version for every namespace creation. The primary key is normally
-      # assigned by the database default (`gen_random_uuid()`), which only
-      # happens once the row is inserted, so it is generated here in Ruby
-      # instead, to have it available up front for building `traversal_ids`.
+      # Set traversal_ids for a namespace right after it is inserted. Runs
+      # after_create (rather than before) so that the primary key - assigned
+      # by the database default (`gen_random_uuid()`), which only exists
+      # once the row is inserted - can be used directly, instead of
+      # generating it in Ruby ahead of time. This requires a second UPDATE
+      # statement right after the INSERT (via `update_column`, which
+      # bypasses validations/callbacks and dirty tracking), so namespace
+      # creation logs two logidze versions instead of one - an accepted
+      # tradeoff in favour of letting the database generate the id.
       def write_traversal_ids
-        self.id ||= SecureRandom.uuid
-        self.traversal_ids = (parent&.traversal_ids || []) + [id]
+        update_column(:traversal_ids, (parent&.traversal_ids || []) + [id]) # rubocop:disable Rails/SkipsModelValidations
       end
 
-      # Set traversal_ids for a namespace that is about to be reparented.
-      # Runs before_update (rather than after) so that `traversal_ids` is
-      # part of the same UPDATE as the `parent_id` change, instead of a
-      # separate UPDATE afterwards - a separate UPDATE would otherwise log a
-      # spurious extra logidze version, and (more importantly) a `reload`
-      # to pick up its result would clear this record's
-      # `saved_changes`/`previous_changes`, which other `after_commit`
-      # callbacks on this same save - e.g. `Namespace#propagate_parent_change`,
-      # guarded by `if: :saved_change_to_parent_id?` - rely on to detect the
-      # reparenting that just happened.
-      def set_traversal_ids
-        self.traversal_ids = (parent&.traversal_ids || []) + [id]
+      # Set traversal_ids for this namespace and resync it for all of its
+      # descendants, after this namespace is reparented. Runs after_update
+      # (rather than before) so the already-committed `parent_id` change (and
+      # the `saved_change_to_parent_id?` guard above, and
+      # `Namespace#propagate_parent_change`'s own `after_commit` guard) are
+      # unaffected by this method's own writes. Because this namespace's
+      # `traversal_ids` is set via a separate UPDATE (`update_column`, again
+      # bypassing dirty tracking), the pre-move value is captured in
+      # `old_prefix` before that write, rather than read afterwards via
+      # `saved_change_to_traversal_ids` - which `update_column` would not
+      # have populated.
+      def sync_traversal_ids
+        old_prefix = traversal_ids
+        new_prefix = (parent&.traversal_ids || []) + [id]
+        return if old_prefix == new_prefix
+
+        update_column(:traversal_ids, new_prefix) # rubocop:disable Rails/SkipsModelValidations
+        sync_descendants_traversal_ids(old_prefix, new_prefix)
       end
 
-      # Resync traversal_ids for this namespace's descendants after it is
-      # reparented (this namespace's own `traversal_ids` was already synced
-      # by `set_traversal_ids`, as part of the same UPDATE). The pre-move
-      # value is read via `saved_change_to_traversal_ids` - `traversal_ids`
-      # itself already holds the new, post-move value at this point - and
-      # used as the prefix to match this namespace's existing subtree, which
-      # is then replaced in a single UPDATE with the new prefix.
-      def sync_descendants_traversal_ids
-        old_prefix, new_prefix = saved_change_to_traversal_ids
-        return if old_prefix.blank? || old_prefix == new_prefix
+      # Resync traversal_ids for this namespace's descendants, to replace the
+      # pre-move `old_prefix` (this namespace's own previous root-to-self
+      # chain, matched as a prefix of each descendant's existing
+      # `traversal_ids`) with the post-move `new_prefix`, in a single UPDATE.
+      def sync_descendants_traversal_ids(old_prefix, new_prefix)
+        return if old_prefix.blank?
 
         old_ids = quoted_traversal_ids(old_prefix)
         new_ids = quoted_traversal_ids(new_prefix)

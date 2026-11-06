@@ -187,14 +187,15 @@ module Namespaces
         assert_equal [new_group.id], new_group.traversal_ids
       end
 
-      test 'creating a namespace only logs a single logidze version (no separate traversal_ids write)' do
+      test 'creating a namespace logs an extra logidze version (traversal_ids written in a separate ' \
+           'update_column after insert, now that postgres generates the id instead of ruby)' do
         parent = groups(:group_one)
 
         new_group = Group.create!(name: 'Linear Traversal Logidze Group', path: 'linear-traversal-logidze-group',
                                   parent:)
         new_group.create_logidze_snapshot!
 
-        assert_equal 1, new_group.log_data.version
+        assert_equal 2, new_group.log_data.version
       end
 
       test 'reparenting updates traversal_ids for the namespace and all of its descendants' do
@@ -219,7 +220,8 @@ module Namespaces
         assert_equal original_traversal_ids, subgroup.reload.traversal_ids
       end
 
-      test 'reparenting updates each affected namespace exactly once, with no extra logidze version' do
+      test 'reparenting logs an extra logidze version for the reparented namespace itself (its own ' \
+           'traversal_ids update_column after the parent_id save), but only one new version for descendants' do
         new_root = Group.create!(name: 'Linear Traversal New Root 2', path: 'linear-traversal-new-root-2')
         subgroup = groups(:subgroup_one_group_three)
         project = namespaces_project_namespaces(:project4_namespace)
@@ -238,12 +240,12 @@ module Namespaces
         subgroup.reload_log_data
         project.reload_log_data
 
-        # Both rows are genuinely updated once (subgroup's own traversal_ids
-        # change as part of its own save; project's traversal_ids change via
-        # the separate descendants UPDATE), so each should log exactly one
-        # new logidze version - not two, which would indicate the same row
-        # was written to twice for a single reparent.
-        assert_equal 2, subgroup.log_data.version
+        # subgroup is written to twice (the primary `parent_id` save, plus
+        # the separate `update_column` that sets its own `traversal_ids`
+        # afterwards), so it logs two new versions; project (a descendant,
+        # updated only via the single `sync_descendants_traversal_ids`
+        # UPDATE) logs exactly one.
+        assert_equal 3, subgroup.log_data.version
         assert_equal 2, project.log_data.version
       end
     end
