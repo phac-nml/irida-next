@@ -455,5 +455,20 @@ module Projects
       follow_redirect!
       assert_response :success
     end
+
+    test 'invalid pagy limit is handled gracefully at project level' do
+      sign_in users(:john_doe)
+      get namespace_project_workflow_executions_path(@namespace, @project),
+          params: { pagy: { limit: 'invalid' } }
+
+      assert_response :success
+      assert_select '#workflow-executions-table table tbody tr',
+                    count: [Pagy::OPTIONS[:limit],
+                            @project.namespace.workflow_executions.where(
+                              submitter: users(:project1_automation_bot)
+                            ).or(@project.namespace.workflow_executions.where(
+                                   shared_with_namespace: true
+                                 )).count].min
+    end
   end
 end

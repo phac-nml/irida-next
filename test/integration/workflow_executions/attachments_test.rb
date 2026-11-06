@@ -125,5 +125,17 @@ module WorkflowExecutions
         assert_select 'tr', count: 0
       end
     end
+
+    test 'invalid pagy limit is handled gracefully' do
+      get workflow_execution_path(@workflow_execution, tab: 'files'),
+          params: { limit: 'invalid' }
+
+      assert_response :redirect
+      follow_redirect!
+
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: 2
+      end
+    end
   end
 end
