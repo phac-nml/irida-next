@@ -39,6 +39,7 @@ module Benchmarks
         report_setup_size
         benchmark_member_scope
         benchmark_namespace_group_link_scope
+        benchmark_top_level_ancestor_lookup
         raise ActiveRecord::Rollback
       end
     end
@@ -180,6 +181,39 @@ module Benchmarks
         x.report('old (routes join + ORDER BY routes.path)') { block.call(false) } if %i[old both].include?(strategy)
 
         x.report('new (ORDER BY CARDINALITY(traversal_ids))') { block.call(true) } if %i[new both].include?(strategy)
+
+        x.compare! if strategy == :both
+      end
+      puts
+    end
+
+    # Benchmarks ProjectPolicy's `project_samples_transferable` scope's
+    # top-level group ancestor lookup (`top_level_group_ancestor` in
+    # app/policies/project_policy.rb): old (`self_and_ancestors.find_by(type:
+    # Group.sti_name, parent: nil)`, a query walking the whole ancestor
+    # chain) vs new (`Group.find(traversal_ids.first)`, a direct primary-key
+    # lookup using the id already held in memory).
+    def benchmark_top_level_ancestor_lookup
+      benchmark_top_level_ancestor_lookup_for('group namespace', deepest_leaf)
+      benchmark_top_level_ancestor_lookup_for('project namespace', deepest_project_namespace)
+    end
+
+    def benchmark_top_level_ancestor_lookup_for(label, namespace) # rubocop:disable Metrics/MethodLength
+      puts "--- ProjectPolicy top-level group ancestor lookup, #{label} ---"
+      base = namespace.project_namespace? ? namespace.parent : namespace
+
+      Benchmark.ips do |x|
+        if %i[old both].include?(strategy)
+          x.report('old (self_and_ancestors.find_by)') do
+            base.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
+          end
+        end
+
+        if %i[new both].include?(strategy)
+          x.report('new (Group.find(traversal_ids.first))') do
+            Group.find(base.traversal_ids.first)
+          end
+        end
 
         x.compare! if strategy == :both
       end
