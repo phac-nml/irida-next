@@ -69,17 +69,14 @@ module Namespaces
         # relation and all of their descendants.
         #
         # Implementation:
-        # - A namespace is a descendant of (or equal to) one of the base
-        #   namespaces when its `traversal_ids`, truncated to the base
-        #   namespace's depth, equals the base namespace's `traversal_ids`.
-        #   This is expressed with Postgres array-slice syntax
-        #   (`traversal_ids[1:cardinality(base.traversal_ids)]`), which Arel
-        #   has no built-in node for, so it is injected as a raw SQL
-        #   fragment via `Arel.sql`.
-        # - The base namespaces (those in the receiver relation) are joined
-        #   via an aliased `base_namespaces` table and matched with `EXISTS`
-        #   to avoid returning duplicate rows when multiple base namespaces
-        #   share descendants.
+        # - Every namespace's `traversal_ids` is its unique root-to-self id
+        #   chain, and ids are globally unique across the tree. So a
+        #   namespace is a descendant of (or equal to) one of the base
+        #   namespaces exactly when the base namespace's id appears
+        #   somewhere in its `traversal_ids` array. This is checked with
+        #   Postgres' array overlap operator (`&&`) against the set of base
+        #   namespace ids, which (unlike the array-slice-equality approach
+        #   this replaced) can use the GIN index on `traversal_ids`.
         #
         # Returns an ActiveRecord::Relation of Namespace records (self + descendants).
         #
@@ -87,7 +84,7 @@ module Namespaces
         # `unscoped`, preserving the receiver's STI `type` condition. Use
         # `self_and_descendants_across_types` to query across STI types.
         def self_and_descendants
-          unscoped.where(Arel::Nodes::Exists.new(descendant_match_subquery(select(:id).arel)))
+          unscoped.where(descendant_match_condition(select(:id).arel))
         end
 
         def self_and_descendant_ids
@@ -100,7 +97,7 @@ module Namespaces
         # `#self_and_descendants_of_type` to find descendants of a different
         # STI type than the receiver (e.g. a Group's Project descendants).
         def self_and_descendants_across_types
-          Namespace.unscoped.where(Arel::Nodes::Exists.new(descendant_match_subquery(select(:id).arel)))
+          Namespace.unscoped.where(descendant_match_condition(select(:id).arel))
         end
 
         # Return namespaces in the receiver relation that are not
@@ -123,13 +120,10 @@ module Namespaces
 
         private
 
-        def descendant_match_subquery(base_ids)
-          base = Arel::Table.new(table_name, as: 'base_namespaces')
-          slice = Arel.sql("#{table_name}.traversal_ids[1:cardinality(base_namespaces.traversal_ids)]")
-
-          base.project(Arel.sql('1'))
-              .where(base[:id].in(base_ids))
-              .where(Arel::Nodes::Equality.new(slice, base[:traversal_ids]))
+        def descendant_match_condition(base_ids)
+          Arel::Nodes::InfixOperation.new(
+            '&&', Namespace.arel_table[:traversal_ids], Arel::Nodes::NamedFunction.new('ARRAY', [base_ids])
+          )
         end
 
         def ancestor_match_subquery(base_ids)
