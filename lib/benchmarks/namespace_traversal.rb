@@ -69,8 +69,8 @@ module Benchmarks
     end
 
     def report_hierarchy_size
-      puts "Total namespaces created: #{root.linear_self_and_descendants.count}"
-      puts "Deepest leaf ancestor count: #{deepest_leaf.linear_ancestor_ids.size}"
+      puts "Total namespaces created: #{root.self_and_descendants.count}"
+      puts "Deepest leaf ancestor count: #{deepest_leaf.ancestor_ids.size}"
       puts
     end
 
@@ -84,14 +84,16 @@ module Benchmarks
       benchmark_methods(root, %w[descendants self_and_descendants])
     end
 
-    # Benchmarks the `route_based_<method_name>` and `linear_<method_name>`
-    # variants of each given method name against `namespace`, reporting a
-    # single iterations-per-second comparison across all of them.
+    # Benchmarks the `route_based_<method_name>` (routes join) and bare
+    # `<method_name>` (traversal_ids - Linear is the default implementation
+    # for bare method names) variants of each given method name against
+    # `namespace`, reporting a single iterations-per-second comparison
+    # across all of them.
     def benchmark_methods(namespace, method_names)
       Benchmark.ips do |x|
         method_names.each do |method_name|
           x.report("route_based #{method_name}") { namespace.public_send(:"route_based_#{method_name}").load }
-          x.report("linear #{method_name}") { namespace.public_send(:"linear_#{method_name}").load }
+          x.report("linear #{method_name}") { namespace.public_send(method_name).load }
         end
 
         x.compare!
