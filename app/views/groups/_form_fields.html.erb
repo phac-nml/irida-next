@@ -35,7 +35,7 @@ include: group.new_record? ? %i[name description path parent_id] : %i[name descr
     errors: group.errors.full_messages_for(:name) %>
   <% end %>
 
-  <span id="<%= form.field_id(:name, "hint") %>" class="field-hint"><%== t(:"groups.create.name_help") %></span>
+  <span id="<%= form.field_id(:name, "hint") %>" class="field-hint"><%= t(:"groups.create.name_help_html") %></span>
 </div>
 
 <% if group.new_record? %>
