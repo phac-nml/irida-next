@@ -9,6 +9,7 @@ const SUPPORTED_MIME_TYPES = [
   "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
+const HEADER_READ_OPTIONS = { sheetRows: 1 };
 
 const buildBulkUpdateSampleMetadataMutation = (namespaceField) => `
   mutation BulkUpdateSampleMetadata($metadata: JSON!, $${namespaceField}: ID!) {
@@ -141,8 +142,8 @@ export const bulkUpdateSampleMetadata = async ({
   return payload?.data?.bulkUpdateSampleMetadata;
 };
 
-const workbookFromFile = async (file) => {
-  const workbook = spreadsheet.read(await file.arrayBuffer());
+const workbookFromFile = async (file, readOptions = {}) => {
+  const workbook = spreadsheet.read(await file.arrayBuffer(), readOptions);
   const worksheetName = workbook.SheetNames[0];
 
   return workbook.Sheets[worksheetName];
@@ -319,7 +320,7 @@ self.onmessage = async (event) => {
 
   if (type === "read_headers") {
     try {
-      const worksheet = await workbookFromFile(file);
+      const worksheet = await workbookFromFile(file, HEADER_READ_OPTIONS);
       self.postMessage({
         type: "headers",
         headers: worksheetHeaders(worksheet),
