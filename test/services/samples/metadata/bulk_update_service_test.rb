@@ -20,6 +20,74 @@ module Samples
         @subgroup12aa = groups(:subgroup_twelve_a_a)
       end
 
+      test 'broadcasts once per project and ancestor after updating the metadata summary' do
+        payload = { @sample34.name => { 'metadatafield3' => 'value3' },
+                    @sample35.id => { 'metadatafield3' => 'value3' } }
+
+        [@project31, @subgroup12aa, @subgroup12a, @group12].each do |target|
+          Project.any_instance.expects(:broadcast_refresh_later_to).with do |streamable, stream|
+            summary = target.is_a?(Project) ? target.namespace.reload.metadata_summary : target.reload.metadata_summary
+            streamable == target && stream == :samples && summary['metadatafield3'] == 2
+          end.once
+        end
+
+        result = Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, ['metadatafield3'],
+                                                          @user).execute
+
+        assert_equal payload.keys, result.keys
+      end
+
+      test 'group imports broadcast once for each changed project' do
+        payload = { @sample33.puid => { 'metadatafield3' => 'value3' },
+                    @sample34.name => { 'metadatafield3' => 'value3' },
+                    @sample35.id => { 'metadatafield3' => 'value3' } }
+
+        [@project30, @project31, @subgroup12b, @subgroup12a, @subgroup12aa].each do |target|
+          Project.any_instance.expects(:broadcast_refresh_later_to).with(target, :samples).once
+        end
+        Project.any_instance.expects(:broadcast_refresh_later_to).with(@group12, :samples).twice
+
+        Samples::Metadata::BulkUpdateService.new(@group12, payload, ['metadatafield3'], @user).execute
+      end
+
+      test 'does not broadcast when no metadata changes' do
+        payload = { @sample34.name => { 'metadatafield1' => 'protected analysis value' },
+                    @sample33.puid => { 'metadatafield1' => 'value1' },
+                    @sample35.id => { 'metadatafield3' => nil },
+                    'missing sample' => { 'metadatafield3' => 'value3' },
+                    @sample34.id => {} }
+        Project.any_instance.expects(:broadcast_refresh_later_to).never
+
+        Samples::Metadata::BulkUpdateService.new(@group12, payload,
+                                                 %w[metadatafield1 metadatafield3], @user).execute
+
+        assert @group12.errors.any?
+      end
+
+      test 'broadcasts after updates and deletions without adding metadata fields' do
+        payload = { @sample33.puid => { 'metadatafield1' => 'new value', 'metadatafield2' => '' } }
+
+        [@project30, @subgroup12b, @group12].each do |target|
+          Project.any_instance.expects(:broadcast_refresh_later_to).with(target, :samples).once
+        end
+
+        result = Samples::Metadata::BulkUpdateService.new(@project30.namespace, payload,
+                                                          %w[metadatafield1 metadatafield2], @user).execute
+
+        assert_equal ['metadatafield1'], result[@sample33.puid][:updated]
+        assert_equal ['metadatafield2'], result[@sample33.puid][:deleted]
+      end
+
+      test 'restores sample broadcasts when a metadata update raises' do
+        payload = { @sample35.id => { 'metadatafield3' => 'value3' } }
+        service = Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, ['metadatafield3'], @user)
+        service.stubs(:perform_metadata_update).raises(ActiveRecord::RecordInvalid)
+
+        assert_raises(ActiveRecord::RecordInvalid) { service.execute }
+
+        assert_not Sample.suppressed_turbo_broadcasts
+      end
+
       test 'add metadata to samples within a single project' do
         freeze_time
         payload = { @sample34.name => { 'metadatafield3' => 'value3', 'metadatafield4' => 'value4' },

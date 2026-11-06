@@ -154,6 +154,21 @@ const worksheetHeaders = (worksheet) =>
 const rowValue = (worksheet, row, column) =>
   worksheet[spreadsheet.utils.encode_cell({ r: row, c: column })]?.v ?? null;
 
+const rowHasValues = (worksheet, row, range) => {
+  for (let column = range.s.c; column <= range.e.c; column += 1) {
+    if (rowValue(worksheet, row, column) !== null) return true;
+  }
+  return false;
+};
+
+const spreadsheetRowCount = (worksheet, range) => {
+  let count = 0;
+  for (let row = range.s.r + 1; row <= range.e.r; row += 1) {
+    if (rowHasValues(worksheet, row, range)) count += 1;
+  }
+  return count;
+};
+
 const spreadsheetRows = function* ({
   worksheet,
   headers,
@@ -168,6 +183,8 @@ const spreadsheetRows = function* ({
   const sampleIdColumnIndex = headerIndexes.get(sampleIdColumn);
 
   for (let row = range.s.r + 1; row <= range.e.r; row += 1) {
+    if (!rowHasValues(worksheet, row, range)) continue;
+
     const metadata = {};
 
     metadataColumns.forEach((column) => {
@@ -343,7 +360,8 @@ self.onmessage = async (event) => {
         groupPuid,
         projectId,
         projectPuid,
-        total: range.e.r,
+        // Count separately so progress excludes blank rows without materializing all metadata rows.
+        total: spreadsheetRowCount(worksheet, range),
       });
     } else {
       await importRowChunks({

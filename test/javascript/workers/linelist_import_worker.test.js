@@ -296,7 +296,7 @@ describe("linelist import worker", () => {
 
   it("imports missing cell values when empty values are selected", async () => {
     const file = { arrayBuffer: async () => new ArrayBuffer(0) };
-    const worksheet = {};
+    const worksheet = { "1:0": { v: "sample_1" } };
     mockRead.mockReturnValue({
       SheetNames: ["Sheet1"],
       Sheets: { Sheet1: worksheet },
@@ -323,12 +323,12 @@ describe("linelist import worker", () => {
     });
 
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
-    expect(body.variables.metadata).toEqual({ null: { country: null } });
+    expect(body.variables.metadata).toEqual({ sample_1: { country: null } });
   });
 
   it("omits missing metadata values when empty values are ignored", async () => {
     const file = { arrayBuffer: async () => new ArrayBuffer(0) };
-    const worksheet = {};
+    const worksheet = { "1:0": { v: "sample_1" } };
     mockRead.mockReturnValue({
       SheetNames: ["Sheet1"],
       Sheets: { Sheet1: worksheet },
@@ -355,7 +355,7 @@ describe("linelist import worker", () => {
     });
 
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
-    expect(body.variables.metadata).toEqual({ null: {} });
+    expect(body.variables.metadata).toEqual({ sample_1: {} });
   });
 
   it("imports rows in chunks and reports progress before completion", async () => {
