@@ -139,6 +139,9 @@ application.register(
 import PersonalAccessTokensController from "./personal_access_tokens_controller";
 application.register("personal-access-tokens", PersonalAccessTokensController);
 
+import Projects__PathPreviewController from "./projects/path_preview_controller";
+application.register("projects--path-preview", Projects__PathPreviewController);
+
 import Projects__Samples__Attachments__SelectedAttachmentsController from "./projects/samples/attachments/selected_attachments_controller";
 application.register(
   "projects--samples--attachments--selected-attachments",

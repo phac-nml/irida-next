@@ -1620,24 +1620,23 @@ en:
               pre_html: 'You are about to delete the project <strong>%{project_name}</strong>. This action will also delete:'
               samples_count: "%{count} sample(s)"
           description: Deleting a project is permanent and cannot be undone. All samples and direct members will be deleted along with the project.
+          heading: Delete this project
           submit: Delete project
           title: Delete project
         path:
           description: Changing a project's URL can have unintended side effects.
           help: The path is used in URLs and must be at least 3 characters and can only contain letters, numbers, dashes and underscores
+          preview_label: 'Project URL:'
+          section_description: The address people and integrations use to reach this project.
           submit: Change project URL
           title: Change project URL
-        title: Advanced settings
         transfer:
           confirm:
             points_html:
             - To prevent accidental actions we ask you to confirm your intention.
             - Please type <kbd>%{project}</kbd> to proceed or close this dialog to cancel.
             warning_html: You are going to transfer <strong>%{project_name}</strong> to another namespace. Once you confirm, this action cannot be undone.
-          descriptions:
-          - Transfer your project into another namespace.
-          - When you transfer your project to a group, you can easily manage multiple projects and users.
-          - 'Things to be aware of before transferring your project:'
+          description: Transfer your project into another namespace.
           empty_state: No namespaces are associated with that name or ID
           new_namespace_id: Select a new namespace
           no_available_namespaces: You do not have access to any destination namespaces to transfer this project
@@ -1648,10 +1647,15 @@ en:
           select_namespace: Select Namespace
           submit: Transfer project
           title: Transfer project
+      danger_zone:
+        description: These actions cannot be undone. Each one asks you to type the project name to confirm.
+        title: Danger zone
       general:
         heading: Project name and description
+        section_description: Shown across IRIDA Next and in project search results.
         submit: Update project
-        title: General Settings
+        subtitle: Manage this project's name, description, URL, and lifecycle.
+        title: General
       title: General Settings
     group_links:
       edit:

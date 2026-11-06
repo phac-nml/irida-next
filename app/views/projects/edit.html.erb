@@ -1,31 +1,60 @@
-<div class="md:mx-auto">
-  <div class="grid gap-4">
-    <%= render Layout::PageHeaderComponent.new(title: t(".general.title")) %>
+<div class="settings-form mx-auto max-w-5xl">
+  <%= render Layout::PageHeaderComponent.new(
+        title: t(".general.title"),
+        subtitle: t(".general.subtitle"),
+        id: @project.puid,
+      ) %>
 
-    <%= render Viral::CardComponent.new do |card| %>
-      <% card.with_header(title: t(".general.heading")) %>
+  <div class="mb-6">
+    <%= render partial: "shared/form/required_field_legend" %>
+  </div>
 
-      <% card.with_section do %>
-        <%= turbo_frame_tag("project_name_and_description_form") do %>
-          <%= render partial: "edit_name_and_description_form", locals: { project: @project } %>
-        <% end %>
+  <div class="flex flex-col">
+    <%= render layout: "projects/settings/section",
+               locals: {
+                 title: t(".general.heading"),
+                 heading_id: "project-settings-details",
+                 description: t(".general.section_description"),
+               } do %>
+      <%= turbo_frame_tag("project_name_and_description_form") do %>
+        <%= render partial: "projects/edit_name_and_description_form", locals: { project: @project } %>
       <% end %>
     <% end %>
 
-    <%= render Pathogen::Typography::Heading.new(level: 2) do %>
-      <%= t(".advanced.title") %>
+    <%= render layout: "projects/settings/section",
+               locals: {
+                 title: t(:"projects.edit.advanced.path.title"),
+                 heading_id: "project-settings-url",
+                 description: t(:"projects.edit.advanced.path.section_description"),
+               } do %>
+      <%= turbo_frame_tag("project_path_form") do %>
+        <%= render "projects/change_path", project: @project %>
+      <% end %>
     <% end %>
 
-    <%= turbo_frame_tag("project_path_form") do %>
-      <%= render "change_path", project: @project %>
-    <% end %>
+    <% if @allowed_to[:transfer] || @allowed_to[:destroy] %>
+      <%= render layout: "projects/settings/section",
+                 locals: {
+                   title: t(".danger_zone.title"),
+                   heading_id: "project-settings-danger",
+                   description: t(".danger_zone.description"),
+                   danger: true,
+                 } do %>
+        <div
+          class="
+            divide-y divide-[var(--pvc-color-border)] rounded-[var(--pvc-radius-panel)] border
+            border-[var(--pvc-color-border-strong)]
+          "
+        >
+          <% if @allowed_to[:transfer] %>
+            <%= render "projects/transfer", project: @project, authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form %>
+          <% end %>
 
-    <% if @allowed_to[:transfer] %>
-      <%= render "transfer", project: @project, authorized_namespaces: @authorized_namespaces, transfer_form: @transfer_form %>
-    <% end %>
-
-    <% if @allowed_to[:destroy] %>
-      <%= render "destroy", project: @project, samples_count: @samples_count, automated_workflows_count: @automated_workflows_count %>
+          <% if @allowed_to[:destroy] %>
+            <%= render "projects/destroy", project: @project, samples_count: @samples_count, automated_workflows_count: @automated_workflows_count %>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>

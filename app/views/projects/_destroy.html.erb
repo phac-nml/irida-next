@@ -1,58 +1,62 @@
 <%# locals: (project:, samples_count:, automated_workflows_count:) %>
 
-<%= render Viral::CardComponent.new do |card| %>
-  <% card.with_header(title: t(:"projects.edit.advanced.destroy.title")) %>
+<div class="confirm-destroy hidden">
+  <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
+    <%= icon(:warning_circle, color: :danger) %>
 
-  <% card.with_section do %>
-    <div class="confirm-destroy hidden">
-      <div class="mb-4 flex rounded-lg bg-red-50 p-4 text-red-800 dark:bg-slate-800 dark:text-red-400">
-        <%= icon(:warning_circle, color: :danger) %>
+    <div class="ml-4 flex-1">
+      <%= t(
+        :"projects.edit.advanced.destroy.confirm.warning.pre_html",
+        project_name: project.human_name,
+      ) %>
 
-        <div class="ml-4 flex-1">
+      <ul class="ml-4 max-w-md list-inside list-disc space-y-1 py-2">
+        <li><%= t(
+            :"projects.edit.advanced.destroy.confirm.warning.samples_count",
+            count: samples_count,
+          ) %></li>
+
+        <li>
           <%= t(
-            :"projects.edit.advanced.destroy.confirm.warning.pre_html",
-            project_name: project.human_name,
+            :"projects.edit.advanced.destroy.confirm.warning.automated_workflows_count",
+            count: automated_workflows_count,
           ) %>
+        </li>
+      </ul>
 
-          <ul class="ml-4 max-w-md list-inside list-disc space-y-1 py-2">
-            <li><%= t(
-                :"projects.edit.advanced.destroy.confirm.warning.samples_count",
-                count: samples_count,
-              ) %></li>
-
-            <li>
-              <%= t(
-                :"projects.edit.advanced.destroy.confirm.warning.automated_workflows_count",
-                count: automated_workflows_count,
-              ) %>
-            </li>
-          </ul>
-
-          <%= t(:"projects.edit.advanced.destroy.confirm.warning.post_html") %>
-        </div>
-      </div>
-
-      <div class="mb-4">
-        <% t(:"projects.edit.advanced.destroy.confirm.points_html", project: project.name).each do |item| %>
-          <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
-        <% end %>
-      </div>
+      <%= t(:"projects.edit.advanced.destroy.confirm.warning.post_html") %>
     </div>
+  </div>
 
-    <p class="text-slate-600 dark:text-slate-400"><%= t(:"projects.edit.advanced.destroy.description") %></p>
+  <div class="mb-4">
+    <% t(:"projects.edit.advanced.destroy.confirm.points_html", project: project.name).each do |item| %>
+      <p class="mb-2 text-base text-slate-900 dark:text-white"><%= item %></p>
+    <% end %>
+  </div>
+</div>
 
-    <div class="mt-4">
-      <%= pathogen_button_to t(:"projects.edit.advanced.destroy.submit"),
-      namespace_project_path,
-      method: :delete,
-      form: {
-        data: {
-          turbo_confirm: "",
-          turbo_content: ".confirm-destroy",
-          confirm_value: project.name,
-        }
-      },
-      tone: :danger, emphasis: :solid %>
-    </div>
-  <% end %>
-<% end %>
+<div class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+  <div class="min-w-0">
+    <h3 class="text-[length:var(--type-control)] font-semibold text-[var(--pvc-color-text)]">
+      <%= t(:"projects.edit.advanced.destroy.heading") %>
+    </h3>
+
+    <%= render Pathogen::Typography::Supporting.new(variant: :muted, tag: :p) do %>
+      <%= t(:"projects.edit.advanced.destroy.description") %>
+    <% end %>
+  </div>
+
+  <div class="shrink-0">
+    <%= pathogen_button_to t(:"projects.edit.advanced.destroy.submit"),
+    namespace_project_path,
+    method: :delete,
+    form: {
+      data: {
+        turbo_confirm: "",
+        turbo_content: ".confirm-destroy",
+        confirm_value: project.name,
+      }
+    },
+    tone: :danger, emphasis: :outline %>
+  </div>
+</div>

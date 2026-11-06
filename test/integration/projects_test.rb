@@ -356,7 +356,8 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       assert_select 'textarea[name="project[namespace_attributes][description]"]'
       assert_select 'input[type="submit"]', value: I18n.t('projects.edit.general.submit')
     end
-    assert_select 'h2', text: I18n.t('projects.edit.advanced.title')
+    assert_select 'h2', text: I18n.t('projects.edit.general.heading')
+    assert_select 'h2', text: I18n.t('projects.edit.advanced.path.title')
     assert_select 'form' do
       assert_select 'input[name="project[namespace_attributes][path]"]'
       assert_select 'input[type="submit"]', value: I18n.t('projects.edit.advanced.path.submit')
@@ -643,7 +644,11 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     get namespace_project_edit_path(@project.namespace.parent, @project)
 
     assert_response :success
-    assert_select 'h2', text: I18n.t('projects.edit.advanced.transfer.title')
+    assert_select 'section[aria-labelledby="project-settings-danger"]' do
+      assert_select 'h2', text: I18n.t('projects.edit.danger_zone.title')
+      assert_select 'h3', text: I18n.t('projects.edit.advanced.transfer.title')
+      assert_select 'h3', text: I18n.t('projects.edit.advanced.destroy.heading')
+    end
   end
 
   test 'maintainer cannot see project transfer section in general settings' do
@@ -653,7 +658,8 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal Member::AccessLevel::MAINTAINER,
                  Member.find_by(user: users(:joan_doe), namespace: @project.namespace.parent).access_level
-    assert_select 'h2', text: I18n.t('projects.edit.advanced.transfer.title'), count: 0
+    assert_select 'h3', text: I18n.t('projects.edit.advanced.transfer.title'), count: 0
+    assert_select 'section[aria-labelledby="project-settings-danger"]', count: 0
   end
 
   test 'owner sees the transfer form with v2 select2 controls' do

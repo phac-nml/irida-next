@@ -1624,24 +1624,23 @@ fr:
               pre_html: 'Vous êtes sur le point de supprimer le projet <strong>%{project_name}</strong>. Cette action supprimera également :'
               samples_count: "%{count} échantillons"
           description: La suppression d’un projet est permanente et ne peut pas être annulée. Tous les échantillons et les membres directs seront supprimés en même temps que le projet.
+          heading: Supprimer ce projet
           submit: Supprimer le projet
           title: Supprimer le projet
         path:
           description: Changer l’URL d’un projet peut avoir des effets secondaires inattendus.
           help: Le chemin est utilisé dans les URL et doit comporter au moins 3 caractères et ne peut contenir que des lettres, des chiffres, des tirets et des traits de soulignement
+          preview_label: 'URL du projet :'
+          section_description: L’adresse utilisée par les personnes et les intégrations pour accéder à ce projet.
           submit: Modifier l’URL du projet
           title: Modifier l’URL du projet
-        title: Paramètres avancés
         transfer:
           confirm:
             points_html:
             - Pour éviter les actions accidentelles, nous vous demandons de confirmer votre intention.
             - Veuillez taper <kbd>%{project}</kbd> pour continuer ou fermer cette boîte de dialogue pour annuler.
             warning_html: Vous allez transférer <strong>%{project_name}</strong> vers un autre espace de noms. Une fois que vous avez confirmé, cette action ne peut pas être annulée.
-          descriptions:
-          - Transférer votre projet dans un autre espace de noms.
-          - Lorsque vous transférez votre projet à un groupe, vous pouvez facilement gérer plusieurs projets et utilisateurs.
-          - 'Ce qu’il faut savoir avant de transférer votre projet:'
+          description: Transférer votre projet dans un autre espace de noms.
           empty_state: Aucun espace de noms n’est associé à ce nom ou à cet identifiant
           new_namespace_id: Sélectionnez un nouvel espace de noms
           no_available_namespaces: Vous n’avez accès à aucun espace de noms de destination pour transférer ce projet
@@ -1652,10 +1651,15 @@ fr:
           select_namespace: Sélectionnez l’espace de noms
           submit: Projet de transfert
           title: Projet de transfert
+      danger_zone:
+        description: Ces actions sont irréversibles. Chacune vous demande de saisir le nom du projet pour confirmer.
+        title: Zone de danger
       general:
         heading: Nom et description du projet
+        section_description: Affiché dans IRIDA Next et dans les résultats de recherche de projets.
         submit: Mettre à jour le projet
-        title: Paramètres généraux
+        subtitle: Gérez le nom, la description, l’URL et le cycle de vie de ce projet.
+        title: Général
       title: Paramètres généraux
     group_links:
       edit:

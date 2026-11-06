@@ -1,81 +1,73 @@
 <%# locals: (project:) -%>
 
-<%= render Viral::CardComponent.new do |card| %>
-  <% card.with_header(title: t(:"projects.edit.advanced.path.title")) %>
+<%= form_with(model: project,
+              url: namespace_project_path,
+              method: :patch,
+              html: { novalidate: true },
+              class: "grid gap-4",
+              data: { controller: "projects--path-preview" }) do |form| %>
+  <%= form.fields_for :namespace, include_id: false do |builder| %>
+    <%= form_error_summary(builder, include: %i[path]) %>
 
-  <% card.with_section do %>
-    <%= form_with(model: project, url: namespace_project_path, method: :patch, html: {novalidate: true}) do |form| %>
-      <%= form.fields_for :namespace, include_id: false do |builder| %>
-        <div class="grid gap-4">
-          <%= form_error_summary(builder, include: %i[path]) %>
+    <% invalid_path = project.namespace.errors.include?(:path) %>
 
-          <p class="text-slate-600 dark:text-slate-400">
-            <%= t(:"projects.edit.advanced.path.description") %>
-          </p>
+    <p
+      id="<%= builder.field_id(:path, "warning") %>"
+      class="
+        flex max-w-xl items-start gap-2 text-[length:var(--type-control)] font-medium
+        text-[var(--pvc-color-warning-strong)]
+      "
+    >
+      <%= icon(:warning_circle, class: "shrink-0") %>
+      <span><%= t(:"projects.edit.advanced.path.description") %></span>
+    </p>
 
-          <%= render partial: "shared/form/required_field_legend" %>
+    <div class="form-field max-w-xl <%= 'invalid' if invalid_path %>">
+      <%= builder.label :path, data: { required: true } %>
 
-          <% invalid_path = project.namespace.errors.include?(:path) %>
+      <%= builder.text_field :path,
+                         pattern: Irida::PathRegex::PATH_REGEX_STR,
+                         required: true,
+                         data: {
+                           "projects--path-preview-target": "input",
+                           action: "input->projects--path-preview#update",
+                         },
+                         aria: {
+                           describedby: [
+                             builder.field_id(:path, "warning"),
+                             invalid_path ? builder.field_id(:path, "error") : nil,
+                             builder.field_id(:path, "preview"),
+                             builder.field_id(:path, "hint"),
+                           ].compact.join(" "),
+                           invalid: invalid_path,
+                           required: true,
+                         } %>
 
-          <div class="form-field <%= 'invalid' if invalid_path %>">
-            <div class="@container">
-              <%= builder.label :path, data: { required: true } %>
-
-              <div class="flex flex-row @max-md:flex-col">
-                <div
-                  class="
-                    max-w-md overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4
-                    py-2 text-sm font-medium text-ellipsis whitespace-nowrap text-slate-700 @md:!rounded-r-none
-                    @md:border-r-0 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300
-                  "
-                  role="group"
-                  aria-label="<%= root_url %><%= project.parent.full_path %>"
-                >
-                  <%= root_url %>
-                  <span class="font-bold"><%= project.parent.full_path + "/" %></span>
-                </div>
-
-                <div class="grow">
-                  <%= builder.text_field :path,
-                                     pattern: Irida::PathRegex::PATH_REGEX_STR,
-                                     required: true,
-                                     title: project.path,
-                                      class:
-                                        "text-ellipsis overflow-hidden border-slate-300 text-slate-800 sm:text-sm rounded-r-lg md:!rounded-l-none",
-                                      aria: {
-                                        describedby: [
-                                          invalid_path ? builder.field_id(:path, "error") : nil,
-                                          builder.field_id(:path, "hint"),
-                                        ].join(" "),
-                                        invalid: invalid_path,
-                                        required: true,
-                                      } %>
-                </div>
-              </div>
-
-              <% if invalid_path %>
-                <%= render "shared/form/field_errors",
-                id: builder.field_id(:path, "error"),
-                errors: project.namespace.errors.full_messages_for(:path) %>
-              <% end %>
-
-              <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
-                <%== t(:"projects.edit.advanced.path.help") %>
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <%= form.submit t(:"projects.edit.advanced.path.submit"),
-                        data: {
-                          turbo_frame: "_top",
-                        },
-                        tone: :danger,
-                        emphasis: :outline,
-                        class: "inline-block" %>
-          </div>
-        </div>
+      <% if invalid_path %>
+        <%= render "shared/form/field_errors",
+        id: builder.field_id(:path, "error"),
+        errors: project.namespace.errors.full_messages_for(:path) %>
       <% end %>
-    <% end %>
+
+      <p
+        id="<%= builder.field_id(:path, "preview") %>"
+        class="mt-1 text-[length:var(--type-meta)] wrap-anywhere text-[var(--pvc-color-text-muted)]"
+      >
+        <%= t(:"projects.edit.advanced.path.preview_label") %>
+        <%= root_url %><%= project.parent.full_path %>/<strong class="font-semibold text-[var(--pvc-color-text)]" data-projects--path-preview-target="path"><%= project.namespace.path %></strong>
+      </p>
+
+      <span id="<%= builder.field_id(:path, "hint") %>" class="field-hint">
+        <%== t(:"projects.edit.advanced.path.help") %>
+      </span>
+    </div>
+
+    <div>
+      <%= form.submit t(:"projects.edit.advanced.path.submit"),
+                  data: { turbo_frame: "_top" },
+                  tone: :neutral,
+                  emphasis: :outline,
+                  class: "inline-block" %>
+    </div>
   <% end %>
 <% end %>
