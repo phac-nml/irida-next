@@ -33,7 +33,10 @@ class Member < ApplicationRecord # rubocop:disable Metrics/ClassLength
   delegate :project, to: :project_namespace
 
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
-                                        where(namespace: namespace&.self_and_ancestors_of_type(
+                                        traversal_namespace = namespace if namespace&.persisted?
+                                        traversal_namespace ||= namespace&.parent
+
+                                        where(namespace: traversal_namespace&.self_and_ancestors_of_type(
                                           [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
                                         ))
                                       }
