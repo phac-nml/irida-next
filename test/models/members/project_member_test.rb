@@ -145,6 +145,16 @@ class ProjectMemberTest < ActiveSupport::TestCase
     assert_same_unique_elements(members, memberships)
   end
 
+  test '#scope for_namespace_and_ancestors includes an unsaved project namespace parent memberships' do
+    group = groups(:group_one)
+    project = Project.new
+    project.build_namespace(parent: group)
+
+    members = Member.for_namespace_and_ancestors(project.namespace)
+
+    assert_same_unique_elements(group.group_members, members)
+  end
+
   test '#scope not_expired for_namespace_and_ancestors returns the correct collection' do
     members = Member.for_namespace_and_ancestors(@project.namespace).not_expired
     assert_difference(-> { members.count } => -1) do
