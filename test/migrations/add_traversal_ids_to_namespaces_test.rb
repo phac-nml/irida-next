@@ -66,7 +66,9 @@ class AddTraversalIdsToNamespacesTest < ActiveSupport::TestCase
 
   test 'down removes the traversal_ids column' do
     migrate_up
-    AddTraversalIdsToNamespaces.new.down
+
+    migration = AddTraversalIdsToNamespaces.new
+    migration.suppress_messages { migration.down }
 
     assert_not ActiveRecord::Base.connection.column_exists?(:namespaces, :traversal_ids)
   end
@@ -74,7 +76,8 @@ class AddTraversalIdsToNamespacesTest < ActiveSupport::TestCase
   private
 
   def migrate_up
-    AddTraversalIdsToNamespaces.new.up
+    migration = AddTraversalIdsToNamespaces.new
+    migration.suppress_messages { migration.up }
     Namespace.reset_column_information
   end
 
