@@ -33,31 +33,57 @@ module Benchmarks
         report_hierarchy_size
         benchmark_ancestors
         benchmark_descendants
+        benchmark_scopes
         raise ActiveRecord::Rollback
       end
     end
 
     private
 
-    attr_reader :depth, :children_per_level, :root, :deepest_leaf
+    attr_reader :depth, :children_per_level, :root, :deepest_leaf, :scope_sample
 
-    # Builds a hierarchy `depth` levels deep. At every level, `children_per_level`
-    # sibling groups are created under the previous level's chosen parent, but
-    # only the first sibling is descended into further - this keeps the total
-    # number of namespaces created linear in depth * children_per_level
-    # (rather than exponential), while still giving `root`'s descendants
-    # query a realistically large result set to traverse.
+    # Builds a hierarchy `depth` levels deep under `root`. At every level,
+    # `children_per_level` sibling groups are created under the previous
+    # level's chosen parent, but only the first sibling is descended into
+    # further - this keeps the total number of namespaces created linear in
+    # depth * children_per_level (rather than exponential), while still
+    # giving `root`'s descendants query a realistically large result set to
+    # traverse.
+    #
+    # Also builds a handful of smaller, independent sibling branches off
+    # `root` (`scope_sample`) - mutually unrelated namespaces (none is an
+    # ancestor/descendant of another) that each have their own real
+    # descendants, used to benchmark the class-level `self_and_descendants`/
+    # `without_descendants` scopes against a multi-row base relation.
     def build_hierarchy
       puts "Building synthetic hierarchy (depth=#{depth}, children per level=#{children_per_level})..."
 
       @root = Group.create!(name: 'Benchmark Root', path: "benchmark-root-#{SecureRandom.hex(4)}")
-      parent = @root
+      @deepest_leaf = build_branch(root, depth)
 
-      depth.times do |level|
+      scope_branch_depth = [depth / 2, 1].max
+      branch_heads = Array.new(3) do |i|
+        branch_root = Group.create!(
+          name: "Benchmark Branch #{i}", path: "benchmark-branch-#{i}-#{SecureRandom.hex(4)}", parent: root
+        )
+        build_branch(branch_root, scope_branch_depth)
+        branch_root
+      end
+      @scope_sample = Group.where(id: branch_heads.map(&:id))
+    end
+
+    # Builds a chain `levels` deep starting at `start_parent`, creating
+    # `children_per_level` sibling groups at each level but only descending
+    # further into the first sibling. Returns the deepest descended-into
+    # group.
+    def build_branch(start_parent, levels)
+      parent = start_parent
+
+      levels.times do |level|
         siblings = Array.new(children_per_level) do |i|
           Group.create!(
-            name: "Benchmark L#{level} G#{i}",
-            path: "benchmark-l#{level}-g#{i}-#{SecureRandom.hex(4)}",
+            name: "Benchmark #{start_parent.id} L#{level} G#{i}",
+            path: "benchmark-#{SecureRandom.hex(4)}-l#{level}-g#{i}",
             parent:
           )
         end
@@ -65,7 +91,7 @@ module Benchmarks
         parent = siblings.first
       end
 
-      @deepest_leaf = parent
+      parent
     end
 
     def report_hierarchy_size
@@ -84,6 +110,15 @@ module Benchmarks
       benchmark_methods(root, %w[descendants self_and_descendants])
     end
 
+    # Benchmarks the class-level `self_and_descendants`/`without_descendants`
+    # scopes directly against a multi-row base relation, as opposed to
+    # `benchmark_descendants` above which only exercises them indirectly via
+    # single-namespace instance method delegation.
+    def benchmark_scopes
+      puts "--- self_and_descendants / without_descendants scopes (multi-row base, #{scope_sample.count} rows) ---"
+      benchmark_scope_methods(scope_sample, %w[self_and_descendants without_descendants])
+    end
+
     # Benchmarks the `route_based_<method_name>` (routes join) and bare
     # `<method_name>` (traversal_ids - Linear is the default implementation
     # for bare method names) variants of each given method name against
@@ -94,6 +129,21 @@ module Benchmarks
         method_names.each do |method_name|
           x.report("route_based #{method_name}") { namespace.public_send(:"route_based_#{method_name}").load }
           x.report("linear #{method_name}") { namespace.public_send(method_name).load }
+        end
+
+        x.compare!
+      end
+      puts
+    end
+
+    # Same as `benchmark_methods`, but for class-level scopes invoked on a
+    # relation (e.g. `Group.where(...).self_and_descendants`) rather than
+    # instance methods invoked on a single namespace.
+    def benchmark_scope_methods(relation, method_names)
+      Benchmark.ips do |x|
+        method_names.each do |method_name|
+          x.report("route_based #{method_name}") { relation.public_send(:"route_based_#{method_name}").load }
+          x.report("linear #{method_name}") { relation.public_send(method_name).load }
         end
 
         x.compare!
