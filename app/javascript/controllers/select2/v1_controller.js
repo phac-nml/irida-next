@@ -370,7 +370,9 @@ export default class Select2Controller extends Controller {
         offsetDistance: 10,
         delay: 300,
         onShow: () => {
-          this.dropdownTarget.style.minWidth = `${this.inputTarget.offsetWidth}px`;
+          const dropdownWidth = `${this.inputTarget.offsetWidth}px`;
+          this.dropdownTarget.style.width = dropdownWidth;
+          this.dropdownTarget.style.minWidth = dropdownWidth;
           this.inputTarget.setAttribute("aria-expanded", "true");
         },
         onHide: () => {
