@@ -257,10 +257,35 @@ describe("linelist import controller", () => {
 
     broadcastRefresh();
     expect(refreshNotice()).toHaveClass("hidden");
+    broadcastRefresh();
+    expect(refreshNotice()).toHaveClass("hidden");
 
     worker.onmessage({ data: { type: "done" } });
     broadcastRefresh();
     expect(refreshNotice()).not.toHaveClass("hidden");
+  });
+
+  it("reapplies unload and refresh guards when reconnecting during an active import", async () => {
+    const controller = await mount({ withRefreshOutlet: true });
+    controller._file = { type: "text/csv", name: "samples.csv" };
+    controller._fileType = "text/csv";
+    controller.sampleIdColumnTarget.append(
+      new Option("sample_id", "sample_id"),
+    );
+    controller.sampleIdColumnTarget.value = "sample_id";
+
+    controller.handleSubmit(new Event("submit", { cancelable: true }));
+    const worker = FakeWorker.instances[0];
+
+    controller.connect();
+    broadcastRefresh();
+    expect(refreshNotice()).toHaveClass("hidden");
+
+    const unloadEvent = buildBeforeUnloadEvent();
+    window.dispatchEvent(unloadEvent);
+    expect(unloadEvent.defaultPrevented).toBe(true);
+
+    worker.onmessage({ data: { type: "done" } });
   });
 
   it("sends an empty CSRF token when the page has no CSRF meta tag", async () => {
@@ -497,6 +522,100 @@ describe("linelist import controller", () => {
     );
   });
 
+  it("keeps unload warnings active until all concurrent imports complete", async () => {
+    document.body.innerHTML = `${markup()}${markup()}`;
+    application = startApplication();
+    application.register("linelist-import", LinelistImportController);
+    await Promise.resolve();
+
+    const controllers = Array.from(
+      document.querySelectorAll('[data-controller="linelist-import"]'),
+      (element) =>
+        application.getControllerForElementAndIdentifier(
+          element,
+          "linelist-import",
+        ),
+    );
+
+    const xlsx = await vi.importMock("xlsx");
+    xlsx.utils.sheet_to_json.mockReturnValue([]);
+    controllers.forEach((controller) => {
+      controller.headers = ["sample_id"];
+      controller._worksheet = {};
+      controller.handleSubmit(new Event("submit", { cancelable: true }));
+    });
+    const [firstWorker, secondWorker] = FakeWorker.instances.slice(-2);
+
+    const firstUnload = buildBeforeUnloadEvent();
+    window.dispatchEvent(firstUnload);
+    expect(firstUnload.defaultPrevented).toBe(true);
+
+    firstWorker.onmessage({ data: { type: "done" } });
+    const secondUnload = buildBeforeUnloadEvent();
+    window.dispatchEvent(secondUnload);
+    expect(secondUnload.defaultPrevented).toBe(true);
+
+    secondWorker.onmessage({ data: { type: "done" } });
+    const finalUnload = buildBeforeUnloadEvent();
+    window.dispatchEvent(finalUnload);
+    expect(finalUnload.defaultPrevented).toBe(false);
+  });
+
+  it("clears stale guard state when the listener is already missing", async () => {
+    const controller = await mount();
+    const worker = await startImport(controller);
+    worker.onmessage({ data: { type: "done" } });
+
+    controller._importActive = true;
+    controller._beforeUnloadGuardActive = true;
+    worker.onmessage({ data: { type: "done" } });
+
+    const unloadEvent = buildBeforeUnloadEvent();
+    window.dispatchEvent(unloadEvent);
+    expect(unloadEvent.defaultPrevented).toBe(false);
+  });
+
+  it("ignores stale suppressed outlets that do not implement refresh suppression", async () => {
+    const controller = await mount();
+    const worker = await startImport(controller);
+    controller._suppressedRefreshOutlets = [{}];
+
+    worker.onmessage({ data: { type: "done" } });
+
+    expect(controller._suppressedRefreshOutlets).toEqual([]);
+  });
+
+  it("clears suppressed refresh state for outlets that implement suppression", async () => {
+    const controller = await mount();
+    const worker = await startImport(controller);
+    const outlet = { setRefreshSuppressed: vi.fn() };
+    controller._suppressedRefreshOutlets = [outlet];
+
+    worker.onmessage({ data: { type: "done" } });
+
+    expect(outlet.setRefreshSuppressed).toHaveBeenCalledWith(false);
+    expect(controller._suppressedRefreshOutlets).toEqual([]);
+  });
+
+  it("terminates header workers that fail before import starts", async () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const controller = await mount();
+
+    controller.readFile({
+      target: { files: [{ type: "text/csv", name: "samples.csv" }] },
+    });
+    const worker = FakeWorker.instances[0];
+    worker.onerror({ message: "header read failed" });
+
+    expect(worker.terminated).toBe(true);
+    expect(consoleError).toHaveBeenCalledWith(
+      "Worker failed:",
+      "header read failed",
+    );
+  });
+
   it("does not submit when workers are unavailable", async () => {
     vi.stubGlobal("Worker", undefined);
     const consoleError = vi
@@ -533,7 +652,7 @@ describe("linelist import controller", () => {
     const xlsx = await vi.importMock("xlsx");
     xlsx.utils.sheet_to_json.mockReturnValue([]);
     controller.handleSubmit(new Event("submit", { cancelable: true }));
-    return FakeWorker.instances[0];
+    return FakeWorker.instances.at(-1);
   }
 
   const dismissButton = () =>
