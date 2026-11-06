@@ -12,6 +12,45 @@ import {
   updateProgressWindow,
 } from "utilities/progress_window";
 
+let activeImports = 0;
+let beforeUnloadHandler = null;
+
+function bindImportBeforeUnload() {
+  if (beforeUnloadHandler) return;
+
+  beforeUnloadHandler = (event) => {
+    // The handler is unbound when no imports remain, so this guard is defensive.
+    /* v8 ignore next */
+    if (activeImports <= 0) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+    return "";
+  };
+
+  window.addEventListener("beforeunload", beforeUnloadHandler);
+}
+
+function unbindImportBeforeUnload() {
+  if (!beforeUnloadHandler) return;
+
+  window.removeEventListener("beforeunload", beforeUnloadHandler);
+  beforeUnloadHandler = null;
+}
+
+function startImportBeforeUnloadGuard() {
+  activeImports += 1;
+  bindImportBeforeUnload();
+}
+
+function stopImportBeforeUnloadGuard() {
+  activeImports = Math.max(activeImports - 1, 0);
+
+  if (activeImports === 0) {
+    unbindImportBeforeUnload();
+  }
+}
+
 export default class extends Controller {
   static targets = [
     "alertTemplate",
@@ -78,12 +117,24 @@ export default class extends Controller {
     this._operationId ||= null;
     this._progressWindowOpenedAt ||= null;
     this._dismissProgressWindowTimeout ||= null;
+    this._beforeUnloadGuardActive ??= false;
+    this._suppressedRefreshOutlets ||= [];
     this.progressWindowDismissed ??= false;
     this._importActive ??= false;
     this._lastPercentage ||= 0;
     this._file = null;
+
+    if (this._importActive) {
+      this.#startImportBeforeUnloadGuard();
+      this.#setRefreshNoticeSuppressed(true);
+    }
+
     // Init before super.connect so a file processed on connect (pre-selected) is not reset.
     super.connect();
+
+    if (this._importActive) {
+      this.#setRefreshNoticeSuppressed(true);
+    }
   }
 
   readFile(event) {
@@ -113,11 +164,14 @@ export default class extends Controller {
     this._worker = this.#buildWorker();
     if (!this._worker) return;
 
+    super.handleSubmit();
     closeDialog(this.element, this.application);
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     clearProgressWindowDismissTimeout(this);
     this.progressWindowDismissed = false;
     this._importActive = true;
+    this.#startImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(true);
     this._lastPercentage = 0;
     this._progressWindowOpenedAt = null;
     showProgressWindow(this, t(this.importStartedMessageValue));
@@ -168,7 +222,11 @@ export default class extends Controller {
 
       worker.onerror = (error) => {
         console.error("Worker failed:", error.message);
-        this.#terminateWorker();
+        if (this._importActive) {
+          this.#onError({ message: error.message });
+        } else {
+          this.#terminateWorker();
+        }
       };
 
       // Listen for messages from the worker
@@ -257,6 +315,8 @@ export default class extends Controller {
   #onDone() {
     const message = t(this.importCompleteMessageValue);
     this._importActive = false;
+    this.#stopImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(false);
     updateProgressWindow(this, message, 100);
     setProgressDismissLabel(this, t(this.closeProgressLabelValue));
     scheduleProgressWindowDismiss(this);
@@ -294,6 +354,8 @@ export default class extends Controller {
   #cancelImport() {
     this.#terminateWorker();
     this._importActive = false;
+    this.#stopImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(false);
 
     const message = t(this.importCanceledMessageValue);
     updateProgressWindow(this, message, this._lastPercentage);
@@ -304,9 +366,48 @@ export default class extends Controller {
   #onError(payload) {
     const message = t(this.errorMessageValue, { message: payload.message });
     this._importActive = false;
+    this.#stopImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(false);
     updateProgressWindow(this, message, 100, true);
     setProgressDismissLabel(this, t(this.closeProgressLabelValue));
     this.#terminateWorker();
+  }
+
+  #startImportBeforeUnloadGuard() {
+    if (this._beforeUnloadGuardActive) return;
+
+    startImportBeforeUnloadGuard();
+    this._beforeUnloadGuardActive = true;
+  }
+
+  #stopImportBeforeUnloadGuard() {
+    if (!this._beforeUnloadGuardActive) return;
+
+    stopImportBeforeUnloadGuard();
+    this._beforeUnloadGuardActive = false;
+  }
+
+  #setRefreshNoticeSuppressed(suppressed) {
+    const outlets =
+      this._suppressedRefreshOutlets.length > 0
+        ? this._suppressedRefreshOutlets
+        : this.hasRefreshOutlet
+          ? this.refreshOutlets.filter((outlet) => outlet)
+          : [];
+
+    if (suppressed && outlets.length > 0) {
+      this._suppressedRefreshOutlets = outlets;
+    }
+
+    outlets.forEach((outlet) => {
+      if (typeof outlet.setRefreshSuppressed === "function") {
+        outlet.setRefreshSuppressed(suppressed);
+      }
+    });
+
+    if (!suppressed) {
+      this._suppressedRefreshOutlets = [];
+    }
   }
 
   #csrfToken() {

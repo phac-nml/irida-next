@@ -75,6 +75,17 @@ describe("refresh controller", () => {
     expect(notice.classList.contains("hidden")).toBe(false);
   });
 
+  it("suppresses refresh streams while explicitly paused", async () => {
+    await mount();
+    controller.suppressRefreshNotice();
+    expect(broadcast()).not.toHaveBeenCalled();
+    expect(notice.classList.contains("hidden")).toBe(true);
+
+    controller.resumeRefreshNotice();
+    broadcast();
+    expect(notice.classList.contains("hidden")).toBe(false);
+  });
+
   it("extends the suppression deadline on another local edit", async () => {
     await mount();
     controller.ignoreNextRefresh();

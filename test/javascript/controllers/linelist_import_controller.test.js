@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { startApplication, stopApplication } from "../helpers/stimulus.js";
 import LinelistImportController from "../../../app/javascript/controllers/linelist_import_controller.js";
+import RefreshController from "../../../app/javascript/controllers/refresh_controller.js";
 
 // The controller imports `xlsx` (CDN-only in production); mock it so the test
 // controls the parsed worksheet and headers.
@@ -66,12 +67,14 @@ const PROGRESS_TEMPLATE = `
 		</div>
 	</template>`;
 
-function markup() {
+function markup({ withRefreshOutlet = false } = {}) {
   return `
+    ${withRefreshOutlet ? '<div data-controller="refresh"><div data-refresh-target="source"></div><div class="hidden" data-refresh-target="notice"></div></div>' : ""}
 		<div data-controller="linelist-import"
 				 data-linelist-import-graphql-url-value="/graphql"
 				 data-linelist-import-group-puid-value="group-1"
-				 data-linelist-import-project-puid-value="project-1">
+				 data-linelist-import-project-puid-value="project-1"
+         data-linelist-import-refresh-outlet="[data-controller='refresh']">
 			<select data-linelist-import-target="sampleIdColumn">
 				<option value="">Select a sample column</option>
 			</select>
@@ -99,9 +102,12 @@ function markup() {
 describe("linelist import controller", () => {
   let application;
 
-  async function mount() {
-    document.body.innerHTML = markup();
+  async function mount(options = {}) {
+    document.body.innerHTML = markup(options);
     application = startApplication();
+    if (options.withRefreshOutlet) {
+      application.register("refresh", RefreshController);
+    }
     application.register("linelist-import", LinelistImportController);
     await Promise.resolve();
     return application.getControllerForElementAndIdentifier(
@@ -113,6 +119,28 @@ describe("linelist import controller", () => {
   const messageText = () =>
     document.querySelector("[data-linelist-import-progress-message]")
       ?.textContent;
+  const refreshNotice = () =>
+    document.querySelector('[data-refresh-target="notice"]');
+  const refreshSource = () =>
+    document.querySelector('[data-refresh-target="source"]');
+
+  function broadcastRefresh() {
+    refreshSource()?.dispatchEvent(
+      new MessageEvent("message", {
+        data: '<turbo-stream action="refresh"></turbo-stream>',
+      }),
+    );
+  }
+
+  function buildBeforeUnloadEvent() {
+    const event = new Event("beforeunload", { cancelable: true });
+    Object.defineProperty(event, "returnValue", {
+      configurable: true,
+      writable: true,
+      value: undefined,
+    });
+    return event;
+  }
 
   beforeEach(() => {
     FakeFileReader.instances = [];
@@ -123,6 +151,12 @@ describe("linelist import controller", () => {
   });
 
   afterEach(async () => {
+    for (const worker of FakeWorker.instances) {
+      if (!worker.terminated && typeof worker.onmessage === "function") {
+        worker.onmessage({ data: { type: "done" } });
+      }
+    }
+
     await stopApplication(application);
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
@@ -206,6 +240,27 @@ describe("linelist import controller", () => {
       },
     ]);
     expect(messageText()).toBe("Starting metadata import...");
+  });
+
+  it("suppresses refresh notices during an active import and restores them afterward", async () => {
+    const controller = await mount({ withRefreshOutlet: true });
+    const file = { type: "text/csv", name: "samples.csv" };
+    controller._file = file;
+    controller._fileType = "text/csv";
+    controller.sampleIdColumnTarget.append(
+      new Option("sample_id", "sample_id"),
+    );
+    controller.sampleIdColumnTarget.value = "sample_id";
+
+    controller.handleSubmit(new Event("submit", { cancelable: true }));
+    const worker = FakeWorker.instances[0];
+
+    broadcastRefresh();
+    expect(refreshNotice()).toHaveClass("hidden");
+
+    worker.onmessage({ data: { type: "done" } });
+    broadcastRefresh();
+    expect(refreshNotice()).not.toHaveClass("hidden");
   });
 
   it("sends an empty CSRF token when the page has no CSRF meta tag", async () => {
@@ -526,5 +581,22 @@ describe("linelist import controller", () => {
     expect(
       document.getElementById(`${controller.identifier}-progress-window`),
     ).toBeNull();
+  });
+
+  it("warns before unloading while an import is running", async () => {
+    const controller = await mount();
+    const worker = await startImport(controller);
+    const activeUnload = buildBeforeUnloadEvent();
+
+    window.dispatchEvent(activeUnload);
+    expect(activeUnload.defaultPrevented).toBe(true);
+    expect(activeUnload.returnValue).toBe("");
+
+    worker.onmessage({ data: { type: "done" } });
+    const completedUnload = buildBeforeUnloadEvent();
+    window.dispatchEvent(completedUnload);
+
+    expect(completedUnload.defaultPrevented).toBe(false);
+    expect(completedUnload.returnValue).toBeUndefined();
   });
 });
