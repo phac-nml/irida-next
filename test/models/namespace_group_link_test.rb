@@ -101,6 +101,16 @@ class NamespaceGroupLinkTest < ActiveSupport::TestCase
     assert_same_unique_elements(namespace_group_links, shared_with_group_links)
   end
 
+  test '#scope for_namespace_and_ancestors includes an unsaved project namespace parent links' do
+    group = groups(:group_one)
+    project = Project.new
+    project.build_namespace(parent: group)
+
+    namespace_group_links = NamespaceGroupLink.for_namespace_and_ancestors(project.namespace)
+
+    assert_same_unique_elements(group.shared_with_group_links, namespace_group_links)
+  end
+
   test 'set_namespace_type' do
     namespace_group_link = NamespaceGroupLink.new
     namespace = namespaces_project_namespaces(:project20_namespace)

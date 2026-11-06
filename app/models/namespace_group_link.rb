@@ -37,7 +37,10 @@ class NamespaceGroupLink < ApplicationRecord
   scope :not_expired, -> { where('expires_at IS NULL OR expires_at > ?', Time.zone.now.beginning_of_day) }
   scope :with_access, -> { where.not(group_access_level: Member::AccessLevel::NO_ACCESS) }
   scope :for_namespace_and_ancestors, lambda { |namespace = nil|
-                                        where(namespace: namespace&.self_and_ancestors_of_type(
+                                        traversal_namespace = namespace if namespace&.persisted?
+                                        traversal_namespace ||= namespace&.parent
+
+                                        where(namespace: traversal_namespace&.self_and_ancestors_of_type(
                                           [Group.sti_name, Namespaces::ProjectNamespace.sti_name]
                                         ))
                                       }
