@@ -12,18 +12,24 @@ class NamespacePolicy < ApplicationPolicy
     type = [Group.sti_name, Namespaces::UserNamespace.sti_name]
     type << Namespaces::ProjectNamespace.sti_name if include_project_namespaces
 
+    # The user's personal namespace and the namespaces they have direct membership
+    # access to are combined into a single root set before expanding to
+    # self + descendants, so the traversal_ids overlap check (and its GIN index
+    # scan) only needs to run once instead of once per root set.
+    accessible_root_namespaces = Namespace.where(id: user.namespace&.id)
+                                          .or(Namespace.where(
+                                                id: user.members.not_expired.with_access_level(access_level)
+                                                        .select(:namespace_id)
+                                              ))
+
     scope = relation
             .with(
-              # 1. The users personal namespace and its descendants
-              user_namespaces: self_and_descendants_of_type(
-                Namespace.where(id: user.namespace&.id), type, use_traversal_ids
-              ).select(:id),
-              # 2. Accessible namespace IDs for the user based on their memberships
+              # 1. Accessible namespace IDs for the user: their personal namespace and
+              #    namespaces they have direct membership access to, plus all descendants
               accessible_namespaces: self_and_descendants_of_type(
-                Namespace.where(id: user.members.not_expired.with_access_level(access_level).select(:namespace_id)),
-                type, use_traversal_ids
+                accessible_root_namespaces, type, use_traversal_ids
               ).select(:id),
-              # 3. Accessible linked namespaces for the user based on group links
+              # 2. Accessible linked namespaces for the user based on group links
               accessible_linked_namespaces:
                 if include_shared_links
                   self_and_descendants_of_type(
@@ -40,8 +46,6 @@ class NamespacePolicy < ApplicationPolicy
             ).where(
               Arel.sql(
                 'namespaces.id IN (
-                  SELECT id FROM user_namespaces
-                  UNION ALL
                   SELECT id FROM accessible_namespaces
                   UNION ALL
                   SELECT id FROM accessible_linked_namespaces
