@@ -13,6 +13,7 @@ module Dashboard
       @q = build_ransack_query(all_groups)
       set_default_sort
       @pagy, @groups = pagy(@q.result.include_route, raise_range_error: true)
+      set_group_row_data
       set_tab_variables
 
       respond_to do |format|
@@ -32,6 +33,10 @@ module Dashboard
       else
         all_groups.ransack(params[:all_groups_q], search_key: :all_groups_q)
       end
+    end
+
+    def set_group_row_data
+      @group_row_data = NamespaceRowPresenter.build_collection(namespaces: @groups, user: current_user)
     end
 
     def set_tab_variables
@@ -72,7 +77,12 @@ module Dashboard
       @setsize = params[:setsize].to_i
       @tabindex = params[:tabindex].to_i
       @children = @group.children
+      set_group_row_data_for_expand
       render :group
+    end
+
+    def set_group_row_data_for_expand
+      @group_row_data = NamespaceRowPresenter.build_collection(namespaces: [@group, *@children], user: current_user)
     end
 
     def authorized_groups

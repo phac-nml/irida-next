@@ -12,6 +12,7 @@ module Dashboard
       @q = build_ransack_query(all_projects)
       set_default_sort
       @pagy, @projects = pagy(@q.result, raise_range_error: true)
+      set_namespace_row_data
       set_tab_variables
 
       respond_to do |format|
@@ -20,6 +21,17 @@ module Dashboard
     end
 
     private
+
+    def set_namespace_row_data
+      @namespace_row_data = @projects.to_h do |project|
+        presenter = NamespaceRowPresenter.new(
+          namespace: project.namespace,
+          user: current_user,
+          samples_count: project.samples_count
+        )
+        [project.namespace.id, presenter]
+      end
+    end
 
     def build_ransack_query(all_projects)
       if params[:personal] == 'true'

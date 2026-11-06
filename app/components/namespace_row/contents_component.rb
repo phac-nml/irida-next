@@ -5,11 +5,12 @@ module NamespaceRow
   class ContentsComponent < Component
     include NamespacePathHelper
 
-    def initialize(namespace:, full_name: false, icon_size: :small, search_params: nil)
+    def initialize(namespace:, full_name: false, icon_size: :small, search_params: nil, presenter: nil)
       @namespace = namespace
       @full_name = full_name
       @icon_size = icon_size
       @search_params = search_params
+      @presenter = presenter || NamespaceRowPresenter.new(namespace:, user: Current.user)
     end
 
     # Base Tailwind classes applied to all count "pill" elements.
@@ -50,6 +51,13 @@ module NamespaceRow
 
     def top_frame_link_data
       TOP_FRAME_LINK_DATA.dup
+    end
+
+    delegate :access_level, :children_count, :project_namespaces_count, :aggregated_samples_count, :samples_count,
+             to: :@presenter
+
+    def effective_access_level
+      access_level
     end
   end
 end

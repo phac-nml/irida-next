@@ -19,7 +19,12 @@ module Groups
       @posinset = params[:posinset].to_i
       @setsize = params[:setsize].to_i
       @tabindex = params[:tabindex].to_i
+      set_namespace_row_data
       render :subgroup
+    end
+
+    def set_namespace_row_data
+      @namespace_row_data = NamespaceRowPresenter.build_collection(namespaces: [@group, *@children], user: current_user)
     end
 
     def namespace_children
