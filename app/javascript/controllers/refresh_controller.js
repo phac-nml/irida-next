@@ -6,6 +6,7 @@ export default class extends Controller {
   #ignoreTimeoutId;
   #debounceTimeoutId;
   #isDebouncing;
+  #isRefreshSuppressed;
 
   initialize() {
     this.boundMessageHandler = this.messageHandler.bind(this);
@@ -13,6 +14,7 @@ export default class extends Controller {
     this.#ignoreTimeoutId = null;
     this.#debounceTimeoutId = null;
     this.#isDebouncing = false;
+    this.#isRefreshSuppressed = false;
   }
 
   sourceTargetConnected(element) {
@@ -28,6 +30,15 @@ export default class extends Controller {
 
   messageHandler(event) {
     if (!this.#isRefreshTurboStream(event)) return;
+
+    if (this.#isRefreshSuppressed) {
+      if (this.#ignoreNextRefresh) {
+        this.#ignoreNextRefresh = false;
+        this.#clearIgnoreTimeout();
+      }
+      event.stopImmediatePropagation();
+      return;
+    }
 
     if (this.#ignoreNextRefresh) {
       this.#ignoreNextRefresh = false;
@@ -68,6 +79,22 @@ export default class extends Controller {
   refresh() {
     // Reload the current page
     window.location.reload();
+  }
+
+  setRefreshSuppressed(suppressed) {
+    this.#isRefreshSuppressed = Boolean(suppressed);
+
+    if (this.#isRefreshSuppressed && this.hasNoticeTarget) {
+      this.noticeTarget.classList.add("hidden");
+    }
+  }
+
+  suppressRefreshNotice() {
+    this.setRefreshSuppressed(true);
+  }
+
+  resumeRefreshNotice() {
+    this.setRefreshSuppressed(false);
   }
 
   // Called by outlet controllers (e.g., editable-cell) to suppress the next refresh notice.
