@@ -5,7 +5,7 @@ require 'application_system_test_case'
 module Projects
   module Samples
     class LinelistImportTest < ApplicationSystemTestCase
-      test 'client import broadcasts a refresh with the updated metadata summary' do
+      test 'client import suppresses refresh notice and updates metadata summary' do
         user = users(:john_doe)
         project = projects(:project1)
         sample = samples(:sample1)
@@ -29,13 +29,12 @@ module Projects
         perform_enqueued_jobs only: Turbo::Streams::BroadcastStreamJob do
           click_button I18n.t('shared.samples.metadata.file_imports.form_fields.submit_button')
           assert_text I18n.t('shared.samples.metadata.file_imports.success.description')
-          assert_selector '[data-refresh-target="notice"]'
+          assert_no_selector '[data-refresh-target="notice"]'
         end
 
         assert_equal 2, project.namespace.reload.metadata_summary['metadatafield3']
-        within '[data-refresh-target="notice"]' do
-          click_button I18n.t('components.refresh_notice.default_link_text')
-        end
+
+        visit namespace_project_samples_url(groups(:group_one), project)
         assert_selector 'table thead th', text: 'METADATAFIELD3'
         assert_selector "tr[id='#{dom_id(sample)}'] td", text: '30', exact_text: true
       ensure
