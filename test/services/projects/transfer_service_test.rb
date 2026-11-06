@@ -123,12 +123,15 @@ module Projects
 
       project_namespace.create_logidze_snapshot!
 
-      assert_equal 2, project_namespace.log_data.version
-      assert_equal 2, project_namespace.log_data.size
+      # 3 versions, not 2: the parent_id save logs one version, and the
+      # separate traversal_ids update_column (now that postgres generates
+      # ids via after_create/after_update) logs a second version.
+      assert_equal 3, project_namespace.log_data.version
+      assert_equal 3, project_namespace.log_data.size
 
       assert_equal groups(:group_one), project_namespace.at(version: 1).parent
 
-      assert_equal new_namespace, project_namespace.at(version: 2).parent
+      assert_equal new_namespace, project_namespace.at(version: 3).parent
 
       assert_enqueued_with(job: UpdateMembershipsJob)
     end
@@ -149,12 +152,15 @@ module Projects
 
       project_namespace.create_logidze_snapshot!
 
-      assert_equal 2, project_namespace.log_data.version
-      assert_equal 2, project_namespace.log_data.size
+      # 3 versions, not 2: the parent_id save logs one version, and the
+      # separate traversal_ids update_column (now that postgres generates
+      # ids via after_create/after_update) logs a second version.
+      assert_equal 3, project_namespace.log_data.version
+      assert_equal 3, project_namespace.log_data.size
 
       assert_equal groups(:group_one), project_namespace.at(version: 1).parent
 
-      assert_equal new_namespace, project_namespace.at(version: 2).parent
+      assert_equal new_namespace, project_namespace.at(version: 3).parent
 
       project_namespace.switch_to!(1)
 

@@ -95,6 +95,7 @@ module Namespaces
                  .where(route_path.matches_any([full_path, "#{full_path}/%"]))
                  .where(type: types)
       end
+      alias route_based_self_and_descendants_of_type self_and_descendants_of_type
 
       def self_and_descendant_ids
         self_and_descendants.as_ids

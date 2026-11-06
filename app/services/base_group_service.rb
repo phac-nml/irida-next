@@ -13,7 +13,7 @@ class BaseGroupService < BaseService
     descendants_to_update = @group.self_and_descendants_of_type(
       [Group.sti_name,
        Namespaces::ProjectNamespace.sti_name]
-    ).where(public: false).order('LENGTH(routes.path) ASC')
+    ).where(public: false).order(Arel.sql('CARDINALITY(traversal_ids) ASC'))
 
     descendants_to_update.each do |descendant|
       next if descendant.public == true
@@ -31,7 +31,7 @@ class BaseGroupService < BaseService
     descendants_to_update = @group.self_and_descendants_of_type(
       [Group.sti_name,
        Namespaces::ProjectNamespace.sti_name]
-    ).where(public: true).order('LENGTH(routes.path) ASC')
+    ).where(public: true).order(Arel.sql('CARDINALITY(traversal_ids) ASC'))
 
     descendants_to_update.each do |descendant|
       next if descendant.public == false
