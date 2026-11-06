@@ -31,4 +31,28 @@ namespace :benchmark do # rubocop:disable Metrics/BlockLength
       strategy:
     )
   end
+
+  desc 'Benchmark old (route-based) vs new (traversal_ids) GroupPolicy/ProjectPolicy relation ' \
+       'listing scopes against several distinct branching hierarchies with scattered namespace group links. ' \
+       'Options (env vars): TREES (default 5, number of distinct hierarchies), ' \
+       'DEPTH (default 4, levels per hierarchy including root), ' \
+       'CHILDREN (default 10, children per node), ' \
+       'LINKS (default 300, namespace group links created), ' \
+       'USERS (default 200, filler members created), ' \
+       'STRATEGY (old|new|both, default both).'
+  task namespace_listing_policy_scope: :environment do
+    require_relative '../benchmarks/namespace_listing_policy_scope'
+
+    strategy = (ENV['STRATEGY'] || 'both').to_sym
+    raise ArgumentError, "STRATEGY must be old|new|both, got #{strategy}" unless %i[old new both].include?(strategy)
+
+    Benchmarks::NamespaceListingPolicyScope.run(
+      trees_count: (ENV['TREES'] || 5).to_i,
+      depth: (ENV['DEPTH'] || 4).to_i,
+      children_per_level: (ENV['CHILDREN'] || 10).to_i,
+      links_count: (ENV['LINKS'] || 300).to_i,
+      users_count: (ENV['USERS'] || 200).to_i,
+      strategy:
+    )
+  end
 end
