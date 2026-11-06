@@ -146,23 +146,40 @@ module Namespaces
         old_prefix, new_prefix = saved_change_to_traversal_ids
         return if old_prefix.blank? || old_prefix == new_prefix
 
-        old_ids = quoted_uuid_array(old_prefix)
-        new_ids = quoted_uuid_array(new_prefix)
+        old_ids = quoted_traversal_ids(old_prefix)
+        new_ids = quoted_traversal_ids(new_prefix)
+        remaining_suffix_slice = array_slice_sql(old_prefix.length + 1)
 
         # Use `Namespace.unscoped`, not `self.class.unscoped`: the affected
         # subtree (this namespace's descendants) commonly spans multiple STI
         # subtypes (e.g. a Group's descendants include
         # Namespaces::ProjectNamespace rows), and Rails always applies the
         # receiver's STI `type` condition to a query, even past `unscoped`.
-        Namespace.unscoped.where.not(id:).where(
-          "traversal_ids[1:cardinality(#{old_ids})] = #{old_ids}"
-        ).update_all( # rubocop:disable Rails/SkipsModelValidations
-          "traversal_ids = #{new_ids} || traversal_ids[(cardinality(#{old_ids}) + 1):]"
-        )
+        Namespace.unscoped.where.not(id:)
+                 .where(array_slice_sql(1, old_prefix.length).eq(old_ids))
+                 .update_all("traversal_ids = #{Arel::Nodes::InfixOperation.new('||', new_ids, remaining_suffix_slice).to_sql}") # rubocop:disable Rails/SkipsModelValidations,Layout/LineLength
       end
 
-      def quoted_uuid_array(ids)
-        "ARRAY[#{ids.map { |id| self.class.connection.quote(id) }.join(',')}]::uuid[]"
+      # Builds an Arel-quoted value for an array of namespace ids, cast per
+      # the `traversal_ids` attribute's `uuid[]` type, rather than
+      # interpolating hand-quoted SQL strings - this keeps the query safe
+      # from SQL injection by construction instead of relying on manual
+      # escaping.
+      def quoted_traversal_ids(ids)
+        Arel::Nodes.build_quoted(ids, Namespace.arel_table[:traversal_ids])
+      end
+
+      # Builds Postgres' array-slice syntax (`traversal_ids[from:to]` or
+      # `traversal_ids[from:]` when `to` is omitted), which Arel has no
+      # built-in node for. `from`/`to` are array indices derived from
+      # `traversal_ids` lengths (not user-controlled data); coercing them with
+      # `#to_i` makes this explicit so the interpolation below cannot carry
+      # anything other than a plain integer.
+      def array_slice_sql(from, to = nil)
+        from = from.to_i
+        to = to.to_i if to
+
+        Arel.sql("traversal_ids[#{from}:#{to}]")
       end
     end
   end
