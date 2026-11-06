@@ -120,10 +120,13 @@ module Projects
 
       project_namespace.create_logidze_snapshot!
 
-      assert_equal 1, project_namespace.log_data.version
-      assert_equal 1, project_namespace.log_data.size
-      assert_equal 'proj1', project_namespace.at(version: 1).name
-      assert_equal 'proj1', project_namespace.at(version: 1).path
+      # 2 versions, not 1: the insert logs one version, and the separate
+      # traversal_ids update_column (now that postgres generates ids via
+      # after_create) logs a second version.
+      assert_equal 2, project_namespace.log_data.version
+      assert_equal 2, project_namespace.log_data.size
+      assert_equal 'proj1', project_namespace.at(version: 2).name
+      assert_equal 'proj1', project_namespace.at(version: 2).path
     end
 
     test 'create project with public parent namespace' do
