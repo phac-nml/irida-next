@@ -269,6 +269,14 @@ class ProjectPolicyTest < ActiveSupport::TestCase
     assert_equal 23, scoped_projects.count
   end
 
+  test 'scope with use_traversal_ids false matches traversal_ids-based scope' do
+    traversal_ids_scope = @policy.apply_scope(Project, type: :relation)
+    route_based_scope = @policy.apply_scope(Project, type: :relation, scope_options: { use_traversal_ids: false })
+
+    assert_equal 40, route_based_scope.count
+    assert_equal traversal_ids_scope.pluck(:id).sort, route_based_scope.pluck(:id).sort
+  end
+
   test 'scope archived projects' do
     scoped_projects = @policy.apply_scope(Project, type: :relation)
     # John Doe has access to 33 projects. 32 through his namespace
