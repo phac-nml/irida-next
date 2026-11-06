@@ -292,6 +292,22 @@ describe("select2/v2 controller", () => {
     expect(fd().isVisible()).toBe(false);
   });
 
+  it("matches dropdown width to the input when opening", async () => {
+    application = await mount();
+    Object.defineProperty(input(), "offsetWidth", {
+      configurable: true,
+      value: 276,
+    });
+
+    fd().show();
+
+    const dropdownEl = document.querySelector(
+      '[data-select2--v2-target="dropdown"]',
+    );
+    expect(dropdownEl.style.width).toBe("276px");
+    expect(dropdownEl.style.minWidth).toBe("276px");
+  });
+
   it("notifies the spreadsheet-import outlet when selection changes", async () => {
     application = await mount({ includeOutlet: true });
     items()[0].click();
