@@ -46,29 +46,39 @@ module Benchmarks
     private
 
     attr_reader :depth, :users_count, :links_count, :strategy,
-                :root, :deepest_leaf, :levels, :created_by
+                :root, :deepest_leaf, :deepest_project_namespace, :levels, :created_by
 
     # Builds a single linear chain of groups `depth` levels deep (no
     # branching) - the benchmarked queries only care about how many
     # namespace_ids are in the ancestor chain being searched, not about the
     # overall hierarchy's breadth, so a chain is enough and keeps setup fast.
+    #
+    # Also creates a project namespace leaf under the deepest group, so the
+    # scopes can be benchmarked against both a group namespace and a project
+    # namespace - the latter is where resolving the ancestor chain from the
+    # in-memory traversal_ids (vs a parent load plus an ancestor query)
+    # saves the most round-trips.
     def build_hierarchy
       puts "Building synthetic hierarchy (depth=#{depth})..."
 
       @created_by = create_benchmark_user('creator')
-      @root = Group.create!(name: 'Policy Scope Benchmark Root', path: "policy-scope-root-#{SecureRandom.hex(4)}")
+      @root = Group.create!(name: 'Policy Scope Benchmark Root', path: "ps-root-#{SecureRandom.hex(4)}")
       @levels = [@root]
 
       build_remaining_levels
 
       @deepest_leaf = levels.last
+      @deepest_project_namespace = Namespaces::ProjectNamespace.create!(
+        name: 'Policy Scope Benchmark Project', path: "ps-proj-#{SecureRandom.hex(4)}",
+        parent: deepest_leaf, owner: created_by
+      )
     end
 
     def build_remaining_levels
       (depth - 1).times do |level|
         child = Group.create!(
           name: "Policy Scope Benchmark L#{level}",
-          path: "policy-scope-l#{level}-#{SecureRandom.hex(4)}",
+          path: "ps-l#{level}-#{SecureRandom.hex(4)}",
           parent: levels.last
         )
         levels << child
@@ -126,12 +136,17 @@ module Benchmarks
     end
 
     def benchmark_member_scope
-      puts '--- MemberPolicy relation scope (DISTINCT ON user_id) ---'
+      benchmark_member_scope_for('group namespace', deepest_leaf)
+      benchmark_member_scope_for('project namespace', deepest_project_namespace)
+    end
+
+    def benchmark_member_scope_for(label, namespace)
+      puts "--- MemberPolicy relation scope (DISTINCT ON user_id), #{label} ---"
       policy = MemberPolicy.new(user: created_by)
       action = lambda { |use_traversal_ids|
         policy.apply_scope(
           Member, type: :relation,
-                  scope_options: { namespace: deepest_leaf, use_traversal_ids: }
+                  scope_options: { namespace:, use_traversal_ids: }
         ).load
       }
 
@@ -139,12 +154,17 @@ module Benchmarks
     end
 
     def benchmark_namespace_group_link_scope
-      puts '--- NamespaceGroupLinkPolicy relation scope (DISTINCT ON group_id) ---'
+      benchmark_namespace_group_link_scope_for('group namespace', deepest_leaf)
+      benchmark_namespace_group_link_scope_for('project namespace', deepest_project_namespace)
+    end
+
+    def benchmark_namespace_group_link_scope_for(label, namespace)
+      puts "--- NamespaceGroupLinkPolicy relation scope (DISTINCT ON group_id), #{label} ---"
       policy = NamespaceGroupLinkPolicy.new(user: created_by)
       action = lambda { |use_traversal_ids|
         policy.apply_scope(
           NamespaceGroupLink, type: :relation,
-                              scope_options: { namespace: deepest_leaf, use_traversal_ids: }
+                              scope_options: { namespace:, use_traversal_ids: }
         ).load
       }
 
