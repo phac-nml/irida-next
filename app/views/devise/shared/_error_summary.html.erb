@@ -1,0 +1,35 @@
+<%# locals: (entries:, hidden: false, data: {}) %>
+
+<% if entries.any? %>
+  <%= tag.div class: class_names(
+    "mb-4 rounded-[var(--pvc-radius-control)] focus-within:outline-2 focus-within:outline-offset-2",
+    "focus-within:outline-[var(--pvc-color-danger)]",
+    hidden: hidden,
+  ), data: data do %>
+    <%= render "devise/shared/alert" do %>
+      <div
+        class="focus-visible:!outline-none"
+        data-controller="form-error-summary"
+        data-form-error-summary-autofocus-value="true"
+        tabindex="-1"
+      >
+        <h2 class="font-semibold"><%= t("general.form.error_summary.title", count: entries.count) %></h2>
+        <p class="mt-1 font-normal"><%= t("general.form.error_notification") %></p>
+
+        <ul class="mt-2 list-disc space-y-1 ps-5">
+          <% entries.each do |entry| %>
+            <li>
+              <%= link_to entry.message,
+              entry.href,
+              class: "underline underline-offset-2",
+              data: {
+                action: "form-error-summary#focusField",
+                "form-error-summary-target-id-param": entry.target_id,
+              } %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

@@ -6,9 +6,12 @@ en:
         submit_button: Resend confirmation instructions
         title: Resend confirmation instructions
     failure:
+      unauthenticated: You need to sign in or sign up before continuing.
       user:
         invalid: Invalid Email or password.
     layout:
+      art_caption: Simulated data, for illustration only
+      tagline: Bioinformatics platform for the storage, management, and analysis of genomic sequences and metadata.
       title: IRIDA Next
     mailer:
       confirmation_instructions:
@@ -39,17 +42,19 @@ en:
     passwords:
       edit:
         password_confirmation_label: Confirm new password
-        password_hint: "(%{minimum_password_length} characters minimum)"
+        password_hint: "%{minimum_password_length} characters minimum"
         password_label: New password
         reset_password: Change Password
         submit_button: Change my password
         title: Change your password
       new:
+        description: Enter your account email. If it matches an account, we'll send a link to choose a new password.
         email:
           format_error: Invalid email format. Please enter an email address with the format xxx@yyy.zzz
           required_error: Email is required. Please enter a valid email address.
         forgot_password: Reset Password
         submit_button: Send me reset password instructions
+        title: Reset your password
       no_token: You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided.
       send_instructions: You will receive an email with instructions on how to reset your password in a few minutes.
       send_paranoid_instructions: If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.
@@ -64,14 +69,15 @@ en:
         confirmation_message: 'Currently waiting confirmation for: %{email}'
         current_password_hint: "(we need your current password to confirm your changes)"
         password_blank_hint: "(leave blank if you don't want to change it)"
-        password_length_hint: "(%{minimum_password_length} characters minimum)"
+        password_length_hint: "%{minimum_password_length} characters minimum"
         title: Edit %{resource_name}
         unhappy: Unhappy?
       new:
-        password_hint: "(%{minimum_password_length} characters minimum)"
+        password_hint: "%{minimum_password_length} characters minimum"
         register: Register
         signed_up: Already signed up?
-        submit_button: Sign up
+        submit_button: Create account
+        title: Create your account
       signed_up: Welcome! You have signed up successfully.
       signed_up_but_inactive: You have signed up successfully. However, we could not sign you in because your account is not yet activated.
       signed_up_but_locked: You have signed up successfully. However, we could not sign you in because your account is locked.
@@ -88,6 +94,7 @@ en:
         no_configured_authentication_methods: No authentication methods are currently configured. Please contact an IRIDA Next administrator for assistance.
         omniauth: Sign in with %{provider}
         return_button: Return to sign in selection
+        title: Sign in
       signed_in: Signed in successfully.
       signed_out: Signed out successfully.
     shared:
@@ -100,6 +107,9 @@ en:
         forgot_password_link: Forgot your password?
         sign_in_link: Sign in
         unlock_link: Didn't receive unlock instructions?
+      password_toggle:
+        hide: Hide password
+        show: Show password
     unlocks:
       new:
         submit_button: Resend unlock instructions

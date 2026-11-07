@@ -1,0 +1,19 @@
+<%# locals: (type: :danger) %>
+
+<%# Pathogen has no alert component yet. Replace this partial when it does. %>
+<% danger = type == :danger %>
+
+<div
+  role="<%= danger ? 'alert' : 'status' %>"
+  class="
+    <%= class_names(
+    'flex items-start gap-2 rounded-[var(--pvc-radius-control)] border p-3 text-sm font-medium',
+    'border-[var(--pvc-color-danger)] text-[var(--pvc-color-danger-strong)]': danger,
+    'border-[var(--pvc-color-border-strong)] text-[var(--pvc-color-text)]': !danger,
+    ) %>
+  "
+>
+  <%= icon(danger ? "exclamation-circle" : "information-circle", library: :heroicons, size: :md, color: nil, class: "flex-none") %>
+
+  <div class="min-w-0"><%= yield %></div>
+</div>

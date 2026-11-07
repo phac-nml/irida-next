@@ -1,128 +1,88 @@
-<h2><%= t(".title", resource_name: resource_name.to_s.humanize) %></h2>
+<% content_for :auth_title, t(".title", resource_name: resource_name.to_s.humanize) %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, novalidate: true }) do |f| %>
-  <%= form_error_summary(f) %>
-  <%= render partial: "shared/form/required_field_legend" %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-4", novalidate: true }) do |f| %>
+  <%= render "devise/shared/error_summary", entries: FormErrorSummaryEntryBuilder.new(builder: f).call %>
+
+  <div><%= render partial: "shared/form/required_field_legend" %></div>
 
   <%= render "devise/shared/hidden_locale_input", form: f %>
 
-  <% invalid_email = resource.errors.include?(:email) %>
-
-  <div class="form-field <%= 'invalid' if invalid_email %>">
-    <%= f.label :email, data: { required: true } %><br>
-
-    <%= f.email_field :email,
-                  autofocus: resource.errors.none?,
-                  required: true,
-                  aria: {
-                    describedby: invalid_email ? f.field_id(:email, "error") : nil,
-                    invalid: invalid_email,
-                    required: true,
-                  },
-                  autocomplete: "email" %>
-
-    <% if invalid_email %>
-      <%= render "shared/form/field_errors",
-      id: f.field_id(:email, "error"),
-      errors: resource.errors.full_messages_for(:email) %>
-    <% end %>
-  </div>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :email,
+  field: :email_field,
+  mark_required: true,
+  input: {
+    autofocus: resource.errors.none?,
+    autocomplete: "email",
+  } %>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div><%= t(".confirmation_message", email: @resource.unconfirmed_email) %></div>
+    <p class="text-sm"><%= t(".confirmation_message", email: resource.unconfirmed_email) %></p>
   <% end %>
 
-  <% invalid_password = resource.errors.include?(:password) %>
+  <% length_hint = t(".password_length_hint", minimum_password_length: @minimum_password_length) if @minimum_password_length %>
 
-  <div class="form-field <%= 'invalid' if invalid_password %>">
-    <%= f.label :password, data: { required: true } %>
-    <i><%= t(".password_blank_hint") %></i><br>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :password,
+  field: :password_field,
+  mark_required: true,
+  toggle: true,
+  hint: [t(".password_blank_hint"), length_hint].compact.join(" "),
+  input: {
+    autocomplete: "new-password",
+  } %>
 
-    <%= f.password_field :password,
-                     required: true,
-                     aria: {
-                       describedby: invalid_password ? f.field_id(:password, "error") : nil,
-                       invalid: invalid_password,
-                       required: true,
-                     },
-                     autocomplete: "new-password" %>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :password_confirmation,
+  field: :password_field,
+  mark_required: true,
+  input: {
+    autocomplete: "new-password",
+  } %>
 
-    <% if @minimum_password_length %>
-      <br>
-      <em><%= t(".password_length_hint", minimum_password_length: @minimum_password_length) %></em>
-    <% end %>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :current_password,
+  field: :password_field,
+  mark_required: true,
+  hint: t(".current_password_hint"),
+  input: {
+    autocomplete: "current-password",
+  } %>
 
-    <% if invalid_password %>
-      <%= render "shared/form/field_errors",
-      id: f.field_id(:password, "error"),
-      errors: resource.errors.full_messages_for(:password) %>
-    <% end %>
-  </div>
-
-  <% invalid_password_confirmation = resource.errors.include?(:password_confirmation) %>
-
-  <div class="form-field <%= 'invalid' if invalid_password_confirmation %>">
-    <%= f.label :password_confirmation, data: { required: true } %><br>
-
-    <%= f.password_field :password_confirmation,
-                     required: true,
-                     aria: {
-                       describedby:
-                         invalid_password_confirmation ? f.field_id(:password_confirmation, "error") : nil,
-                       invalid: invalid_password_confirmation,
-                       required: true,
-                     },
-                     autocomplete: "new-password" %>
-
-    <% if invalid_password_confirmation %>
-      <%= render "shared/form/field_errors",
-      id: f.field_id(:password_confirmation, "error"),
-      errors: resource.errors.full_messages_for(:password_confirmation) %>
-    <% end %>
-  </div>
-
-  <% invalid_current_password = resource.errors.include?(:current_password) %>
-
-  <div class="form-field <%= 'invalid' if invalid_current_password %>">
-    <%= f.label :current_password, data: { required: true } %>
-    <i><%= t(".current_password_hint") %></i><br>
-
-    <%= f.password_field :current_password,
-                     required: true,
-                     aria: {
-                       describedby:
-                         invalid_current_password ? f.field_id(:current_password, "error") : nil,
-                       invalid: invalid_current_password,
-                       required: true,
-                     },
-                     autocomplete: "current-password" %>
-
-    <% if invalid_current_password %>
-      <%= render "shared/form/field_errors",
-      id: f.field_id(:current_password, "error"),
-      errors: resource.errors.full_messages_for(:current_password) %>
-    <% end %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit t('common.actions.update') %>
-  </div>
+  <%= f.submit t('common.actions.update'), tone: :primary, emphasis: :solid, block: true %>
 <% end %>
 
-<h3><%= t(".cancel_title") %></h3>
+<div class="mt-6 space-y-2 border-t border-[var(--pvc-color-border)] pt-6">
+  <%= render Pathogen::Typography::Heading.new(level: 2) do %>
+    <%= t(".cancel_title") %>
+  <% end %>
 
-<div>
-  <%= t(".unhappy") %>
+  <p class="text-sm text-[var(--pvc-color-text-muted)]"><%= t(".unhappy") %></p>
 
   <%= pathogen_button_to t(".cancel_button"),
     registration_path(resource_name),
     method: :delete,
     tone: :neutral,
     emphasis: :outline,
+    form: {
+      data: {
+        turbo: true,
+      },
+    },
     data: {
-      confirm: t(".cancel_confirmation"),
+      turbo: true,
       turbo_confirm: t(".cancel_confirmation"),
     } %>
 </div>
 
-<%= link_to t(".back_link"), :back %>
+<p class="mt-4 text-sm">
+  <%= render Pathogen::Link.new(href: url_for(:back)) do %>
+    <%= t(".back_link") %>
+  <% end %>
+</p>
+
+<%= render ConfirmationComponent.new %>

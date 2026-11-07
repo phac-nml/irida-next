@@ -1,0 +1,5 @@
+<%# locals: (classes:) %>
+
+<%# Decorative. Lazy loading means the hidden theme's file is never fetched. %>
+<%= image_tag "auth/variant-matrix-light.svg", alt: "", loading: "lazy", class: class_names(classes, "block dark:hidden") %>
+<%= image_tag "auth/variant-matrix-dark.svg", alt: "", loading: "lazy", class: class_names(classes, "hidden dark:block") %>
