@@ -1,139 +1,67 @@
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4", novalidate: true }) do |f| %>
-  <%= form_error_summary(f) %>
+<% content_for :auth_title, t(".title") %>
 
-  <%= render partial: "shared/form/required_field_legend" %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4", novalidate: true }) do |f| %>
+  <%= render "devise/shared/error_summary", entries: FormErrorSummaryEntryBuilder.new(builder: f).call %>
+
+  <div><%= render partial: "shared/form/required_field_legend" %></div>
 
   <%= render "devise/shared/hidden_locale_input", form: f %>
 
-  <% invalid_email = resource.errors.include?(:email) %>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :email,
+  field: :email_field,
+  mark_required: true,
+  input: {
+    autofocus: resource.errors.none?,
+    autocomplete: "email",
+  } %>
 
-  <div class="form-field <%= 'invalid' if invalid_email %>">
-    <%= f.label :email, data: { required: true } %>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <%= render "devise/shared/field",
+    form: f,
+    attribute: :first_name,
+    mark_required: true,
+    input: {
+      autocomplete: "given-name",
+    } %>
 
-    <%= f.email_field :email,
-                  autofocus: resource.errors.none?,
-                  required: true,
-                  aria: {
-                    describedby: invalid_email ? f.field_id(:email, "error") : nil,
-                    invalid: invalid_email,
-                    required: true,
-                  },
-                  autocomplete: "email" %>
-
-    <%= if invalid_email
-      render "shared/form/field_errors",
-      id: f.field_id(:email, "error"),
-      errors: resource.errors.full_messages_for(:email)
-    end %>
+    <%= render "devise/shared/field",
+    form: f,
+    attribute: :last_name,
+    mark_required: true,
+    input: {
+      autocomplete: "family-name",
+    } %>
   </div>
 
-  <% invalid_first_name = resource.errors.include?(:first_name) %>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :password,
+  field: :password_field,
+  mark_required: true,
+  toggle: true,
+  hint: (t(".password_hint", minimum_password_length: @minimum_password_length) if @minimum_password_length),
+  input: {
+    autocomplete: "new-password",
+  } %>
 
-  <div class="form-field <%= 'invalid' if invalid_first_name %>">
-    <%= f.label :first_name, data: { required: true } %>
-
-    <%= f.text_field :first_name,
-                 required: true,
-                 aria: {
-                   describedby:
-                     invalid_first_name ? f.field_id(:first_name, "error") : nil,
-                   invalid: invalid_first_name,
-                   required: true,
-                 },
-                 autocomplete: "given-name" %>
-
-    <%= if invalid_first_name
-      render "shared/form/field_errors",
-      id: f.field_id(:first_name, "error"),
-      errors: resource.errors.full_messages_for(:first_name)
-    end %>
-  </div>
-
-  <% invalid_last_name = resource.errors.include?(:last_name) %>
-
-  <div class="form-field <%= 'invalid' if invalid_last_name %>">
-    <%= f.label :last_name, data: { required: true } %>
-
-    <%= f.text_field :last_name,
-                 required: true,
-                 aria: {
-                   describedby:
-                     invalid_last_name ? f.field_id(:last_name, "error") : nil,
-                   invalid: invalid_last_name,
-                   required: true,
-                 },
-                 autocomplete: "family-name" %>
-
-    <%= if invalid_last_name
-      render "shared/form/field_errors",
-      id: f.field_id(:last_name, "error"),
-      errors: resource.errors.full_messages_for(:last_name)
-    end %>
-  </div>
-
-  <% invalid_password = resource.errors.include?(:password) %>
-
-  <div class="form-field <%= 'invalid' if invalid_password %>">
-    <%= f.label :password, data: { required: true } %>
-
-    <%= f.password_field :password,
-                     required: true,
-                     aria: {
-                       describedby:
-                         invalid_password ? f.field_id(:password, "error") : nil,
-                       invalid: invalid_password,
-                       required: true,
-                     },
-                     autocomplete: "new-password" %>
-
-    <% if @minimum_password_length %>
-      <span class="text-sm font-light text-slate-500 dark:text-slate-400">
-        <%= t(".password_hint", minimum_password_length: @minimum_password_length) %>
-      </span>
-    <% end %>
-
-    <%= if invalid_password
-      render "shared/form/field_errors",
-      id: f.field_id(:password, "error"),
-      errors: resource.errors.full_messages_for(:password)
-    end %>
-  </div>
-
-  <% invalid_password_confirmation = resource.errors.include?(:password_confirmation) %>
-
-  <div class="form-field <%= 'invalid' if invalid_password_confirmation %>">
-    <%= f.label :password_confirmation, data: { required: true } %>
-
-    <%= f.password_field :password_confirmation,
-                     required: true,
-                     aria: {
-                       describedby:
-                         (
-                           if invalid_password_confirmation
-                             f.field_id(:password_confirmation, "error")
-                           else
-                             nil
-                           end
-                         ),
-                       invalid: invalid_password_confirmation,
-                       required: true,
-                     },
-                     autocomplete: "new-password" %>
-
-    <%= if invalid_password_confirmation
-      render "shared/form/field_errors",
-      id: f.field_id(:password_confirmation, "error"),
-      errors: resource.errors.full_messages_for(:password_confirmation)
-    end %>
-  </div>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :password_confirmation,
+  field: :password_field,
+  mark_required: true,
+  input: {
+    autocomplete: "new-password",
+  } %>
 
   <%= f.submit t(".submit_button"), tone: :primary, emphasis: :solid, block: true %>
 <% end %>
 
-<div class="flex">
-  <span class="mr-2 dark:text-white"><%= t(".signed_up") %></span>
+<p class="mt-6 border-t border-[var(--pvc-color-border)] pt-6 text-sm text-[var(--pvc-color-text-muted)]">
+  <%= t(".signed_up") %>
 
-  <div class="grid gap-2">
-    <%= render "devise/shared/links" %>
-  </div>
-</div>
+  <%= render Pathogen::Link.new(href: new_session_path(resource_name, **auth_locale_params)) do %>
+    <%= t("devise.shared.links.sign_in_link") %>
+  <% end %>
+</p>

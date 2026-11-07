@@ -1,56 +1,54 @@
-<% params = I18n.locale != I18n.default_locale ? { locale: I18n.locale } : {} %>
+<% content_for :auth_title, t(".title") %>
+<% content_for :auth_description, t("devise.layout.tagline") %>
 
 <% if !password_authentication_enabled? && !button_based_providers_enabled? %>
-  <div
-    class="
-      flex items-center border-l-4 border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-slate-800
-      dark:text-red-400
-    "
-    role="alert"
-  >
-    <div><span class="font-semibold"><%= t("devise.sessions.new.no_configured_authentication_methods") %></span></div>
-  </div>
+  <%= render "devise/shared/alert" do %>
+    <%= t("devise.sessions.new.no_configured_authentication_methods") %>
+  <% end %>
 <% else %>
   <% if password_authentication_enabled? && !button_based_providers_enabled? || @local_account %>
     <%= render "devise/shared/form" %>
   <% end %>
-  <div class="grid gap-2">
-    <% if button_based_providers_enabled? %>
-      <% if @local_account %>
-        <%= render "devise/shared/links" %>
-        <%= link_to t(".return_button"),
-    new_user_session_path(**params),
-    class: "button button-default w-full" %>
-      <% else %>
+
+  <% if button_based_providers_enabled? %>
+    <% if @local_account %>
+      <%= render "devise/shared/links" %>
+
+      <p class="mt-2 text-sm">
+        <%= render Pathogen::Link.new(href: new_user_session_path(**auth_locale_params)) do %>
+          <%= t(".return_button") %>
+        <% end %>
+      </p>
+    <% else %>
+      <div class="grid gap-2">
         <%- enabled_button_based_providers.each do |provider| %>
           <% provider_text = Rails.configuration.auth_config["#{provider}_text"] || OmniAuth::Utils.camelize(provider) %>
+          <% icon_name = Rails.configuration.auth_config["#{provider}_icon"] ? "#{provider}_icon" : provider %>
 
           <%= pathogen_button_to omniauth_authorize_path(resource_name, provider),
                     data: {
                       turbo: false
                     },
-                    params: params,
+                    params: auth_locale_params,
                     form_class: "w-full",
                     tone: :neutral, emphasis: :outline, block: true do %>
             <span class="inline-flex items-center justify-center gap-2">
-              <% if Rails.configuration.auth_config["#{provider}_icon"] %>
-                <%= render Viral::IconComponent.new(name: "#{provider}_icon", classes: "size-4") %>
-              <% else %>
-                <%= render Viral::IconComponent.new(name: provider, classes: "size-4") %>
-              <% end %>
-
+              <span class="size-4 [&>svg]:size-full"><%= viral_icon_source(icon_name) %></span>
               <span><%= t(".omniauth", provider: provider_text) %></span>
             </span>
           <% end %>
         <% end %>
-        <% if password_authentication_enabled? %>
-          <%= link_to t(".local_button"),
-      new_user_session_path(local: true, **params),
-      class: "button button-default w-full" %>
-        <% end %>
+      </div>
+
+      <% if password_authentication_enabled? %>
+        <p class="mt-6 border-t border-[var(--pvc-color-border)] pt-6 text-sm">
+          <%= render Pathogen::Link.new(href: new_user_session_path(local: true, **auth_locale_params)) do %>
+            <%= t(".local_button") %>
+          <% end %>
+        </p>
       <% end %>
-    <% else %>
-      <%= render "devise/shared/links" %>
     <% end %>
-  </div>
+  <% else %>
+    <%= render "devise/shared/links" %>
+  <% end %>
 <% end %>

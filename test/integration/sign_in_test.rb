@@ -56,6 +56,9 @@ class SignInTest < ActionDispatch::IntegrationTest
     assert_select 'button', text: /#{Regexp.escape(expected_text)}/
     # Custom icon for entra_id
     assert_select "svg.icon-#{custom_provider}_icon"
+  ensure
+    Rails.configuration.auth_config.delete(:"#{custom_provider}_text")
+    Rails.configuration.auth_config.delete(:"#{custom_provider}_icon")
   end
 
   test 'should display no authentication methods message when no providers and password authentication disabled' do
@@ -85,7 +88,7 @@ class SignInTest < ActionDispatch::IntegrationTest
     get new_user_session_path
 
     assert_response :success
-    assert_select 'h1', text: I18n.t(:'devise.layout.title'), count: 1
+    assert_select 'h1', text: I18n.t(:'devise.sessions.new.title'), count: 1
 
     get new_user_session_path(local: true)
 
@@ -100,7 +103,7 @@ class SignInTest < ActionDispatch::IntegrationTest
     get new_user_session_path
 
     assert_response :success
-    assert_select 'h1', text: I18n.t(:'devise.layout.title'), count: 1
+    assert_select 'h1', text: I18n.t(:'devise.sessions.new.title'), count: 1
 
     get new_user_session_path(local: true)
 
@@ -120,6 +123,24 @@ class SignInTest < ActionDispatch::IntegrationTest
       assert_select 'label', text: /Password/, count: 1
     end
     assert_equal '/users/sign_in', request.path
+  end
+
+  test 'should not show the sign in prompt to someone opening the application' do
+    get root_path
+    follow_redirect!
+
+    assert_response :success
+    assert_select '[role="alert"]', count: 0
+    assert_select '[role="status"]', count: 0
+  end
+
+  test 'should show the sign in prompt as information after a deep link' do
+    get projects_path
+    follow_redirect!
+
+    assert_response :success
+    assert_select '[role="alert"]', count: 0
+    assert_select '[role="status"]', text: /#{Regexp.escape(I18n.t(:'devise.failure.unauthenticated'))}/
   end
 
   test 'should set Clear-Site-Data header on sign_out' do

@@ -3,46 +3,42 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4", novalidate: true }) do |f| %>
   <%= render "devise/shared/hidden_locale_input" %>
 
-  <%= render partial: "shared/form/required_field_legend" %>
-
   <input type="hidden" name="local" value="<%= params[:local] %>">
 
-  <div class="form-field">
-    <%= f.label :email, data: { required: true } %>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :email,
+  field: :email_field,
+  input: {
+    autofocus: true,
+    autocomplete: "email",
+  } %>
 
-    <%= f.email_field :email,
-                  autofocus: true,
-                  required: true,
-                  aria: {
-                    required: true,
-                  },
-                  autocomplete: "email" %>
-  </div>
+  <%= render "devise/shared/field",
+  form: f,
+  attribute: :password,
+  field: :password_field,
+  toggle: true,
+  input: {
+    autocomplete: "current-password",
+  } %>
 
-  <div class="form-field">
-    <%= f.label :password, data: { required: true } %>
-
-    <%= f.password_field :password,
-                     required: true,
-                     aria: {
-                       required: true,
-                     },
-                     autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="form-field flex items-start">
-      <div class="flex h-5 items-center">
-        <%= f.check_box :remember_me %>
+  <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+    <% if devise_mapping.rememberable? %>
+      <div class="flex min-h-11 items-center">
+        <%= f.check_box :remember_me, class: "!mt-0" %>
+        <%= f.label :remember_me, class: "!mb-0 py-3" %>
       </div>
+    <% end %>
 
-      <div class="ml-2 text-sm">
-        <%= f.label :remember_me %>
-      </div>
-    </div>
-  <% end %>
-
-  <div class="flow-root">
-    <%= f.submit t(".sign_in"), tone: :primary, emphasis: :solid, block: true %>
+    <% if devise_mapping.recoverable? %>
+      <span class="text-sm">
+        <%= render Pathogen::Link.new(href: new_password_path(resource_name, **auth_locale_params)) do %>
+          <%= t("devise.shared.links.forgot_password_link") %>
+        <% end %>
+      </span>
+    <% end %>
   </div>
+
+  <%= f.submit t(".sign_in"), tone: :primary, emphasis: :solid, block: true %>
 <% end %>

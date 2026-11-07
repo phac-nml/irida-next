@@ -180,6 +180,20 @@ input[type="search"] {
   @apply rounded-lg border border-slate-200 bg-slate-50 p-4 shadow-xs sm:p-6 dark:border-slate-700 dark:bg-slate-800;
 }
 
+@utility auth-shell {
+  & .form-field input:is([type="email"], [type="password"], [type="text"]) {
+    @apply min-h-11 rounded-[var(--pvc-radius-control)] bg-[var(--pvc-color-surface)] text-[var(--pvc-color-text)];
+  }
+
+  &
+    .form-field
+    input:is([type="email"], [type="password"], [type="text"]):not(
+      [aria-invalid="true"]
+    ) {
+    @apply border-[var(--pvc-color-control-border)];
+  }
+}
+
 @utility form-field {
   legend {
     @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;

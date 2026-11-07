@@ -1,42 +1,37 @@
 <%# locals: () %>
 
-<% params = I18n.locale != I18n.default_locale ? { locale: I18n.locale } : {} %>
+<div class="mt-6 grid gap-2 border-t border-(--pvc-color-border) pt-6 text-sm">
+  <%- if controller_name != 'sessions' %>
+    <span>
+      <%= render Pathogen::Link.new(href: new_session_path(resource_name, **auth_locale_params)) do %>
+        <%= t(".sign_in_link") %>
+      <% end %>
+    </span>
+  <% end %>
 
-<%- if controller_name != 'sessions' %>
-  <%= link_to t(".sign_in_link"),
-  new_session_path(resource_name, **params),
-  class:
-    "font-medium text-primary-700 underline dark:text-primary-500 hover:decoration-2" %>
-<% end %>
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <span class="text-(--pvc-color-text-muted)">
+      <%= t(".create_an_account") %>
 
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <span class="dark:text-white">
-    <%= t(".create_an_account") %>
+      <%= render Pathogen::Link.new(href: new_registration_path(resource_name, **auth_locale_params)) do %>
+        <%= t(".create_an_account_link") %>
+      <% end %>
+    </span>
+  <% end %>
 
-    <%= link_to t(".create_an_account_link"),
-    new_registration_path(resource_name, **params),
-    class:
-      "font-medium text-primary-700 underline dark:text-primary-500 hover:decoration-2 ml-1" %>
-  </span>
-<% end %>
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <span>
+      <%= render Pathogen::Link.new(href: new_confirmation_path(resource_name, **auth_locale_params)) do %>
+        <%= t(".confirmation_link") %>
+      <% end %>
+    </span>
+  <% end %>
 
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to t(".forgot_password_link"),
-  new_password_path(resource_name, **params),
-  class:
-    "font-medium text-primary-700 underline dark:text-primary-500 hover:decoration-2" %>
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to t(".confirmation_link"),
-  new_confirmation_path(resource_name, **params),
-  class:
-    "font-medium text-primary-700 underline dark:text-primary-500 hover:decoration-2" %>
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to t(".unlock_link"),
-  new_unlock_path(resource_name, **params),
-  class:
-    "font-medium text-primary-700 underline dark:text-primary-500 hover:decoration-2" %>
-<% end %>
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <span>
+      <%= render Pathogen::Link.new(href: new_unlock_path(resource_name, **auth_locale_params)) do %>
+        <%= t(".unlock_link") %>
+      <% end %>
+    </span>
+  <% end %>
+</div>

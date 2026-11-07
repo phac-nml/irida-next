@@ -6,9 +6,12 @@ fr:
         submit_button: Renvoyer les instructions de confirmation
         title: Renvoyer les instructions de confirmation
     failure:
+      unauthenticated: Vous devez vous connecter ou vous inscrire pour continuer.
       user:
         invalid: Courriel ou mot de passe invalide.
     layout:
+      art_caption: Données simulées, à titre d'illustration seulement
+      tagline: Plateforme bio-informatique pour le stockage, la gestion et l'analyse de séquences génomiques et de métadonnées.
       title: IRIDA Next
     mailer:
       confirmation_instructions:
@@ -39,17 +42,19 @@ fr:
     passwords:
       edit:
         password_confirmation_label: Confirmez votre nouveau mot de passe
-        password_hint: "(%{minimum_password_length} caractères minimums)"
+        password_hint: "%{minimum_password_length} caractères minimum"
         password_label: Nouveau mot de passe
         reset_password: Changer le mot de passe
         submit_button: Changer mon mot de passe
         title: Changer votre mot de passe
       new:
+        description: Entrez le courriel de votre compte. S'il correspond à un compte, nous vous enverrons un lien pour choisir un nouveau mot de passe.
         email:
           format_error: Format de courriel non valide Veuillez inscrire une adresse courriel dans le format xxx@yyy.zzz.
           required_error: Courriel requis Veuillez inscrire une adresse courriel valide.
         forgot_password: Mot de passe oublié
         submit_button: Envoyez-moi des instructions pour réinitialiser mon mot de passe
+        title: Réinitialiser votre mot de passe
       no_token: Vous ne pouvez pas accéder à cette page si vous n’avez pas été dirigé vers celle-ci à partir d’un courriel de réinitialisation de mot de passe. Si vous tentez d’accéder à cette page à partir d’un courriel de réinitialisation de mot de passe, assurez-vous d’utiliser l’URL fournie au complet.
       send_instructions: Vous recevrez un courriel d’instructions sur la façon de réinitialiser votre mot de passe dans quelques minutes.
       send_paranoid_instructions: Si votre adresse électronique existe déjà dans notre base de données, vous recevrez un lien pour la récupération de votre mot de passe à votre adresse électronique dans quelques minutes.
@@ -64,14 +69,15 @@ fr:
         confirmation_message: 'En attente de confirmation pour : %{email}'
         current_password_hint: "(nous avons besoin de votre mot de passe actuel pour valider ces modifications)"
         password_blank_hint: "(laissez ce champ vide pour le laisser inchangé)"
-        password_length_hint: "(%{minimum_password_length} caractères minimums)"
+        password_length_hint: "%{minimum_password_length} caractères minimum"
         title: Éditer %{resource_name}
         unhappy: Pas content ?
       new:
-        password_hint: "(%{minimum_password_length} caractères minimums)"
+        password_hint: "%{minimum_password_length} caractères minimum"
         register: Registre
         signed_up: Vous êtes déjà connecté?
-        submit_button: Inscription
+        submit_button: Créer un compte
+        title: Créez votre compte
       signed_up: Bienvenue ! Vous vous êtes enregistré(e) avec succès.
       signed_up_but_inactive: Vous vous êtes enregistré(e) avec succès. Cependant, nous n’avons pas pu vous connecter car votre compte n’a pas encore été activé.
       signed_up_but_locked: Vous vous êtes enregistré(e) avec succès. Cependant, nous n’avons pas pu vous connecter car votre compte est verrouillé.
@@ -88,6 +94,7 @@ fr:
         no_configured_authentication_methods: Aucune méthode d'authentification n'est actuellement configurée. Veuillez contacter un administrateur d'IRIDA Next pour obtenir de l'aide.
         omniauth: Connectez-vous avec %{provider}
         return_button: Retour à la sélection de connexion
+        title: Connexion
       signed_in: Ouverture de session réussie.
       signed_out: Fermeture de session réussie.
     shared:
@@ -100,6 +107,9 @@ fr:
         forgot_password_link: Mot de passe oublié ?
         sign_in_link: Connexion
         unlock_link: Vous n'avez pas reçu le courriel de déblocage ?
+      password_toggle:
+        hide: Masquer le mot de passe
+        show: Afficher le mot de passe
     unlocks:
       new:
         submit_button: Renvoyer les instructions de déblocage

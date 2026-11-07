@@ -51,4 +51,30 @@ class RegistrationsTest < ApplicationSystemTestCase
     assert_selector '#user_current_password', focused: true
     assert_accessible
   end
+
+  test 'cancelling an account asks for confirmation first' do
+    user = users(:john_doe)
+    login_as user
+
+    visit edit_user_registration_path
+
+    click_button I18n.t('devise.registrations.edit.cancel_button')
+
+    within('#turbo-confirm') do
+      assert_text I18n.t('devise.registrations.edit.cancel_confirmation')
+      click_on I18n.t('common.actions.cancel')
+    end
+
+    assert_current_path edit_user_registration_path
+    assert User.exists?(user.id)
+
+    click_button I18n.t('devise.registrations.edit.cancel_button')
+
+    within('#turbo-confirm') do
+      click_on I18n.t('common.controls.confirm')
+    end
+
+    assert_selector 'h1', text: I18n.t('devise.sessions.new.title')
+    assert_not User.exists?(user.id)
+  end
 end

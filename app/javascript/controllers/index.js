@@ -136,6 +136,9 @@ application.register(
   Nextflow__V2__SamplesheetController,
 );
 
+import PasswordVisibilityController from "./password_visibility_controller";
+application.register("password-visibility", PasswordVisibilityController);
+
 import PersonalAccessTokensController from "./personal_access_tokens_controller";
 application.register("personal-access-tokens", PersonalAccessTokensController);
 

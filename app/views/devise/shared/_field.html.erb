@@ -1,0 +1,56 @@
+<%# locals: (form:, attribute:, field: :text_field, label_text: nil, hint: nil, mark_required: false, toggle: false, input: {}) %>
+
+<% invalid = resource.errors.include?(attribute) %>
+<% hint_id = form.field_id(attribute, "hint") %>
+<% error_id = form.field_id(attribute, "error") %>
+<% describedby = [(hint_id if hint), (error_id if invalid)].compact.join(" ").presence %>
+<% label_options = mark_required ? { data: { required: true } } : {} %>
+
+<% input_options = input.deep_merge(
+     required: true,
+     aria: { describedby: describedby, invalid: invalid, required: true },
+   ) %>
+
+<% input_options = input_options.deep_merge(class: "!pe-12", data: { password_visibility_target: "input" }) if toggle %>
+
+<%= tag.div class: class_names("form-field", invalid: invalid),
+            data: (toggle ? {
+              controller: "password-visibility",
+              password_visibility_show_label_value: t("devise.shared.password_toggle.show"),
+              password_visibility_hide_label_value: t("devise.shared.password_toggle.hide"),
+            } : nil) do %>
+  <%= label_text ? form.label(attribute, label_text, label_options) : form.label(attribute, label_options) %>
+
+  <% if toggle %>
+    <div class="relative">
+      <%= form.public_send(field, attribute, **input_options) %>
+
+      <button
+        type="button"
+        class="
+          absolute inset-y-0 inset-e-0 hidden w-11 cursor-pointer place-items-center rounded-(--pvc-radius-control)
+          text-(--pvc-color-text-muted) hover:text-(--pvc-color-text)
+        "
+        aria-label="<%= t('devise.shared.password_toggle.show') %>"
+        aria-pressed="false"
+        data-password-visibility-target="toggle"
+        data-action="password-visibility#toggle"
+      >
+        <span data-password-visibility-target="showIcon"><%= icon("eye", library: :heroicons, size: :md, color: nil) %></span>
+        <span class="hidden" data-password-visibility-target="hideIcon"><%= icon("eye-slash", library: :heroicons, size: :md, color: nil) %></span>
+      </button>
+    </div>
+  <% else %>
+    <%= form.public_send(field, attribute, **input_options) %>
+  <% end %>
+
+  <% if hint %>
+    <p id="<%= hint_id %>" class="mt-1 text-xs text-(--pvc-color-text-muted)"><%= hint %></p>
+  <% end %>
+
+  <% if invalid %>
+    <ul id="<%= error_id %>" class="mt-1 space-y-1">
+      <%= render partial: "devise/shared/field_error", collection: resource.errors.full_messages_for(attribute), as: :message %>
+    </ul>
+  <% end %>
+<% end %>

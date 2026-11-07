@@ -1,3 +1,6 @@
+<% content_for :auth_title, t(".title") %>
+<% content_for :auth_description, t(".description") %>
+
 <div
   data-controller="email-input"
   data-email-input-email-missing-value="<%= t('devise.passwords.new.email.required_error') %>"
@@ -8,75 +11,44 @@
     action: "submit->email-input#submit"
     }, html: { method: :post, class: "space-y-4", novalidate: true }) do |f| %>
     <% if resource.errors.any? %>
-      <%= form_error_summary(f) %>
+      <%= render "devise/shared/error_summary", entries: FormErrorSummaryEntryBuilder.new(builder: f).call %>
     <% else %>
-      <% client_summary_entries = [
-           FormErrorSummaryEntryBuilder::Entry.new(
-             attribute: :email,
-             message: t('devise.passwords.new.email.required_error'),
-             target_id: f.field_id(:email)
-           )
-         ] %>
-      <%= render FormErrorSummaryComponent.new(
-        entries: client_summary_entries,
-        classes: "hidden",
-        data: { email_input_target: "summary" }
-      ) %>
+      <%= render "devise/shared/error_summary",
+      hidden: true,
+      data: { email_input_target: "summary" },
+      entries: [
+        FormErrorSummaryEntryBuilder::Entry.new(
+          attribute: :email,
+          message: t("devise.passwords.new.email.required_error"),
+          target_id: f.field_id(:email),
+        ),
+      ] %>
     <% end %>
 
-    <div class="space-y-4">
-      <%= render "devise/shared/hidden_locale_input" %>
+    <%= render "devise/shared/hidden_locale_input" %>
 
-      <%= render partial: "shared/form/required_field_legend" %>
+    <%= render "devise/shared/field",
+    form: f,
+    attribute: :email,
+    field: :email_field,
+    input: {
+      autofocus: resource.errors.none?,
+      autocomplete: "email",
+      data: {
+        email_input_target: "emailField",
+        action: "input->email-input#handleInput",
+      },
+    } %>
 
-      <% invalid_email = resource.errors.include?(:email) %>
+    <%# Client-side errors land here. The server's own error owns the id when there is one. %>
+    <%= tag.ul id: (f.field_id(:email, "error") unless resource.errors.include?(:email)),
+               class: "hidden",
+               data: { email_input_target: "errorContainer" } do %>
+      <%= render "devise/shared/field_error", message: "" %>
+    <% end %>
 
-      <div class="form-field <%= 'invalid' if invalid_email %>">
-        <%= f.label :email, data: { required: true } %>
-
-        <%= f.email_field :email,
-                      autofocus: resource.errors.none?,
-                      aria: {
-                        describedby: invalid_email ? f.field_id(:email, "error") : nil,
-                        invalid: invalid_email,
-                        required: true,
-                      },
-                      autocomplete: "email",
-                      class:
-                        "
-                                  border-slate-300 focus:ring-blue-500 focus:border-blue-500
-                                  invalid:border-red-500 invalid:focus:border-red-500 invalid:focus:ring-red-500
-                                ",
-                       data: {
-                         email_input_target: "emailField",
-                         action: "input->email-input#handleInput",
-                       } %>
-
-        <% if invalid_email %>
-          <%= render "shared/form/field_errors",
-          id: f.field_id(:email, "error"),
-          errors: resource.errors.full_messages_for(:email) %>
-        <% end %>
-      </div>
-
-      <!-- Error messages container -->
-      <ul
-        id="<%= invalid_email ? nil : f.field_id(:email, 'error') %>"
-        data-email-input-target="errorContainer"
-        class="hidden max-w-md list-inside text-sm text-slate-500 dark:text-slate-400"
-      >
-        <li>
-          <%= render Viral::Form::HelpTextComponent.new(state: :error) %>
-        </li>
-      </ul>
-
-      <div>
-        <%= f.submit t(".submit_button"), tone: :primary, emphasis: :solid, block: true %>
-      </div>
-    </div>
+    <%= f.submit t(".submit_button"), tone: :primary, emphasis: :solid, block: true %>
   <% end %>
 </div>
 
-<div class="grid gap-2">
-  <%= render "devise/shared/links" %>
-</div>
+<%= render "devise/shared/links" %>
