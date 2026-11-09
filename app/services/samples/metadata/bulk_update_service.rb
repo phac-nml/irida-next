@@ -30,45 +30,46 @@ module Samples
           should_update_progress_bar = true
         end
 
-        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index| # rubocop:disable Metrics/BlockLength
-          update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
-          next unless validate_metadata_param(metadata, sample_identifier)
+        Sample.suppressing_turbo_broadcasts do # rubocop:disable Metrics/BlockLength
+          @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index| # rubocop:disable Metrics/BlockLength
+            update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
+            next unless validate_metadata_param(metadata, sample_identifier)
 
-          sample = find_sample(sample_identifier)
-          next if sample.nil?
+            sample = find_sample(sample_identifier)
+            next if sample.nil?
 
-          project_puid = sample.project.puid
-          metadata_changes = Sample.suppressing_turbo_broadcasts do
-            perform_metadata_update(sample, metadata, false)
+            project_puid = sample.project.puid
+            metadata_changes = perform_metadata_update(sample, metadata, false)
+
+            # no changes made for sample (metadata was invalid)
+            next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
+                                          not_found: [] }
+
+            full_metadata_changes[sample_identifier] = metadata_changes
+
+            %i[not_updated unchanged not_found].each do |unsuccessful_metadata_change_key|
+              next if metadata_changes[unsuccessful_metadata_change_key].empty?
+
+              unsuccessful_updates[unsuccessful_metadata_change_key][sample_identifier] =
+                metadata_changes[unsuccessful_metadata_change_key]
+            end
+
+            if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? &&
+               metadata_changes[:updated].empty?
+              next
+            end
+
+            if activity_data.key?(project_puid)
+              activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
+                                               project_name: sample.project.name,
+                                               project_puid: }
+            else
+              activity_data[project_puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
+                                               project_name: sample.project.name,
+                                               project_puid: }]
+            end
+            add_changes_to_metadata_summary(project_puid, metadata_changes)
           end
-
-          # no changes made for sample (metadata was invalid)
-          next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
-                                        not_found: [] }
-
-          full_metadata_changes[sample_identifier] = metadata_changes
-
-          %i[not_updated unchanged not_found].each do |unsuccessful_metadata_change_key|
-            next if metadata_changes[unsuccessful_metadata_change_key].empty?
-
-            unsuccessful_updates[unsuccessful_metadata_change_key][sample_identifier] =
-              metadata_changes[unsuccessful_metadata_change_key]
-          end
-
-          if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? && metadata_changes[:updated].empty?
-            next
-          end
-
-          if activity_data.key?(project_puid)
-            activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
-                                             project_name: sample.project.name,
-                                             project_puid: }
-          else
-            activity_data[project_puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
-                                             project_name: sample.project.name,
-                                             project_puid: }]
-          end
-          add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
         handle_unsuccessful_updates(unsuccessful_updates)
