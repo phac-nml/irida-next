@@ -541,7 +541,8 @@ CREATE TABLE public.application_settings (
     max_personal_access_token_lifetime_in_days integer DEFAULT 365 NOT NULL,
     cleanup_inactive_access_tokens_after_days integer DEFAULT 30 NOT NULL,
     user_opt_in_features jsonb DEFAULT '{}'::jsonb NOT NULL,
-    max_data_export_size_gigabytes integer DEFAULT 30 NOT NULL
+    max_data_export_size_gigabytes integer DEFAULT 30 NOT NULL,
+    workflow_execution_fields jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -2216,6 +2217,7 @@ ALTER TABLE ONLY public.workflow_executions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20261109120000'),
 ('20261105120531'),
 ('20260810103000'),
 ('20260714160000'),
