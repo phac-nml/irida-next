@@ -101,7 +101,7 @@ class PreferencesTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to new_user_session_path
     follow_redirect!
-    assert_select "[data-viral--alert-type-value='danger']",
+    assert_select '[role="status"]',
                   text: /#{Regexp.escape(I18n.t('devise.failure.unauthenticated'))}/, count: 1
   end
 end
