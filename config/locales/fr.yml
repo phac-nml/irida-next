@@ -343,6 +343,9 @@ fr:
       attachment:
         create_html: "%{user} a joint des fichiers au projet"
         destroy_html: "%{user} a retiré des fichiers du projet"
+      automated_pipeline:
+        create_html: "%{user} a configuré le pipeline automatisé %{href} pour le projet"
+        destroy_html: "%{user} a retiré le pipeline automatisé %{href} du projet"
       create_html: "%{user} a créé le projet"
       destroy_html: "%{user} a supprimé le projet"
       import_samples:
@@ -1805,12 +1808,12 @@ fr:
         subtitle: Mettre à jour le nom et la description de l’échantillon actuel
         title: Modifier l’échantillon
       index:
-        deselect_all_tooltip: Désélectionner tous les échantillons de ce projet
+        deselect_all_tooltip: Désélectionner tout - Désélectionner tous les échantillons de ce projet
         no_associated_samples: Il n’y a aucun échantillon associé à ce projet.
         no_samples: Aucun échantillon
         refresh_notice:
           message: Le tableau des échantillons est obsolète. Veuillez actualiser pour voir les dernières modifications.
-        select_all_tooltip: Sélectionner tous les échantillons de ce projet
+        select_all_tooltip: Sélectionner tout - Sélectionner tous les échantillons de ce projet
         subtitle: Affichage des échantillons pour le projet avec l’identifiant unique persistant (PUID) %{puid}.
         title: Échantillons
         workflows:

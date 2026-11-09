@@ -6,11 +6,7 @@ module Activities
     def workflow_execution_exists?
       return false if @activity[:workflow_execution].nil?
 
-      if @activity[:automated] == true
-        !@activity[:workflow_execution].destroyed?
-      else
-        !@activity[:workflow_execution].deleted?
-      end
+      !@activity[:workflow_execution].deleted?
     end
 
     def workflow_execution_sample_exists?
@@ -20,9 +16,7 @@ module Activities
     end
 
     def activity_message
-      if @activity[:automated] == true
-        automated_workflow_execution_activity
-      elsif workflow_execution_exists? && workflow_execution_sample_exists?
+      if workflow_execution_exists? && workflow_execution_sample_exists?
         workflow_execution_and_sample_exists_activity
       elsif workflow_execution_exists?
         workflow_execution_exists_activity
@@ -34,26 +28,6 @@ module Activities
 
         t(@activity[:key], user: @activity[:user], href: href, sample_href: sample_href)
       end
-    end
-
-    def automated_workflow_execution_activity # rubocop:disable Metrics/MethodLength
-      href = if workflow_execution_exists?
-               link_to(
-                 @activity[:workflow_id],
-                 helpers.namespace_project_automated_workflow_executions_path(
-                   @activity[:namespace].parent,
-                   @activity[:namespace].project
-                 ),
-                 class: active_link_classes,
-                 title:
-                   t('components.activity.workflow_executions.index.link_descriptive_text'),
-                 'aria-label' =>
-                   t('components.activity.workflow_executions.index.link_descriptive_text')
-               )
-             else
-               highlighted_text(@activity[:workflow_id])
-             end
-      t(@activity[:key], user: @activity[:user], href: href)
     end
 
     # Both workflow execution and sample exist

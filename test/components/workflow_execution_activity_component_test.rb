@@ -13,50 +13,6 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
     @sample1 = samples(:sample1)
   end
 
-  test 'automated workflow execution setup activity' do
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
-
-    assert_equal(1, activities.count do |activity|
-      activity[:key].include?('workflow_execution.automated_workflow.create')
-    end)
-
-    activity_to_render = activities.find do |a|
-      a[:key] == 'activity.workflow_execution.automated_workflow.create_html'
-    end
-
-    render_inline Activities::WorkflowExecutionActivityComponent.new(activity: activity_to_render)
-
-    assert_text strip_tags(
-      I18n.t('activity.workflow_execution.automated_workflow.create_html', user: 'System',
-                                                                           href: @automated_workflow_execution.id)
-    )
-    assert_selector 'a',
-                    text: @automated_workflow_execution.id
-  end
-
-  test 'automated workflow execution destroy activity' do
-    ::AutomatedWorkflowExecutions::DestroyService.new(@automated_workflow_execution, @user).execute
-
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
-
-    assert_equal(1, activities.count do |activity|
-      activity[:key].include?('workflow_execution.automated_workflow.destroy')
-    end)
-
-    activity_to_render = activities.find do |a|
-      a[:key] == 'activity.workflow_execution.automated_workflow.destroy_html'
-    end
-
-    render_inline Activities::WorkflowExecutionActivityComponent.new(activity: activity_to_render)
-
-    assert_text strip_tags(
-      I18n.t('activity.workflow_execution.automated_workflow.destroy_html', user: @user.email,
-                                                                            href: @automated_workflow_execution.id)
-    )
-    assert_selector 'span',
-                    text: @automated_workflow_execution.id
-  end
-
   test 'workflow launched on sample activity' do
     activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
 

@@ -17,11 +17,11 @@ module AutomatedWorkflowExecutions
 
       return unless @automated_workflow_execution.destroyed?
 
-      @automated_workflow_execution.namespace.create_activity key: 'workflow_execution.automated_workflow.destroy',
+      @automated_workflow_execution.namespace.create_activity key: 'namespaces_project_namespace.automated_pipeline.destroy', # rubocop:disable Layout/LineLength
                                                               owner: current_user,
                                                               parameters: {
-                                                                workflow_id: @automated_workflow_execution.id,
-                                                                automated: true
+                                                                automated_pipeline_id: @automated_workflow_execution.id,
+                                                                action: 'automated_pipeline_destroy'
                                                               }
     end
   end
