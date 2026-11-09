@@ -5,27 +5,6 @@ lib.mkMerge [
     env.GA4GH_WES_URL = "http://localhost:1122";
     env.PLAYWRIGHT_BROWSERS_PATH="${pkgs.playwright.passthru.browsers}";
     env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS="true";
-    env.POETRY_DATA_DIR = "${config.devenv.state}/poetry/data";
-    env.POETRY_CACHE_DIR = "${config.devenv.state}/poetry/cache";
-
-    # pin nextflow to 25.10.2
-    overlays = [
-      (final: prev: {
-        nextflow = inputs.nextflow-pin.legacyPackages.${prev.system}.nextflow.overrideAttrs (oldAttrs: {
-          system = prev.stdenv.system;
-          postPatch = ''
-            # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
-            # several locations so we fix that globally. However, when running inside
-            # a container, we actually *want* "/bin/bash". Thus the global fix needs
-            # to be reverted for this specific use case.
-            substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
-              --replace-fail "['/bin/bash'," "['${prev.bash}/bin/bash'," \
-              --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
-                        launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
-          '';
-        });
-      })
-    ];
 
     # https://devenv.sh/packages/
     packages = with pkgs; [
@@ -34,7 +13,6 @@ lib.mkMerge [
       openssl.dev
       coreutils
       postgresql_14
-      nextflow
       nodejs_24
       jq
       file
@@ -57,24 +35,8 @@ lib.mkMerge [
       corepack.enable = true;
     };
 
-    languages.python = {
-      enable = true;
-      version = "3.13";
-      venv.enable = true;
-      venv.requirements = ''
-        poetry
-      '';
-    };
-
     # https://devenv.sh/processes/
     # processes.dev.exec = "${lib.getExe pkgs.watchexec} -n -- ls -la";
-    processes.sapporo-service = {
-      ports.http.allocate = 1122;
-      exec = ''
-        SKIP_CHOWN_OUTPUTS=True SAPPORO_HOST=0.0.0.0 SAPPORO_PORT=${toString config.processes.sapporo-service.ports.http.value} SAPPORO_DEBUG=True SAPPORO_RUN_SH=${config.devenv.state}/sapporo-service/sapporo/run_irida_next.sh poetry run sapporo
-      '';
-      cwd = "${config.devenv.state}/sapporo-service/sapporo";
-    };
 
     # https://devenv.sh/services/
     services.postgres = {
@@ -138,21 +100,6 @@ lib.mkMerge [
     #   "myproj:setup".exec = "mytool build";
     #   "devenv:enterShell".after = [ "myproj:setup" ];
     # };
-    tasks."sapporo:setup-data" = {
-      exec = ''
-        [ ! -d 'sapporo-service' ] && git clone https://github.com/phac-nml/sapporo-service.git
-        cd sapporo-service
-        git fetch --all
-        git checkout main
-        git branch -D irida-next &>/dev/null || true
-        git checkout irida-next
-        poetry install -v
-        mkdir -p sapporo/runs/.nextflow
-        printf "docker {\n\tenabled = true\n\trunOptions = '--network host'\n}" > sapporo/runs/.nextflow/config
-      '';
-      cwd = "${config.devenv.state}";
-      before = [ "devenv:processes:sapporo-service" ];
-    };
 
     # https://devenv.sh/tests/
     enterTest = ''

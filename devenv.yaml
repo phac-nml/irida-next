@@ -1,17 +1,36 @@
-# yaml-language-server: $schema=https://devenv.sh/devenv.schema.json
+imports:
+  - sapporo-service
 inputs:
   nextflow-pin:
     url: github:nixos/nixpkgs/1f6deaff6d3c8546398eadc710c3fb6fbcaf45e4
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
   nixpkgs-python:
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
     url: github:cachix/nixpkgs-python
-    inputs:
-      nixpkgs:
-        follows: nixpkgs
   nixpkgs-ruby:
-    url: github:bobvanderlinden/nixpkgs-ruby
     inputs:
       nixpkgs:
         follows: nixpkgs
+    url: github:bobvanderlinden/nixpkgs-ruby
+  pyproject-build-systems:
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+    url: github:pyproject-nix/build-system-pkgs
+  pyproject-nix:
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+    url: github:pyproject-nix/pyproject.nix
+  sapporo-service:
+    flake: false
+    url: github:phac-nml/sapporo-service/devenv
+  uv2nix:
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+    url: github:pyproject-nix/uv2nix
 strict_ports: true
