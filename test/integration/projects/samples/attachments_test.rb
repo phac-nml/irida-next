@@ -1088,9 +1088,21 @@ module Projects
         sample = samples(:sampleA)
 
         get namespace_project_sample_path(namespace, project, sample),
-            params: { pagy: { limit: 'invalid' } }
+            params: { limit: 'invalid' }
 
-        assert_response :success
+        assert_redirected_to namespace_project_sample_path(namespace, project, sample, limit: Pagy::OPTIONS[:limit])
+        follow_redirect!
+
+        assert_select '#attachments-table-body' do
+          assert_select 'tr', count: sample.attachments.count
+        end
+
+        get namespace_project_sample_path(namespace, project, sample),
+            params: { limit: '2xt5a' }
+
+        assert_redirected_to namespace_project_sample_path(namespace, project, sample, limit: Pagy::OPTIONS[:limit])
+        follow_redirect!
+
         assert_select '#attachments-table-body' do
           assert_select 'tr', count: sample.attachments.count
         end

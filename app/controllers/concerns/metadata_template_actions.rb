@@ -18,7 +18,9 @@ module MetadataTemplateActions # rubocop:disable Metrics/ModuleLength
 
     @q = load_namespace_metadata_templates.ransack(params[:q])
     set_default_sort
-    @pagy, @metadata_templates = pagy(@q.result, raise_range_error: true)
+    @pagy, @metadata_templates = pagy(
+      @q.result, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
+    )
   end
 
   def new

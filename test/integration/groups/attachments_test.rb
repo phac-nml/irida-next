@@ -530,10 +530,21 @@ module Groups
       group = groups(:group_one)
 
       get group_attachments_path(group),
-          params: { pagy: { limit: 'invalid' } }
+          params: { limit: 'invalid' }
 
-      assert_response :success
+      assert_redirected_to group_attachments_path(group, limit: Pagy::OPTIONS[:limit])
 
+      follow_redirect!
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: group.attachments.count
+      end
+
+      get group_attachments_path(group),
+          params: { limit: '2xYz1' }
+
+      assert_redirected_to group_attachments_path(group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
       assert_select '#attachments-table-body' do
         assert_select 'tr', count: group.attachments.count
       end

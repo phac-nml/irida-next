@@ -541,5 +541,20 @@ module Groups
       follow_redirect!
       assert_response :success
     end
+
+    test 'invalid pagy limit is handled gracefully at group level' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+
+      get group_bots_path(namespace),
+          params: { limit: 'invalid' }
+
+      assert_redirected_to group_bots_path(namespace, limit: Pagy::OPTIONS[:limit])
+
+      get group_bots_path(namespace),
+          params: { limit: '2x1ag' }
+
+      assert_redirected_to group_bots_path(namespace, limit: Pagy::OPTIONS[:limit])
+    end
   end
 end

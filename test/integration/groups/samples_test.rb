@@ -194,9 +194,20 @@ module Groups
     test 'invalid pagy limit is handled gracefully' do
       sign_in users(:john_doe)
       get group_samples_url(@group),
-          params: { pagy: { limit: 'invalid' } }
+          params: { limit: 'invalid' }
 
-      assert_response :success
+      assert_redirected_to group_samples_url(@group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
+      assert_select '#samples-table table tbody tr',
+                    count: [Pagy::OPTIONS[:limit], @group.aggregated_samples_count].min
+
+      get group_samples_url(@group),
+          params: { limit: '2xYz1' }
+
+      assert_redirected_to group_samples_url(@group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
       assert_select '#samples-table table tbody tr',
                     count: [Pagy::OPTIONS[:limit], @group.aggregated_samples_count].min
     end

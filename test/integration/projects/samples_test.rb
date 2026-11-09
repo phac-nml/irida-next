@@ -351,9 +351,19 @@ module Projects
 
     test 'invalid pagy limit is handled gracefully' do
       get namespace_project_samples_url(@namespace, @project),
-          params: { pagy: { limit: 'invalid' } }
+          params: { limit: 'invalid' }
 
-      assert_response :success
+      assert_redirected_to namespace_project_samples_url(@namespace, @project, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+
+      assert_select '#samples-table table tbody tr', count: [Pagy::OPTIONS[:limit], @project.samples.count].min
+
+      get namespace_project_samples_url(@namespace, @project),
+          params: { limit: '2xt5a' }
+
+      assert_redirected_to namespace_project_samples_url(@namespace, @project, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+
       assert_select '#samples-table table tbody tr', count: [Pagy::OPTIONS[:limit], @project.samples.count].min
     end
 

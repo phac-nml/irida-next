@@ -443,5 +443,28 @@ module Projects
 
       assert_equal '/projects/project-one/metadata_templates', controller.send(:metadata_templates_path)
     end
+
+    test 'invalid limit causes pagy option error redirect at project level' do
+      get namespace_project_metadata_templates_path(
+        @project_namespace.parent, @project_namespace.project, limit: 'invalid'
+      )
+
+      assert_redirected_to namespace_project_metadata_templates_path(
+        @project_namespace.parent, @project_namespace.project, limit: Pagy::OPTIONS[:limit]
+      )
+
+      follow_redirect!
+      assert_response :success
+
+      get namespace_project_metadata_templates_path(@project_namespace.parent, @project_namespace.project, limit: '2as')
+
+      assert_redirected_to namespace_project_metadata_templates_path(
+        @project_namespace.parent,
+        @project_namespace.project, limit: Pagy::OPTIONS[:limit]
+      )
+
+      follow_redirect!
+      assert_response :success
+    end
   end
 end

@@ -382,5 +382,19 @@ module Groups
 
       assert_equal '/groups/group-one/metadata_templates', controller.send(:metadata_templates_path)
     end
+
+    test 'invalid limit causes pagy option error redirect' do
+      get group_metadata_templates_path(@group, limit: 'invalid')
+
+      assert_redirected_to group_metadata_templates_path(@group, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+      assert_response :success
+
+      get group_metadata_templates_path(@group, limit: '2as')
+
+      assert_redirected_to group_metadata_templates_path(@group, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+      assert_response :success
+    end
   end
 end

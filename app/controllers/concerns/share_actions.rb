@@ -18,7 +18,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     @q = load_namespace_group_links.ransack(params[:group_links_q], search_key: :group_links_q)
     @has_group_links = load_namespace_group_links.size.positive?
     set_default_sort
-    @pagy, @namespace_group_links = pagy(@q.result, raise_range_error: true)
+    @pagy, @namespace_group_links = pagy(
+      @q.result, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
+    )
     respond_to do |format|
       format.turbo_stream
     end
@@ -31,7 +33,9 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @created_namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace,
                                                                      group_link_params).execute
-    @pagy, @namespace_group_links = pagy(load_namespace_group_links, raise_range_error: true)
+    @pagy, @namespace_group_links = pagy(
+      load_namespace_group_links, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
+    )
 
     if @created_namespace_group_link.persisted?
       respond_to do |format|
@@ -58,9 +62,11 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def destroy # rubocop:disable Metrics/MethodLength
+  def destroy # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     GroupLinks::GroupUnlinkService.new(current_user, @namespace_group_link).execute
-    @pagy, @namespace_group_links = pagy(load_namespace_group_links, raise_range_error: true)
+    @pagy, @namespace_group_links = pagy(
+      load_namespace_group_links, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
+    )
 
     respond_to do |format|
       if @namespace_group_link

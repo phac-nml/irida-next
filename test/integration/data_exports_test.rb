@@ -1002,4 +1002,18 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
   end
+
+  test 'accessing data exports index with invalid limit causes pagy option error redirect' do
+    get data_exports_path(limit: 'invalid')
+
+    assert_redirected_to data_exports_path(limit: Pagy::OPTIONS[:limit])
+    follow_redirect!
+    assert_response :success
+
+    get data_exports_path(limit: '2as')
+
+    assert_redirected_to data_exports_path(limit: Pagy::OPTIONS[:limit])
+    follow_redirect!
+    assert_response :success
+  end
 end

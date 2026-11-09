@@ -659,11 +659,22 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'invalid pagy limit is handled gracefully at user level' do
     get workflow_executions_path,
-        params: { pagy: { limit: 'invalid', page: 1 } }
+        params: { limit: 'invalid', page: 1 }
 
     assert_equal 22, WorkflowExecution.where(submitter: users(:john_doe)).count
 
-    assert_response :success
+    assert_redirected_to workflow_executions_path(limit: Pagy::OPTIONS[:limit], page: 1)
+    follow_redirect!
+
+    assert_select '#workflow-executions-table table tbody tr',
+                  count: Pagy::OPTIONS[:limit]
+
+    get workflow_executions_path,
+        params: { limit: '2ad', page: 1 }
+
+    assert_redirected_to workflow_executions_path(limit: Pagy::OPTIONS[:limit], page: 1)
+    follow_redirect!
+
     assert_select '#workflow-executions-table table tbody tr',
                   count: Pagy::OPTIONS[:limit]
   end

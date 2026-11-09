@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
   before_action :set_pagy_locale
+  before_action :validate_pagy_limit, if: -> { params&.[](:limit).present? }
 
   helper IconHelper
   helper_method :error_message
@@ -97,11 +98,19 @@ class ApplicationController < ActionController::Base
   def sanitize_pagy_limit(_exception)
     # Converts the limit parameter to an integer by clamping the limit
     # within the allowed range and redirecting to the same page
-    limit = params[:limit].to_i.clamp(Pagy::OPTIONS[:limit], Pagy::OPTIONS[:max_limit])
-    if params[:tab].present?
-      redirect_to url_for(limit: limit, tab: params[:tab])
-    else
-      redirect_to url_for(limit: limit)
-    end
+    limit = Pagy::OPTIONS[:limit]
+
+    # Since we are redirecting the user to a new URL containing query strings that they already provided,
+    # it is safe to for us to strip the Rails parameter protection using `to_unsafe_h`
+    redirect_to url_for(params.to_unsafe_h.merge(limit: limit))
+  end
+
+  def validate_pagy_limit
+    # Integer() strictly rejects non-numeric characters (e.g., "25a" or "abc")
+    Integer(params[:limit].to_s)
+  rescue ArgumentError, TypeError
+    raise Pagy::OptionError.new(
+      Pagy::OPTIONS, :limit, "Invalid value for limit: #{params[:limit]}. Must be numeric.", params[:limit]
+    )
   end
 end

@@ -14,7 +14,7 @@ module Metadata
       result = result.order(model.metadata_sort(field, dir))
     end
 
-    pagy(result, raise_range_error: true)
+    pagy(result, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit])
   end
 
   # Returns metadata fields based on namespace or template selection
