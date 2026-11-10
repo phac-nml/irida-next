@@ -25,7 +25,12 @@ module Samples
           users(:john_doe),
           { 'metadata' => metadata, 'analysis_id' => @analysis_id, include_activity: false, 'force_update' => false }
         ).execute
-        cte_changes = CteAtomicUpdateService.new(@cte_sample, @analysis_id, metadata).execute
+        cte_changes = CteAtomicUpdateService.new(
+          @cte_sample.project,
+          @cte_sample,
+          users(:john_doe),
+          { 'metadata' => metadata, 'analysis_id' => @analysis_id }
+        ).execute
 
         assert_equal legacy_changes, cte_changes
 
@@ -40,9 +45,11 @@ module Samples
         original_provenance = @cte_sample.metadata_provenance['metadatafield1']
 
         metadata_changes = CteAtomicUpdateService.new(
+          @cte_sample.project,
           @cte_sample,
-          @analysis_id,
-          { 'metadatafield1' => 'value1', 'metadatafield3' => 'value3' }
+          users(:john_doe),
+          { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield3' => 'value3' },
+            'analysis_id' => @analysis_id }
         ).execute
 
         @cte_sample.reload
@@ -56,9 +63,10 @@ module Samples
 
       test 'detects deleted fields from persisted metadata after their provenance is removed' do
         metadata_changes = CteAtomicUpdateService.new(
+          @cte_sample.project,
           @cte_sample,
-          @analysis_id,
-          { 'metadatafield1' => '' }
+          users(:john_doe),
+          { 'metadata' => { 'metadatafield1' => '' }, 'analysis_id' => @analysis_id }
         ).execute
 
         @cte_sample.reload
@@ -71,9 +79,10 @@ module Samples
         sample = samples(:sample34)
 
         changes = CteAtomicUpdateService.new(
+          sample.project,
           sample,
-          nil,
-          { 'metadatafield1' => 'user value', 'metadatafield2' => '' }
+          users(:john_doe),
+          { 'metadata' => { 'metadatafield1' => 'user value', 'metadatafield2' => '' } }
         ).execute
 
         sample.reload
@@ -81,6 +90,25 @@ module Samples
         assert_equal ['metadatafield2'], changes[:deleted]
         assert_equal 'value1', sample.metadata['metadatafield1']
         assert_not sample.metadata.key?('metadatafield2')
+      end
+
+      test 'does not update a sample that does not belong to the supplied project' do
+        sample = samples(:sample32)
+        project = projects(:project30)
+
+        changes = CteAtomicUpdateService.new(
+          project,
+          sample,
+          users(:john_doe),
+          { 'metadata' => { 'metadatafield1' => 'new value' }, 'analysis_id' => @analysis_id }
+        ).execute
+
+        assert_equal ['metadatafield1'], changes[:not_updated]
+        assert sample.errors.full_messages.include?(
+          I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: sample.name,
+                                                                                project_name: project.name)
+        )
+        assert_equal 'value1', sample.reload.metadata['metadatafield1']
       end
     end
   end

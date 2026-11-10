@@ -43,13 +43,23 @@ class AtomicSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
 
   def update_with_atomic_service
     with_rollback(atomic_sample) do |sample|
-      Samples::Metadata::AtomicUpdateService.new(sample, @analysis_id, benchmark_metadata).execute
+      Samples::Metadata::AtomicUpdateService.new(
+        sample.project,
+        sample,
+        @user,
+        { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id }
+      ).execute
     end
   end
 
   def update_with_cte_atomic_service
     with_rollback(cte_atomic_sample) do |sample|
-      Samples::Metadata::CteAtomicUpdateService.new(sample, @analysis_id, benchmark_metadata).execute
+      Samples::Metadata::CteAtomicUpdateService.new(
+        sample.project,
+        sample,
+        @user,
+        { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id }
+      ).execute
     end
   end
 

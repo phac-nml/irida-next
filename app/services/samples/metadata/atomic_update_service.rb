@@ -4,14 +4,26 @@ module Samples
   module Metadata
     # Atomically applies analysis metadata and generated provenance to a sample.
     class AtomicUpdateService < BaseSampleMetadataUpdateService # rubocop:disable Metrics/ClassLength
-      def initialize(sample, analysis_id, metadata)
-        super(nil, {})
+      def initialize(project, sample, user = nil, params = {})
+        super(user, params)
+        @project = project
         @sample = sample
-        @analysis_id = analysis_id
-        @metadata = metadata
+        @analysis_id = params['analysis_id']
+        @metadata = params['metadata']
       end
 
       def execute
+        authorize! @sample.project, to: :update_sample?
+        validate_sample_in_project
+
+        execute_metadata_update
+      rescue Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError => e
+        validation_error_response(e)
+      end
+
+      private
+
+      def execute_metadata_update
         metadata = normalized_metadata
         return empty_metadata_changes if metadata.empty?
 
@@ -26,7 +38,17 @@ module Samples
         metadata_changes
       end
 
-      private
+      def validation_error_response(error)
+        @sample.reload.errors.add(:base, error.message)
+        {
+          added: [],
+          updated: [],
+          deleted: [],
+          not_updated: @metadata.nil? ? [] : @metadata.keys,
+          unchanged: [],
+          not_found: []
+        }
+      end
 
       def persist_metadata(payload)
         timestamp = Time.current
@@ -38,12 +60,20 @@ module Samples
       def update_sample(payload, timestamp)
         filtered_payload = filtered_metadata_payload(payload)
         # update_all executes one PostgreSQL JSONB update rather than saving a stale Ruby object.
-        Sample.where(id: @sample.id).update_all( # rubocop:disable Rails/SkipsModelValidations
+        Sample.where(id: @sample.id, project_id: @project.id).update_all( # rubocop:disable Rails/SkipsModelValidations
           metadata: merge_jsonb(@sample.class.arel_table[:metadata], filtered_payload),
           metadata_provenance: merge_jsonb(@sample.class.arel_table[:metadata_provenance],
                                            filtered_provenance_payload(payload, filtered_payload, timestamp)),
           updated_at: timestamp
         )
+      end
+
+      def validate_sample_in_project
+        return if @project.id == @sample.project_id
+
+        raise Samples::Metadata::UpdateService::SampleMetadataUpdateValidationError,
+              I18n.t('services.samples.metadata.sample_does_not_belong_to_project', sample_name: @sample.name,
+                                                                                    project_name: @project.name)
       end
 
       def normalized_metadata
@@ -110,7 +140,7 @@ module Samples
         provenance = Arel::Table.new(:provenance)
         timestamp_path = Arel::Nodes.build_quoted('{updated_at}')
         updated_at = Arel::Nodes::InfixOperation.new('#>>', provenance[:value], timestamp_path)
-        samples = @sample.class.where(id: @sample.id)
+        samples = @sample.class.where(id: @sample.id, project_id: @project.id)
 
         samples.joins('CROSS JOIN LATERAL jsonb_each(samples.metadata_provenance) AS provenance(key, value)')
                .where(updated_at.eq(timestamp.as_json))

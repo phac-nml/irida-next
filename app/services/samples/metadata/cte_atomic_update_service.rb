@@ -26,6 +26,7 @@ module Samples
         payload_jsonb = connection.quote(payload.to_json)
         provenance_jsonb = connection.quote(provenance_payload(payload, timestamp).to_json)
         sample_id = connection.quote(@sample.id)
+        project_id = connection.quote(@project.id)
         updated_at = connection.quote(timestamp)
         permitted_update = permitted_metadata_update_sql(samples)
 
@@ -38,6 +39,7 @@ module Samples
             FROM payload
             CROSS JOIN #{samples}
             WHERE #{samples}.id = #{sample_id}
+              AND #{samples}.project_id = #{project_id}
               AND #{samples}.metadata -> payload.key IS DISTINCT FROM payload.value
               AND NOT (payload.value = 'null'::jsonb AND #{samples}.metadata -> payload.key IS NULL)
               AND #{permitted_update}
@@ -60,6 +62,7 @@ module Samples
             updated_at = #{updated_at}
           FROM updates
           WHERE #{samples}.id = #{sample_id}
+            AND #{samples}.project_id = #{project_id}
             AND EXISTS (SELECT 1 FROM changed)
           RETURNING #{samples}.metadata, #{samples}.metadata_provenance,
                     COALESCE((SELECT jsonb_agg(key) FROM changed), '[]'::jsonb) AS changed_keys
