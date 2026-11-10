@@ -80,7 +80,7 @@ pathogen_view_components_opts =
   end
 gem 'pathogen_view_components', **pathogen_view_components_opts
 
-gem 'reactionview', '~> 0.6.0'
+gem 'reactionview', '~> 0.6.1'
 gem 'view_component', ['>= 4.0', '< 5.0']
 
 # ActiveRecord Cursor Paginate
