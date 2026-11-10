@@ -339,8 +339,8 @@ GEM
     hashdiff (1.2.1)
     hashie (5.2.0)
       logger
-    herb (0.11.0-arm64-darwin)
-    herb (0.11.0-x86_64-linux-gnu)
+    herb (0.11.2-arm64-darwin)
+    herb (0.11.2-x86_64-linux-gnu)
     heroicon-rails (0.2.9)
       activesupport (>= 7.0.8)
       nokogiri (>= 1.14.3)
@@ -656,10 +656,10 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    reactionview (0.6.0)
+    reactionview (0.6.1)
       actionview (>= 7.0)
       cruise (>= 0.3.0)
-      herb (>= 0.11.0)
+      herb (>= 0.11.2)
       websocket (~> 1.2)
     redcarpet (3.6.1)
     regexp_parser (2.13.1)
@@ -884,7 +884,7 @@ DEPENDENCIES
   rails (~> 8.1.4)
   rails_icons (~> 1.10)
   ransack (~> 6.0.1)
-  reactionview (~> 0.6.0)
+  reactionview (~> 0.6.1)
   requestjs-rails
   roo (~> 3.0.0)
   roo-xls
