@@ -73,9 +73,11 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
   end
 
   def normalized_metadata(sample, metadata)
-    metadata.each { |key, value| validate_metadata_value(key, value, sample.name) }
+    metadata.filter_map do |key, value|
+      next unless validate_metadata_value(key, value, sample.name)
 
-    metadata.to_h { |key, value| [strip_whitespaces(key.to_s.downcase), strip_whitespaces(value.to_s)] }
+      [strip_whitespaces(key.to_s.downcase), strip_whitespaces(value.to_s)]
+    end.to_h
   end
 
   def persist_atomic_metadata(sample, payload, force_update)
