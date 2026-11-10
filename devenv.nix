@@ -11,7 +11,7 @@ lib.mkMerge [
     # pin nextflow to 25.10.2
     overlays = [
       (final: prev: {
-        nextflow = inputs.nextflow-pin.legacyPackages.${prev.system}.nextflow.overrideAttrs (oldAttrs: {
+        nextflow = inputs.nextflow-pin.legacyPackages.${prev.stdenv.hostPlatform.system}.nextflow.overrideAttrs (oldAttrs: {
           system = prev.stdenv.system;
           postPatch = ''
             # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
@@ -59,7 +59,7 @@ lib.mkMerge [
 
     languages.python = {
       enable = true;
-      version = "3.13";
+      version = "3.13.14";
       venv.enable = true;
       venv.requirements = ''
         poetry
@@ -162,7 +162,7 @@ lib.mkMerge [
 
     # See full reference at https://devenv.sh/reference/options/
   }
-  (lib.mkIf pkgs.stdenv.isLinux {
+  (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     enterShell = ''
       # add libnss_sss.so.2 to LD_PRELOAD if it exists, to avoid issues with SSSD and NSS
       LIBNSS_SSS_PATH=$(find /lib /usr/lib /lib64 /usr/lib64 -name "libnss_sss.so.2" 2>/dev/null | head -n 1)
