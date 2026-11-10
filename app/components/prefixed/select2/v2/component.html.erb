@@ -2,9 +2,9 @@
   <div class="flex flex-row @max-md:flex-col">
     <div
       class="
-        flex min-h-11 items-center overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100
-        px-4 text-sm font-medium text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600
-        dark:bg-slate-700 dark:text-slate-300
+        flex min-h-11 items-center overflow-hidden rounded-l-[var(--pvc-radius-control)]
+        rounded-r-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-slate-100 px-4
+        text-sm font-medium text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:bg-slate-700 dark:text-slate-300
       "
       role="group"
       aria-label="<%= helpers.root_url %>"
@@ -23,8 +23,8 @@
           autocomplete: "off",
           value: selected_value,
           class: "
-            select2-input block w-full overflow-hidden rounded-l-lg rounded-r-lg border-slate-300 p-2 text-ellipsis
-            text-slate-800 sm:text-sm @min-md:rounded-l-none! dark:border-slate-600 dark:bg-slate-800
+            select2-input block w-full overflow-hidden rounded-l-[var(--pvc-radius-control)] rounded-r-[var(--pvc-radius-control)] border-[var(--pvc-color-border-strong)] p-2 text-ellipsis
+            text-slate-800 sm:text-sm @min-md:rounded-l-none! dark:bg-slate-800
             dark:text-slate-50 dark:placeholder-slate-400
           ",
           data: { "select2--v2-target": "input", action: "input->select2--v2#input" },

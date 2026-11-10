@@ -59,7 +59,7 @@
                                 required: (!@automated_workflow).to_s,
                               },
                               class:
-                                "bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg block w-full p-2.5  dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white" %>
+                                "bg-slate-50 border border-[var(--pvc-color-border-strong)] text-slate-900 text-sm rounded-[var(--pvc-radius-control)] block w-full p-2.5  dark:bg-slate-700 dark:placeholder-slate-400 dark:text-white" %>
 
           <div id="workflow_execution_name_error" class="mt-2 text-sm">
             <%= render Viral::Form::HelpTextComponent.new(state: :error, classes: "hidden") %>
