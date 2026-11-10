@@ -21,6 +21,7 @@ module Samples
         activity_data = {}
         unsuccessful_updates = { not_updated: {}, unchanged: {}, not_found: {} }
         full_metadata_changes = {}
+        preload_samples
 
         starting_index = 0
         should_update_progress_bar = false
@@ -29,43 +30,46 @@ module Samples
           should_update_progress_bar = true
         end
 
-        @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index| # rubocop:disable Metrics/BlockLength
-          update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
-          next unless validate_metadata_param(metadata, sample_identifier)
+        Sample.suppressing_turbo_broadcasts do # rubocop:disable Metrics/BlockLength
+          @metadata_payload.each.with_index(starting_index) do |(sample_identifier, metadata), index| # rubocop:disable Metrics/BlockLength
+            update_progress_bar(index, @progress_bar_denominator, @broadcast_target) if should_update_progress_bar
+            next unless validate_metadata_param(metadata, sample_identifier)
 
-          sample = find_sample(sample_identifier)
-          next if sample.nil?
+            sample = find_sample(sample_identifier)
+            next if sample.nil?
 
-          project_puid = sample.project.puid
-          metadata_changes = perform_metadata_update(sample, metadata, false)
+            project_puid = sample.project.puid
+            metadata_changes = perform_metadata_update(sample, metadata, false)
 
-          # no changes made for sample (metadata was invalid)
-          next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
-                                        not_found: [] }
+            # no changes made for sample (metadata was invalid)
+            next if metadata_changes == { added: [], updated: [], deleted: [], not_updated: [], unchanged: [],
+                                          not_found: [] }
 
-          full_metadata_changes[sample_identifier] = metadata_changes
+            full_metadata_changes[sample_identifier] = metadata_changes
 
-          %i[not_updated unchanged not_found].each do |unsuccessful_metadata_change_key|
-            next if metadata_changes[unsuccessful_metadata_change_key].empty?
+            %i[not_updated unchanged not_found].each do |unsuccessful_metadata_change_key|
+              next if metadata_changes[unsuccessful_metadata_change_key].empty?
 
-            unsuccessful_updates[unsuccessful_metadata_change_key][sample_identifier] =
-              metadata_changes[unsuccessful_metadata_change_key]
+              unsuccessful_updates[unsuccessful_metadata_change_key][sample_identifier] =
+                metadata_changes[unsuccessful_metadata_change_key]
+            end
+
+            if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? &&
+               metadata_changes[:updated].empty?
+              next
+            end
+
+            if activity_data.key?(project_puid)
+              activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
+                                               project_name: sample.project.name,
+                                               project_puid: }
+            else
+              activity_data[project_puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
+                                               project_name: sample.project.name,
+                                               project_puid: }]
+            end
+            add_changes_to_metadata_summary(project_puid, metadata_changes)
           end
-
-          if metadata_changes[:added].empty? && metadata_changes[:deleted].empty? && metadata_changes[:updated].empty?
-            next
-          end
-
-          if activity_data.key?(project_puid)
-            activity_data[project_puid] << { sample_puid: sample.puid, sample_name: sample.name,
-                                             project_name: sample.project.name,
-                                             project_puid: }
-          else
-            activity_data[project_puid] = [{ sample_puid: sample.puid, sample_name: sample.name,
-                                             project_name: sample.project.name,
-                                             project_puid: }]
-          end
-          add_changes_to_metadata_summary(project_puid, metadata_changes)
         end
 
         handle_unsuccessful_updates(unsuccessful_updates)
@@ -98,6 +102,9 @@ module Samples
       end
 
       def find_sample(sample_identifier)
+        return find_preloaded_project_sample(sample_identifier) if @preloaded_project_samples
+        return find_preloaded_group_sample(sample_identifier) if @preloaded_group_samples
+
         id_type = determine_sample_identifier_type(sample_identifier)
         sample_identifier = parse_gid(sample_identifier) if id_type == 'gid'
 
@@ -163,6 +170,112 @@ module Samples
         nil
       end
 
+      def preload_project_samples
+        identifiers = @metadata_payload.keys.group_by { |identifier| determine_sample_identifier_type(identifier) }
+        project_samples = @namespace.project.samples
+        @preloaded_project_samples = {}
+
+        assign_preloaded_project_samples(project_samples, :name, identifiers['name'])
+        assign_preloaded_project_samples(project_samples, :puid, identifiers['puid'])
+        assign_preloaded_project_samples(project_samples, :id, identifiers['id'])
+        assign_preloaded_global_id_samples(project_samples, identifiers['gid'])
+      end
+
+      def preload_group_samples
+        identifiers = @metadata_payload.keys.group_by { |identifier| determine_sample_identifier_type(identifier) }
+        group_samples = authorized_scope(
+          Sample, type: :relation, as: :namespace_samples,
+                  scope_options: {
+                    namespace: @namespace,
+                    minimum_access_level: Member::AccessLevel::MAINTAINER
+                  }
+        )
+        @preloaded_group_samples = {}
+
+        assign_preloaded_group_samples(group_samples, :name, identifiers['name'])
+        assign_preloaded_group_samples(group_samples, :puid, identifiers['puid'])
+        assign_preloaded_group_samples(group_samples, :id, identifiers['id'])
+        assign_preloaded_global_id_group_samples(group_samples, identifiers['gid'])
+      end
+
+      def preload_samples
+        @namespace.group_namespace? ? preload_group_samples : preload_project_samples
+      end
+
+      def assign_preloaded_project_samples(project_samples, attribute, identifiers)
+        return if identifiers.blank?
+
+        project_samples.where(attribute => identifiers).find_each do |sample|
+          @preloaded_project_samples[sample.public_send(attribute)] = sample
+        end
+      end
+
+      def assign_preloaded_global_id_samples(project_samples, identifiers)
+        return if identifiers.blank?
+
+        global_ids = global_id_pairs(identifiers)
+        samples_by_id = project_samples.where(id: global_ids.map(&:last)).index_by { |sample| sample.id.to_s }
+
+        global_ids.each do |identifier, sample_id|
+          remember_global_id_identifier(identifier, sample_id)
+          @preloaded_project_samples[identifier] = samples_by_id[sample_id.to_s]
+        end
+      end
+
+      def assign_preloaded_group_samples(group_samples, attribute, identifiers)
+        return if identifiers.blank?
+
+        group_samples.where(attribute => identifiers).find_each do |sample|
+          (@preloaded_group_samples[sample.public_send(attribute)] ||= []) << sample
+        end
+      end
+
+      def assign_preloaded_global_id_group_samples(group_samples, identifiers)
+        return if identifiers.blank?
+
+        global_ids = global_id_pairs(identifiers)
+        samples_by_id = group_samples.where(id: global_ids.map(&:last)).group_by { |sample| sample.id.to_s }
+
+        global_ids.each do |identifier, sample_id|
+          remember_global_id_identifier(identifier, sample_id)
+          @preloaded_group_samples[identifier] = samples_by_id[sample_id.to_s] || []
+        end
+      end
+
+      def global_id_pairs(identifiers)
+        identifiers.filter_map { |identifier| [identifier, parse_gid(identifier)] }
+      end
+
+      def remember_global_id_identifier(identifier, sample_id)
+        @preloaded_global_id_identifiers ||= {}
+        @preloaded_global_id_identifiers[identifier] = sample_id
+      end
+
+      def find_preloaded_project_sample(sample_identifier)
+        sample = @preloaded_project_samples[sample_identifier]
+        return sample unless sample.nil?
+
+        @namespace.errors.add(:sample,
+                              I18n.t('services.samples.metadata.bulk_update.sample_not_found',
+                                     sample_identifier: error_sample_identifier(sample_identifier)))
+        nil
+      end
+
+      def find_preloaded_group_sample(sample_identifier)
+        samples = @preloaded_group_samples[sample_identifier] || []
+        return samples.first if samples.one?
+
+        error_key = samples.empty? ? 'sample_not_found' : 'duplicate_identifier'
+        @namespace.errors.add(:sample,
+                              I18n.t("services.samples.metadata.bulk_update.#{error_key}",
+                                     sample_identifier: error_sample_identifier(sample_identifier)))
+        nil
+      end
+
+      def error_sample_identifier(sample_identifier)
+        @preloaded_global_id_identifiers&.fetch(sample_identifier, sample_identifier) || sample_identifier
+      end
+
       def add_group_sample_query_error(sample, sample_identifier)
         error_key = sample.none? ? 'sample_not_found' : 'duplicate_identifier'
         @namespace.errors.add(:sample, I18n.t("services.samples.metadata.bulk_update.#{error_key}", sample_identifier:))
@@ -226,6 +339,7 @@ module Samples
                                           @metadata_summary_data[project_puid][:deleted],
                                           @metadata_summary_data[project_puid][:added],
                                           false)
+        project_namespace.project.broadcast_refresh_later_to_samples_table
       end
 
       def handle_unsuccessful_updates(unsuccessful_updates)

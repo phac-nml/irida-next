@@ -1,16 +1,55 @@
-import * as XLSX from "xlsx";
 import Controller from "controllers/metadata/file_import_controller";
 import { resolveLinelistImportWorkerSource } from "controllers/linelist_import/worker_source";
-import { omitBy, pick } from "utilities/collection";
 import { closeDialog, ensureDialog, openDialog } from "utilities/dialog";
 import { ensureFlash } from "utilities/flash";
 import { t } from "utilities/message_formatter";
 import {
   clearProgressWindowDismissTimeout,
+  dismissProgressWindow,
   scheduleProgressWindowDismiss,
+  setProgressDismissLabel,
   showProgressWindow,
   updateProgressWindow,
 } from "utilities/progress_window";
+
+let activeImports = 0;
+let beforeUnloadHandler = null;
+
+function bindImportBeforeUnload() {
+  if (beforeUnloadHandler) return;
+
+  beforeUnloadHandler = (event) => {
+    // The handler is unbound when no imports remain, so this guard is defensive.
+    /* v8 ignore next */
+    if (activeImports <= 0) return;
+
+    event.preventDefault();
+    event.returnValue = "";
+    return "";
+  };
+
+  window.addEventListener("beforeunload", beforeUnloadHandler);
+}
+
+function unbindImportBeforeUnload() {
+  if (!beforeUnloadHandler) return;
+
+  window.removeEventListener("beforeunload", beforeUnloadHandler);
+  beforeUnloadHandler = null;
+}
+
+function startImportBeforeUnloadGuard() {
+  activeImports += 1;
+  bindImportBeforeUnload();
+}
+
+function stopImportBeforeUnloadGuard() {
+  activeImports = Math.max(activeImports - 1, 0);
+
+  if (activeImports === 0) {
+    unbindImportBeforeUnload();
+  }
+}
 
 export default class extends Controller {
   static targets = [
@@ -41,6 +80,23 @@ export default class extends Controller {
       type: String,
       default: "The metadata import is complete",
     },
+    importRetryMessage: {
+      type: String,
+      default: "Retrying import (attempt %{attempt} of %{maxAttempts})",
+    },
+    importCanceledMessage: {
+      type: String,
+      default: "The metadata import was canceled",
+    },
+    cancelConfirmationMessage: {
+      type: String,
+      default:
+        "Cancel this import? Metadata already saved for processed records will not be reverted, and the remaining records will not be imported.",
+    },
+    closeProgressLabel: {
+      type: String,
+      default: "Close progress",
+    },
     duplicateHeadersMessage: {
       type: String,
       default:
@@ -61,10 +117,24 @@ export default class extends Controller {
     this._operationId ||= null;
     this._progressWindowOpenedAt ||= null;
     this._dismissProgressWindowTimeout ||= null;
+    this._beforeUnloadGuardActive ??= false;
+    this._suppressedRefreshOutlets ||= [];
     this.progressWindowDismissed ??= false;
-    this._worksheet = null;
+    this._importActive ??= false;
+    this._lastPercentage ||= 0;
+    this._file = null;
+
+    if (this._importActive) {
+      this.#startImportBeforeUnloadGuard();
+      this.#setRefreshNoticeSuppressed(true);
+    }
+
     // Init before super.connect so a file processed on connect (pre-selected) is not reset.
     super.connect();
+
+    if (this._importActive) {
+      this.#setRefreshNoticeSuppressed(true);
+    }
   }
 
   readFile(event) {
@@ -80,26 +150,11 @@ export default class extends Controller {
     }
 
     const file = files[0];
+    this._file = file;
     this._fileType = file.type;
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-
-    reader.onload = () => {
-      const workbook = XLSX.read(reader.result);
-      const worksheetName = workbook.SheetNames[0];
-      this._worksheet = workbook.Sheets[worksheetName];
-      this.headers = XLSX.utils.sheet_to_json(this._worksheet, {
-        header: 1,
-      })[0];
-
-      if (this.#hasDuplicateHeaders()) {
-        this.errorMessageTarget.textContent = this.duplicateHeadersMessageValue;
-        this.#showDuplicateHeadersError();
-        return;
-      }
-
-      super.addSampleIDInputOptions();
-    };
+    this.#terminateWorker();
+    this._worker = this.#buildWorker();
+    this._worker?.postMessage({ type: "read_headers", file });
   }
 
   handleSubmit(event) {
@@ -109,22 +164,21 @@ export default class extends Controller {
     this._worker = this.#buildWorker();
     if (!this._worker) return;
 
+    super.handleSubmit();
     closeDialog(this.element, this.application);
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     clearProgressWindowDismissTimeout(this);
     this.progressWindowDismissed = false;
+    this._importActive = true;
+    this.#startImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(true);
+    this._lastPercentage = 0;
     this._progressWindowOpenedAt = null;
     showProgressWindow(this, t(this.importStartedMessageValue));
     this.#processRows();
   }
 
   #processRows() {
-    const allRows = XLSX.utils.sheet_to_json(this._worksheet, {
-      header: this.headers,
-      range: 1,
-      defval: null,
-    });
-
     const selectedMetadataColumns = Array.from(
       this.element.querySelectorAll('[name="file_import[metadata_columns][]"]'),
       (el) => el.value,
@@ -134,23 +188,29 @@ export default class extends Controller {
       '[name="file_import[ignore_empty_values]"]',
     ).checked;
 
-    const rows = allRows.map((row) => [
-      row[this.sampleIdColumnTarget.value],
-      omitBy(
-        pick(row, selectedMetadataColumns),
-        (value) => ignoreEmptyValues && value == null,
-      ),
-    ]);
-
-    // Send data to worker
     this._worker.postMessage({
       csrf_token: this.#csrfToken(),
       mime_type: this._fileType,
       graphql_url: this.graphqlUrlValue,
       group_puid: this.groupPuidValue,
       project_puid: this.projectPuidValue,
-      rows: rows,
+      file: this._file,
+      sample_id_column: this.sampleIdColumnTarget.value,
+      metadata_columns: selectedMetadataColumns,
+      ignore_empty_values: ignoreEmptyValues,
     });
+  }
+
+  #onHeaders({ headers }) {
+    this.headers = headers;
+
+    if (this.#hasDuplicateHeaders()) {
+      this.errorMessageTarget.textContent = this.duplicateHeadersMessageValue;
+      this.#showDuplicateHeadersError();
+      return;
+    }
+
+    super.addSampleIDInputOptions();
   }
 
   #buildWorker() {
@@ -162,15 +222,27 @@ export default class extends Controller {
 
       worker.onerror = (error) => {
         console.error("Worker failed:", error.message);
-        this.#terminateWorker();
+        if (this._importActive) {
+          this.#onError({ message: error.message });
+        } else {
+          this.#terminateWorker();
+        }
       };
 
       // Listen for messages from the worker
       worker.onmessage = (event) => {
         const payload = event.data || {};
 
+        if (payload.type === "headers") {
+          this.#onHeaders(payload);
+        }
+
         if (payload.type === "progress") {
           this.#onProgress(payload);
+        }
+
+        if (payload.type === "retry") {
+          this.#onRetry(payload);
         }
 
         if (payload.type === "done") {
@@ -209,8 +281,8 @@ export default class extends Controller {
 
   #onProgress(payload) {
     const message = t(this.importedRecordsMessageValue, {
-      current: payload.current,
-      total: payload.total,
+      current: payload.current.toLocaleString(),
+      total: payload.total.toLocaleString(),
     });
 
     if (payload.result?.overallStatus === "successful") {
@@ -236,24 +308,106 @@ export default class extends Controller {
       }
     }
 
-    updateProgressWindow(
-      this,
-      message,
-      (payload.current / payload.total) * 100,
-    );
+    this._lastPercentage = (payload.current / payload.total) * 100;
+    updateProgressWindow(this, message, this._lastPercentage);
   }
 
   #onDone() {
     const message = t(this.importCompleteMessageValue);
+    this._importActive = false;
+    this.#stopImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(false);
     updateProgressWindow(this, message, 100);
+    setProgressDismissLabel(this, t(this.closeProgressLabelValue));
     scheduleProgressWindowDismiss(this);
     this.#terminateWorker();
   }
 
+  #onRetry(payload) {
+    const message = t(this.importRetryMessageValue, {
+      attempt: payload.attempt,
+      maxAttempts: payload.maxAttempts,
+    });
+    this._lastPercentage = (payload.current / payload.total) * 100;
+    updateProgressWindow(this, message, this._lastPercentage);
+  }
+
+  // Invoked by the progress card's dismiss (X) button via progress_window's
+  // click handler. While an import is running, treat it as a cancel request
+  // (requires confirmation); once finished, just close the card.
+  async handleProgressDismiss() {
+    if (!this._importActive) {
+      dismissProgressWindow(this);
+      return;
+    }
+
+    const confirmed = await window.Turbo.config.forms.confirm(
+      t(this.cancelConfirmationMessageValue),
+      this.element,
+    );
+
+    if (!confirmed) return;
+
+    this.#cancelImport();
+  }
+
+  #cancelImport() {
+    this.#terminateWorker();
+    this._importActive = false;
+    this.#stopImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(false);
+
+    const message = t(this.importCanceledMessageValue);
+    updateProgressWindow(this, message, this._lastPercentage);
+    setProgressDismissLabel(this, t(this.closeProgressLabelValue));
+    scheduleProgressWindowDismiss(this);
+  }
+
   #onError(payload) {
     const message = t(this.errorMessageValue, { message: payload.message });
+    this._importActive = false;
+    this.#stopImportBeforeUnloadGuard();
+    this.#setRefreshNoticeSuppressed(false);
     updateProgressWindow(this, message, 100, true);
+    setProgressDismissLabel(this, t(this.closeProgressLabelValue));
     this.#terminateWorker();
+  }
+
+  #startImportBeforeUnloadGuard() {
+    if (this._beforeUnloadGuardActive) return;
+
+    startImportBeforeUnloadGuard();
+    this._beforeUnloadGuardActive = true;
+  }
+
+  #stopImportBeforeUnloadGuard() {
+    if (!this._beforeUnloadGuardActive) return;
+
+    stopImportBeforeUnloadGuard();
+    this._beforeUnloadGuardActive = false;
+  }
+
+  #setRefreshNoticeSuppressed(suppressed) {
+    const outlets =
+      this._suppressedRefreshOutlets.length > 0
+        ? this._suppressedRefreshOutlets
+        : this.hasRefreshOutlet
+          ? this.refreshOutlets.filter((outlet) => outlet)
+          : [];
+
+    if (suppressed && outlets.length > 0) {
+      this._suppressedRefreshOutlets = outlets;
+    }
+
+    outlets.forEach((outlet) => {
+      if (typeof outlet.setRefreshSuppressed === "function") {
+        outlet.setRefreshSuppressed(suppressed);
+      }
+    });
+
+    if (!suppressed) {
+      this._suppressedRefreshOutlets = [];
+    }
   }
 
   #csrfToken() {
