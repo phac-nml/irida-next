@@ -66,6 +66,22 @@ module Samples
         assert_not @atomic_sample.metadata.key?('metadatafield1')
         assert_not @atomic_sample.metadata_provenance.key?('metadatafield1')
       end
+
+      test 'does not let a user update analysis metadata but permits clearing it' do
+        sample = samples(:sample34)
+
+        changes = AtomicUpdateService.new(
+          sample,
+          nil,
+          { 'metadatafield1' => 'user value', 'metadatafield2' => '' }
+        ).execute
+
+        sample.reload
+        assert_equal ['metadatafield1'], changes[:not_updated]
+        assert_equal ['metadatafield2'], changes[:deleted]
+        assert_equal 'value1', sample.metadata['metadatafield1']
+        assert_not sample.metadata.key?('metadatafield2')
+      end
     end
   end
 end

@@ -67,9 +67,14 @@ module Samples
 
       def persisted_metadata_change_status(original_metadata, key, value, persisted_keys)
         return deleted_metadata_change_status(original_metadata, key) if value.blank?
+        return :not_updated if analysis_metadata_written_by_other_source?(key)
         return :unchanged unless persisted_keys.include?(key)
 
         original_metadata.key?(key) ? :updated : :added
+      end
+
+      def analysis_metadata_written_by_other_source?(key)
+        @analysis_id.nil? && @sample.metadata_provenance.dig(key, 'source') == 'analysis'
       end
 
       def deleted_metadata_change_status(original_metadata, key)
@@ -125,11 +130,35 @@ module Samples
         values_differ = Arel::Nodes::InfixOperation.new('IS DISTINCT FROM', existing_value, payload_entry[:value])
         missing_null_value = payload_entry[:value].eq(Arel.sql("'null'::jsonb"))
                                                   .and(existing_value.eq(nil))
+        permitted_update = permitted_metadata_update_sql(payload_entry)
         jsonb_entries = Arel::Nodes::NamedFunction.new('jsonb_each', [jsonb_payload(payload)])
         jsonb_object = Arel::Nodes::NamedFunction.new('jsonb_object_agg', [payload_entry[:key], payload_entry[:value]])
         aggregate = Arel::Nodes::NamedFunction.new('coalesce', [jsonb_object, Arel.sql("'{}'::jsonb")])
 
-        jsonb_aggregate(jsonb_entries, aggregate, "#{values_differ.to_sql} AND NOT (#{missing_null_value.to_sql})")
+        jsonb_aggregate(
+          jsonb_entries,
+          aggregate,
+          "#{values_differ.to_sql} AND NOT (#{missing_null_value.to_sql}) AND #{permitted_update}"
+        )
+      end
+
+      def permitted_metadata_update_sql(payload_entry)
+        return 'TRUE' unless @analysis_id.nil?
+
+        provenance = @sample.class.arel_table[:metadata_provenance]
+        source = Arel::Nodes::InfixOperation.new(
+          '->>',
+          Arel::Nodes::InfixOperation.new('->', provenance, payload_entry[:key]),
+          Arel::Nodes.build_quoted('source')
+        )
+        clearing_value = payload_entry[:value].eq(Arel.sql("'null'::jsonb"))
+        user_writable = Arel::Nodes::InfixOperation.new(
+          'IS DISTINCT FROM',
+          source,
+          Arel::Nodes.build_quoted('analysis')
+        )
+
+        clearing_value.or(user_writable).to_sql
       end
 
       def filtered_provenance_payload(payload, filtered_payload, timestamp)

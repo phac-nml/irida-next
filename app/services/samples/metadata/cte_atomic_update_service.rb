@@ -27,6 +27,7 @@ module Samples
         provenance_jsonb = connection.quote(provenance_payload(payload, timestamp).to_json)
         sample_id = connection.quote(@sample.id)
         updated_at = connection.quote(timestamp)
+        permitted_update = permitted_metadata_update_sql(samples)
 
         <<~SQL.squish
           WITH payload AS (
@@ -39,6 +40,7 @@ module Samples
             WHERE #{samples}.id = #{sample_id}
               AND #{samples}.metadata -> payload.key IS DISTINCT FROM payload.value
               AND NOT (payload.value = 'null'::jsonb AND #{samples}.metadata -> payload.key IS NULL)
+              AND #{permitted_update}
           ),
           updates AS (
             SELECT
@@ -61,6 +63,17 @@ module Samples
             AND EXISTS (SELECT 1 FROM changed)
           RETURNING #{samples}.metadata, #{samples}.metadata_provenance,
                     COALESCE((SELECT jsonb_agg(key) FROM changed), '[]'::jsonb) AS changed_keys
+        SQL
+      end
+
+      def permitted_metadata_update_sql(samples)
+        return 'TRUE' unless @analysis_id.nil?
+
+        <<~SQL.squish
+          (
+            payload.value = 'null'::jsonb
+            OR #{samples}.metadata_provenance -> payload.key ->> 'source' IS DISTINCT FROM 'analysis'
+          )
         SQL
       end
     end

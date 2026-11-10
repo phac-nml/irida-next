@@ -4,7 +4,7 @@ require_relative '../config/environment'
 require 'benchmark/ips'
 
 # Compares persisted analysis metadata updates without retaining benchmark records.
-class AtomicSampleMetadataUpdateBenchmark
+class AtomicSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
   attr_reader :atomic_sample, :cte_atomic_sample, :legacy_sample
 
   def initialize(sample, user, analysis_id, metadata_counts)
@@ -65,6 +65,7 @@ class AtomicSampleMetadataUpdateBenchmark
     @counter += 1
     deleted_field_names.index_with { '' }
                        .merge(updated_field_names.index_with { |field| "updated-#{field}-#{@counter}" })
+                       .merge(analysis_updated_field_names.index_with { |field| "updated-#{field}-#{@counter}" })
                        .merge(created_field_names.index_with { |field| "created-#{field}-#{@counter}" })
                        .merge(unchanged_field_names.index_with { |field| initial_metadata[field] })
   end
@@ -81,13 +82,26 @@ class AtomicSampleMetadataUpdateBenchmark
   def initial_metadata
     deleted_field_names.index_with { 'delete me' }
                        .merge(updated_field_names.index_with { 'original value' })
+                       .merge(analysis_updated_field_names.index_with { 'analysis value' })
                        .merge(unchanged_field_names.index_with { 'unchanged value' })
   end
 
   def initial_metadata_provenance
-    initial_metadata.transform_values do
+    initial_metadata.to_h do |field, _value|
+      [field, metadata_provenance(field)]
+    end
+  end
+
+  def metadata_provenance(field)
+    if analysis_field?(field)
+      { source: 'analysis', id: @analysis_id || 'benchmark-analysis', updated_at: Time.current.as_json }
+    else
       { source: 'user', id: @user.id, updated_at: Time.current.as_json }
     end
+  end
+
+  def analysis_field?(field)
+    deleted_field_names.include?(field) || analysis_updated_field_names.include?(field)
   end
 
   def deleted_field_names
@@ -102,6 +116,10 @@ class AtomicSampleMetadataUpdateBenchmark
     field_names('unchanged', @metadata_counts[:unchanged])
   end
 
+  def analysis_updated_field_names
+    field_names('analysis_updated', @metadata_counts[:analysis_updated])
+  end
+
   def created_field_names
     field_names('created', @metadata_counts[:created])
   end
@@ -113,7 +131,7 @@ end
 
 sample = Sample.find(ENV.fetch('SAMPLE_ID'))
 user = User.find(ENV.fetch('USER_ID'))
-analysis_id = ENV.fetch('ANALYSIS_ID')
+analysis_id = ENV['ANALYSIS_ID'].presence
 field_count = lambda do |name|
   count = Integer(ENV.fetch(name, 1))
   raise ArgumentError, "#{name} must be non-negative" if count.negative?
@@ -124,7 +142,8 @@ metadata_counts = {
   deleted: field_count.call('DELETED_FIELD_COUNT'),
   updated: field_count.call('UPDATED_FIELD_COUNT'),
   unchanged: field_count.call('UNCHANGED_FIELD_COUNT'),
-  created: field_count.call('CREATED_FIELD_COUNT')
+  created: field_count.call('CREATED_FIELD_COUNT'),
+  analysis_updated: field_count.call('ANALYSIS_UPDATED_FIELD_COUNT')
 }
 
 Sample.transaction do
