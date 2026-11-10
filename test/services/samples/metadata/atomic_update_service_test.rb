@@ -62,6 +62,24 @@ module Samples
         )
       end
 
+      test 'adds user metadata with user provenance' do
+        freeze_time
+
+        metadata_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => { 'metadatafield3' => 'value3' }, 'metadata_update_implementation' => 'atomic' }
+        ).execute
+
+        @atomic_sample.reload
+        assert_equal ['metadatafield3'], metadata_changes[:added]
+        assert_equal(
+          { 'source' => 'user', 'id' => @user.id, 'updated_at' => Time.current.as_json },
+          @atomic_sample.metadata_provenance['metadatafield3']
+        )
+      end
+
       test 'rewrites matching values when force_update is enabled' do
         freeze_time
 

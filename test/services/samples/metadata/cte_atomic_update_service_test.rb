@@ -61,6 +61,24 @@ module Samples
         )
       end
 
+      test 'adds user metadata with user provenance' do
+        freeze_time
+
+        metadata_changes = UpdateService.new(
+          @cte_sample.project,
+          @cte_sample,
+          users(:john_doe),
+          { 'metadata' => { 'metadatafield3' => 'value3' }, 'metadata_update_implementation' => 'cte_atomic' }
+        ).execute
+
+        @cte_sample.reload
+        assert_equal ['metadatafield3'], metadata_changes[:added]
+        assert_equal(
+          { 'source' => 'user', 'id' => users(:john_doe).id, 'updated_at' => Time.current.as_json },
+          @cte_sample.metadata_provenance['metadatafield3']
+        )
+      end
+
       test 'rewrites matching values when force_update is enabled' do
         freeze_time
 

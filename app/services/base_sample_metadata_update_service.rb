@@ -56,7 +56,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     return empty_metadata_changes if metadata.empty?
 
     original_metadata = sample.metadata.dup
-    payload = metadata_payload(metadata)
+    payload = atomic_metadata_payload(metadata)
     persisted_keys = persist_atomic_metadata(sample, payload, force_update) if payload.any?
 
     persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys || [])
@@ -67,7 +67,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     return empty_metadata_changes if metadata.empty?
 
     original_metadata = sample.metadata.dup
-    persisted_keys = persist_cte_atomic_metadata(sample, metadata_payload(metadata), force_update)
+    persisted_keys = persist_cte_atomic_metadata(sample, atomic_metadata_payload(metadata), force_update)
 
     persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys)
   end
@@ -81,7 +81,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
   def persist_atomic_metadata(sample, payload, force_update)
     timestamp = Time.current
     filtered_payload = filtered_metadata_payload(sample, payload, force_update)
-    sample.class.where(id: sample.id, project_id: @project.id).update_all( # rubocop:disable Rails/SkipsModelValidations
+    sample.class.where(id: sample.id, project_id: metadata_update_project_id(sample)).update_all( # rubocop:disable Rails/SkipsModelValidations
       metadata: merge_jsonb(sample.class.arel_table[:metadata], filtered_payload),
       metadata_provenance: merge_jsonb(sample.class.arel_table[:metadata_provenance],
                                        filtered_provenance_payload(payload, filtered_payload, timestamp)),
@@ -129,14 +129,28 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     { added: [], updated: [], deleted: [], not_updated: [], unchanged: [], not_found: [] }
   end
 
-  def metadata_payload(metadata)
+  def atomic_metadata_payload(metadata)
     metadata.transform_values(&:presence)
   end
 
   def provenance_payload(payload, timestamp)
     payload.transform_values do |value|
-      value.nil? ? nil : { source: 'analysis', id: @analysis_id, updated_at: timestamp.as_json }
+      next if value.nil?
+
+      {
+        source: metadata_provenance_source,
+        id: metadata_provenance_id,
+        updated_at: timestamp.as_json
+      }
     end
+  end
+
+  def metadata_provenance_source
+    @analysis_id.nil? ? 'user' : 'analysis'
+  end
+
+  def metadata_provenance_id
+    @analysis_id || current_user.id
   end
 
   def persisted_metadata_keys(sample, timestamp)
@@ -144,7 +158,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     timestamp_path = Arel::Nodes.build_quoted('{updated_at}')
     updated_at = Arel::Nodes::InfixOperation.new('#>>', provenance[:value], timestamp_path)
 
-    sample.class.where(id: sample.id, project_id: @project.id)
+    sample.class.where(id: sample.id, project_id: metadata_update_project_id(sample))
           .joins('CROSS JOIN LATERAL jsonb_each(samples.metadata_provenance) AS provenance(key, value)')
           .where(updated_at.eq(timestamp.as_json))
           .pluck(Arel.sql('provenance.key'))
@@ -211,13 +225,17 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     )
   end
 
+  def metadata_update_project_id(sample)
+    @project&.id || sample.project_id
+  end
+
   def cte_atomic_update_sql(sample, payload, timestamp, force_update) # rubocop:disable Metrics/MethodLength
     connection = sample.class.connection
     samples = sample.class.quoted_table_name
     payload_jsonb = connection.quote(payload.to_json)
     provenance_jsonb = connection.quote(provenance_payload(payload, timestamp).to_json)
     sample_id = connection.quote(sample.id)
-    project_id = connection.quote(@project.id)
+    project_id = connection.quote(metadata_update_project_id(sample))
     updated_at = connection.quote(timestamp)
     permitted_update = cte_permitted_metadata_update_sql(samples)
     change_condition = force_update ? 'TRUE' : "#{samples}.metadata -> payload.key IS DISTINCT FROM payload.value"
