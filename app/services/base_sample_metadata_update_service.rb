@@ -59,7 +59,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     payload = atomic_metadata_payload(metadata)
     persisted_keys = persist_atomic_metadata(sample, payload, force_update) if payload.any?
 
-    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys || [])
+    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys || [], force_update)
   end
 
   def perform_cte_atomic_metadata_update(sample, metadata, force_update)
@@ -69,7 +69,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     original_metadata = sample.metadata.dup
     persisted_keys = persist_cte_atomic_metadata(sample, atomic_metadata_payload(metadata), force_update)
 
-    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys)
+    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
   end
 
   def normalized_metadata(sample, metadata)
@@ -101,9 +101,12 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     JSON.parse(result.first['changed_keys'])
   end
 
-  def persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys)
+  def persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
     metadata.each_with_object(empty_metadata_changes) do |(key, value), changes|
-      changes[persisted_metadata_change_status(sample, original_metadata, key, value, persisted_keys)] << key
+      status = persisted_metadata_change_status(sample, original_metadata, key, value, persisted_keys)
+      status = :unchanged if status == :updated && original_metadata[key] == value && !force_update
+
+      changes[status] << key
     end
   end
 
