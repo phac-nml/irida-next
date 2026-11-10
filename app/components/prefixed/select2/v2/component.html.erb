@@ -2,13 +2,14 @@
   <div class="flex flex-row @max-md:flex-col">
     <div
       class="
-        overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium
-        text-ellipsis text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600 dark:bg-slate-700
-        dark:text-slate-300
+        flex min-h-11 items-center overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100
+        px-4 text-sm font-medium text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600
+        dark:bg-slate-700 dark:text-slate-300
       "
-      title="<%= helpers.root_url %>"
+      role="group"
+      aria-label="<%= helpers.root_url %>"
     >
-      <%= helpers.root_url %>
+      <span class="truncate"><%= helpers.root_url %></span>
     </div>
 
     <div class="grow">
