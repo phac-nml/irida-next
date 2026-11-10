@@ -26,11 +26,11 @@ module Samples
           users(:john_doe),
           { 'metadata' => metadata, 'analysis_id' => @analysis_id, include_activity: false, 'force_update' => false }
         ).execute
-        atomic_changes = AtomicUpdateService.new(
+        atomic_changes = UpdateService.new(
           @atomic_sample.project,
           @atomic_sample,
           @user,
-          { 'metadata' => metadata, 'analysis_id' => @analysis_id }
+          { 'metadata' => metadata, 'analysis_id' => @analysis_id, 'metadata_update_implementation' => 'atomic' }
         ).execute
 
         assert_equal legacy_changes, atomic_changes
@@ -45,12 +45,12 @@ module Samples
         freeze_time
         original_provenance = @atomic_sample.metadata_provenance['metadatafield1']
 
-        metadata_changes = AtomicUpdateService.new(
+        metadata_changes = UpdateService.new(
           @atomic_sample.project,
           @atomic_sample,
           @user,
           { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield3' => 'value3' },
-            'analysis_id' => @analysis_id }
+            'analysis_id' => @analysis_id, 'metadata_update_implementation' => 'atomic' }
         ).execute
 
         @atomic_sample.reload
@@ -62,12 +62,32 @@ module Samples
         )
       end
 
-      test 'detects deleted fields from persisted metadata after their provenance is removed' do
-        metadata_changes = AtomicUpdateService.new(
+      test 'rewrites matching values when force_update is enabled' do
+        freeze_time
+
+        metadata_changes = UpdateService.new(
           @atomic_sample.project,
           @atomic_sample,
           @user,
-          { 'metadata' => { 'metadatafield1' => '' }, 'analysis_id' => @analysis_id }
+          { 'metadata' => { 'metadatafield1' => 'value1' }, 'analysis_id' => @analysis_id,
+            'force_update' => true, 'metadata_update_implementation' => 'atomic' }
+        ).execute
+
+        @atomic_sample.reload
+        assert_equal ['metadatafield1'], metadata_changes[:updated]
+        assert_equal(
+          { 'source' => 'analysis', 'id' => @analysis_id, 'updated_at' => Time.current.as_json },
+          @atomic_sample.metadata_provenance['metadatafield1']
+        )
+      end
+
+      test 'detects deleted fields from persisted metadata after their provenance is removed' do
+        metadata_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => { 'metadatafield1' => '' }, 'analysis_id' => @analysis_id,
+            'metadata_update_implementation' => 'atomic' }
         ).execute
 
         @atomic_sample.reload
@@ -79,11 +99,12 @@ module Samples
       test 'does not let a user update analysis metadata but permits clearing it' do
         sample = samples(:sample34)
 
-        changes = AtomicUpdateService.new(
+        changes = UpdateService.new(
           sample.project,
           sample,
           @user,
-          { 'metadata' => { 'metadatafield1' => 'user value', 'metadatafield2' => '' } }
+          { 'metadata' => { 'metadatafield1' => 'user value', 'metadatafield2' => '' },
+            'metadata_update_implementation' => 'atomic' }
         ).execute
 
         sample.reload
@@ -97,11 +118,12 @@ module Samples
         sample = samples(:sample32)
         project = projects(:project30)
 
-        changes = AtomicUpdateService.new(
+        changes = UpdateService.new(
           project,
           sample,
           @user,
-          { 'metadata' => { 'metadatafield1' => 'new value' }, 'analysis_id' => @analysis_id }
+          { 'metadata' => { 'metadatafield1' => 'new value' }, 'analysis_id' => @analysis_id,
+            'metadata_update_implementation' => 'atomic' }
         ).execute
 
         assert_equal ['metadatafield1'], changes[:not_updated]
