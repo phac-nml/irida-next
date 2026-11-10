@@ -16,7 +16,7 @@ module BotActions
   def index
     authorize! @namespace, to: :view_bot_accounts?
 
-    @pagy, @bot_accounts = pagy(@bot_accounts, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit])
+    @pagy, @bot_accounts = pagy_wrapper(@bot_accounts, raise_range_error: true)
   end
 
   def new
@@ -40,9 +40,7 @@ module BotActions
     respond_to do |format|
       format.turbo_stream do
         if @bot_account.persisted?
-          @pagy, @bot_accounts = pagy(
-            @bot_accounts, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
-          )
+          @pagy, @bot_accounts = pagy_wrapper(@bot_accounts, raise_range_error: true)
 
           render status: :ok, locals: {
             type: 'success',

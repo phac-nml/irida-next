@@ -13,7 +13,7 @@ module SampleAttachment
     @has_attachments = all_attachments.any?
     @search_params = attachment_search_params
 
-    @pagy, @attachments = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    @pagy, @attachments = pagy_wrapper(@query)
     @results_message = attachments_results_message
 
     setup_ransack_for_attachments_form(all_attachments)

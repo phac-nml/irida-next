@@ -28,7 +28,7 @@ module WorkflowExecutionActions # rubocop:disable Metrics/ModuleLength
     @has_workflow_executions = load_workflows.any?
     @search_params = search_params
 
-    @pagy, @workflow_executions = @query.results(limit: params[:limit] || 20, page: params[:page] || 1)
+    @pagy, @workflow_executions = pagy_wrapper(@query)
     @results_message = results_message
 
     setup_ransack_for_form

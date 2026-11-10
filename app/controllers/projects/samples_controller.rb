@@ -17,7 +17,7 @@ module Projects
 
     def index
       @timestamp = DateTime.current
-      @pagy, @samples = @query.results(limit: params.fetch(:limit, 20), page: params.fetch(:page, 1))
+      @pagy, @samples = pagy_wrapper(@query)
       @samples = @samples.includes(project: { namespace: :parent })
       @has_samples = @project.samples.size.positive?
       @results_message = results_message

@@ -12,9 +12,7 @@ module Dashboard
       @has_groups = all_groups.any?
       @q = build_ransack_query(all_groups)
       set_default_sort
-      @pagy, @groups = pagy(
-        @q.result.include_route, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
-      )
+      @pagy, @groups = pagy_wrapper(@q.result.include_route, raise_range_error: true)
       set_tab_variables
 
       respond_to do |format|

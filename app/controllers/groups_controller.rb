@@ -16,7 +16,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     redirect_to dashboard_groups_path
   end
 
-  def show # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def show
     authorize! @group, to: :read?
 
     @tab = params[:tab] || 'subgroups_and_projects'
@@ -36,9 +36,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @q = all_namespaces.ransack(params[search_key], search_key:)
 
     set_default_sort
-    @pagy, @namespaces = pagy(
-      @q.result.include_route, raise_range_error: true, limit: params[:limit] || Pagy::OPTIONS[:limit]
-    )
+    @pagy, @namespaces = pagy_wrapper(@q.result.include_route, raise_range_error: true)
   end
 
   def new
@@ -98,7 +96,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
     group_activities = @group.retrieve_group_activity.order(created_at: :desc)
 
-    @pagy, raw_activities = pagy(group_activities, limit: 10, raise_range_error: true)
+    @pagy, raw_activities = pagy_wrapper(group_activities, limit: 10, raise_range_error: true)
 
     @activities = @group.human_readable_activity(raw_activities)
 

@@ -68,7 +68,7 @@ module Samples
     def build_pagy(namespace)
       project_ids = Project.where(namespace_id: namespace.project_namespace_ids).pluck(:id)
       query = Sample::Query.new({ sort: 'namespaces.puid asc', project_ids: project_ids })
-      pagy, samples = query.results(limit: 50, page: 1)
+      pagy, samples = pagy_wrapper(query, limit: 50)
       @rendered_samples = samples.includes(project: { namespace: :parent })
       pagy
     end

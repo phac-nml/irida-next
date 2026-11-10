@@ -442,14 +442,13 @@ module Projects
 
     test 'accessing workflow executions index on invalid page causes pagy overflow redirect at project level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
-      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      # The rescue_from handler should redirect to first page with page=1
       get namespace_project_workflow_executions_path(@namespace, @project, page: 50)
 
       # Should be redirected to first page
       assert_response :redirect
-      # Check both page and limit are in the redirect URL (order may vary)
+      # Check page=1 is in the redirect URL
       assert_match(/page=1/, response.location)
-      assert_match(/limit=20/, response.location)
 
       # Follow the redirect and verify it's successful
       follow_redirect!

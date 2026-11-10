@@ -68,6 +68,7 @@ module ActiveSupport
     include W3cValidationHelpers
     include SortingTestHelper
     include UserOptInFeaturesTestHelper
+    include PagyWrapper
 
     PublicActivity.enabled = true
   end

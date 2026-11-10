@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   include Irida::Auth
   include Pagy::Method
   include RouteHelper
+  include PagyWrapper
 
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
@@ -14,14 +15,11 @@ class ApplicationController < ActionController::Base
   around_action :use_logidze_responsible, only: %i[create destroy update transfer] # rubocop:disable Rails/LexicallyScopedActionFilter
   around_action :switch_locale
   before_action :set_pagy_locale
-  before_action :validate_pagy_limit, if: -> { params&.[](:limit).present? }
 
   helper IconHelper
   helper_method :error_message
 
-  # Pagy::RangeError is a subclass of Pagy::OptionError, so the more specific RangeError
-  # handler must be declared after OptionError to take precedence over it.
-  rescue_from Pagy::OptionError, with: :sanitize_pagy_limit
+  rescue_from Pagy::OptionError, with: :redirect_to_sanitized_pagy_params
   rescue_from Pagy::RangeError, with: :redirect_to_first_page
 
   def set_current_user
@@ -86,31 +84,7 @@ class ApplicationController < ActionController::Base
     new_user_session_path(params)
   end
 
-  # Rescues from Pagy::RangeError by redirecting to the first page
-  def redirect_to_first_page
-    redirect_to url_for(page: 1, limit: params[:limit] || 20)
-  end
-
   def set_pagy_locale
     Pagy::I18n.locale = params[:locale] || I18n.locale
-  end
-
-  def sanitize_pagy_limit(_exception)
-    # Converts the limit parameter to an integer by clamping the limit
-    # within the allowed range and redirecting to the same page
-    limit = Pagy::OPTIONS[:limit]
-
-    # Since we are redirecting the user to a new URL containing query strings that they already provided,
-    # it is safe to for us to strip the Rails parameter protection using `to_unsafe_h`
-    redirect_to url_for(params.to_unsafe_h.merge(limit: limit))
-  end
-
-  def validate_pagy_limit
-    # Integer() strictly rejects non-numeric characters (e.g., "25a" or "abc")
-    Integer(params[:limit].to_s)
-  rescue ArgumentError, TypeError
-    raise Pagy::OptionError.new(
-      Pagy::OPTIONS, :limit, "Invalid value for limit: #{params[:limit]}. Must be numeric.", params[:limit]
-    )
   end
 end
