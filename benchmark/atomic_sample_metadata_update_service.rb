@@ -4,8 +4,13 @@ require_relative '../config/environment'
 require 'benchmark/ips'
 
 # Compares persisted analysis metadata updates without retaining benchmark records.
-class AtomicSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
-  attr_reader :atomic_sample, :cte_atomic_sample, :legacy_sample
+class AtomicSampleMetadataUpdateBenchmark
+  IMPLEMENTATIONS = {
+    'existing update service' => 'original',
+    'atomic update service' => 'atomic',
+    'CTE atomic update service' => 'cte_atomic',
+    'classified atomic update service' => 'classified_atomic'
+  }.freeze
 
   def initialize(sample, user, analysis_id, metadata_counts)
     @sample = sample
@@ -13,55 +18,27 @@ class AtomicSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
     @analysis_id = analysis_id
     @metadata_counts = metadata_counts
     @counter = 0
-    @legacy_sample = benchmark_sample('legacy')
-    @atomic_sample = benchmark_sample('atomic')
-    @cte_atomic_sample = benchmark_sample('cte atomic')
+    @samples = IMPLEMENTATIONS.values.index_with { |implementation| benchmark_sample(implementation) }
   end
 
   def run
     Benchmark.ips do |benchmark|
       benchmark.config(time: 10, warmup: 2)
-      benchmark.report('existing update service') { update_with_existing_service }
-      benchmark.report('atomic update service') { update_with_atomic_service }
-      benchmark.report('CTE atomic update service') { update_with_cte_atomic_service }
+      IMPLEMENTATIONS.each do |label, implementation|
+        benchmark.report(label) { update_with(implementation) }
+      end
       benchmark.compare!
     end
   end
 
   private
 
-  def update_with_existing_service
-    with_rollback(legacy_sample) do |sample|
-      Samples::Metadata::UpdateService.new(
-        sample.project,
-        sample,
-        @user,
-        { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id, include_activity: false }
-      ).execute
-    end
-  end
+  def update_with(implementation)
+    with_rollback(@samples.fetch(implementation)) do |sample|
+      params = { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id, include_activity: false }
+      params['metadata_update_implementation'] = implementation unless implementation == 'original'
 
-  def update_with_atomic_service
-    with_rollback(atomic_sample) do |sample|
-      Samples::Metadata::UpdateService.new(
-        sample.project,
-        sample,
-        @user,
-        { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id,
-          'metadata_update_implementation' => 'atomic', include_activity: false }
-      ).execute
-    end
-  end
-
-  def update_with_cte_atomic_service
-    with_rollback(cte_atomic_sample) do |sample|
-      Samples::Metadata::UpdateService.new(
-        sample.project,
-        sample,
-        @user,
-        { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id,
-          'metadata_update_implementation' => 'cte_atomic', include_activity: false }
-      ).execute
+      Samples::Metadata::UpdateService.new(sample.project, sample, @user, params).execute
     end
   end
 

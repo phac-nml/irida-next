@@ -7,23 +7,28 @@ require 'benchmark/ips'
 class BulkSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
   SAMPLE_COUNT = 100
 
+  IMPLEMENTATIONS = {
+    'existing bulk update service' => 'original',
+    'atomic bulk update service' => 'atomic',
+    'CTE atomic bulk update service' => 'cte_atomic',
+    'classified atomic bulk update service' => 'classified_atomic'
+  }.freeze
+
   def initialize(sample, user, analysis_id, metadata_counts)
     @project = sample.project
     @user = user
     @analysis_id = analysis_id
     @metadata_counts = metadata_counts
     @counter = 0
-    @sample_sets = %w[original atomic cte_atomic].index_with do |implementation|
-      benchmark_samples(implementation)
-    end
+    @sample_sets = IMPLEMENTATIONS.values.index_with { |implementation| benchmark_samples(implementation) }
   end
 
   def run
     Benchmark.ips do |benchmark|
       benchmark.config(time: 10, warmup: 2)
-      benchmark.report('existing bulk update service') { update_with('original') }
-      benchmark.report('atomic bulk update service') { update_with('atomic') }
-      benchmark.report('CTE atomic bulk update service') { update_with('cte_atomic') }
+      IMPLEMENTATIONS.each do |label, implementation|
+        benchmark.report(label) { update_with(implementation) }
+      end
       benchmark.compare!
     end
   end

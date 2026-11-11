@@ -81,7 +81,7 @@ module Samples
       test 'supports atomic metadata update implementations' do
         freeze_time
 
-        %w[atomic cte_atomic].each do |implementation|
+        %w[atomic cte_atomic classified_atomic].each do |implementation|
           Sample.transaction(requires_new: true) do
             payload = { @sample33.id => { 'metadatafield3' => "#{implementation} value" } }
 
@@ -132,7 +132,7 @@ module Samples
           added: ['created_field'], updated: ['updated_field'], deleted: ['deleted_field'],
           not_updated: ['analysis_updated_field'], unchanged: ['unchanged_field'], not_found: []
         }
-        %w[original atomic cte_atomic].each do |implementation|
+        %w[original atomic cte_atomic classified_atomic].each do |implementation|
           Sample.transaction(requires_new: true) do
             sample = Sample.create!(
               project: @project30,

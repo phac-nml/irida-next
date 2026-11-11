@@ -2,7 +2,7 @@
 
 # Base service for metadata update service shared logic
 class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/ClassLength
-  METADATA_UPDATE_IMPLEMENTATIONS = %w[original atomic cte_atomic].freeze
+  METADATA_UPDATE_IMPLEMENTATIONS = %w[original atomic cte_atomic classified_atomic].freeze
 
   def initialize(user = nil, params = {})
     super
@@ -18,6 +18,8 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
       perform_atomic_metadata_update(sample, metadata, force_update)
     when 'cte_atomic'
       perform_cte_atomic_metadata_update(sample, metadata, force_update)
+    when 'classified_atomic'
+      perform_classified_atomic_metadata_update(sample, metadata, force_update)
     end
   end
 
@@ -82,6 +84,22 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
   end
 
+  # Single correlated UPDATE (no separate relation scan of `samples`, so no explicit row lock is
+  # required - see persist_classified_atomic_metadata). Unlike cte_atomic, it merges metadata and
+  # provenance in one combined scan over the payload and derives persisted_keys from RETURNING
+  # instead of a second round-trip, avoiding both the extra lock acquisition cte_atomic needs and
+  # the follow-up lookup query atomic needs, while reusing the same proven classification logic.
+  def perform_classified_atomic_metadata_update(sample, metadata, force_update)
+    metadata = normalized_metadata(sample, metadata)
+    return empty_metadata_changes if metadata.empty?
+
+    original_metadata = sample.metadata.dup
+    payload = atomic_metadata_payload(metadata)
+    persisted_keys = persist_classified_atomic_metadata(sample, payload, force_update)
+
+    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
+  end
+
   def normalized_metadata(sample, metadata)
     metadata.filter_map do |key, value|
       next unless validate_metadata_value(key, value, sample.name)
@@ -111,6 +129,18 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     sample.metadata = JSON.parse(result.first['metadata'])
     sample.metadata_provenance = JSON.parse(result.first['metadata_provenance'])
     JSON.parse(result.first['changed_keys'])
+  end
+
+  def persist_classified_atomic_metadata(sample, payload, force_update)
+    timestamp = Time.current
+    sql = classified_atomic_update_sql(sample, payload, timestamp, force_update)
+    result = sample.class.connection.select_all(sql)
+    return [] if result.empty?
+
+    row = result.first
+    sample.metadata = JSON.parse(row['metadata'])
+    sample.metadata_provenance = JSON.parse(row['metadata_provenance'])
+    JSON.parse(row['persisted_keys'])
   end
 
   def persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
@@ -296,6 +326,81 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
       (
         payload.value = 'null'::jsonb
         OR #{samples}.metadata_provenance -> payload.key ->> 'source' IS DISTINCT FROM 'analysis'
+      )
+    SQL
+  end
+
+  # Single correlated UPDATE: merges metadata and provenance in one combined pass over the
+  # payload (unlike atomic, which scans the payload twice - once per column), and derives
+  # persisted_keys from RETURNING's post-write metadata_provenance instead of a second
+  # round-trip query (unlike atomic's persisted_metadata_keys). No relation (`samples`) is
+  # scanned via a separate JOIN/CTE, so no explicit row lock is required for the "is this
+  # writable" decision to be safe against concurrent writers, unlike cte_atomic_update_sql.
+  # Classification (added/updated/deleted/...) is intentionally left to the already-tested
+  # persisted_metadata_changes/persisted_metadata_change_status, not computed here: RETURNING
+  # only ever reflects the row's POST-write state, so a classification subquery referencing
+  # samples.metadata within RETURNING cannot distinguish "already matched" from "just matched
+  # because this statement wrote it" - it would misreport added/updated as unchanged.
+  def classified_atomic_update_sql(sample, payload, timestamp, force_update) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    connection = sample.class.connection
+    samples = sample.class.quoted_table_name
+    payload_jsonb = connection.quote(payload.to_json)
+    provenance_jsonb = connection.quote(provenance_payload(payload, timestamp).to_json)
+    sample_id = connection.quote(sample.id)
+    project_id = connection.quote(metadata_update_project_id(sample))
+    updated_at = connection.quote(timestamp)
+    updated_at_json = connection.quote(timestamp.as_json)
+    writable = classified_atomic_writable_sql(samples, force_update)
+    entries = "jsonb_each(#{payload_jsonb}::jsonb) AS payload_entry(key, value)"
+
+    <<~SQL.squish
+      UPDATE #{samples}
+      SET
+        metadata = jsonb_strip_nulls(#{samples}.metadata || (
+          SELECT COALESCE(jsonb_object_agg(payload_entry.key, payload_entry.value), '{}'::jsonb)
+          FROM #{entries} WHERE #{writable}
+        )),
+        metadata_provenance = jsonb_strip_nulls(#{samples}.metadata_provenance || (
+          SELECT COALESCE(jsonb_object_agg(payload_entry.key, #{provenance_jsonb}::jsonb -> payload_entry.key), '{}'::jsonb)
+          FROM #{entries} WHERE #{writable}
+        )),
+        updated_at = CASE
+          WHEN EXISTS (SELECT 1 FROM #{entries} WHERE #{writable}) THEN #{updated_at}
+          ELSE #{samples}.updated_at
+        END
+      WHERE #{samples}.id = #{sample_id}
+        AND #{samples}.project_id = #{project_id}
+      RETURNING #{samples}.metadata, #{samples}.metadata_provenance,
+        (
+          SELECT COALESCE(jsonb_agg(kv.key), '[]'::jsonb)
+          FROM jsonb_each(#{samples}.metadata_provenance) AS kv(key, value)
+          WHERE kv.value ->> 'updated_at' = #{updated_at_json}
+        ) AS persisted_keys
+    SQL
+  end
+
+  def classified_atomic_writable_sql(samples, force_update)
+    permitted = classified_atomic_permitted_sql(samples)
+    change_condition = if force_update
+                         'TRUE'
+                       else
+                         "#{samples}.metadata -> payload_entry.key IS DISTINCT FROM payload_entry.value"
+                       end
+
+    <<~SQL.squish
+      #{change_condition}
+      AND NOT (payload_entry.value = 'null'::jsonb AND #{samples}.metadata -> payload_entry.key IS NULL)
+      AND #{permitted}
+    SQL
+  end
+
+  def classified_atomic_permitted_sql(samples)
+    return 'TRUE' unless @analysis_id.nil?
+
+    <<~SQL.squish
+      (
+        payload_entry.value = 'null'::jsonb
+        OR #{samples}.metadata_provenance -> payload_entry.key ->> 'source' IS DISTINCT FROM 'analysis'
       )
     SQL
   end
