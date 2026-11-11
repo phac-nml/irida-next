@@ -66,8 +66,18 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     metadata = normalized_metadata(sample, metadata)
     return empty_metadata_changes if metadata.empty?
 
-    original_metadata = sample.metadata.dup
-    persisted_keys = persist_cte_atomic_metadata(sample, atomic_metadata_payload(metadata), force_update)
+    payload = atomic_metadata_payload(metadata)
+    original_metadata = nil
+    persisted_keys = nil
+
+    # Acquire the row lock before the CTE reads metadata/provenance so a concurrent writer (e.g. an
+    # analysis completion job) cannot commit changes between this statement's snapshot and its write.
+    # Without this lock, PostgreSQL does not refresh the CTE's independent read of `samples` when
+    # resolving a concurrent-update conflict, allowing a stale permission decision to be applied.
+    sample.with_lock do
+      original_metadata = sample.metadata.dup
+      persisted_keys = persist_cte_atomic_metadata(sample, payload, force_update)
+    end
 
     persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
   end
