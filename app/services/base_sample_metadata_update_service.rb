@@ -24,7 +24,8 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
   end
 
   def metadata_update_implementation
-    implementation = params.fetch('metadata_update_implementation', 'original')
+    default_implementation = Flipper.enabled?(:atomic_metadata_updates) ? 'classified_atomic' : 'original'
+    implementation = params.fetch('metadata_update_implementation', default_implementation)
     return implementation if METADATA_UPDATE_IMPLEMENTATIONS.include?(implementation)
 
     raise ArgumentError, "Unsupported metadata update implementation: #{implementation}"

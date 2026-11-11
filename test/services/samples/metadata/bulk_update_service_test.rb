@@ -18,6 +18,13 @@ module Samples
         @subgroup12a = groups(:subgroup_twelve_a)
         @subgroup12b = groups(:subgroup_twelve_b)
         @subgroup12aa = groups(:subgroup_twelve_a_a)
+        # Ensure the 'original' entries in the implementation parity tests genuinely exercise the
+        # original implementation, regardless of the atomic_metadata_updates flag's test-wide default.
+        Flipper.disable(:atomic_metadata_updates)
+      end
+
+      def teardown
+        Flipper.enable(:atomic_metadata_updates)
       end
 
       test 'broadcasts once per project and ancestor after updating the metadata summary' do

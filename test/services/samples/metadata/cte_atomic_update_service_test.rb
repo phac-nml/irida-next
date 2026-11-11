@@ -9,6 +9,13 @@ module Samples
         @analysis_id = 10
         @legacy_sample = samples(:sample33)
         @cte_sample = samples(:sample32)
+        # Ensure the default (no explicit implementation param) path genuinely exercises the
+        # original implementation, regardless of the atomic_metadata_updates flag's test-wide default.
+        Flipper.disable(:atomic_metadata_updates)
+      end
+
+      def teardown
+        Flipper.enable(:atomic_metadata_updates)
       end
 
       test 'matches the existing service for analysis additions, updates, and deletions' do
