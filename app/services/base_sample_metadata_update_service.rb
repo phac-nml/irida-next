@@ -65,7 +65,8 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
   end
 
   def normalized_metadata(sample, metadata)
-    metadata.filter_map do |key, value|
+    # to_h: ActionController::Parameters (e.g. deletion_params) doesn't implement filter_map, unlike Hash
+    metadata.to_h.filter_map do |key, value|
       next unless validate_metadata_value(key, value, sample.name)
 
       [strip_whitespaces(key.to_s.downcase), strip_whitespaces(value.to_s)] # to_s removes data types
