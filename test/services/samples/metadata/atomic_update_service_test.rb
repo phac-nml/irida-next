@@ -81,6 +81,40 @@ module Samples
         assert_equal ['metadatafield1'], atomic_changes[:updated]
       end
 
+      test 'normalizes metadata when the payload is ActionController::Parameters, not a plain Hash' do
+        freeze_time
+        # Regression test: controllers (e.g. Projects::Samples::Metadata::DeletionsController) pass
+        # permitted ActionController::Parameters as the metadata payload, not a plain Hash.
+        # normalized_metadata must handle both the same way (ActionController::Parameters does not
+        # implement filter_map, unlike Hash).
+        metadata = ActionController::Parameters.new(
+          'metadatafield1' => 'newvalue1',
+          'metadatafield3' => 'value3'
+        ).permit!
+
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'original' }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic' }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+
+        @legacy_sample.reload
+        @atomic_sample.reload
+        assert_equal @legacy_sample.metadata, @atomic_sample.metadata
+        assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
+        assert_equal 'newvalue1', @legacy_sample.metadata['metadatafield1']
+        assert_equal 'newvalue1', @atomic_sample.metadata['metadatafield1']
+      end
+
       test 'excludes matching values so their provenance is not rewritten' do
         freeze_time
         original_provenance = @atomic_sample.metadata_provenance['metadatafield1']
