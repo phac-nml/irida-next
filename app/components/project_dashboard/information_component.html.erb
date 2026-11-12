@@ -3,10 +3,11 @@
   <div class="mb-6">
     <dl class="space-y-6">
       <div>
-        <dt class="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">
+        <dt class="mb-1 text-sm font-semibold text-slate-600 dark:text-slate-400">
           <%= t('common.labels.description') %>
         </dt>
-        <dd class="text-slate-800 dark:text-slate-200 break-words">
+
+        <dd class="break-words text-slate-800 dark:text-slate-200">
           <%= @project.description %>
         </dd>
       </div>
@@ -14,14 +15,10 @@
   </div>
 <% end %>
 
-<div class="pt-6 border-t border-slate-200 dark:border-slate-700">
+<div class="border-t border-slate-200 pt-6 dark:border-slate-700">
   <h3 class="sr-only"><%= t(:"components.project_dashboard.information.statistics_title") %></h3>
 
-  <div
-    class="
-      grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full
-    "
-  >
+  <div class="grid w-full grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
     <%# Created Date - Takes full width on mobile, half on sm, and full on lg %>
     <div class="col-span-2 sm:col-span-1">
       <%= render NamespaceStatisticComponent.new(
