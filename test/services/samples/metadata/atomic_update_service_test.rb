@@ -43,6 +43,44 @@ module Samples
         assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
       end
 
+      test 'normalizes distinct raw keys that collapse to the same key, with last-value-wins semantics' do
+        freeze_time
+        # 'MetadataField1' and ' metadatafield1 ' both normalize (downcase + strip_whitespaces) to
+        # 'metadatafield1', so the payload contains two distinct raw keys targeting the same field.
+        # Both implementations normalize the payload into a plain Hash (via normalized_metadata)
+        # before classifying changes, so duplicate normalized keys collapse the same way for both:
+        # the later raw key wins, and the field is reported only once.
+        metadata = {
+          'MetadataField1' => 'newvalue_a',
+          ' metadatafield1 ' => 'newvalue_b'
+        }
+
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'original' }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic' }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+
+        @legacy_sample.reload
+        @atomic_sample.reload
+
+        assert_equal 'newvalue_b', @legacy_sample.metadata['metadatafield1']
+        assert_equal 'newvalue_b', @atomic_sample.metadata['metadatafield1']
+        assert_equal @legacy_sample.metadata, @atomic_sample.metadata
+        assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
+        assert_equal ['metadatafield1'], legacy_changes[:updated]
+        assert_equal ['metadatafield1'], atomic_changes[:updated]
+      end
+
       test 'excludes matching values so their provenance is not rewritten' do
         freeze_time
         original_provenance = @atomic_sample.metadata_provenance['metadatafield1']

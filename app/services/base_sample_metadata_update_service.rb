@@ -27,14 +27,10 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     raise ArgumentError, "Unsupported metadata update implementation: #{implementation}"
   end
 
-  def perform_original_metadata_update(sample, metadata, force_update) # rubocop:disable Metrics/MethodLength
-    metadata_changes = { added: [], updated: [], deleted: [], not_updated: [], unchanged: [], not_found: [] }
+  def perform_original_metadata_update(sample, metadata, force_update)
+    metadata_changes = empty_metadata_changes
     sample.with_lock do
-      metadata.each do |key, value|
-        next unless validate_metadata_value(key, value, sample.name)
-
-        key = strip_whitespaces(key.to_s.downcase)
-        value = strip_whitespaces(value.to_s) # remove data types
+      normalized_metadata(sample, metadata).each do |key, value|
         status = get_metadata_change_status(sample, key, value, force_update)
         next unless status
 
@@ -72,7 +68,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     metadata.filter_map do |key, value|
       next unless validate_metadata_value(key, value, sample.name)
 
-      [strip_whitespaces(key.to_s.downcase), strip_whitespaces(value.to_s)]
+      [strip_whitespaces(key.to_s.downcase), strip_whitespaces(value.to_s)] # to_s removes data types
     end.to_h
   end
 
