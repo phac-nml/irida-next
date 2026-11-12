@@ -70,3 +70,14 @@ fr:
     toggle_main_navigation_menu: Basculer le menu de navigation principal
     toggle_section: Basculer la section
     toggle_user_menu: Basculer le menu utilisateur
+    workflow_execution_fields:
+      description: Définissez des champs supplémentaires que les utilisateurs remplissent lors de la soumission d'une exécution de flux de travail. Les valeurs sont envoyées à WES sous forme d'étiquettes. Saisissez les définitions sous la forme d'un objet JSON suivant la structure des propriétés du schéma Nextflow.
+      errors_title: 'Les champs d''exécution de flux de travail n''ont pas pu être enregistrés :'
+      field_hint: Chaque clé correspond au nom de l'étiquette et doit respecter le format a-z, 0-9 et traits de soulignement. Les clés réservées createdBy, namespaceId et samplesCount ne peuvent pas être utilisées.
+      field_label: Définitions des champs (JSON)
+      flash:
+        error: Les champs d'exécution de flux de travail n'ont pas pu être enregistrés.
+        parse_error: 'JSON invalide : %{message}'
+        success: Champs d'exécution de flux de travail mis à jour.
+      save: Enregistrer
+      title: Champs d'exécution de flux de travail

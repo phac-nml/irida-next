@@ -70,3 +70,14 @@ en:
     toggle_main_navigation_menu: Toggle main navigation menu
     toggle_section: Toggle section
     toggle_user_menu: Toggle user menu
+    workflow_execution_fields:
+      description: Define additional fields that users fill in when submitting a workflow execution. The values are sent to WES as tags. Enter the definitions as a JSON object following the Nextflow schema property shape.
+      errors_title: 'The workflow execution fields could not be saved:'
+      field_hint: Each key is the tag name and must match the pattern a-z, 0-9 and underscores. The reserved keys createdBy, namespaceId and samplesCount cannot be used.
+      field_label: Field definitions (JSON)
+      flash:
+        error: The workflow execution fields could not be saved.
+        parse_error: 'Invalid JSON: %{message}'
+        success: Workflow execution fields updated.
+      save: Save
+      title: Workflow Execution Fields
