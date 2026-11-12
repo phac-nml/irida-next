@@ -181,7 +181,8 @@ ignore_unused:
 ## Exclude these keys from the `i18n-tasks check-consistent-interpolations` report:
 ignore_inconsistent_interpolations:
   fr:
-    - '*'
+    - '*.one'
+    - '{date,datetime}.*'
 # - 'activerecord.attributes.*'
 
 ## Ignore these keys completely:
