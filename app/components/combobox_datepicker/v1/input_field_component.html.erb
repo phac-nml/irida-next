@@ -3,7 +3,7 @@
     <%= @label %>
 
     <% if @required %>
-      <abbr class="req" title="<%= t('pathogen.label.title') %>"><%= t("pathogen.label.required_indicator") %></abbr>
+      <abbr class="req" aria-label="<%= t('pathogen.label.title') %>"><%= t("pathogen.label.required_indicator") %></abbr>
     <% end %>
   </label>
 <% end %>
@@ -27,8 +27,8 @@
     name="<%= @input_name %>"
     id="<%= @input_id %>"
     class="
-      min-w-full rounded-lg border-slate-300 px-10 py-2.5 text-sm text-slate-900 dark:border-slate-600
-      dark:bg-slate-800 dark:text-white dark:placeholder-slate-400
+      min-w-full rounded-[var(--pvc-radius-control)] border-[var(--pvc-color-border-strong)] px-10 py-2.5 text-sm
+      text-slate-900 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400
     "
     role="combobox"
     aria-haspopup="dialog"
@@ -51,8 +51,9 @@
       data-combobox-datepicker--v1--input-target="inputArrow"
       data-action="click->combobox-datepicker--v1--input#toggleCalendar"
       class="
-        flex h-full w-10 cursor-pointer items-center justify-center rounded-r-lg text-slate-500 transition-colors
-        hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300 dark:hover:bg-slate-700
+        flex h-full w-10 cursor-pointer items-center justify-center rounded-r-[var(--pvc-radius-control)]
+        text-slate-500 transition-colors hover:bg-slate-100 focus-visible:outline-3 dark:text-slate-300
+        dark:hover:bg-slate-700
       "
       tabindex="-1"
       type="button"

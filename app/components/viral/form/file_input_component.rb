@@ -27,8 +27,9 @@ module Viral
           args[:required] = @required if @required.present?
           args[:pattern] = @pattern if @pattern.present?
           args[:class] = class_names(
-            'block w-full text-sm text-slate-900 border border-slate-300 rounded-lg cursor-pointer bg-slate-50',
-            'dark:text-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400',
+            'block w-full cursor-pointer rounded-[var(--pvc-radius-control)] border',
+            'border-[var(--pvc-color-border-strong)] bg-slate-50 text-sm text-slate-900',
+            'dark:text-slate-400 dark:bg-slate-700 dark:placeholder-slate-400',
             args[:class]
           )
         end
