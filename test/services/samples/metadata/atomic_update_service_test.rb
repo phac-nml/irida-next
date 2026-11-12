@@ -10,6 +10,7 @@ module Samples
         @user = users(:john_doe)
         @legacy_sample = samples(:sample33)
         @atomic_sample = samples(:sample32)
+        @atomic_sample.create_logidze_snapshot!
       end
 
       test 'matches the existing service for analysis additions, updates, and deletions' do
@@ -154,6 +155,31 @@ module Samples
         )
       end
 
+      test 'broadcasts a refresh after an atomic update commits' do
+        ActiveRecord.expects(:after_all_transactions_commit).yields
+        Project.any_instance.expects(:broadcast_refresh_later_to_samples_table).once
+
+        UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => { 'metadatafield3' => 'value3' }, 'metadata_update_implementation' => 'atomic' }
+        ).execute
+      end
+
+      test 'does not schedule a broadcast when atomic updates suppress Turbo broadcasts' do
+        ActiveRecord.expects(:after_all_transactions_commit).never
+
+        Sample.suppressing_turbo_broadcasts do
+          UpdateService.new(
+            @atomic_sample.project,
+            @atomic_sample,
+            @user,
+            { 'metadata' => { 'metadatafield3' => 'value3' }, 'metadata_update_implementation' => 'atomic' }
+          ).execute
+        end
+      end
+
       test 'rewrites matching values when force_update is enabled' do
         freeze_time
 
@@ -190,6 +216,7 @@ module Samples
 
       test 'does not let a user update analysis metadata but permits clearing it' do
         sample = samples(:sample34)
+        sample.create_logidze_snapshot!
 
         changes = UpdateService.new(
           sample.project,

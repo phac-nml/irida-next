@@ -80,6 +80,7 @@ module Samples
 
       test 'supports the atomic metadata update implementation' do
         freeze_time
+        @sample33.create_logidze_snapshot!
 
         Sample.transaction(requires_new: true) do
           payload = { @sample33.id => { 'metadatafield3' => 'atomic value' } }

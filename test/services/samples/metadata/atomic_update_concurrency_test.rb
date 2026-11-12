@@ -32,6 +32,9 @@ module Samples
       end
 
       def teardown
+        if @metadata_summary_incremented
+          @project.namespace.update_metadata_summary_by_update_service(['field2'], [], true)
+        end
         @sample&.destroy
       end
 
@@ -72,6 +75,49 @@ module Samples
         @sample.reload
         assert_equal 'analysis_committed_value', @sample.metadata['field1']
         assert_equal 'analysis', @sample.metadata_provenance['field1']['source']
+      end
+
+      test 'classifies a concurrently added key as updated without incrementing its metadata summary' do
+        lock_acquired = Queue.new
+        initial_summary_count = @project.namespace.metadata_summary.fetch('field2', 0)
+
+        writer_thread = Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do |connection|
+            connection.transaction do
+              connection.execute("SELECT id FROM samples WHERE id = #{connection.quote(@sample.id)} FOR UPDATE")
+              lock_acquired << true
+              sleep 1
+              connection.execute(<<~SQL.squish)
+                UPDATE samples
+                SET metadata = jsonb_set(metadata, ARRAY['field2'], '"concurrent_value"'::jsonb),
+                    metadata_provenance = jsonb_set(
+                      metadata_provenance,
+                      ARRAY['field2'],
+                      '{"source":"user","id":"#{@user.id}"}'::jsonb
+                    )
+                WHERE id = #{connection.quote(@sample.id)}
+              SQL
+              @project.namespace.update_metadata_summary_by_update_service([], ['field2'], true)
+              @metadata_summary_incremented = true
+            end
+          end
+        end
+
+        lock_acquired.pop
+
+        result = BulkUpdateService.new(
+          @project.namespace,
+          { @sample.id => { 'field2' => 'atomic_value' } },
+          ['field2'],
+          @user,
+          { 'metadata_update_implementation' => 'atomic' }
+        ).execute
+
+        writer_thread.join
+
+        assert_equal ['field2'], result.fetch(@sample.id)[:updated], result.inspect
+        assert_equal initial_summary_count + 1, @project.namespace.reload.metadata_summary['field2']
+        assert_equal 'atomic_value', @sample.reload.metadata['field2']
       end
     end
   end
