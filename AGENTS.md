@@ -31,6 +31,7 @@
 - **Install JS dependencies:** `devenv shell -- pnpm install`
 - **Prepare database (dev & test):** `devenv shell -- bin/rails db:prepare`
 - **Build JS assets:** `devenv shell -- pnpm build`
+- **Fix bundle/pnpm errors:** If a command fails with gem/`bundle` errors (missing gems, version mismatches) or `pnpm` errors (missing packages), run `devenv shell -- bin/setup --skip-server` to reinstall Ruby gems and JS dependencies (via `bin/setup`) without starting the dev server afterwards.
 
 ### Testing
 
