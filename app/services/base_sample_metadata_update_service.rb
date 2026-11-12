@@ -2,7 +2,7 @@
 
 # Base service for metadata update service shared logic
 class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/ClassLength
-  METADATA_UPDATE_IMPLEMENTATIONS = %w[original atomic cte_atomic classified_atomic].freeze
+  METADATA_UPDATE_IMPLEMENTATIONS = %w[original atomic].freeze
 
   def initialize(user = nil, params = {})
     super
@@ -16,15 +16,11 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
       perform_original_metadata_update(sample, metadata, force_update)
     when 'atomic'
       perform_atomic_metadata_update(sample, metadata, force_update)
-    when 'cte_atomic'
-      perform_cte_atomic_metadata_update(sample, metadata, force_update)
-    when 'classified_atomic'
-      perform_classified_atomic_metadata_update(sample, metadata, force_update)
     end
   end
 
   def metadata_update_implementation
-    default_implementation = Flipper.enabled?(:atomic_metadata_updates) ? 'classified_atomic' : 'original'
+    default_implementation = Flipper.enabled?(:atomic_metadata_updates) ? 'atomic' : 'original'
     implementation = params.fetch('metadata_update_implementation', default_implementation)
     return implementation if METADATA_UPDATE_IMPLEMENTATIONS.include?(implementation)
 
@@ -54,49 +50,20 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     metadata_changes
   end
 
+  # Single correlated UPDATE ... RETURNING statement. No separate relation scan of `samples`
+  # occurs, so no explicit row lock is required for the "is this writable" decision to be safe
+  # against concurrent writers: the writability/change checks are scalar subqueries correlated
+  # directly to the row being updated, which PostgreSQL's EvalPlanQual conflict resolution
+  # refreshes against the latest committed tuple when blocked by a concurrent writer. Metadata
+  # and provenance are merged in one combined scan over the payload, and persisted_keys is
+  # derived from RETURNING instead of a second round-trip query.
   def perform_atomic_metadata_update(sample, metadata, force_update)
     metadata = normalized_metadata(sample, metadata)
     return empty_metadata_changes if metadata.empty?
 
     original_metadata = sample.metadata.dup
     payload = atomic_metadata_payload(metadata)
-    persisted_keys = persist_atomic_metadata(sample, payload, force_update) if payload.any?
-
-    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys || [], force_update)
-  end
-
-  def perform_cte_atomic_metadata_update(sample, metadata, force_update)
-    metadata = normalized_metadata(sample, metadata)
-    return empty_metadata_changes if metadata.empty?
-
-    payload = atomic_metadata_payload(metadata)
-    original_metadata = nil
-    persisted_keys = nil
-
-    # Acquire the row lock before the CTE reads metadata/provenance so a concurrent writer (e.g. an
-    # analysis completion job) cannot commit changes between this statement's snapshot and its write.
-    # Without this lock, PostgreSQL does not refresh the CTE's independent read of `samples` when
-    # resolving a concurrent-update conflict, allowing a stale permission decision to be applied.
-    sample.with_lock do
-      original_metadata = sample.metadata.dup
-      persisted_keys = persist_cte_atomic_metadata(sample, payload, force_update)
-    end
-
-    persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
-  end
-
-  # Single correlated UPDATE (no separate relation scan of `samples`, so no explicit row lock is
-  # required - see persist_classified_atomic_metadata). Unlike cte_atomic, it merges metadata and
-  # provenance in one combined scan over the payload and derives persisted_keys from RETURNING
-  # instead of a second round-trip, avoiding both the extra lock acquisition cte_atomic needs and
-  # the follow-up lookup query atomic needs, while reusing the same proven classification logic.
-  def perform_classified_atomic_metadata_update(sample, metadata, force_update)
-    metadata = normalized_metadata(sample, metadata)
-    return empty_metadata_changes if metadata.empty?
-
-    original_metadata = sample.metadata.dup
-    payload = atomic_metadata_payload(metadata)
-    persisted_keys = persist_classified_atomic_metadata(sample, payload, force_update)
+    persisted_keys = persist_atomic_metadata(sample, payload, force_update)
 
     persisted_metadata_changes(sample, original_metadata, metadata, persisted_keys, force_update)
   end
@@ -111,30 +78,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
 
   def persist_atomic_metadata(sample, payload, force_update)
     timestamp = Time.current
-    filtered_payload = filtered_metadata_payload(sample, payload, force_update)
-    sample.class.where(id: sample.id, project_id: metadata_update_project_id(sample)).update_all( # rubocop:disable Rails/SkipsModelValidations
-      metadata: merge_jsonb(sample.class.arel_table[:metadata], filtered_payload),
-      metadata_provenance: merge_jsonb(sample.class.arel_table[:metadata_provenance],
-                                       filtered_provenance_payload(payload, filtered_payload, timestamp)),
-      updated_at: timestamp
-    )
-    sample.reload
-    persisted_metadata_keys(sample, timestamp)
-  end
-
-  def persist_cte_atomic_metadata(sample, payload, force_update)
-    timestamp = Time.current
-    result = sample.class.connection.select_all(cte_atomic_update_sql(sample, payload, timestamp, force_update))
-    return [] if result.empty?
-
-    sample.metadata = JSON.parse(result.first['metadata'])
-    sample.metadata_provenance = JSON.parse(result.first['metadata_provenance'])
-    JSON.parse(result.first['changed_keys'])
-  end
-
-  def persist_classified_atomic_metadata(sample, payload, force_update)
-    timestamp = Time.current
-    sql = classified_atomic_update_sql(sample, payload, timestamp, force_update)
+    sql = atomic_update_sql(sample, payload, timestamp, force_update)
     result = sample.class.connection.select_all(sql)
     return [] if result.empty?
 
@@ -199,150 +143,24 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     @analysis_id || current_user.id
   end
 
-  def persisted_metadata_keys(sample, timestamp)
-    provenance = Arel::Table.new(:provenance)
-    timestamp_path = Arel::Nodes.build_quoted('{updated_at}')
-    updated_at = Arel::Nodes::InfixOperation.new('#>>', provenance[:value], timestamp_path)
-
-    sample.class.where(id: sample.id, project_id: metadata_update_project_id(sample))
-          .joins('CROSS JOIN LATERAL jsonb_each(samples.metadata_provenance) AS provenance(key, value)')
-          .where(updated_at.eq(timestamp.as_json))
-          .pluck(Arel.sql('provenance.key'))
-  end
-
-  def merge_jsonb(column, payload)
-    Arel::Nodes::NamedFunction.new('jsonb_strip_nulls', [Arel::Nodes::InfixOperation.new('||', column, payload)])
-  end
-
-  def filtered_metadata_payload(sample, payload, force_update) # rubocop:disable Metrics/AbcSize
-    metadata = sample.class.arel_table[:metadata]
-    payload_entry = Arel::Table.new(:payload_entry)
-    existing_value = Arel::Nodes::InfixOperation.new('->', metadata, payload_entry[:key])
-    values_differ = Arel::Nodes::InfixOperation.new('IS DISTINCT FROM', existing_value, payload_entry[:value])
-    missing_null_value = payload_entry[:value].eq(Arel.sql("'null'::jsonb")).and(existing_value.eq(nil))
-    permitted_update = permitted_metadata_update_sql(sample, payload_entry)
-    jsonb_entries = Arel::Nodes::NamedFunction.new('jsonb_each', [jsonb_payload(payload)])
-    jsonb_object = Arel::Nodes::NamedFunction.new('jsonb_object_agg', [payload_entry[:key], payload_entry[:value]])
-    aggregate = Arel::Nodes::NamedFunction.new('coalesce', [jsonb_object, Arel.sql("'{}'::jsonb")])
-
-    change_condition = force_update ? 'TRUE' : values_differ.to_sql
-    jsonb_aggregate(jsonb_entries, aggregate,
-                    "#{change_condition} AND NOT (#{missing_null_value.to_sql}) AND #{permitted_update}")
-  end
-
-  def permitted_metadata_update_sql(sample, payload_entry)
-    return 'TRUE' unless @analysis_id.nil?
-
-    provenance = sample.class.arel_table[:metadata_provenance]
-    source = Arel::Nodes::InfixOperation.new(
-      '->>',
-      Arel::Nodes::InfixOperation.new('->', provenance, payload_entry[:key]),
-      Arel::Nodes.build_quoted('source')
-    )
-    clearing_value = payload_entry[:value].eq(Arel.sql("'null'::jsonb"))
-    user_writable = Arel::Nodes::InfixOperation.new(
-      'IS DISTINCT FROM',
-      source,
-      Arel::Nodes.build_quoted('analysis')
-    )
-
-    clearing_value.or(user_writable).to_sql
-  end
-
-  def filtered_provenance_payload(payload, filtered_payload, timestamp)
-    provenance_entry = Arel::Table.new(:provenance_entry)
-    jsonb_entries = Arel::Nodes::NamedFunction.new('jsonb_each',
-                                                   [jsonb_payload(provenance_payload(payload, timestamp))])
-    jsonb_object = Arel::Nodes::NamedFunction.new('jsonb_object_agg',
-                                                  [provenance_entry[:key], provenance_entry[:value]])
-    includes_key = Arel::Nodes::InfixOperation.new('?', filtered_payload, provenance_entry[:key])
-    aggregate = Arel::Nodes::NamedFunction.new('coalesce', [jsonb_object, Arel.sql("'{}'::jsonb")])
-
-    jsonb_aggregate(jsonb_entries, aggregate, includes_key.to_sql, 'provenance_entry')
-  end
-
-  def jsonb_payload(payload)
-    Arel::Nodes::InfixOperation.new('::', Arel::Nodes.build_quoted(payload.to_json), Arel.sql('jsonb'))
-  end
-
-  def jsonb_aggregate(entries, aggregate, condition, alias_name = 'payload_entry')
-    Arel::Nodes::Grouping.new(
-      Arel.sql("SELECT #{aggregate.to_sql} FROM #{entries.to_sql} AS #{alias_name}(key, value) WHERE #{condition}")
-    )
-  end
-
   def metadata_update_project_id(sample)
     @project&.id || sample.project_id
   end
 
-  def cte_atomic_update_sql(sample, payload, timestamp, force_update) # rubocop:disable Metrics/MethodLength
-    connection = sample.class.connection
-    samples = sample.class.quoted_table_name
-    payload_jsonb = connection.quote(payload.to_json)
-    provenance_jsonb = connection.quote(provenance_payload(payload, timestamp).to_json)
-    sample_id = connection.quote(sample.id)
-    project_id = connection.quote(metadata_update_project_id(sample))
-    updated_at = connection.quote(timestamp)
-    permitted_update = cte_permitted_metadata_update_sql(samples)
-    change_condition = force_update ? 'TRUE' : "#{samples}.metadata -> payload.key IS DISTINCT FROM payload.value"
-
-    <<~SQL.squish
-      WITH payload AS (
-        SELECT key, value FROM jsonb_each(#{payload_jsonb}::jsonb)
-      ),
-      changed AS (
-        SELECT payload.key, payload.value
-        FROM payload
-        CROSS JOIN #{samples}
-        WHERE #{samples}.id = #{sample_id}
-          AND #{samples}.project_id = #{project_id}
-          AND #{change_condition}
-          AND NOT (payload.value = 'null'::jsonb AND #{samples}.metadata -> payload.key IS NULL)
-          AND #{permitted_update}
-      ),
-      updates AS (
-        SELECT
-          COALESCE(jsonb_object_agg(key, value), '{}'::jsonb) AS metadata,
-          COALESCE(jsonb_object_agg(key, #{provenance_jsonb}::jsonb -> key), '{}'::jsonb) AS metadata_provenance
-        FROM changed
-      )
-      UPDATE #{samples}
-      SET
-        metadata = jsonb_strip_nulls(#{samples}.metadata || updates.metadata),
-        metadata_provenance = jsonb_strip_nulls(#{samples}.metadata_provenance || updates.metadata_provenance),
-        updated_at = #{updated_at}
-      FROM updates
-      WHERE #{samples}.id = #{sample_id}
-        AND #{samples}.project_id = #{project_id}
-        AND EXISTS (SELECT 1 FROM changed)
-      RETURNING #{samples}.metadata, #{samples}.metadata_provenance,
-                COALESCE((SELECT jsonb_agg(key) FROM changed), '[]'::jsonb) AS changed_keys
-    SQL
-  end
-
-  def cte_permitted_metadata_update_sql(samples)
-    return 'TRUE' unless @analysis_id.nil?
-
-    <<~SQL.squish
-      (
-        payload.value = 'null'::jsonb
-        OR #{samples}.metadata_provenance -> payload.key ->> 'source' IS DISTINCT FROM 'analysis'
-      )
-    SQL
-  end
-
-  # Single correlated UPDATE: merges metadata and provenance in one combined pass over the
-  # payload (unlike atomic, which scans the payload twice - once per column), and derives
-  # persisted_keys from RETURNING's post-write metadata_provenance instead of a second
-  # round-trip query (unlike atomic's persisted_metadata_keys). No relation (`samples`) is
-  # scanned via a separate JOIN/CTE, so no explicit row lock is required for the "is this
-  # writable" decision to be safe against concurrent writers, unlike cte_atomic_update_sql.
-  # Classification (added/updated/deleted/...) is intentionally left to the already-tested
-  # persisted_metadata_changes/persisted_metadata_change_status, not computed here: RETURNING
-  # only ever reflects the row's POST-write state, so a classification subquery referencing
-  # samples.metadata within RETURNING cannot distinguish "already matched" from "just matched
-  # because this statement wrote it" - it would misreport added/updated as unchanged.
-  def classified_atomic_update_sql(sample, payload, timestamp, force_update) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # Single correlated UPDATE ... RETURNING statement: merges metadata and provenance in one
+  # combined pass over the payload, and derives persisted_keys from RETURNING's post-write
+  # metadata_provenance instead of a second round-trip query. No relation (`samples`) is scanned
+  # via a separate JOIN/CTE, so no explicit row lock is required for the "is this writable"
+  # decision to be safe against concurrent writers: the writability/change checks are scalar
+  # subqueries correlated directly to the row being updated, which PostgreSQL's EvalPlanQual
+  # conflict resolution refreshes against the latest committed tuple when blocked by a
+  # concurrent writer. Classification (added/updated/deleted/...) is intentionally left to the
+  # already-tested persisted_metadata_changes/persisted_metadata_change_status, not computed
+  # here: RETURNING only ever reflects the row's POST-write state, so a classification subquery
+  # referencing samples.metadata within RETURNING cannot distinguish "already matched" from
+  # "just matched because this statement wrote it" - it would misreport added/updated as
+  # unchanged.
+  def atomic_update_sql(sample, payload, timestamp, force_update) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     connection = sample.class.connection
     samples = sample.class.quoted_table_name
     payload_jsonb = connection.quote(payload.to_json)
@@ -351,7 +169,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     project_id = connection.quote(metadata_update_project_id(sample))
     updated_at = connection.quote(timestamp)
     updated_at_json = connection.quote(timestamp.as_json)
-    writable = classified_atomic_writable_sql(samples, force_update)
+    writable = atomic_writable_sql(samples, force_update)
     entries = "jsonb_each(#{payload_jsonb}::jsonb) AS payload_entry(key, value)"
 
     <<~SQL.squish
@@ -380,8 +198,8 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     SQL
   end
 
-  def classified_atomic_writable_sql(samples, force_update)
-    permitted = classified_atomic_permitted_sql(samples)
+  def atomic_writable_sql(samples, force_update)
+    permitted = atomic_permitted_sql(samples)
     change_condition = if force_update
                          'TRUE'
                        else
@@ -395,7 +213,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     SQL
   end
 
-  def classified_atomic_permitted_sql(samples)
+  def atomic_permitted_sql(samples)
     return 'TRUE' unless @analysis_id.nil?
 
     <<~SQL.squish

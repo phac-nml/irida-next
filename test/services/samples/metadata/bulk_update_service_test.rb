@@ -78,30 +78,28 @@ module Samples
         assert_equal ['metadatafield2'], result[@sample33.puid][:deleted]
       end
 
-      test 'supports atomic metadata update implementations' do
+      test 'supports the atomic metadata update implementation' do
         freeze_time
 
-        %w[atomic cte_atomic classified_atomic].each do |implementation|
-          Sample.transaction(requires_new: true) do
-            payload = { @sample33.id => { 'metadatafield3' => "#{implementation} value" } }
+        Sample.transaction(requires_new: true) do
+          payload = { @sample33.id => { 'metadatafield3' => 'atomic value' } }
 
-            result = Samples::Metadata::BulkUpdateService.new(
-              @project30.namespace,
-              payload,
-              ['metadatafield3'],
-              @user,
-              { 'metadata_update_implementation' => implementation }
-            ).execute
+          result = Samples::Metadata::BulkUpdateService.new(
+            @project30.namespace,
+            payload,
+            ['metadatafield3'],
+            @user,
+            { 'metadata_update_implementation' => 'atomic' }
+          ).execute
 
-            assert_equal ['metadatafield3'], result[@sample33.id][:added]
-            assert_equal "#{implementation} value", @sample33.reload.metadata['metadatafield3']
-            assert_equal(
-              { 'source' => 'user', 'id' => @user.id, 'updated_at' => Time.current.as_json },
-              @sample33.metadata_provenance['metadatafield3']
-            )
+          assert_equal ['metadatafield3'], result[@sample33.id][:added]
+          assert_equal 'atomic value', @sample33.reload.metadata['metadatafield3']
+          assert_equal(
+            { 'source' => 'user', 'id' => @user.id, 'updated_at' => Time.current.as_json },
+            @sample33.metadata_provenance['metadatafield3']
+          )
 
-            raise ActiveRecord::Rollback
-          end
+          raise ActiveRecord::Rollback
         end
       end
 
@@ -132,7 +130,7 @@ module Samples
           added: ['created_field'], updated: ['updated_field'], deleted: ['deleted_field'],
           not_updated: ['analysis_updated_field'], unchanged: ['unchanged_field'], not_found: []
         }
-        %w[original atomic cte_atomic classified_atomic].each do |implementation|
+        %w[original atomic].each do |implementation|
           Sample.transaction(requires_new: true) do
             sample = Sample.create!(
               project: @project30,

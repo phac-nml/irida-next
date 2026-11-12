@@ -7,9 +7,7 @@ require 'benchmark/ips'
 class AtomicSampleMetadataUpdateBenchmark
   IMPLEMENTATIONS = {
     'existing update service' => 'original',
-    'atomic update service' => 'atomic',
-    'CTE atomic update service' => 'cte_atomic',
-    'classified atomic update service' => 'classified_atomic'
+    'atomic update service' => 'atomic'
   }.freeze
 
   def initialize(sample, user, analysis_id, metadata_counts)

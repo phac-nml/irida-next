@@ -45,29 +45,6 @@
         89
       ],
       "note": ""
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "2115304039faccead636d0863e01bfa5865ee4a2936457d58217bd46f8751f37",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/services/base_sample_metadata_update_service.rb",
-      "line": 270,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"SELECT #{aggregate.to_sql} FROM #{entries.to_sql} AS #{alias_name}(key, value) WHERE #{condition}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "BaseSampleMetadataUpdateService",
-        "method": "jsonb_aggregate"
-      },
-      "user_input": "alias_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "False positive: alias_name is always a hardcoded literal ('payload_entry' or 'provenance_entry') passed by the two call sites, never derived from user input. entries/aggregate/condition are Arel-built fragments whose values are quoted via Arel::Nodes.build_quoted/connection quoting; no raw identifier or value interpolation of untrusted data occurs."
     }
   ],
   "brakeman_version": "7.1.1"

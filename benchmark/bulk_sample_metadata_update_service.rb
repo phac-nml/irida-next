@@ -9,9 +9,7 @@ class BulkSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
 
   IMPLEMENTATIONS = {
     'existing bulk update service' => 'original',
-    'atomic bulk update service' => 'atomic',
-    'CTE atomic bulk update service' => 'cte_atomic',
-    'classified atomic bulk update service' => 'classified_atomic'
+    'atomic bulk update service' => 'atomic'
   }.freeze
 
   def initialize(sample, user, analysis_id, metadata_counts)

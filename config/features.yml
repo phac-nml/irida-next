@@ -50,8 +50,7 @@ features:
       en: "Advanced Search Autocomplete"
       fr: "Saisie semi-automatique de la recherche avancée"
   atomic_metadata_updates:
-    description: "Force the classified_atomic implementation for all sample metadata\
-      \ updates."
+    description: "Force the atomic implementation for all sample metadata updates."
     enable_in_development: true
   attachments_advanced_search:
     admin_manageable: true

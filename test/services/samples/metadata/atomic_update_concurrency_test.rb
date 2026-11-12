@@ -4,17 +4,20 @@ require 'test_helper'
 
 module Samples
   module Metadata
-    # Regression test for a race condition where a concurrent writer (e.g. an analysis completion
-    # job) could have its committed, analysis-owned metadata silently overwritten by a user update
-    # that read stale data before the row lock was acquired. See
-    # BaseSampleMetadataUpdateService#perform_cte_atomic_metadata_update.
+    # Regression/validation test proving the atomic implementation is safe against races where a
+    # concurrent writer commits an analysis-owned value for a field while this update is in flight,
+    # even though it deliberately does NOT acquire an explicit row lock. Its "is this writable"
+    # decision is made via scalar subqueries correlated directly to the single row being updated (no
+    # separate join/CTE scan of `samples`): PostgreSQL's EvalPlanQual conflict resolution substitutes
+    # the latest committed tuple for this row throughout the whole statement, so a blocked writer
+    # sees fresh data once it unblocks. See BaseSampleMetadataUpdateService#atomic_update_sql.
     #
     # This requires genuine concurrent PostgreSQL connections with real, committed row locks.
     # Transactional test fixtures wrap each test in an open, uncommitted transaction on the test's
     # own connection; a second connection's `SELECT ... FOR UPDATE` on the same row would then block
     # forever waiting for a lock that is never released within the test, deadlocking the test.
     # Transactional tests are disabled here and the sample is cleaned up manually.
-    class CteAtomicUpdateConcurrencyTest < ActiveSupport::TestCase
+    class AtomicUpdateConcurrencyTest < ActiveSupport::TestCase
       self.use_transactional_tests = false
 
       def setup
@@ -22,7 +25,7 @@ module Samples
         @project = projects(:project31)
         @sample = Sample.create!(
           project: @project,
-          name: "cte-atomic-concurrency-#{SecureRandom.hex(4)}",
+          name: "atomic-concurrency-#{SecureRandom.hex(4)}",
           metadata: { 'field1' => 'initial' },
           metadata_provenance: { 'field1' => { source: 'user', id: @user.id, updated_at: Time.current } }
         )
@@ -58,7 +61,8 @@ module Samples
           @project,
           @sample,
           @user,
-          { 'metadata' => { 'field1' => 'user_attempted_value' }, 'metadata_update_implementation' => 'cte_atomic' }
+          { 'metadata' => { 'field1' => 'user_attempted_value' },
+            'metadata_update_implementation' => 'atomic' }
         ).execute
 
         writer_thread.join

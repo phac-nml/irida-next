@@ -18,12 +18,12 @@ module Samples
         Flipper.enable(:atomic_metadata_updates)
       end
 
-      test 'uses classified_atomic by default when the flag is enabled and no param is given' do
+      test 'uses atomic by default when the flag is enabled and no param is given' do
         Flipper.enable(:atomic_metadata_updates)
 
         service = UpdateService.new(@project, @sample, @user, { 'metadata' => { 'metadatafield1' => 'value1' } })
 
-        assert_equal 'classified_atomic', service.send(:metadata_update_implementation)
+        assert_equal 'atomic', service.send(:metadata_update_implementation)
       end
 
       test 'uses original by default when the flag is disabled' do
@@ -35,7 +35,7 @@ module Samples
       end
 
       test 'an explicit implementation param always wins, regardless of the flag' do
-        %w[original atomic cte_atomic classified_atomic].each do |implementation|
+        %w[original atomic].each do |implementation|
           [true, false].each do |flag_enabled|
             flag_enabled ? Flipper.enable(:atomic_metadata_updates) : Flipper.disable(:atomic_metadata_updates)
 

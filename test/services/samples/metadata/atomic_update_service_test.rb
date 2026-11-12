@@ -31,7 +31,8 @@ module Samples
           @atomic_sample.project,
           @atomic_sample,
           @user,
-          { 'metadata' => metadata, 'analysis_id' => @analysis_id, 'metadata_update_implementation' => 'atomic' }
+          { 'metadata' => metadata, 'analysis_id' => @analysis_id,
+            'metadata_update_implementation' => 'atomic' }
         ).execute
 
         assert_equal legacy_changes, atomic_changes
