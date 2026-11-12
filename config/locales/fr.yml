@@ -855,7 +855,7 @@ fr:
       error_notification: 'Veuillez examiner les problèmes suivants :'
       error_summary:
         title:
-          one: Il y a %{count} champ présentant un problème qui empêche la soumission
+          one: Il y a 1 champ présentant un problème qui empêche la soumission
           other: Il y a %{count} champs présentant des problèmes qui empêchent la soumission
     help: Aide
     name: IRIDA Next
@@ -1964,7 +1964,7 @@ fr:
         partial_error: Les échantillons %{not_deleted} n’ont pas pu être supprimés
         partial_success: Les échantillons %{deleted} ont été supprimés avec succès
         success:
-          one: Supprimé avec succès %{count} échantillon
+          one: Supprimé avec succès 1 échantillon
           other: Supprimé avec succès %{count} échantillons
       destroy_multiple_confirmation_dialog:
         description:

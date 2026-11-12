@@ -15,7 +15,7 @@ fr:
           title: Uploaded Metadata
         group_sample_transfer:
           description:
-            one: "%{user} a transféré %{count} échantillon entre les projets"
+            one: "%{user} a transféré un échantillon entre les projets"
             other: "%{user} a transféré les échantillons %{count} entre les projets"
           sample_name: Nom de l’échantillon
           title: Échantillons transférés
@@ -41,14 +41,14 @@ fr:
           copied_to: Copiés à
           group:
             target_project_description:
-              one: "%{user} a copié %{count} échantillon dans un autre projet"
+              one: "%{user} a copié un échantillon dans un autre projet"
               other: "%{user} a copié les échantillons %{count} dans d’autres projets"
           project:
             source_project_description:
-              one: "%{user} a copié %{count} échantillon du projet %{source_project_puid}"
+              one: "%{user} a copié un échantillon du projet %{source_project_puid}"
               other: "%{user} a copié les échantillons %{count} du projet %{source_project_puid}"
             target_project_description:
-              one: "%{user} a copié %{count} échantillon au projet %{target_project_puid}"
+              one: "%{user} a copié un échantillon au projet %{target_project_puid}"
               other: "%{user} a copié les échantillons %{count} au projet %{target_project_puid}"
           project_from: Projet de
           project_to: Projet à
@@ -56,20 +56,20 @@ fr:
         sample_destroy:
           description:
             group:
-              one: "%{user} a retiré %{count} échantillon du groupe"
+              one: "%{user} a retiré un échantillon du groupe"
               other: "%{user} a retiré les échantillons %{count} du groupe"
             project:
-              one: "%{user} a retiré %{count} échantillon du projet"
+              one: "%{user} a retiré un échantillon du projet"
               other: "%{user} a retiré les échantillons %{count} du projet"
           project: Projet
           sample: Échantillon
           title: Échantillons supprimés
         sample_transfer:
           source_project_description:
-            one: "%{user} a transféré %{count} échantillon du projet %{source_project_puid}"
+            one: "%{user} a transféré un échantillon du projet %{source_project_puid}"
             other: "%{user} a transféré les échantillons %{count} du projet %{source_project_puid}"
           target_project_description:
-            one: "%{user} a transféré %{count} échantillon au projet %{target_project_puid}"
+            one: "%{user} a transféré un échantillon au projet %{target_project_puid}"
             other: "%{user} a transféré les échantillons %{count} au projet %{target_project_puid}"
           title: Échantillons transférés
         workflow_execution_destroy:
@@ -317,14 +317,14 @@ fr:
             one: Afficher %{count} projet pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
             other: Afficher %{count} projets pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip:
-            one: "%{count} projet dans %{namespace_name}"
+            one: 1 projet dans %{namespace_name}
             other: "%{count} projets dans %{namespace_name}"
         samples:
           aria-label:
             one: Afficher %{count} échantillon pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
             other: Afficher %{count} échantillons pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip:
-            one: "%{count} échantillon dans %{namespace_name}"
+            one: 1 échantillon dans %{namespace_name}
             other: "%{count} échantillons dans %{namespace_name}"
         shared_namespaces:
           public: Publique
@@ -333,7 +333,7 @@ fr:
             one: Afficher %{count} sous-groupe pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
             other: Afficher %{count} sous-groupes pour %{namespace_type} avec l’identifiant unique persistant %{namespace_puid}
           tooltip:
-            one: "%{count} sous-groupe dans %{namespace_name}"
+            one: 1 sous-groupe dans %{namespace_name}
             other: "%{count} sous-groupes dans %{namespace_name}"
     nextflow:
       email_notification: Vous recevez un avis par courriel lorsque votre analyse est terminée?
@@ -369,11 +369,11 @@ fr:
       data_missing_error: 'Les échantillons suivants manquent de données requises : '
       loading_complete:
         alert_message_html:
-          one: "<div>(Complète) Préparation des arguments d’exécution du flux de travail pour %{count} échantillon.</div><div>La feuille d’échantillons est prête.</div>"
+          one: "<div>(Complète) Préparation des arguments d’exécution du flux de travail pour 1 échantillon.</div><div>La feuille d’échantillons est prête.</div>"
           other: "<div>(Complète) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps.</div><div>La feuille d’échantillons est prête.</div>"
         announcement: La feuille d’échantillons est prête.
       loading_samplesheet:
-        one: "(En cours) Préparation des arguments d’exécution du flux de travail pour %{count} échantillon."
+        one: "(En cours) Préparation des arguments d’exécution du flux de travail pour 1 échantillon."
         other: "(En cours) La préparation des arguments d’exécution du flux de travail pour les échantillons %{count} peut prendre un certain temps."
       name:
         error: Nom requis. Veuillez entrer un nom pour l’exécution du flux de travail.
