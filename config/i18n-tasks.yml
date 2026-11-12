@@ -1,3 +1,4 @@
+<% require 'bundler' %>
 <% require './lib/i18n_tasks/i18n_csv_tasks' %>
 
 # i18n-tasks finds and manages missing and unused translations: https://github.com/glebm/i18n-tasks
@@ -44,6 +45,8 @@ data:
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
   external:
+    # Resolve from the bundle even when invoked without `bundle exec`.
+    - "<%= Bundler.load.specs['pathogen_view_components'].first.full_gem_path %>/config/locales/%{locale}.yml"
     ## Example (replace %#= with %=):
     # - "<%#= %x[bundle info vagrant --path].chomp %>/templates/locales/%{locale}.yml"
 
@@ -95,7 +98,8 @@ search:
   # only: ["*.rb", "*.html.slim"]
 
   ## If `strict` is `false`, guess usages such as t("categories.#{category}.title"). The default is `true`.
-  # strict: true
+  # The application builds translation keys dynamically (for example, statuses and access levels).
+  strict: false
 
   ## Allows adding ast_matchers for finding translations using the AST-scanners
   ## The available matchers are:
@@ -151,7 +155,6 @@ ignore_missing:
     - "helpers.submit.*.create"
     - "local_time"
     - "local_time.*"
-    - "pathogen.*"
 
 ## Consider these keys used:
 ignore_unused:
