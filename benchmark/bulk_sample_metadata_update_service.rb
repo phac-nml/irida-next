@@ -55,8 +55,6 @@ class BulkSampleMetadataUpdateBenchmark # rubocop:disable Metrics/ClassLength
   end
 
   def bulk_update_params(implementation)
-    return {} if implementation == 'original'
-
     { 'metadata_update_implementation' => implementation }
   end
 

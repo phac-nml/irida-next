@@ -36,7 +36,7 @@ class AtomicSampleMetadataUpdateBenchmark
   def update_with(implementation)
     with_rollback(@samples.fetch(implementation)) do |sample|
       params = { 'metadata' => benchmark_metadata, 'analysis_id' => @analysis_id, include_activity: false }
-      params['metadata_update_implementation'] = implementation unless implementation == 'original'
+      params['metadata_update_implementation'] = implementation
 
       Samples::Metadata::UpdateService.new(sample.project, sample, @user, params).execute
     end
