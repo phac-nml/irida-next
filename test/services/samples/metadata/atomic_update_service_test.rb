@@ -241,6 +241,28 @@ module Samples
         assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
       end
 
+      test 'matches the existing service when deleting a key from a stale sample instance' do
+        [@legacy_sample, @atomic_sample].each do |sample|
+          Sample.find(sample.id).update!(metadata: {}, metadata_provenance: {})
+        end
+
+        metadata = { 'metadatafield1' => '' }
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'original', include_activity: false }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic', include_activity: false }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+      end
+
       test 'does not let a user update analysis metadata but permits clearing it' do
         sample = samples(:sample34)
         sample.create_logidze_snapshot!

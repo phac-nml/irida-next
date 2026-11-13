@@ -107,7 +107,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
   end
 
   def persisted_metadata_change_status(sample, key, value, persisted_keys, existing_keys)
-    return deleted_metadata_change_status(sample, key, existing_keys) if value.blank?
+    return deleted_metadata_change_status(key, existing_keys) if value.blank?
     return :not_updated if analysis_metadata_written_by_other_source?(sample, key)
     return :unchanged unless persisted_keys.include?(key)
 
@@ -118,9 +118,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
     @analysis_id.nil? && sample.metadata_provenance.dig(key, 'source') == 'analysis'
   end
 
-  def deleted_metadata_change_status(sample, key, existing_keys)
-    return :unchanged if sample.metadata.key?(key)
-
+  def deleted_metadata_change_status(key, existing_keys)
     existing_keys.include?(key) ? :deleted : :not_found
   end
 
@@ -204,6 +202,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
         END
       WHERE #{samples}.id = #{sample_id}
         AND #{samples}.project_id = #{project_id}
+        AND EXISTS (SELECT 1 FROM #{entries} WHERE #{writable})
       RETURNING #{samples}.metadata, #{samples}.metadata_provenance,
         (
           SELECT COALESCE(jsonb_agg(kv.key), '[]'::jsonb)
