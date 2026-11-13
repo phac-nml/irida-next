@@ -18,11 +18,17 @@ class PagyAssignAndCheckTest < ActiveSupport::TestCase
     end
   end
 
-  test 'assign_and_check rejects a clean integer limit not in the dropdown options' do
+  test 'assign_and_check rejects a clean string limit not in the dropdown options' do
     # 30 converts cleanly but is not one of Viral::Pagy::LimitComponent::LIMITS
     assert_raises(Pagy::LimitError) do
-      Pagy::Offset.new(count: 100, page: 1, limit: 30)
+      Pagy::Offset.new(count: 100, page: 1, limit: '30')
     end
+  end
+
+  test 'assign_and_check accepts programmatic integer limits outside the dropdown options' do
+    pagy = Pagy::Offset.new(count: 100, page: 1, limit: 5)
+
+    assert_equal 5, pagy.limit
   end
 
   test 'assign_and_check rejects invalid limit like 50abc' do
