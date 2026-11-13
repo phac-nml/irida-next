@@ -524,5 +524,30 @@ module Groups
         assert_select 'tr', count: 0
       end
     end
+
+    test 'invalid pagy limit is handled gracefully' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      get group_attachments_path(group),
+          params: { limit: 'invalid' }
+
+      assert_redirected_to group_attachments_path(group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: group.attachments.count
+      end
+
+      get group_attachments_path(group),
+          params: { limit: '2xYz1' }
+
+      assert_redirected_to group_attachments_path(group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: group.attachments.count
+      end
+    end
   end
 end

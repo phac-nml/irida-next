@@ -362,14 +362,13 @@ module Groups
 
     test 'accessing metadata templates index on invalid page causes pagy overflow redirect at group level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
-      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      # The rescue_from handler should redirect to first page with page=1
       get group_metadata_templates_path(@group, page: 50)
 
       # Should be redirected to first page
       assert_response :redirect
-      # Check both page and limit are in the redirect URL (order may vary)
+      # Check page=1 is in the redirect URL
       assert_match(/page=1/, response.location)
-      assert_match(/limit=20/, response.location)
 
       # Follow the redirect and verify it's successful
       follow_redirect!
@@ -381,6 +380,20 @@ module Groups
       controller.stubs(:group_metadata_templates_path).returns('/groups/group-one/metadata_templates')
 
       assert_equal '/groups/group-one/metadata_templates', controller.send(:metadata_templates_path)
+    end
+
+    test 'invalid limit causes pagy option error redirect' do
+      get group_metadata_templates_path(@group, limit: 'invalid')
+
+      assert_redirected_to group_metadata_templates_path(@group, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+      assert_response :success
+
+      get group_metadata_templates_path(@group, limit: '2as')
+
+      assert_redirected_to group_metadata_templates_path(@group, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+      assert_response :success
     end
   end
 end

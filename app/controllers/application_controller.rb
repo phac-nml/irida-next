@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   include Irida::Auth
   include Pagy::Method
   include RouteHelper
+  include PagyWrapper
 
   add_flash_types :success, :info, :warning, :danger
   before_action :authenticate_user!
@@ -18,6 +19,7 @@ class ApplicationController < ActionController::Base
   helper IconHelper
   helper_method :error_message
 
+  rescue_from Pagy::OptionError, with: :redirect_to_sanitized_pagy_params
   rescue_from Pagy::RangeError, with: :redirect_to_first_page
 
   def set_current_user
@@ -80,11 +82,6 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(_resource_or_scope)
     params = { locale: I18n.locale } if I18n.locale != I18n.default_locale
     new_user_session_path(params)
-  end
-
-  # Rescues from Pagy::RangeError by redirecting to the first page
-  def redirect_to_first_page
-    redirect_to url_for(page: 1, limit: params[:limit] || 20)
   end
 
   def set_pagy_locale

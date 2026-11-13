@@ -87,6 +87,12 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test 'should render a resource not found page if activity does not exist' do
+    get activity_path(-1, dialog_type: 'samples_clone', format: :turbo_stream)
+
+    assert_response :not_found
+  end
+
   test 'render workflow executions destroy' do
     activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
 

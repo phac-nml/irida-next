@@ -528,18 +528,32 @@ module Groups
       namespace = groups(:group_one)
 
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
-      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      # The rescue_from handler should redirect to first page with page=1
       get group_bots_path(namespace, page: 50)
 
       # Should be redirected to first page
       assert_response :redirect
-      # Check both page and limit are in the redirect URL (order may vary)
+      # Check page=1 is in the redirect URL
       assert_match(/page=1/, response.location)
-      assert_match(/limit=20/, response.location)
 
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    test 'invalid pagy limit is handled gracefully at group level' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+
+      get group_bots_path(namespace),
+          params: { limit: 'invalid' }
+
+      assert_redirected_to group_bots_path(namespace, limit: Pagy::OPTIONS[:limit])
+
+      get group_bots_path(namespace),
+          params: { limit: '2x1ag' }
+
+      assert_redirected_to group_bots_path(namespace, limit: Pagy::OPTIONS[:limit])
     end
   end
 end

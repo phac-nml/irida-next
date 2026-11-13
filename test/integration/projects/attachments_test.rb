@@ -675,5 +675,31 @@ module Projects
         assert_select 'tr', count: 0
       end
     end
+
+    test 'invalid pagy limit is handled gracefully' do
+      sign_in users(:john_doe)
+      project = projects(:project1)
+      group = groups(:group_one)
+
+      get namespace_project_attachments_path(group, project),
+          params: { limit: 'invalid' }
+
+      assert_redirected_to namespace_project_attachments_path(group, project, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: project.namespace.attachments.count
+      end
+
+      get namespace_project_attachments_path(group, project),
+          params: { limit: '2xt5a' }
+
+      assert_redirected_to namespace_project_attachments_path(group, project, limit: Pagy::OPTIONS[:limit])
+      follow_redirect!
+
+      assert_select '#attachments-table-body' do
+        assert_select 'tr', count: project.namespace.attachments.count
+      end
+    end
   end
 end

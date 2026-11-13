@@ -251,18 +251,40 @@ module Groups
 
     test 'accessing workflow executions index on invalid page causes pagy overflow redirect at group level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
-      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      # The rescue_from handler should redirect to first page with page=1
       get group_workflow_executions_path(@group, page: 50)
 
       # Should be redirected to first page
       assert_response :redirect
-      # Check both page and limit are in the redirect URL (order may vary)
+      # Check page=1 is in the redirect URL
       assert_match(/page=1/, response.location)
-      assert_match(/limit=20/, response.location)
 
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    test 'invalid pagy limit is handled gracefully at group level' do
+      sign_in users(:john_doe)
+      get group_workflow_executions_path(@group),
+          params: { limit: 'invalid' }
+
+      assert_redirected_to group_workflow_executions_path(@group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
+      assert_select '#workflow-executions-table table tbody tr',
+                    count: [Pagy::OPTIONS[:limit],
+                            @group.workflow_executions.where(shared_with_namespace: true).count].min
+
+      get group_workflow_executions_path(@group),
+          params: { limit: '2xYz1' }
+
+      assert_redirected_to group_workflow_executions_path(@group, limit: Pagy::OPTIONS[:limit])
+
+      follow_redirect!
+      assert_select '#workflow-executions-table table tbody tr',
+                    count: [Pagy::OPTIONS[:limit],
+                            @group.workflow_executions.where(shared_with_namespace: true).count].min
     end
   end
 end

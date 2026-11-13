@@ -49,7 +49,7 @@ module BotPersonalAccessTokenActions # rubocop:disable Metrics/ModuleLength
   def create # rubocop:disable Metrics/MethodLength
     @personal_access_token = PersonalAccessTokens::CreateService.new(current_user, bot_personal_access_token_params,
                                                                      @namespace, @bot_account.user).execute
-    @pagy, @bot_accounts = pagy(@bot_accounts, raise_range_error: true)
+    @pagy, @bot_accounts = pagy_wrapper(@bot_accounts, raise_range_error: true)
 
     respond_to do |format|
       format.turbo_stream do
