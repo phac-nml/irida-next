@@ -214,6 +214,33 @@ module Samples
         assert_not @atomic_sample.metadata_provenance.key?('metadatafield1')
       end
 
+      test 'matches the existing service when deleting a metadata key that does not exist' do
+        metadata = { 'metadatafield3' => '' }
+        Project.any_instance.expects(:broadcast_refresh_later_to_samples_table).never
+        Namespaces::ProjectNamespace.any_instance.expects(:update_metadata_summary_by_update_service).never
+
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'original', include_activity: false }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic', include_activity: false }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+        assert_equal ['metadatafield3'], legacy_changes[:not_found]
+
+        @legacy_sample.reload
+        @atomic_sample.reload
+        assert_equal @legacy_sample.metadata, @atomic_sample.metadata
+        assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
+      end
+
       test 'does not let a user update analysis metadata but permits clearing it' do
         sample = samples(:sample34)
         sample.create_logidze_snapshot!
