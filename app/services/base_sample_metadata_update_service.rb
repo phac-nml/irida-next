@@ -72,16 +72,34 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
   def persist_atomic_metadata(sample, payload, force_update)
     timestamp = Time.current
     sql = atomic_update_sql(sample, payload, timestamp, force_update)
-    result = sample.class.connection.select_all(sql)
-    return { existing_metadata: {}, existing_metadata_provenance: {} } if result.empty?
+    row = sample.class.connection.select_all(sql).first
+    # An empty result means the row no longer matches (e.g. it was deleted after the sample was
+    # loaded). Mirror the original implementation's with_lock/reload behavior by raising
+    # RecordNotFound instead of classifying changes against the stale in-memory sample.
+    raise_atomic_sample_not_found(sample) if row.nil?
 
-    row = result.first
-    sample.metadata = JSON.parse(row['metadata'])
-    sample.metadata_provenance = JSON.parse(row['metadata_provenance'])
+    sync_sample_to_persisted_row(sample, row)
     {
       existing_metadata: JSON.parse(row.fetch('existing_metadata')),
       existing_metadata_provenance: JSON.parse(row.fetch('existing_metadata_provenance'))
     }
+  end
+
+  def raise_atomic_sample_not_found(sample)
+    raise ActiveRecord::RecordNotFound.new(
+      "Couldn't find #{sample.class.name} with '#{sample.class.primary_key}'=#{sample.id}",
+      sample.class.name, sample.class.primary_key, sample.id
+    )
+  end
+
+  def sync_sample_to_persisted_row(sample, row)
+    sample.metadata = JSON.parse(row['metadata'])
+    sample.metadata_provenance = JSON.parse(row['metadata_provenance'])
+    sample.updated_at = row['updated_at']
+    # The raw SQL UPDATE already persisted these columns, so sync the in-memory record to the
+    # returned row and clear its dirty state: the attributes match the database, and leaving them
+    # marked as changed would otherwise make a later sample.save issue a redundant UPDATE.
+    sample.clear_changes_information
   end
 
   def persisted_metadata_changes(sample, metadata, persisted_metadata, force_update)
@@ -195,7 +213,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
         END
       FROM locked_sample
       WHERE #{samples}.id = locked_sample.id
-      RETURNING #{samples}.metadata, #{samples}.metadata_provenance,
+      RETURNING #{samples}.metadata, #{samples}.metadata_provenance, #{samples}.updated_at,
         locked_sample.existing_metadata,
         locked_sample.existing_metadata_provenance
     SQL

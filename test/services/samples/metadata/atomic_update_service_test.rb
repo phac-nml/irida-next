@@ -78,6 +78,83 @@ module Samples
         assert_equal atomic_updated_at, @atomic_sample.updated_at
       end
 
+      test 'leaves the sample clean and synced to the persisted row after an atomic update' do
+        original_updated_at = @atomic_sample.updated_at
+
+        UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => { 'metadatafield3' => 'value3' }, 'metadata_update_implementation' => 'atomic',
+            include_activity: false }
+        ).execute
+
+        persisted_sample = Sample.find(@atomic_sample.id)
+        assert_not @atomic_sample.changed?
+        assert_equal persisted_sample.metadata, @atomic_sample.metadata
+        assert_equal persisted_sample.metadata_provenance, @atomic_sample.metadata_provenance
+        assert_equal persisted_sample.updated_at, @atomic_sample.updated_at
+        assert_not_equal original_updated_at, @atomic_sample.updated_at
+      end
+
+      test 'matches the existing service by raising RecordNotFound when the sample row no longer exists' do
+        @legacy_sample.reload
+        @atomic_sample.reload
+        Sample.where(id: [@legacy_sample.id, @atomic_sample.id]).delete_all
+
+        metadata = { 'metadatafield1' => 'newvalue', 'metadatafield3' => 'value3' }
+
+        assert_raises(ActiveRecord::RecordNotFound) do
+          UpdateService.new(
+            @legacy_sample.project,
+            @legacy_sample,
+            @user,
+            { 'metadata' => metadata, 'metadata_update_implementation' => 'original', include_activity: false }
+          ).execute
+        end
+
+        assert_raises(ActiveRecord::RecordNotFound) do
+          UpdateService.new(
+            @atomic_sample.project,
+            @atomic_sample,
+            @user,
+            { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic', include_activity: false }
+          ).execute
+        end
+      end
+
+      test 'matches the existing service when updating a soft-deleted sample' do
+        freeze_time
+        @legacy_sample.reload
+        @atomic_sample.reload
+        @legacy_sample.destroy
+        @atomic_sample.destroy
+
+        metadata = { 'metadatafield1' => 'newvalue', 'metadatafield3' => 'value3' }
+
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'original', include_activity: false }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic', include_activity: false }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+
+        legacy_reloaded = Sample.unscoped.find(@legacy_sample.id)
+        atomic_reloaded = Sample.unscoped.find(@atomic_sample.id)
+        assert_equal legacy_reloaded.metadata, atomic_reloaded.metadata
+        assert_equal legacy_reloaded.metadata_provenance, atomic_reloaded.metadata_provenance
+        # The soft-deleted row is updated in place; neither implementation clears deleted_at.
+        assert_not_nil atomic_reloaded.deleted_at
+      end
+
       test 'matches the existing service when a user updates one analysis-owned field' do
         freeze_time
         analysis_metadata = { 'metadatafield1' => 'analysis value' }
