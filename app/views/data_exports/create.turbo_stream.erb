@@ -1,6 +1,16 @@
 <% if keep_dialog_open %>
   <%= turbo_stream.update "data-export-dialog-errors" do %>
-    <%= render Viral::AlertComponent.new(type:, message:, classes: "mb-2") %>
+    <%= render Viral::AlertComponent.new(type:, message:, classes: "mb-2") if message.present? %>
+  <% end %>
+  <%= turbo_stream.update "data-export-form-error-summary" do %>
+    <%= fields :data_export, model: data_export do |form| %>
+      <%= form_error_summary(form) %>
+    <% end %>
+  <% end %>
+  <%= turbo_stream.update "data-export-name-and-email" do %>
+    <%= fields :data_export, model: data_export do |form| %>
+      <%= render partial: "data_exports/name_and_email", locals: { form: } %>
+    <% end %>
   <% end %>
 <% else %>
   <% if export_type == 'analysis' %>

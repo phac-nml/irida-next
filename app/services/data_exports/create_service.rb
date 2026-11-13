@@ -69,6 +69,10 @@ module DataExports
       @data_export.user = current_user
       @data_export.status = 'processing'
       @data_export.name = nil if params.key?('name') && params['name'].empty?
+      if Flipper.enabled?(:data_export_custom_basename, current_user) &&
+         params.key?('basename') && params['basename'].empty?
+        @data_export.basename = nil
+      end
     end
 
     def authorized_export_samples(namespace, sample_ids)

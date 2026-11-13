@@ -9,6 +9,7 @@ class DataExportTest < ActiveSupport::TestCase
     @sample1 = samples(:sample1)
     @user = users(:john_doe)
     @workflow_execution = workflow_executions(:irida_next_example_completed_with_output)
+    Flipper.enable_actor(:data_export_custom_basename, @user)
   end
 
   test 'valid sample data export' do
@@ -64,6 +65,41 @@ class DataExportTest < ActiveSupport::TestCase
     assert_difference(-> { DataExport.count } => -1) do
       @export1.destroy
     end
+  end
+
+  test 'data export basename allows blank' do
+    @export1.basename = ''
+    assert @export1.valid?
+  end
+
+  test 'data export basename allows letters, digits, dashes, and underscores' do
+    @export1.basename = 'My_Export_1-final'
+    assert @export1.valid?
+  end
+
+  test 'data export basename rejects path separators and other special characters' do
+    %w[../etc/passwd my/export my\\export my:export my*export].each do |invalid_basename|
+      @export1.basename = invalid_basename
+      assert_not @export1.valid?, "expected '#{invalid_basename}' to be invalid"
+      assert_equal I18n.t('activerecord.errors.models.data_export.attributes.basename.invalid'),
+                   @export1.errors[:basename].first
+    end
+  end
+
+  test 'data export basename rejects names longer than 100 characters' do
+    @export1.basename = 'a' * 101
+    assert_not @export1.valid?
+    assert_equal I18n.t('activerecord.errors.models.data_export.attributes.basename.too_long', count: 100),
+                 @export1.errors[:basename].first
+  end
+
+  test 'data export basename is not validated when the feature is disabled' do
+    Flipper.disable_actor(:data_export_custom_basename, @user)
+    @export1.basename = 'invalid/basename'
+
+    assert @export1.valid?
+  ensure
+    Flipper.enable_actor(:data_export_custom_basename, @user)
   end
 
   test 'data export with missing export_type' do

@@ -7,6 +7,7 @@ module DataExports
     def setup
       @data_export2 = data_exports(:data_export_two)
       @data_export6 = data_exports(:data_export_six)
+      Flipper.enable_actor(:data_export_custom_basename, @data_export2.user)
     end
 
     test 'creating export and updating data_export status' do
@@ -20,6 +21,25 @@ module DataExports
       assert_equal 'ready', @data_export2.status
       assert @data_export2.file.valid?
       assert_equal "#{@data_export2.id}.zip", @data_export2.file.filename.to_s
+    end
+
+    test 'creating export uses the custom basename as the attached filename when present' do
+      @data_export2.update!(basename: 'my_custom_export')
+
+      DataExports::CreateJob.perform_now(@data_export2)
+
+      assert_equal 'my_custom_export.zip', @data_export2.file.filename.to_s
+    end
+
+    test 'creating export ignores the custom basename when the feature is disabled' do
+      @data_export2.update!(basename: 'my_custom_export')
+      Flipper.disable_actor(:data_export_custom_basename, @data_export2.user)
+
+      DataExports::CreateJob.perform_now(@data_export2)
+
+      assert_equal "#{@data_export2.id}.zip", @data_export2.file.filename.to_s
+    ensure
+      Flipper.enable_actor(:data_export_custom_basename, @data_export2.user)
     end
 
     test 'content of sample export' do

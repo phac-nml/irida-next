@@ -27,6 +27,8 @@ import { closeDialog } from "utilities/dialog";
 
 let activeExports = 0;
 let beforeUnloadHandler = null;
+const BASENAME_MAX_LENGTH = 100;
+const BASENAME_PATTERN = /^[\w-]*$/;
 
 function bindExportBeforeUnload() {
   if (beforeUnloadHandler) return;
@@ -66,7 +68,15 @@ function stopExportBeforeUnloadGuard() {
 }
 
 export default class extends Controller {
-  static targets = ["sampleStatus", "progressTemplate"];
+  static targets = [
+    "basename",
+    "basenameError",
+    "basenameField",
+    "basenameLabel",
+    "formErrorSummary",
+    "sampleStatus",
+    "progressTemplate",
+  ];
   static values = {
     workerUrl: String,
     graphqlUrl: String,
@@ -109,6 +119,22 @@ export default class extends Controller {
       type: String,
       default: "Created %{current} of %{total} records",
     },
+    formErrorSummaryTitleOne: {
+      type: String,
+      default: "There is 1 field with problems preventing submission",
+    },
+    formErrorSummaryTitleOther: {
+      type: String,
+      default: "There are %{count} fields with problems preventing submission",
+    },
+    basenameInvalidMessage: {
+      type: String,
+      default: "File basename is invalid",
+    },
+    basenameTooLongMessage: {
+      type: String,
+      default: "File basename is too long",
+    },
   };
 
   connect() {
@@ -130,10 +156,133 @@ export default class extends Controller {
   }
 
   submit(event) {
+    if (!this.validateFormInputs(event)) {
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
     closeDialog(this.element, this.application);
     this.startExport();
+  }
+
+  validateFormInputs(event) {
+    const basename = this.hasBasenameTarget ? this.basenameTarget.value : "";
+    const errorMessages = [];
+    if (basename.length > BASENAME_MAX_LENGTH) {
+      errorMessages.push(this.basenameTooLongMessageValue);
+    }
+    if (!BASENAME_PATTERN.test(basename)) {
+      errorMessages.push(this.basenameInvalidMessageValue);
+    }
+
+    if (this.hasBasenameTarget && errorMessages.length > 0) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showBasenameErrorState(errorMessages);
+      this.showFormErrorSummary(errorMessages);
+      this.basenameTarget.reportValidity();
+      return false;
+    }
+
+    this.clearBasenameErrorState();
+    this.hideFormErrorSummary();
+    return true;
+  }
+
+  showBasenameErrorState(errorMessages) {
+    if (this.hasBasenameFieldTarget) {
+      this.basenameFieldTarget.classList.add("invalid");
+    }
+    if (this.hasBasenameTarget) {
+      this.basenameTarget.setAttribute("aria-invalid", "true");
+      this.wrapWithFieldError(this.basenameTarget);
+    }
+    if (this.hasBasenameLabelTarget) {
+      this.wrapWithFieldError(this.basenameLabelTarget);
+    }
+    if (this.hasBasenameErrorTarget) {
+      this.basenameErrorTarget.classList.remove("hidden");
+      this.setBasenameErrorMessage(errorMessages.join("\n"));
+    }
+  }
+
+  clearBasenameErrorState() {
+    if (this.hasBasenameFieldTarget) {
+      this.basenameFieldTarget.classList.remove("invalid");
+    }
+    if (this.hasBasenameTarget) {
+      this.basenameTarget.removeAttribute("aria-invalid");
+      this.unwrapFromFieldError(this.basenameTarget);
+    }
+    if (this.hasBasenameLabelTarget) {
+      this.unwrapFromFieldError(this.basenameLabelTarget);
+    }
+    if (this.hasBasenameErrorTarget) {
+      this.basenameErrorTarget.classList.add("hidden");
+      this.setBasenameErrorMessage("");
+    }
+  }
+
+  // Mirrors Rails' default field_error_proc, which wraps each erroring form
+  // tag (e.g. label and input) in its own `div.field_with_errors` so it
+  // picks up the same error styling as server-rendered forms.
+  wrapWithFieldError(element) {
+    if (element.parentElement?.classList.contains("field_with_errors")) {
+      return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("field_with_errors");
+    element.replaceWith(wrapper);
+    wrapper.appendChild(element);
+  }
+
+  unwrapFromFieldError(element) {
+    const wrapper = element.parentElement;
+    if (wrapper?.classList.contains("field_with_errors")) {
+      wrapper.replaceWith(element);
+    }
+  }
+
+  setBasenameErrorMessage(message) {
+    const messageElement = this.basenameErrorTarget.querySelector(".grow");
+    if (messageElement) {
+      messageElement.textContent = message;
+    } else {
+      this.basenameErrorTarget.textContent = message;
+    }
+  }
+
+  showFormErrorSummary(errorMessages) {
+    if (!this.hasFormErrorSummaryTarget) return;
+
+    const title = this.formErrorSummaryTarget.querySelector("h2");
+    if (title) {
+      title.textContent =
+        errorMessages.length === 1
+          ? this.formErrorSummaryTitleOneValue
+          : this.formErrorSummaryTitleOtherValue.replace(
+              "%{count}",
+              errorMessages.length.toString(),
+            );
+    }
+
+    this.formErrorSummaryTarget.querySelectorAll("a").forEach((link, index) => {
+      link.textContent = errorMessages[index] || "";
+      link.closest("li")?.classList.toggle("hidden", !errorMessages[index]);
+    });
+    this.formErrorSummaryTarget.classList.remove("hidden");
+    this.formErrorSummaryTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  hideFormErrorSummary() {
+    if (!this.hasFormErrorSummaryTarget) return;
+
+    this.formErrorSummaryTarget.classList.add("hidden");
   }
 
   startExport() {
@@ -150,8 +299,7 @@ export default class extends Controller {
       return;
     }
 
-    const filename = `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}.${format}`;
-    const totalCount = selectedCount;
+    const filename = `${this.getFilename()}.${format}`;
     this.clearProgressWindowDismissTimeout();
     this._operationId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     this._progressWindowOpenedAt = null;
@@ -160,13 +308,13 @@ export default class extends Controller {
     if (this.hasSampleStatusTarget) {
       this.sampleStatusTarget.textContent = t(
         this.preparingExportMessageValue,
-        { count: totalCount },
+        { count: selectedCount },
       );
     }
 
     try {
       this.showProgressWindow(
-        t(this.preparingRowsMessageValue, { count: totalCount }),
+        t(this.preparingRowsMessageValue, { count: selectedCount }),
       );
 
       startExportBeforeUnloadGuard();
@@ -180,7 +328,7 @@ export default class extends Controller {
         sample_graphql_id_prefix: sampleGraphqlIdPrefix,
         format,
         filename,
-        total_count: totalCount,
+        total_count: selectedCount,
       });
     } catch (error) {
       this.updateProgress(
@@ -279,6 +427,14 @@ export default class extends Controller {
 
   selectedSampleIds() {
     return selectedSampleIdsFromSession(this.selectionStorageKey());
+  }
+
+  getFilename() {
+    if (this.hasBasenameTarget && this.basenameTarget.value) {
+      return this.basenameTarget.value;
+    }
+
+    return `linelist-${new Date().toISOString().replace(/[:.]/g, "-")}`;
   }
 
   graphqlUrl() {

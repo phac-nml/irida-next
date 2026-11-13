@@ -35,6 +35,8 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     authorize! @namespace.project, to: :export_data? if @namespace&.project_namespace?
     authorize! @namespace, to: :export_data? if @namespace&.group_namespace?
 
+    @data_export = DataExport.new
+
     send(export_dialog_render_method)
   end
 
@@ -43,9 +45,10 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
 
     if @data_export.errors.any?
       render status: :unprocessable_content,
-             locals: { type: 'alert', message: error_message(@data_export),
+             locals: { type: 'alert', message: error_message(@data_export, exclude: [:basename]),
                        export_type: data_export_params['export_type'],
-                       keep_dialog_open: max_data_export_size_exceeded?(@data_export) }
+                       data_export: @data_export,
+                       keep_dialog_open: keep_dialog_open?(@data_export) }
     else
       flash[:success] = t('.success', name: @data_export.name || @data_export.id)
       redirect_to data_export_path(@data_export), status: :see_other
@@ -126,9 +129,12 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   end
 
   def data_export_params
-    params.expect(data_export: [:name, :export_type, :email_notification,
-                                { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
-                                                      { ids: [], metadata_fields: [], attachment_formats: [] }] }])
+    permitted_attributes = [:name, :export_type, :email_notification,
+                            { export_parameters: [:linelist_format, :namespace_id, :analysis_type,
+                                                  { ids: [], metadata_fields: [], attachment_formats: [] }] }]
+    permitted_attributes.insert(1, :basename) if Flipper.enabled?(:data_export_custom_basename, current_user)
+
+    params.expect(data_export: permitted_attributes)
   end
 
   def data_export
@@ -185,12 +191,14 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     when 'analysis'
       analysis_locals
     when 'sample'
-      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort }
+      { open: true, namespace_id: params[:namespace_id], formats: Attachment::FORMAT_REGEX.keys.sort,
+        data_export: @data_export, selected: false }
     when 'linelist'
       templates = metadata_templates_ancestral.map do |template|
         { id: template.id, name: template.name, fields: template.fields }
       end
-      { open: true, namespace_id: params[:namespace_id], namespace: @namespace, templates: templates }
+      { open: true, namespace_id: params[:namespace_id], namespace: @namespace, templates: templates,
+        data_export: @data_export, selected: false }
     else
       raise ActionController::BadRequest, "Unsupported data export type: #{params[:export_type]}"
     end
@@ -199,7 +207,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
   def analysis_locals
     local = { open: true,
               analysis_type: params['analysis_type'],
-              namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil }
+              namespace_id: %w[group project].include?(params['analysis_type']) ? params[:namespace_id] : nil,
+              data_export: @data_export,
+              selected: false }
     if params[:single_workflow]
       local[:workflow_execution] =
         WorkflowExecution.find(params.expect(:workflow_execution_id))
@@ -252,5 +262,9 @@ class DataExportsController < ApplicationController # rubocop:disable Metrics/Cl
     data_export.errors.details.fetch(:base, []).any? do |error|
       error[:error] == :max_data_export_size_exceeded
     end
+  end
+
+  def keep_dialog_open?(data_export)
+    max_data_export_size_exceeded?(data_export) || data_export.errors.include?(:basename)
   end
 end

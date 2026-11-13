@@ -1,4 +1,4 @@
-<%# locals: (namespace:, namespace_id:, open:, templates:) %>
+<%# locals: (namespace:, namespace_id:, open:, templates:, data_export:, selected:) %>
 
 <%= render Viral::DialogComponent.new(open: open, size: :large) do |dialog| %>
   <% dialog.with_header(title: t(".title")) %>
@@ -42,7 +42,7 @@
 
               <span
                 data-collapsible-target="icon"
-                class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": @selected }) %>"
+                class="<%= class_names("transition-transform duration-200 mr-2 flex-shrink-0", { "rotate-180": selected }) %>"
               >
                 <%= icon(:caret_down, size: :sm) %>
               </span>
@@ -80,6 +80,8 @@
             </div>
           </div>
         </div>
+
+        <%= turbo_frame_tag("data-export-form-error-summary") %>
 
         <%= render partial: "shared/form/required_field_legend" %>
 
@@ -122,7 +124,10 @@
           </template>
         <% end %>
 
-        <%= form_for(:data_export, url: data_exports_path, method: :post,
+        <%= form_with(model: data_export, as: :data_export,
+              url: data_exports_path,
+              method: :post,
+              html: { novalidate: true },
               data: {
                 controller: "form--json-submission",
                 "form--json-submission-selection-outlet": '#samples-table',
@@ -165,7 +170,9 @@
               </div>
             </div>
 
-            <%= render partial: "name_and_email", locals: { form: } %>
+            <%= turbo_frame_tag("data-export-name-and-email") do %>
+              <%= render partial: "data_exports/name_and_email", locals: { form: } %>
+            <% end %>
 
             <div>
               <%= form.hidden_field :export_type, value: "linelist" %>
@@ -175,7 +182,7 @@
               <% end %>
             </div>
 
-            <% unless @namespace.metadata_fields.empty? %>
+            <% unless namespace.metadata_fields.empty? %>
               <div class="hidden" data-sortable-lists--v1--two-lists-selection-target="field"></div>
               <% data = {
                 turbo_frame: "_top",
