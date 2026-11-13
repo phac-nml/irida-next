@@ -57,6 +57,9 @@ gem 'omniauth-entra-id'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
+# Verify Entra ID issued JWT bearer tokens for API authentication (on-behalf-of integrations)
+gem 'jwt'
+
 # API Integrations
 gem 'faraday', '~> 2.15'
 gem 'faraday-follow_redirects'

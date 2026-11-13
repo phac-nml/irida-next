@@ -850,6 +850,7 @@ DEPENDENCIES
   i18n-tasks (~> 1.1.2)
   jbuilder
   json (< 3.0)
+  jwt
   lefthook (~> 2.2)
   listen
   local_time (~> 3.0, >= 3.0.2)

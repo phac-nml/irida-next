@@ -213,3 +213,42 @@ réponse
 ```json
 { "data": { "currentUser": { "email": "user0@email.com" } } }
 ```
+
+## Authentification avec les jetons Entra ID {#authentication-with-entra-id-bearer-tokens}
+
+Si votre instance IRIDA Next est configurée pour utiliser [Entra ID (Azure AD)](../configuration/authentication.md) pour la connexion,
+les intégrations de confiance peuvent authentifier les requêtes de l'API GraphQL en tant qu'utilisateur Entra ID connecté, au lieu d'un
+jeton d'accès personnel/compte robot partagé. Ceci est utile pour les intégrations (telles que BDIP) qui créent des échantillons ou
+téléversent des fichiers vers IRIDA Next au nom d'utilisateurs déjà connectés au même locataire Entra.
+
+### Fonctionnement
+
+1. L'intégration obtient un jeton d'accès pour l'utilisateur connecté via le
+   [flux On-Behalf-Of](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-on-behalf-of-flow) d'Entra ID,
+   limité à l'inscription d'application de cette instance IRIDA Next (son `client_id`, ou `api_audience` si configuré).
+2. L'intégration envoie le jeton d'accès comme jeton porteur (bearer) :
+
+   ```bash
+   curl "http://localhost:3000/api/graphql" --header "Authorization: Bearer <votre jeton d'accès ici>" --header "Content-Type: application/json" --request POST --data "{\"query\": \"query {currentUser{email}}}\"}"
+   ```
+
+3. IRIDA Next vérifie la signature du jeton (par rapport aux clés de signature publiées par Entra ID), l'émetteur, l'audience,
+   l'expiration et le locataire, puis recherche l'utilisateur local correspondant aux revendications `oid`/`tid` du jeton. L'utilisateur
+   doit déjà exister dans IRIDA Next (par exemple, en s'étant déjà connecté au moins une fois via le fournisseur entra_id).
+4. IRIDA Next vérifie également les portées accordées au jeton (la revendication `scp`). Le jeton **doit** inclure la portée
+   `access_as_user`; sinon, l'authentification échoue et la requête est traitée de manière anonyme.
+5. Si le jeton est valide, la requête est authentifiée en tant que cet utilisateur, mais reste limitée par les portées `api`/`read_api`
+   présentes dans le jeton, exactement comme un jeton d'accès personnel : un jeton avec uniquement `read_api` peut effectuer des
+   requêtes mais pas des mutations, et un jeton sans aucune de ces deux portées est authentifié mais ne peut ni interroger ni modifier
+   l'API.
+
+### Exigences
+
+- `entra_id` doit être un `omniauth_provider` activé (voir [Connexion à un serveur d'authentification](../configuration/authentication.md)).
+- Les informations d'identification `entra_id` (`client_id`, `tenant_id`) doivent être configurées.
+- L'utilisateur effectuant l'action doit déjà avoir un compte IRIDA Next lié à son identité Entra ID.
+- L'inscription d'application doit exposer une portée `access_as_user` (permission déléguée), et l'intégration doit la demander
+  (ainsi que `api` et/ou `read_api`, selon le cas) lors de l'obtention du jeton d'accès via le flux On-Behalf-Of.
+
+Contrairement aux jetons d'accès personnels, les jetons d'accès Entra ID sont de courte durée (généralement ~1 heure), donc les
+intégrations utilisant cette méthode sont responsables du rafraîchissement/réémission des jetons selon les besoins.
