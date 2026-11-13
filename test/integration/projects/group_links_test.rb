@@ -474,5 +474,49 @@ module Projects
         end
       end
     end
+
+    test 'accessing project group links index on invalid page causes pagy overflow redirect' do
+      sign_in @user
+
+      assert_pagy_range_error_redirects_to_first_page(
+        namespace_project_group_links_path(@namespace.parent, @project), as: :turbo_stream
+      )
+    end
+
+    test 'accessing project group links index with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in @user
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_group_links_path(@namespace.parent, @project), '50abc', as: :turbo_stream
+      )
+    end
+
+    test 'creating a project group link on invalid page causes pagy overflow redirect' do
+      sign_in @user
+      group = groups(:subgroup_one_group_three)
+
+      assert_pagy_range_error_redirects_to_first_page(
+        namespace_project_group_links_path(@namespace.parent, @project),
+        params: { namespace_group_link: { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST } },
+        redirect_path: namespace_project_group_links_path(@namespace.parent, @project),
+        as: :turbo_stream,
+        method: :post
+      )
+    end
+
+    test 'creating a project group link with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in @user
+      group = groups(:subgroup_one_group_three)
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_group_links_path(@namespace.parent, @project), '50abc',
+        params: { namespace_group_link: { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST } },
+        redirect_path: namespace_project_group_links_path(@namespace.parent, @project),
+        as: :turbo_stream,
+        method: :post
+      )
+    end
   end
 end

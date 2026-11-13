@@ -518,5 +518,47 @@ module Groups
         end
       end
     end
+
+    test 'accessing group links index on invalid page causes pagy overflow redirect' do
+      sign_in @user
+
+      assert_pagy_range_error_redirects_to_first_page(group_group_links_path(@namespace), as: :turbo_stream)
+    end
+
+    test 'accessing group links index with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in @user
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        group_group_links_path(@namespace), '50abc', as: :turbo_stream
+      )
+    end
+
+    test 'creating a group link on invalid page causes pagy overflow redirect' do
+      sign_in @user
+      group = groups(:group_six)
+
+      assert_pagy_range_error_redirects_to_first_page(
+        group_group_links_path(@namespace),
+        params: { namespace_group_link: { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST } },
+        redirect_path: group_group_links_path(@namespace),
+        as: :turbo_stream,
+        method: :post
+      )
+    end
+
+    test 'creating a group link with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in @user
+      group = groups(:group_six)
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        group_group_links_path(@namespace), '50abc',
+        params: { namespace_group_link: { group_id: group.id, group_access_level: Member::AccessLevel::ANALYST } },
+        redirect_path: group_group_links_path(@namespace),
+        as: :turbo_stream,
+        method: :post
+      )
+    end
   end
 end

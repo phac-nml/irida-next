@@ -689,5 +689,20 @@ module Projects
       assert_select '[role="tab"]#groups-tab[aria-selected="true"]'
       assert_select '[role="tabpanel"]#groups-panel:not([hidden])'
     end
+
+    test 'accessing project members index on invalid page causes pagy overflow redirect' do
+      sign_in @user
+
+      assert_pagy_range_error_redirects_to_first_page(namespace_project_members_path(@namespace, @project))
+    end
+
+    test 'accessing project members index with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in @user
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_members_path(@namespace, @project), '50abc'
+      )
+    end
   end
 end

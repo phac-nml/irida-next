@@ -376,6 +376,11 @@ module Groups
       assert_response :success
     end
 
+    test 'accessing metadata templates index with an invalid limit redirects to the first page ' \
+         'with the default limit at group level' do
+      assert_pagy_limit_error_redirects_to_default_limit(group_metadata_templates_path(@group), '50abc')
+    end
+
     test 'groups metadata templates controller metadata_templates_path delegates to group route helper' do
       controller = Groups::MetadataTemplatesController.new
       controller.stubs(:group_metadata_templates_path).returns('/groups/group-one/metadata_templates')
