@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   helper_method :error_message
 
   rescue_from Pagy::RangeError, with: :redirect_to_first_page
+  rescue_from Pagy::LimitError, with: :handle_invalid_limit
 
   def set_current_user
     Current.user = current_user
@@ -89,6 +90,11 @@ class ApplicationController < ActionController::Base
   # Rescues from Pagy::RangeError by redirecting to the first page
   def redirect_to_first_page
     redirect_to url_for(page: 1, limit: params[:limit] || 20)
+  end
+
+  # Rescues from Pagy::LimitError by redirecting to the default limit
+  def handle_invalid_limit(_exception)
+    redirect_to url_for(page: 1, limit: 20)
   end
 
   def set_pagy_locale
