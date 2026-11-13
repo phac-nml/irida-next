@@ -351,14 +351,14 @@ GEM
     htmlentities (4.4.2)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.1.2)
+    i18n-tasks (1.2.0)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
       highline (>= 3.0.0)
       i18n
       parser (>= 3.2.2.1)
-      prism
+      prism (>= 0.28)
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.8, >= 1.8.1)
@@ -371,7 +371,7 @@ GEM
       railties (>= 7.0)
       responders (>= 2)
     io-console (0.9.5)
-    irb (1.18.0)
+    irb (1.19.0)
       pp (>= 0.6.0)
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
@@ -568,7 +568,8 @@ GEM
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.1)
-    prism (1.9.0)
+    prism (2.1.0-arm64-darwin)
+    prism (2.1.0-x86_64-linux-gnu)
     process_executer (4.1.1)
       track_open_instances (~> 0.1)
     propshaft (1.3.2)
@@ -700,9 +701,9 @@ GEM
       rubocop-ast (>= 1.49.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.50.0)
+    rubocop-ast (1.51.0)
       parser (>= 3.3.7.2)
-      prism (~> 1.7)
+      prism (>= 1.7)
     rubocop-graphql (1.8.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.89, < 2)
@@ -847,7 +848,7 @@ DEPENDENCIES
   graphql
   heroicon-rails (>= 0.2.9)
   holidays
-  i18n-tasks (~> 1.1.2)
+  i18n-tasks (~> 1.2.0)
   jbuilder
   json (< 3.0)
   lefthook (~> 2.2)

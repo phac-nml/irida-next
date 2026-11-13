@@ -210,7 +210,7 @@ group :development do
   gem 'lookbook', '~> 2.3'
 
   # i18n-tasks
-  gem 'i18n-tasks', '~> 1.1.2', require: false
+  gem 'i18n-tasks', '~> 1.2.0', require: false
 
   # git hooks
   gem 'lefthook', '~> 2.2', require: false
