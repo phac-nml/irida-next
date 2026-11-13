@@ -58,7 +58,7 @@ end
 # options (e.g. :page, :count) pass through to Pagy's native assign_and_check via super.
 module PagyAssignAndCheckOverride # rubocop:disable Style/OneClassPerFile
   def assign_and_check(name_min)
-    validate_limit!(@options[:limit]) if name_min.key?(:limit)
+    validate_limit!(@options[:limit]) if name_min.key?(:limit) && @options[:limit].is_a?(String)
 
     super
   end
