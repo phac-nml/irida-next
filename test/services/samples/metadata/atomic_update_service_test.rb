@@ -44,6 +44,77 @@ module Samples
         assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
       end
 
+      test 'matches the existing service for a no-op metadata update' do
+        freeze_time
+        metadata = { 'metadatafield1' => 'value1' }
+        @atomic_sample.reload
+        legacy_log_data = @legacy_sample.log_data
+        legacy_updated_at = @legacy_sample.updated_at
+        atomic_log_data = @atomic_sample.log_data
+        atomic_updated_at = @atomic_sample.updated_at
+
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, include_activity: false, 'metadata_update_implementation' => 'original' }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, include_activity: false, 'metadata_update_implementation' => 'atomic' }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+
+        @legacy_sample.reload
+        @atomic_sample.reload
+        assert_equal @legacy_sample.metadata, @atomic_sample.metadata
+        assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
+        assert_equal legacy_log_data, @legacy_sample.log_data
+        assert_equal legacy_updated_at, @legacy_sample.updated_at
+        assert_equal atomic_log_data, @atomic_sample.log_data
+        assert_equal atomic_updated_at, @atomic_sample.updated_at
+      end
+
+      test 'matches the existing service when a user updates one analysis-owned field' do
+        freeze_time
+        analysis_metadata = { 'metadatafield1' => 'analysis value' }
+        [@legacy_sample, @atomic_sample].zip(%w[original atomic]).each do |sample, implementation|
+          UpdateService.new(
+            sample.project,
+            sample,
+            @user,
+            { 'metadata' => analysis_metadata, 'analysis_id' => @analysis_id,
+              'metadata_update_implementation' => implementation, include_activity: false }
+          ).execute
+        end
+
+        user_metadata = { 'metadatafield1' => 'user value' }
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => user_metadata, 'metadata_update_implementation' => 'original', include_activity: false }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => user_metadata, 'metadata_update_implementation' => 'atomic', include_activity: false }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+        assert_equal ['metadatafield1'], atomic_changes[:not_updated]
+
+        @legacy_sample.reload
+        @atomic_sample.reload
+        assert_equal @legacy_sample.metadata, @atomic_sample.metadata
+        assert_equal @legacy_sample.metadata_provenance, @atomic_sample.metadata_provenance
+        assert_equal 'analysis value', @atomic_sample.metadata['metadatafield1']
+      end
+
       test 'normalizes distinct raw keys that collapse to the same key, with last-value-wins semantics' do
         freeze_time
         # 'MetadataField1' and ' metadatafield1 ' both normalize (downcase + strip_whitespaces) to
@@ -263,6 +334,41 @@ module Samples
         assert_equal legacy_changes, atomic_changes
       end
 
+      test 'uses persisted provenance when updating a stale sample instance' do
+        freeze_time
+        persisted_metadata = { 'metadatafield1' => 'analysis value' }
+        persisted_provenance = {
+          'metadatafield1' => {
+            'source' => 'analysis',
+            'id' => @analysis_id,
+            'updated_at' => Time.current.as_json
+          }
+        }
+        [@legacy_sample, @atomic_sample].each do |sample|
+          Sample.find(sample.id).update!(
+            metadata: persisted_metadata,
+            metadata_provenance: persisted_provenance
+          )
+        end
+
+        metadata = { 'metadatafield1' => 'user value' }
+        legacy_changes = UpdateService.new(
+          @legacy_sample.project,
+          @legacy_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'original', include_activity: false }
+        ).execute
+        atomic_changes = UpdateService.new(
+          @atomic_sample.project,
+          @atomic_sample,
+          @user,
+          { 'metadata' => metadata, 'metadata_update_implementation' => 'atomic', include_activity: false }
+        ).execute
+
+        assert_equal legacy_changes, atomic_changes
+        assert_equal ['metadatafield1'], legacy_changes[:not_updated]
+      end
+
       test 'does not let a user update analysis metadata but permits clearing it' do
         sample = samples(:sample34)
         sample.create_logidze_snapshot!
@@ -271,7 +377,7 @@ module Samples
           sample.project,
           sample,
           @user,
-          { 'metadata' => { 'metadatafield1' => 'user value', 'metadatafield2' => '' },
+          { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => '' },
             'metadata_update_implementation' => 'atomic' }
         ).execute
 

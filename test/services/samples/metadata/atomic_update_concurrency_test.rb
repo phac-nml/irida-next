@@ -4,13 +4,8 @@ require 'test_helper'
 
 module Samples
   module Metadata
-    # Regression/validation test proving the atomic implementation is safe against races where a
-    # concurrent writer commits an analysis-owned value for a field while this update is in flight,
-    # even though it deliberately does NOT acquire an explicit row lock. Its "is this writable"
-    # decision is made via scalar subqueries correlated directly to the single row being updated (no
-    # separate join/CTE scan of `samples`): PostgreSQL's EvalPlanQual conflict resolution substitutes
-    # the latest committed tuple for this row throughout the whole statement, so a blocked writer
-    # sees fresh data once it unblocks. See BaseSampleMetadataUpdateService#atomic_update_sql.
+    # Regression/validation tests proving the atomic implementation uses the locked CTE snapshot
+    # consistently when concurrent writers commit before the update proceeds.
     #
     # This requires genuine concurrent PostgreSQL connections with real, committed row locks.
     # Transactional test fixtures wrap each test in an open, uncommitted transaction on the test's
