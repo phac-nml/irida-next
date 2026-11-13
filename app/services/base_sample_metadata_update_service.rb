@@ -41,7 +41,11 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
           remove_metadata_from_sample(sample, key)
         end
       end
-      sample.save
+      # Only save when something actually changed: sample.save always registers the record with
+      # the enclosing transaction and triggers after_commit callbacks (e.g. the samples table
+      # broadcast) even when there are no dirty attributes to persist, so a true no-op update
+      # must skip the call entirely to avoid an observable broadcast.
+      sample.save if sample.changed?
     end
     metadata_changes
   end
