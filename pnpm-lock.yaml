@@ -30,8 +30,8 @@ importers:
         specifier: ^8.1.401
         version: 8.1.401
       '@sindresorhus/slugify':
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^4.0.1
+        version: 4.0.1
       '@tailwindcss/cli':
         specifier: 4.3.5
         version: 4.3.5
@@ -883,13 +883,13 @@ packages:
   '@ruby/prism@2.1.0':
     resolution: {integrity: sha512-+lMGoxR5YQ8HEX7e2EuLn4H9GBpaDIrIkwtaAdTo/+lhzCxijAOhjrNBMFJtFr+DhbX+32CrA+j0R/WsLYrefw==}
 
-  '@sindresorhus/slugify@3.0.1':
-    resolution: {integrity: sha512-N1oPvN6sytRKZCskv0L+vSyvnUYi9JplPXZ90lT6EBsijjHrUdoXttb0Lna6pw1TWMe8vlajQnLDtU9KYHqtDg==}
-    engines: {node: '>=20'}
+  '@sindresorhus/slugify@4.0.1':
+    resolution: {integrity: sha512-DsuqdYRMBj9zcLBQ6m0KrkrWi8PuxXcPlO7CEjrhCOZWt8JPEMCuD3LD3FOgET/sHqgOE++xvkZI0HONqFyaug==}
+    engines: {node: '>=22'}
 
-  '@sindresorhus/transliterate@2.3.1':
-    resolution: {integrity: sha512-gVaaGtKYMYAMmI8buULVH3A2TXVJ98QiwGwI7ddrWGuGidGC2uRt4FHs22+8iROJ0QTzju9CuMjlVsrvpqsdhA==}
-    engines: {node: '>=20'}
+  '@sindresorhus/transliterate@3.0.0':
+    resolution: {integrity: sha512-mqOUtMxpY419WtwwYw1EX865Oh+QWpa37yhGLXNmVc6d91wsBYLG51TgSePqrdnCSnTJn2AygX+35StK86tNOA==}
+    engines: {node: '>=22'}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -2609,12 +2609,12 @@ snapshots:
 
   '@ruby/prism@2.1.0': {}
 
-  '@sindresorhus/slugify@3.0.1':
+  '@sindresorhus/slugify@4.0.1':
     dependencies:
-      '@sindresorhus/transliterate': 2.3.1
+      '@sindresorhus/transliterate': 3.0.0
       escape-string-regexp: 5.0.0
 
-  '@sindresorhus/transliterate@2.3.1': {}
+  '@sindresorhus/transliterate@3.0.0': {}
 
   '@standard-schema/spec@1.1.0': {}
 
