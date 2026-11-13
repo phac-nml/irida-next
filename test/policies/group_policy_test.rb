@@ -144,12 +144,20 @@ class GroupPolicyTest < ActiveSupport::TestCase
   test 'scope' do
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 34, scoped_groups.count
+    assert_equal 35, scoped_groups.count
 
     user = users(:david_doe)
     policy = GroupPolicy.new(user:)
     scoped_groups = policy.apply_scope(Group, type: :relation)
     assert_equal 11, scoped_groups.count
+  end
+
+  test 'scope with use_traversal_ids false matches traversal_ids-based scope' do
+    traversal_ids_scope = @policy.apply_scope(Group, type: :relation)
+    route_based_scope = @policy.apply_scope(Group, type: :relation, scope_options: { use_traversal_ids: false })
+
+    assert_equal 35, route_based_scope.count
+    assert_equal traversal_ids_scope.pluck(:id).sort, route_based_scope.pluck(:id).sort
   end
 
   test 'scoped manageable groups' do
@@ -177,7 +185,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 32, scoped_groups.count
+    assert_equal 33, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:group_one).name)
     assert_not scoped_groups_names.include?(groups(:david_doe_group_four).name)
@@ -188,7 +196,7 @@ class GroupPolicyTest < ActiveSupport::TestCase
 
     scoped_groups = @policy.apply_scope(Group, type: :relation)
 
-    assert_equal 31, scoped_groups.count
+    assert_equal 32, scoped_groups.count
     scoped_groups_names = scoped_groups.pluck(:name)
     assert_not scoped_groups_names.include?(groups(:namespace_group_link_group_one).name)
   end

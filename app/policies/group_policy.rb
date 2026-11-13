@@ -343,15 +343,16 @@ class GroupPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     false
   end
 
-  scope_for :relation do |relation|
+  scope_for :relation do |relation, use_traversal_ids: true|
     relation.where(
-      id: authorized_scope(Namespace, type: :relation)
+      id: authorized_scope(Namespace, type: :relation, scope_options: { use_traversal_ids: use_traversal_ids })
     ).include_route
   end
 
-  scope_for :relation, :manageable do |relation|
+  scope_for :relation, :manageable do |relation, use_traversal_ids: true|
     relation.where(
-      id: authorized_scope(Namespace, type: :relation, as: :manageable, scope_options: { include_route: false })
+      id: authorized_scope(Namespace, type: :relation, as: :manageable,
+                                      scope_options: { include_route: false, use_traversal_ids: use_traversal_ids })
     ).include_route
   end
 

@@ -17,6 +17,15 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     assert_not scoped_namespaces.include?(namespaces_project_namespaces(:project28_namespace))
   end
 
+  test 'scope with use_traversal_ids false matches traversal_ids-based scope' do
+    traversal_ids_scope = @policy.apply_scope(Namespace, type: :relation)
+    route_based_scope = @policy.apply_scope(Namespace, type: :relation,
+                                                       scope_options: { use_traversal_ids: false })
+
+    assert_equal 12, route_based_scope.count
+    assert_equal traversal_ids_scope.pluck(:id).sort, route_based_scope.pluck(:id).sort
+  end
+
   test 'scope without shared links' do
     scoped_namespaces = @policy.apply_scope(Namespace, type: :relation, scope_options: { include_shared_links: false })
 
@@ -90,9 +99,9 @@ class NamespacePolicyTest < ActiveSupport::TestCase
     policy = NamespacePolicy.new(user:)
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
-    # John Doe has manageable access to 33 namespaces
-    # (1 user namespace and 33 group namespaces)
-    assert_equal 34, scoped_namespaces.count
+    # John Doe has manageable access to 34 namespaces
+    # (1 user namespace and 34 group namespaces)
+    assert_equal 35, scoped_namespaces.count
 
     assert_not scoped_namespaces.include?(namespace_group_link.namespace)
 
@@ -104,10 +113,10 @@ class NamespacePolicyTest < ActiveSupport::TestCase
 
     scoped_namespaces = policy.apply_scope(Namespace, type: :relation, name: :manageable)
 
-    # John Doe has manageable access to 30 namespaces (1 user namespace,
-    # 33 group namespaces, and 1 group namespace via a namespace
+    # John Doe has manageable access to 35 namespaces (1 user namespace,
+    # 34 group namespaces, and 1 group namespace via a namespace
     # group link)
-    assert_equal 35, scoped_namespaces.count
+    assert_equal 36, scoped_namespaces.count
 
     assert scoped_namespaces.include?(namespace_group_link.namespace)
   end

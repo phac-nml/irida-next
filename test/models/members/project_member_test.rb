@@ -135,16 +135,24 @@ class ProjectMemberTest < ActiveSupport::TestCase
   test '#scope for_namespace_and_ancestors returns the correct collection' do
     project = projects(:project1)
 
-    members = Member.for_namespace_and_ancestors(project)
+    members = Member.for_namespace_and_ancestors(project.namespace)
 
     group_and_ancestors = project.namespace.parent&.self_and_ancestors
 
-    memberships = group_and_ancestors.map(&:group_members)
-
-    memberships = memberships.flatten
+    memberships = group_and_ancestors.map(&:group_members).flatten + project.namespace.project_members
 
     assert memberships.count == members.count
     assert_same_unique_elements(members, memberships)
+  end
+
+  test '#scope for_namespace_and_ancestors includes an unsaved project namespace parent memberships' do
+    group = groups(:group_one)
+    project = Project.new
+    project.build_namespace(parent: group)
+
+    members = Member.for_namespace_and_ancestors(project.namespace)
+
+    assert_same_unique_elements(group.group_members, members)
   end
 
   test '#scope not_expired for_namespace_and_ancestors returns the correct collection' do

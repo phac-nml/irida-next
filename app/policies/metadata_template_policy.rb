@@ -28,15 +28,30 @@ class MetadataTemplatePolicy < ApplicationPolicy
     include_ancestral_templates = options[:include_ancestral_templates]
 
     namespace_ids = if include_ancestral_templates
-                      if namespace.project_namespace?
-                        [namespace.id] + namespace.parent&.self_and_ancestor_ids
-                      else
-                        namespace.self_and_ancestor_ids
-                      end
+                      ancestor_namespace_ids(namespace)
                     else
                       namespace.id
                     end
 
     relation.joins(:created_by).where(namespace_id: namespace_ids)
+  end
+
+  private
+
+  # Resolve the self-and-ancestor namespace ids for `namespace`. When
+  # traversal_ids are available, the namespace's `traversal_ids` column
+  # already holds its full root-to-self id chain, so it is returned directly
+  # - avoiding the 1-2 extra queries the query-based branch below would
+  # otherwise fire (a parent load plus an ancestor lookup for a project
+  # namespace). The query-based fallback is kept for namespaces whose
+  # traversal_ids have not been backfilled yet.
+  def ancestor_namespace_ids(namespace)
+    return namespace.traversal_ids if namespace.use_traversal_ids?
+
+    if namespace.project_namespace?
+      [namespace.id] + namespace.parent&.self_and_ancestor_ids
+    else
+      namespace.self_and_ancestor_ids
+    end
   end
 end
