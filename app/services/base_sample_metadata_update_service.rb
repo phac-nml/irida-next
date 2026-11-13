@@ -41,7 +41,7 @@ class BaseSampleMetadataUpdateService < BaseService # rubocop:disable Metrics/Cl
           remove_metadata_from_sample(sample, key)
         end
       end
-      sample.save if metadata_changes.values_at(:added, :updated, :deleted).any?(&:any?)
+      sample.save
     end
     metadata_changes
   end
