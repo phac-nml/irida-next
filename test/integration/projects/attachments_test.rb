@@ -294,6 +294,16 @@ module Projects
       assert_response :success
     end
 
+    test 'attempting to access attachments with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_attachments_path(group, projects(:project1)), '50abc'
+      )
+    end
+
     test 'can filter attachments by filename or puid' do
       sign_in users(:john_doe)
       project = projects(:project1)

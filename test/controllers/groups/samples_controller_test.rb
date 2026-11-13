@@ -241,6 +241,11 @@ module Groups
       assert_response :success
     end
 
+    test 'accessing samples index with an invalid limit redirects to the first page ' \
+         'with the default limit at group level' do
+      assert_pagy_limit_error_redirects_to_default_limit(group_samples_path(@group), '50abc')
+    end
+
     private
 
     def rendered_project_puids

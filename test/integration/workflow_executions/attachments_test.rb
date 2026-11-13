@@ -125,5 +125,19 @@ module WorkflowExecutions
         assert_select 'tr', count: 0
       end
     end
+
+    test 'accessing workflow execution files tab on invalid page causes pagy overflow redirect' do
+      assert_pagy_range_error_redirects_to_first_page(
+        workflow_execution_path(@workflow_execution), params: { tab: 'files' },
+                                                      redirect_path: workflow_execution_path(@workflow_execution)
+      )
+    end
+
+    test 'accessing workflow execution files tab with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      assert_pagy_limit_error_redirects_to_default_limit(
+        workflow_execution_path(@workflow_execution), '50abc', params: { tab: 'files' }
+      )
+    end
   end
 end

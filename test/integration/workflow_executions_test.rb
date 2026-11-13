@@ -656,4 +656,9 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
   end
+
+  test 'accessing workflow executions index with an invalid limit redirects to the first page ' \
+       'with the default limit at user level' do
+    assert_pagy_limit_error_redirects_to_default_limit(workflow_executions_path, '50abc')
+  end
 end
