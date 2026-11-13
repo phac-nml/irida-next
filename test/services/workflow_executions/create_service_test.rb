@@ -299,7 +299,10 @@ module WorkflowExecutions
         {
           assembler: '',
           project_name: 'assembly',
-          random_seed: '0'
+          random_seed: '0',
+          config_profile_name: 'evil',
+          malicious_param: 'injected',
+          input: 'gid://irida/Attachment/1'
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -312,6 +315,9 @@ module WorkflowExecutions
       assert_equal '', @workflow_execution.workflow_params['assembler']
       assert_equal 'assembly', @workflow_execution.workflow_params['project_name']
       assert_equal 0, @workflow_execution.workflow_params['random_seed']
+      assert_not @workflow_execution.workflow_params.key?('config_profile_name')
+      assert_not @workflow_execution.workflow_params.key?('malicious_param')
+      assert_not @workflow_execution.workflow_params.key?('input')
       expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
                         samplesCount: @workflow_execution.samples_workflow_executions.size.to_s }
       assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)

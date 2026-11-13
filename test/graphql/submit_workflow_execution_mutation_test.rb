@@ -19,13 +19,17 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
         workflowParams: {
           assembler: "stub",
           random_seed: 1,
-          project_name: "assembly"
+          project_name: "assembly",
+          config_profile_name: "evil",
+          malicious_param: "injected",
+          input: "gid://irida/Attachment/1"
         }
         samplesWorkflowExecutionsAttributes: $samples_workflow_executions_attributes
         }) {
         workflowExecution{
           name
           id
+          workflowParams
         }
         errors{
           message
@@ -82,6 +86,13 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
     assert_not_empty data, 'submit workflow execution type should work'
     workflow_execution = data['workflowExecution']
     assert_equal 'my_new_workflow_submission', workflow_execution['name']
+    workflow_params = workflow_execution['workflowParams']
+    assert_equal 'stub', workflow_params['assembler']
+    assert_equal 1, workflow_params['random_seed']
+    assert_equal 'assembly', workflow_params['project_name']
+    assert_not workflow_params.key?('config_profile_name')
+    assert_not workflow_params.key?('malicious_param')
+    assert_not workflow_params.key?('input')
   end
 
   test 'submit workflow execution mutation should not work for minimum samples not provided' do
