@@ -574,5 +574,18 @@ module Groups
       assert_select '[role="tab"]#groups-tab[aria-selected="true"]'
       assert_select '[role="tabpanel"]#groups-panel:not([hidden])'
     end
+
+    test 'accessing group members index on invalid page causes pagy overflow redirect' do
+      sign_in @user
+
+      assert_pagy_range_error_redirects_to_first_page(group_members_path(@group))
+    end
+
+    test 'accessing group members index with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in @user
+
+      assert_pagy_limit_error_redirects_to_default_limit(group_members_path(@group), '50abc')
+    end
   end
 end

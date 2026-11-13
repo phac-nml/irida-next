@@ -541,5 +541,77 @@ module Groups
       follow_redirect!
       assert_response :success
     end
+
+    test 'accessing bots index with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+
+      assert_pagy_limit_error_redirects_to_default_limit(group_bots_path(namespace), '50abc')
+    end
+
+    test 'generating a bot personal access token on an invalid page causes pagy overflow redirect' do
+      sign_in users(:john_doe)
+      bot = namespace_bots(:group1_bot0)
+      group = bot.namespace
+
+      assert_pagy_range_error_redirects_to_first_page(
+        group_bot_personal_access_tokens_path(group, bot),
+        params: { personal_access_token: { name: 'Test Token', scopes: ['read_api'] } },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    test 'generating a bot personal access token with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in users(:john_doe)
+      bot = namespace_bots(:group1_bot0)
+      group = bot.namespace
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        group_bot_personal_access_tokens_path(group, bot), '50abc',
+        params: { personal_access_token: { name: 'Test Token', scopes: ['read_api'] } },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    test 'creating a bot on an invalid page causes pagy overflow redirect' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      assert_pagy_range_error_redirects_to_first_page(
+        group_bots_path(group),
+        params: { namespace_bot: bot_create_params },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    test 'creating a bot with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        group_bots_path(group), '50abc',
+        params: { namespace_bot: bot_create_params },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    private
+
+    def bot_create_params
+      {
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::ANALYST }
+          },
+          personal_access_tokens_attributes: {
+            '0': {
+              name: 'Uploader',
+              scopes: %w[read_api api]
+            }
+          }
+        }
+      }
+    end
   end
 end

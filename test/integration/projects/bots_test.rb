@@ -560,5 +560,85 @@ module Projects
       follow_redirect!
       assert_response :success
     end
+
+    test 'accessing bots index with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_bots_path(namespace, project), '50abc'
+      )
+    end
+
+    test 'generating a bot personal access token on an invalid page causes pagy overflow redirect' do
+      sign_in users(:john_doe)
+      bot = namespace_bots(:project1_bot0)
+      namespace = bot.namespace.parent
+      project = bot.namespace.project
+
+      assert_pagy_range_error_redirects_to_first_page(
+        namespace_project_bot_personal_access_tokens_path(namespace, project, bot),
+        params: { personal_access_token: { name: 'Test Token', scopes: ['read_api'] } },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    test 'generating a bot personal access token with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in users(:john_doe)
+      bot = namespace_bots(:project1_bot0)
+      namespace = bot.namespace.parent
+      project = bot.namespace.project
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_bot_personal_access_tokens_path(namespace, project, bot), '50abc',
+        params: { personal_access_token: { name: 'Test Token', scopes: ['read_api'] } },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    test 'creating a bot on an invalid page causes pagy overflow redirect' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      assert_pagy_range_error_redirects_to_first_page(
+        namespace_project_bots_path(namespace, project),
+        params: { namespace_bot: bot_create_params },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    test 'creating a bot with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+      namespace = groups(:group_one)
+      project = projects(:project1)
+
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_bots_path(namespace, project), '50abc',
+        params: { namespace_bot: bot_create_params },
+        as: :turbo_stream, method: :post
+      )
+    end
+
+    private
+
+    def bot_create_params
+      {
+        user_attributes: {
+          members_attributes: {
+            '0': { access_level: Member::AccessLevel::ANALYST }
+          },
+          personal_access_tokens_attributes: {
+            '0': {
+              name: 'Uploader',
+              scopes: %w[read_api api]
+            }
+          }
+        }
+      }
+    end
   end
 end
