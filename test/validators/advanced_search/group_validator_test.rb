@@ -8,11 +8,15 @@ module AdvancedSearch
       private
 
       def allowed_fields
-        %w[name created_at]
+        %w[name created_at byte_size state]
       end
 
       def date_fields
         %w[created_at]
+      end
+
+      def numeric_fields
+        %w[byte_size]
       end
     end
 
@@ -134,6 +138,150 @@ module AdvancedSearch
       assert_not record.valid?
       condition = record.groups.first.conditions.first
       assert condition.errors.added?(:value, :blank)
+    end
+
+    test 'validates all standard text field dropdown operators when metadata operators are enabled' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      {
+        '=' => 'sample',
+        '!=' => 'sample',
+        '<=' => '10',
+        '>=' => '10',
+        'contains' => 'sam',
+        'not_contains' => 'zzz',
+        'exists' => '',
+        'not_exists' => '',
+        'in' => %w[sample other],
+        'not_in' => %w[sample other],
+        'starts_with' => 'sam',
+        'ends_with' => 'ple',
+        'between' => %w[a z]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'name', operator:, value:)
+      end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'validates all standard enum field dropdown operators' do
+      {
+        '=' => 'active',
+        '!=' => 'archived',
+        'in' => %w[active archived],
+        'not_in' => %w[active archived]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'state', operator:, value:)
+      end
+    end
+
+    test 'validates all numeric field dropdown operators' do
+      {
+        '=' => '10',
+        '!=' => '10',
+        '<=' => '10',
+        '>=' => '10',
+        'in' => %w[10 20],
+        'not_in' => %w[10 20],
+        'between' => %w[10 20]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'byte_size', operator:, value:)
+      end
+    end
+
+    test 'validates all date field dropdown operators' do
+      {
+        '=' => '2024-01-01',
+        '!=' => '2024-01-01',
+        '<=' => '2024-01-01',
+        '>=' => '2024-01-01',
+        'exists' => '',
+        'not_exists' => '',
+        'between' => %w[2024-01-01 2024-12-31]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'created_at', operator:, value:)
+      end
+    end
+
+    test 'validates all metadata enum dropdown operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      {
+        'text_equals' => 'assembly',
+        'text_not_equals' => 'assembly',
+        'text_in' => %w[assembly pe],
+        'text_not_in' => %w[assembly pe]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'metadata.sample_type', operator:, value:)
+      end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'validates metadata text field dropdown operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      {
+        'text_equals' => 'sample',
+        'text_not_equals' => 'sample',
+        'text_contains' => 'sam',
+        'text_not_contains' => 'zzz',
+        'text_in' => %w[sample other],
+        'text_not_in' => %w[sample other],
+        'text_starts_with' => 'sam',
+        'text_ends_with' => 'ple',
+        'text_between' => %w[a z]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'metadata.custom_text', operator:, value:)
+      end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'validates metadata numeric field dropdown operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      {
+        'numeric_equals' => '10',
+        'numeric_not_equals' => '10',
+        'numeric_less_than_equals' => '10',
+        'numeric_greater_than_equals' => '10',
+        'numeric_exists' => '',
+        'numeric_not_exists' => '',
+        'numeric_between' => %w[10 20]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'metadata.custom_number', operator:, value:)
+      end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'validates metadata date field dropdown operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      {
+        'date_equals' => '2024-01-01',
+        'date_not_equals' => '2024-01-01',
+        'date_less_than_equals' => '2024-01-01',
+        'date_greater_than_equals' => '2024-01-01',
+        'date_exists' => '',
+        'date_not_exists' => '',
+        'date_between' => %w[2024-01-01 2024-12-31]
+      }.each do |operator, value|
+        assert_valid_condition(field: 'metadata.custom_date', operator:, value:)
+      end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    test 'validates metadata existence dropdown operators' do
+      Flipper.enable(:advanced_search_metadata_operators)
+
+      %w[exists not_exists].each do |operator|
+        assert_valid_condition(field: 'metadata.custom_field', operator:, value: '')
+      end
+    ensure
+      Flipper.disable(:advanced_search_metadata_operators)
     end
 
     test 'restricts date operators for date fields' do
@@ -654,6 +802,19 @@ module AdvancedSearch
       assert record2.valid?
     ensure
       Flipper.disable(:advanced_search_metadata_operators)
+    end
+
+    private
+
+    def assert_valid_condition(field:, operator:, value:)
+      record = DummyRecord.new(
+        groups: [DummyGroup.new(conditions: [DummyCondition.new(field:, operator:, value:)])]
+      )
+
+      error_message = "Expected #{field} with #{operator} to be valid, but got: " \
+                      "#{record.errors.full_messages.join(', ')} / " \
+                      "#{record.groups.first.conditions.first.errors.full_messages.join(', ')}"
+      assert record.valid?, error_message
     end
   end
 end

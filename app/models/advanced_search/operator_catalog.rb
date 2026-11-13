@@ -160,9 +160,9 @@ module AdvancedSearch
                        non_metadata: true, numeric_value: true, enum_standard: true,
                        standard_date_disallowed: true),
           op('starts_with', arel_handler: :condition_starts_with, arel_args: %i[value model_class field_name],
-                            combinable_group: :start_ends_with, standard_date_disallowed: true),
+                            combinable_group: :start_ends_with, non_metadata: true, standard_date_disallowed: true),
           op('ends_with', arel_handler: :condition_ends_with, arel_args: %i[value model_class field_name],
-                          combinable_group: :start_ends_with, standard_date_disallowed: true),
+                          combinable_group: :start_ends_with, non_metadata: true, standard_date_disallowed: true),
           op('between', arel_handler: :condition_between, arel_args: %i[value field_name],
                         between: true, non_metadata: true, numeric_value: true)
         ]

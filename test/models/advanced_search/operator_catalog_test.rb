@@ -64,7 +64,7 @@ module AdvancedSearch
     end
 
     test 'non_metadata_operators matches the legacy set' do
-      assert_equal %w[= != <= >= contains not_contains in not_in between].sort,
+      assert_equal %w[= != <= >= contains not_contains in not_in starts_with ends_with between].sort,
                    OperatorCatalog.non_metadata_operators.sort
     end
 
