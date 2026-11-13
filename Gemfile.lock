@@ -704,7 +704,7 @@ GEM
     rubocop-ast (1.51.0)
       parser (>= 3.3.7.2)
       prism (>= 1.7)
-    rubocop-graphql (1.8.0)
+    rubocop-graphql (1.9.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.89, < 2)
     rubocop-rails (2.38.0)
