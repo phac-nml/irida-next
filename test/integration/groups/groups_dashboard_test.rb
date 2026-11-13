@@ -369,6 +369,12 @@ module Groups
       assert_response :success
     end
 
+    test 'accessing groups index with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+
+      assert_pagy_limit_error_redirects_to_default_limit(dashboard_groups_path, '50abc')
+    end
+
     private
 
     def first_treegrid_row_text
