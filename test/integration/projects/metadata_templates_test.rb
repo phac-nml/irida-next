@@ -437,6 +437,13 @@ module Projects
       assert_response :success
     end
 
+    test 'accessing metadata templates index with an invalid limit redirects to the first page ' \
+         'with the default limit at project level' do
+      assert_pagy_limit_error_redirects_to_default_limit(
+        namespace_project_metadata_templates_path(@project_namespace.parent, @project_namespace.project), '50abc'
+      )
+    end
+
     test 'projects metadata templates controller metadata_templates_path delegates to project route helper' do
       controller = Projects::MetadataTemplatesController.new
       controller.stubs(:namespace_project_metadata_templates_path).returns('/projects/project-one/metadata_templates')

@@ -74,6 +74,19 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'accessing group show on invalid page causes pagy overflow redirect' do
+    sign_in users(:john_doe)
+
+    assert_pagy_range_error_redirects_to_first_page(group_path(@group), redirect_path: group_canonical_path(@group))
+  end
+
+  test 'accessing group show with an invalid limit redirects to the first page with the default limit' do
+    sign_in users(:john_doe)
+
+    assert_pagy_limit_error_redirects_to_default_limit(group_path(@group), '50abc',
+                                                       redirect_path: group_canonical_path(@group))
+  end
+
   test 'should not show the group if member is expired' do
     sign_in users(:john_doe)
 
@@ -182,5 +195,17 @@ class GroupsControllerTest < ActionDispatch::IntegrationTest
         params: { groups_transfer_form: { new_parent_id: new_namespace.id } }, as: :turbo_stream
 
     assert_response :unauthorized
+  end
+
+  test 'accessing group activity on invalid page causes pagy overflow redirect' do
+    sign_in users(:john_doe)
+
+    assert_pagy_range_error_redirects_to_first_page(group_activity_path(@group))
+  end
+
+  test 'accessing group activity with an invalid limit redirects to the first page with the default limit' do
+    sign_in users(:john_doe)
+
+    assert_pagy_limit_error_redirects_to_default_limit(group_activity_path(@group), '50abc')
   end
 end
