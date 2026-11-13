@@ -205,6 +205,12 @@ module Projects
       assert_response :success
     end
 
+    test 'accessing projects index with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+
+      assert_pagy_limit_error_redirects_to_default_limit(dashboard_projects_path, '50abc')
+    end
+
     test 'should update samples count after a sample deletion' do
       group = groups(:group_one)
       project = projects(:project1)

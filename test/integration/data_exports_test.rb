@@ -1044,4 +1044,8 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
   end
+
+  test 'accessing data exports index with an invalid limit redirects to the first page with the default limit' do
+    assert_pagy_limit_error_redirects_to_default_limit(data_exports_path, '50abc')
+  end
 end
