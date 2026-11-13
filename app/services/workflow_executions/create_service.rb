@@ -102,24 +102,38 @@ module WorkflowExecutions
     end
 
     def sanitized_workflow_params
-      # remove any nil values
-      sanitized_params = params[:workflow_params].compact
+      sanitized_params = params[:workflow_params].with_indifferent_access.compact
+
+      # strip any params that have no corresponding visible (non-hidden) property definition, since
+      # those wouldn't be rendered in the submission form or exposed via graphql
+      sanitized_params = sanitized_params.slice(*renderable_workflow_param_names)
 
       workflow.workflow_params.each_value do |definition|
-        definition[:properties].each do |name, property|
-          key = name.to_sym
-          next unless sanitized_params.key?(key)
-
-          if blank_typed_workflow_param?(property, sanitized_params[key])
-            # omit blank values so Nextflow uses its default instead of a coerced zero
-            sanitized_params.delete(key)
-          else
-            sanitized_params[key] = sanitize_workflow_param(property, sanitized_params[key])
-          end
-        end
+        coerce_workflow_params!(sanitized_params, definition[:properties])
       end
 
       sanitized_params
+    end
+
+    # Names of the workflow params that are actually rendered in the submission form (and therefore
+    # the only ones a legitimate graphql submission should be able to set). The samplesheet `input`
+    # param is excluded as it's generated during preparation and never rendered as a form field.
+    def renderable_workflow_param_names
+      workflow.workflow_params.values.flat_map { |definition| definition[:properties].keys } - [:input]
+    end
+
+    def coerce_workflow_params!(sanitized_params, properties)
+      properties.each do |name, property|
+        key = name.to_sym
+        next unless sanitized_params.key?(key)
+
+        if blank_typed_workflow_param?(property, sanitized_params[key])
+          # omit blank values so Nextflow uses its default instead of a coerced zero
+          sanitized_params.delete(key)
+        else
+          sanitized_params[key] = sanitize_workflow_param(property, sanitized_params[key])
+        end
+      end
     end
 
     def blank_typed_workflow_param?(property, value)
