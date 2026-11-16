@@ -196,6 +196,9 @@ group :development, :test do
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem 'brakeman', require: false
+
+  # Benchmarking tool used to compare performance of service implementations
+  gem 'benchmark-ips', require: false
 end
 
 group :development do

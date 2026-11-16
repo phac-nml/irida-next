@@ -78,6 +78,99 @@ module Samples
         assert_equal ['metadatafield2'], result[@sample33.puid][:deleted]
       end
 
+      test 'supports the atomic metadata update implementation' do
+        freeze_time
+        @sample33.create_logidze_snapshot!
+
+        Sample.transaction(requires_new: true) do
+          payload = { @sample33.id => { 'metadatafield3' => 'atomic value' } }
+
+          result = Samples::Metadata::BulkUpdateService.new(
+            @project30.namespace,
+            payload,
+            ['metadatafield3'],
+            @user,
+            { 'metadata_update_implementation' => 'atomic' }
+          ).execute
+
+          assert_equal ['metadatafield3'], result[@sample33.id][:added]
+          assert_equal 'atomic value', @sample33.reload.metadata['metadatafield3']
+          assert_equal(
+            { 'source' => 'user', 'id' => @user.id, 'updated_at' => Time.current.as_json },
+            @sample33.metadata_provenance['metadatafield3']
+          )
+
+          raise ActiveRecord::Rollback
+        end
+      end
+
+      test 'atomic metadata update implementations match original bulk updates' do
+        freeze_time
+        initial_metadata = {
+          'deleted_field' => 'delete me',
+          'updated_field' => 'original value',
+          'analysis_updated_field' => 'analysis value',
+          'unchanged_field' => 'unchanged value'
+        }
+        initial_provenance = {
+          'deleted_field' => user_metadata_provenance,
+          'updated_field' => user_metadata_provenance,
+          'analysis_updated_field' => analysis_metadata_provenance,
+          'unchanged_field' => user_metadata_provenance
+        }
+        metadata = {
+          'deleted_field' => '',
+          'updated_field' => 'updated value',
+          'analysis_updated_field' => 'user value',
+          'created_field' => 'created value',
+          'unchanged_field' => 'unchanged value'
+        }
+        metadata_fields = metadata.keys
+
+        expected_changes = {
+          added: ['created_field'], updated: ['updated_field'], deleted: ['deleted_field'],
+          not_updated: ['analysis_updated_field'], unchanged: ['unchanged_field'], not_found: []
+        }
+        %w[original atomic].each do |implementation|
+          Sample.transaction(requires_new: true) do
+            sample = Sample.create!(
+              project: @project30,
+              name: "#{implementation} bulk parity #{SecureRandom.uuid}",
+              metadata: initial_metadata,
+              metadata_provenance: initial_provenance
+            )
+            params = { 'metadata_update_implementation' => implementation }
+            result = Samples::Metadata::BulkUpdateService.new(
+              @project30.namespace,
+              { sample.id => metadata },
+              metadata_fields,
+              @user,
+              params
+            ).execute
+
+            assert_equal expected_changes, result.fetch(sample.id), implementation
+
+            sample.reload
+            assert_equal(
+              {
+                'updated_field' => 'updated value',
+                'analysis_updated_field' => 'analysis value',
+                'created_field' => 'created value',
+                'unchanged_field' => 'unchanged value'
+              },
+              sample.metadata
+            )
+            assert_equal user_metadata_provenance, sample.metadata_provenance['unchanged_field']
+            assert_equal analysis_metadata_provenance, sample.metadata_provenance['analysis_updated_field']
+            assert_equal user_metadata_provenance, sample.metadata_provenance['updated_field']
+            assert_equal user_metadata_provenance, sample.metadata_provenance['created_field']
+            assert_not sample.metadata_provenance.key?('deleted_field')
+
+            raise ActiveRecord::Rollback
+          end
+        end
+      end
+
       test 'restores sample broadcasts when a metadata update raises' do
         payload = { @sample35.id => { 'metadatafield3' => 'value3' } }
         service = Samples::Metadata::BulkUpdateService.new(@project31.namespace, payload, ['metadatafield3'], @user)
@@ -667,6 +760,16 @@ module Samples
                          .first
 
         assert_equal 1, group_activity.parameters[:imported_metadata_samples_count]
+      end
+
+      private
+
+      def user_metadata_provenance
+        { 'source' => 'user', 'id' => @user.id, 'updated_at' => Time.current.as_json }
+      end
+
+      def analysis_metadata_provenance
+        { 'source' => 'analysis', 'id' => 'analysis-id', 'updated_at' => Time.current.as_json }
       end
     end
   end
