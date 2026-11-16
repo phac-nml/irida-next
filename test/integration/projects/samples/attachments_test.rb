@@ -782,6 +782,7 @@ module Projects
 
       test 'advanced search renders enum dropdowns for attachment metadata fields' do
         sign_in users(:john_doe)
+
         Flipper.enable(:attachments_advanced_search)
 
         {

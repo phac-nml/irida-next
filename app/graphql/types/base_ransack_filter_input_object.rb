@@ -12,39 +12,9 @@ module Types
   end
 
   class SampleAdvancedSearchConditionOperatorInputType < BaseEnum # rubocop:disable Style/Documentation
-    STANDARD_OPERATORS_FOR_ENUM = {
-      'EQUALS' => '=',
-      'NOT_EQUALS' => '!=',
-      'LESS_THAN_EQUALS' => '<=',
-      'GREATER_THAN_EQUALS' => '>=',
-      'CONTAINS' => 'contains',
-      'NOT_CONTAINS' => 'not_contains',
-      'EXISTS' => 'exists',
-      'NOT_EXISTS' => 'not_exists',
-      'IN' => 'in',
-      'NOT_IN' => 'not_in'
-    }.freeze
-
-    METADATA_OPERATORS_FOR_ENUM = {
-      'DATE_GREATER_THAN_EQUALS' => 'date_greater_than_equals',
-      'DATE_LESS_THAN_EQUALS' => 'date_less_than_equals',
-      'DATE_EQUALS' => 'date_equals',
-      'DATE_NOT_EQUALS' => 'date_not_equals',
-      'DATE_EXISTS' => 'date_exists',
-      'DATE_NOT_EXISTS' => 'date_not_exists',
-      'NUMERIC_GREATER_THAN_EQUALS' => 'numeric_greater_than_equals',
-      'NUMERIC_LESS_THAN_EQUALS' => 'numeric_less_than_equals',
-      'NUMERIC_EQUALS' => 'numeric_equals',
-      'NUMERIC_NOT_EQUALS' => 'numeric_not_equals',
-      'NUMERIC_EXISTS' => 'numeric_exists',
-      'NUMERIC_NOT_EXISTS' => 'numeric_not_exists',
-      'TEXT_EQUALS' => 'text_equals',
-      'TEXT_NOT_EQUALS' => 'text_not_equals',
-      'TEXT_IN' => 'text_in',
-      'TEXT_NOT_IN' => 'text_not_in',
-      'TEXT_CONTAINS' => 'text_contains',
-      'TEXT_NOT_CONTAINS' => 'text_not_contains'
-    }.freeze
+    # Operator enum values are declared once in AdvancedSearch::OperatorCatalog.
+    STANDARD_OPERATORS_FOR_ENUM = AdvancedSearch::OperatorCatalog.graphql_standard_operators
+    METADATA_OPERATORS_FOR_ENUM = AdvancedSearch::OperatorCatalog.graphql_metadata_operators
 
     graphql_name 'SampleAdvancedSearchConditionOperator'
     description 'Sample Advanced Search Condition Operator'

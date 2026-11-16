@@ -6,187 +6,51 @@
 # - include `AdvancedSearch::Operators` (for `build_arel_node` and `condition_*` helpers)
 # - provide `model_class`
 #
+# The set of operators and how each one maps to an Arel handler is declared once in
+# `AdvancedSearch::OperatorCatalog`; this concern only dispatches to those handlers.
+#
 # Override points:
+# - `normalize_condition_field(condition)` to coerce fields (e.g., id -> puid)
 # - `normalize_condition_value(condition)` to coerce values (e.g., enums)
-# - `apply_*_operator` methods for special-case fields (e.g., upcasing PUID)
 module AdvancedSearch
   # Applies search conditions to build filtered ActiveRecord scopes.
-  module Filtering # rubocop:disable Metrics/ModuleLength
+  module Filtering
     extend ActiveSupport::Concern
-
-    OPERATOR_HANDLERS = {
-      # equals operators
-      '=' => :apply_condition_equals,
-      'numeric_equals' => :apply_condition_metadata_numeric_equals,
-      'date_equals' => :apply_condition_equals,
-      'text_equals' => :apply_condition_equals,
-      # not_equals operators
-      '!=' => :apply_condition_not_equals,
-      'numeric_not_equals' => :apply_condition_metadata_numeric_not_equals,
-      'date_not_equals' => :apply_condition_not_equals,
-      'text_not_equals' => :apply_condition_not_equals,
-      # contains operators
-      'text_contains' => :apply_condition_contains,
-      'contains' => :apply_condition_contains,
-      # not_contains operators
-      'text_not_contains' => :apply_condition_not_contains,
-      'not_contains' => :apply_condition_not_contains,
-      # greater_than_or_equal operators
-      '>=' => :apply_condition_standard_greater_than_or_equal,
-      'date_greater_than_equals' => :apply_condition_metadata_date_greater_than_or_equal,
-      'numeric_greater_than_equals' => :apply_condition_metadata_numeric_greater_than_or_equal,
-      # less_than_or_equal operators
-      '<=' => :apply_condition_standard_less_than_or_equal,
-      'date_less_than_equals' => :apply_condition_metadata_date_less_than_or_equal,
-      'numeric_less_than_equals' => :apply_condition_metadata_numeric_less_than_or_equal,
-      # in operators
-      'in' => :apply_condition_in,
-      'not_in' => :apply_condition_not_in,
-      'text_in' => :apply_condition_metadata_in,
-      'text_not_in' => :apply_condition_metadata_not_in,
-      # exists operators
-      'exists' => :apply_condition_exists,
-      'not_exists' => :apply_condition_not_exists,
-      'date_exists' => :apply_condition_metadata_date_exists,
-      'date_not_exists' => :apply_condition_metadata_date_not_exists,
-      'numeric_exists' => :apply_condition_metadata_numeric_exists,
-      'numeric_not_exists' => :apply_condition_metadata_numeric_not_exists,
-      # starts_with operators
-      'starts_with' => :apply_condition_starts_with,
-      'text_starts_with' => :apply_condition_starts_with,
-      # ends_with operators
-      'ends_with' => :apply_condition_ends_with,
-      'text_ends_with' => :apply_condition_ends_with,
-      # between operators
-      'between' => :apply_condition_between,
-      'date_between' => :apply_condition_date_between,
-      'numeric_between' => :apply_condition_numeric_between,
-      'text_between' => :apply_condition_text_between
-    }.freeze
 
     private
 
     def add_condition(scope, condition)
+      operator = AdvancedSearch::OperatorCatalog.find(condition.operator)
+      return scope unless operator
+
       field_name = normalize_condition_field(condition)
       node = build_arel_node(field_name, model_class)
       value = normalize_condition_value(condition)
 
-      handler = OPERATOR_HANDLERS[condition.operator]
-      return scope unless handler
-
-      send(handler, scope, node, value, field_name)
+      apply_operator(operator, scope, node, value, field_name)
     end
 
-    def apply_condition_equals(scope, node, value, field_name)
-      condition_equals(scope, node, value, field_name)
+    # Dispatches a catalog operator to its Arel handler. Exposed so callers that
+    # build their own Arel node (e.g. attachment blob columns) can reuse the
+    # catalog-driven dispatch.
+    def apply_operator(operator, scope, node, value, field_name)
+      args = resolve_arel_args(operator.arel_args, value:, field_name:)
+      send(operator.arel_handler, scope, node, *args)
     end
 
-    def apply_condition_not_equals(scope, node, value, field_name)
-      condition_not_equals(scope, node, value, field_name)
-    end
-
-    def apply_condition_contains(scope, node, value, field_name)
-      condition_contains(scope, node, value, model_class, field_name)
-    end
-
-    def apply_condition_not_contains(scope, node, value, field_name)
-      condition_not_contains(scope, node, value, model_class, field_name)
-    end
-
-    def apply_condition_metadata_numeric_equals(scope, node, value, _field_name)
-      metadata_condition_numeric_comparison(scope, node, value, :eq)
-    end
-
-    def apply_condition_metadata_numeric_not_equals(scope, node, value, _field_name)
-      metadata_condition_numeric_comparison(scope, node, value, :not_eq)
-    end
-
-    def apply_condition_standard_greater_than_or_equal(scope, node, value, field_name)
-      condition_greater_than_or_equal(scope, node, value, metadata_key(field_name), field_name)
-    end
-
-    def apply_condition_metadata_date_greater_than_or_equal(scope, node, value, _field_name)
-      metadata_condition_date_comparison(scope, node, value, :gteq)
-    end
-
-    def apply_condition_metadata_numeric_greater_than_or_equal(scope, node, value, _field_name)
-      metadata_condition_numeric_comparison(scope, node, value, :gteq)
-    end
-
-    def apply_condition_standard_less_than_or_equal(scope, node, value, field_name)
-      condition_less_than_or_equal(scope, node, value, metadata_key(field_name), field_name)
-    end
-
-    def apply_condition_metadata_date_less_than_or_equal(scope, node, value, _field_name)
-      metadata_condition_date_comparison(scope, node, value, :lteq)
-    end
-
-    def apply_condition_metadata_numeric_less_than_or_equal(scope, node, value, _field_name)
-      metadata_condition_numeric_comparison(scope, node, value, :lteq)
-    end
-
-    def apply_condition_in(scope, node, value, field_name)
-      condition_in(scope, node, value, field_name)
-    end
-
-    def apply_condition_not_in(scope, node, value, field_name)
-      condition_not_in(scope, node, value, field_name)
-    end
-
-    def apply_condition_metadata_in(scope, node, value, _field_name)
-      condition_in_metadata(scope, node, value)
-    end
-
-    def apply_condition_metadata_not_in(scope, node, value, _field_name)
-      condition_not_in_metadata(scope, node, value)
-    end
-
-    def apply_condition_exists(scope, node, _value, _field_name)
-      condition_exists(scope, node)
-    end
-
-    def apply_condition_not_exists(scope, node, _value, _field_name)
-      condition_not_exists(scope, node)
-    end
-
-    def apply_condition_starts_with(scope, node, value, field_name)
-      condition_starts_with(scope, node, value, model_class, field_name)
-    end
-
-    def apply_condition_ends_with(scope, node, value, field_name)
-      condition_ends_with(scope, node, value, model_class, field_name)
-    end
-
-    def apply_condition_metadata_date_exists(scope, node, _value, _field_name)
-      condition_metadata_exists(scope, node, :date)
-    end
-
-    def apply_condition_metadata_date_not_exists(scope, node, _value, _field_name)
-      condition_metadata_not_exists(scope, node, :date)
-    end
-
-    def apply_condition_metadata_numeric_exists(scope, node, _value, _field_name)
-      condition_metadata_exists(scope, node, :numeric)
-    end
-
-    def apply_condition_metadata_numeric_not_exists(scope, node, _value, _field_name)
-      condition_metadata_not_exists(scope, node, :numeric)
-    end
-
-    def apply_condition_between(scope, node, value, field_name)
-      condition_between(scope, node, value, field_name)
-    end
-
-    def apply_condition_date_between(scope, node, value, _field_name)
-      metadata_condition_date_between(scope, node, value)
-    end
-
-    def apply_condition_numeric_between(scope, node, value, _field_name)
-      condition_numeric_between(scope, node, value)
-    end
-
-    def apply_condition_text_between(scope, node, value, _field_name)
-      condition_text_between(scope, node, value)
+    # Resolves an operator's declared argument tokens into concrete handler
+    # arguments. Reserved tokens are looked up from the current condition context;
+    # any other value (e.g. :eq, :date) is forwarded to the handler literally.
+    def resolve_arel_args(arel_args, value:, field_name:)
+      arel_args.map do |token|
+        case token
+        when :value then value
+        when :field_name then field_name
+        when :model_class then model_class
+        when :metadata_key then metadata_key(field_name)
+        else token
+        end
+      end
     end
 
     def normalize_condition_field(condition)
