@@ -3,7 +3,7 @@
     <%= @label %>
 
     <% if @required %>
-      <abbr class="req" title="<%= t('pathogen.label.title') %>"><%= t("pathogen.label.required_indicator") %></abbr>
+      <abbr class="req" title="<%= t('pathogen.label.title') %>" aria-label="<%= t('pathogen.label.title') %>"><%= t("pathogen.label.required_indicator") %></abbr> <%# herb:disable html-no-title-attribute %>
     <% end %>
   </label>
 <% end %>

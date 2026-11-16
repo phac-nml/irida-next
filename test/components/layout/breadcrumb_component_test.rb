@@ -30,7 +30,7 @@ module Layout
     test 'renders the correct structure for multiple links' do
       render_inline(Layout::BreadcrumbComponent.new(links: @links))
 
-      assert_selector 'nav[data-controller="breadcrumb"]'
+      assert_selector 'nav[data-controller~="breadcrumb"]'
       assert_selector 'li[data-breadcrumb-target="crumb"]', count: 3
     end
 

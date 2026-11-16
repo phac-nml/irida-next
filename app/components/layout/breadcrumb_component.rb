@@ -6,6 +6,7 @@ module Layout
     # @param links [Array<Hash>] A list of hashes, each containing a `:name` and `:path`.
     def initialize(links:)
       @links = links
+      @tooltip_id = Pathogen::Tooltip.generate_id(base_name: 'breadcrumb-tooltip')
       validate_links!
     end
 
