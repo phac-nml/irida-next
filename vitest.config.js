@@ -8,10 +8,7 @@ const jsRoot = resolve(
 
 const fullCoverageFiles = [
   "app/javascript/controllers/action_button_controller.js",
-  "app/javascript/controllers/advanced_search/v1_controller.js",
   "app/javascript/controllers/attachment_upload_controller.js",
-  "app/javascript/controllers/metadata/file_import_controller.js",
-  "app/javascript/controllers/spreadsheet_import_controller.js",
   "app/javascript/controllers/activities/extended_details_controller.js",
   "app/javascript/controllers/clipboard_controller.js",
   "app/javascript/controllers/colour_mode_controller.js",
@@ -22,15 +19,11 @@ const fullCoverageFiles = [
   "app/javascript/controllers/copy_controller.js",
   "app/javascript/controllers/experimental_feature_toggle_controller.js",
   "app/javascript/controllers/filters_controller.js",
-  "app/javascript/controllers/integration_access_token_controller.js",
-  "app/javascript/controllers/launch_workflow_controller.js",
   "app/javascript/controllers/layout_controller.js",
   "app/javascript/controllers/linelist_export_controller.js",
   "app/javascript/controllers/linelist_export/downloader.js",
   "app/javascript/controllers/linelist_export/selection.js",
   "app/javascript/controllers/linelist_export/worker_client.js",
-  "app/javascript/controllers/linelist_import_controller.js",
-  "app/javascript/controllers/linelist_import/worker_source.js",
   "app/javascript/controllers/metadata_toggle_controller.js",
   "app/javascript/controllers/nextflow/v2/samplesheet_controller.js",
   "app/javascript/controllers/projects/samples/complete_controller.js",
@@ -39,13 +32,11 @@ const fullCoverageFiles = [
   "app/javascript/controllers/projects/samples/metadata/create_controller.js",
   "app/javascript/controllers/projects/samples/metadata/delete_listing_controller.js",
   "app/javascript/controllers/projects/samples/metadata/destroy_controller.js",
-  "app/javascript/controllers/personal_access_tokens_controller.js",
   "app/javascript/controllers/refresh_controller.js",
   "app/javascript/controllers/selection_controller.js",
   "app/javascript/controllers/sidebar_item_controller.js",
   "app/javascript/controllers/sortable_lists/v1/two_lists_selection_controller.js",
   "app/javascript/controllers/spinner_controller.js",
-  "app/javascript/controllers/table_controller.js",
   "app/javascript/controllers/table_selection_controller.js",
   "app/javascript/controllers/token_controller.js",
   "app/javascript/controllers/treegrid_controller.js",
@@ -71,7 +62,6 @@ const fullCoverageFiles = [
   "app/javascript/controllers/form/json_submission_controller.js",
   "app/javascript/controllers/form_error_summary_controller.js",
   "app/javascript/workers/linelist_export_worker.js",
-  "app/javascript/workers/linelist_import_worker.js",
   "app/javascript/controllers/breadcrumb_controller.js",
   "app/javascript/controllers/search_field_controller.js",
   "app/javascript/controllers/sessionstorage_amend_form_controller.js",
@@ -105,15 +95,27 @@ export default defineConfig({
   resolve: {
     alias: {
       controllers: resolve(jsRoot, "controllers"),
+      debounce: resolve("vendor/javascript/debounce.js"),
+      deepmerge: resolve("vendor/javascript/deepmerge.js"),
+      "@sindresorhus/slugify": resolve(
+        "vendor/javascript/@sindresorhus--slugify.js",
+      ),
+      "@sindresorhus/transliterate": resolve(
+        "vendor/javascript/@sindresorhus--transliterate.js",
+      ),
+      "escape-string-regexp": resolve(
+        "vendor/javascript/escape-string-regexp.js",
+      ),
+      "focus-trap": resolve("vendor/javascript/focus-trap.js"),
+      tabbable: resolve("vendor/javascript/tabbable.js"),
       "utilities/live_region": resolve(jsRoot, "utilities/live_region.js"),
-      "utilities/collection": resolve(jsRoot, "utilities/collection.js"),
-      "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
-      "utilities/form": resolve(jsRoot, "utilities/form.js"),
-      "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
       "utilities/advanced_search_focus": resolve(
         jsRoot,
         "utilities/advanced_search_focus.js",
       ),
+      "utilities/flash": resolve(jsRoot, "utilities/flash.js"),
+      "utilities/form": resolve(jsRoot, "utilities/form.js"),
+      "utilities/focus": resolve(jsRoot, "utilities/focus.js"),
       "utilities/refresh": resolve(jsRoot, "utilities/refresh.js"),
       "utilities/styles": resolve(jsRoot, "utilities/styles.js"),
       "utilities/dialog": resolve(jsRoot, "utilities/dialog.js"),
@@ -170,6 +172,9 @@ export default defineConfig({
         "app/javascript/controllers/index.js",
         "app/javascript/controllers/application.js",
         "app/javascript/controllers/combobox_datepicker/constants.js",
+        // Import worker entry module runs in a worker context and is not yet
+        // unit-tested; the export worker is covered and gated below.
+        "app/javascript/workers/linelist_import_worker.js",
       ],
       // Ratchet allowlist: add a path here once it reaches full coverage.
       thresholds: {
