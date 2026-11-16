@@ -351,7 +351,7 @@ GEM
     htmlentities (4.4.2)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.2.0)
+    i18n-tasks (1.2.1)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -848,7 +848,7 @@ DEPENDENCIES
   graphql
   heroicon-rails (>= 0.2.9)
   holidays
-  i18n-tasks (~> 1.2.0)
+  i18n-tasks (~> 1.2.1)
   jbuilder
   json (< 3.0)
   lefthook (~> 2.2)
