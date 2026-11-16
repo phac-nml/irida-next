@@ -4,11 +4,11 @@
     controller: "advanced-search--v2--builder",
     "advanced-search--v2--builder-list-input-outlet": ".list-input",
     "advanced-search--v2--builder-enum-fields-value": json_escape_data(@fields.fetch(:enum_fields, {})),
-    "advanced-search--v2--builder-enum-operations-value": json_escape_data(enum_operation_options),
+    "advanced-search--v2--builder-enum-operations-value": json_escape_data(AdvancedSearch::OperatorCatalog.enum_operator_options(metadata_operators_enabled: Flipper.enabled?(:advanced_search_metadata_operators))),
     "advanced-search--v2--builder-numeric-fields-value": json_escape_data(@fields.fetch(:numeric_fields, [])),
-    "advanced-search--v2--builder-numeric-operations-value": json_escape_data(numeric_operation_options),
+    "advanced-search--v2--builder-numeric-operations-value": json_escape_data(AdvancedSearch::OperatorCatalog.numeric_operator_options),
     "advanced-search--v2--builder-date-fields-value": json_escape_data(@fields.fetch(:date_fields, [])),
-    "advanced-search--v2--builder-date-operations-value": json_escape_data(date_operation_options),
+    "advanced-search--v2--builder-date-operations-value": json_escape_data(AdvancedSearch::OperatorCatalog.date_operator_options),
     "advanced-search--v2--builder-initial-state-value": json_escape_data(initial_state),
     "advanced-search--v2--builder-operations-value": json_escape_data(@operations),
   },
@@ -27,7 +27,7 @@
         emphasis: :outline,
         data: { action: "advanced-search--v2--builder#addGroup" },
       ) do %>
-        <%= t("components.advanced_search_component.v1.add_group_button") %>
+        <%= t("components.advanced_search_component.add_group_button") %>
       <% end %>
     </div>
 

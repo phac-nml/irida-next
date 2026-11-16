@@ -15,7 +15,7 @@ module AdvancedSearch
 
         # Trigger opens via the dialog controller, not the builder
         assert_selector "button[data-action='advanced-search--v2--dialog#renderSearch viral--dialog#open']",
-                        text: I18n.t('components.advanced_search_component.v1.title')
+                        text: I18n.t('components.advanced_search_component.title')
       end
 
       %i[en fr].each do |locale|
@@ -27,15 +27,15 @@ module AdvancedSearch
             I18n.with_locale(locale) do
               render_preview(:v2_empty, from: AdvancedSearchComponentPreview)
 
-              description = I18n.t('components.advanced_search_component.v1.description')
+              description = I18n.t('components.advanced_search_component.description')
               rule = metadata_operators ? 'metadata_operators' : 'standard_operators'
               other_rule = metadata_operators ? 'standard_operators' : 'metadata_operators'
-              rules = I18n.t("components.advanced_search_component.v1.rules.#{rule}")
+              rules = I18n.t("components.advanced_search_component.rules.#{rule}")
 
               assert_selector 'dialog p', text: description, visible: :all
               assert_selector 'dialog p', text: rules, visible: :all
               assert_no_selector 'dialog p',
-                                 text: I18n.t("components.advanced_search_component.v1.rules.#{other_rule}"),
+                                 text: I18n.t("components.advanced_search_component.rules.#{other_rule}"),
                                  visible: :all
               assert_no_selector '#advanced-search-builder p', text: description, visible: :all
               assert_no_selector '#advanced-search-builder p', text: rules, visible: :all
@@ -61,9 +61,9 @@ module AdvancedSearch
 
         assert_selector "form #advanced-search-builder[data-controller='advanced-search--v2--builder']"
         assert_no_selector 'dialog', visible: :all
-        assert_no_selector 'p', text: I18n.t('components.advanced_search_component.v1.description'), visible: :all
+        assert_no_selector 'p', text: I18n.t('components.advanced_search_component.description'), visible: :all
         %w[standard_operators metadata_operators].each do |rule|
-          assert_no_selector 'p', text: I18n.t("components.advanced_search_component.v1.rules.#{rule}"), visible: :all
+          assert_no_selector 'p', text: I18n.t("components.advanced_search_component.rules.#{rule}"), visible: :all
         end
       end
 
@@ -108,8 +108,8 @@ module AdvancedSearch
         html = ApplicationController.render(
           AdvancedSearch::V2::BuilderComponent.new(form:, search:, fields:), layout: false
         )
-        assert_includes html, I18n.t('components.advanced_search_component.v1.group', index: 1)
-        assert_includes html, I18n.t('components.advanced_search_component.v1.group', index: 2)
+        assert_includes html, I18n.t('components.advanced_search_component.group', index: 1)
+        assert_includes html, I18n.t('components.advanced_search_component.group', index: 2)
       end
     end
   end

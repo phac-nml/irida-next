@@ -91,6 +91,40 @@ module AdvancedSearch
         @numeric_operator_values ||= keys_where(&:numeric_value).freeze
       end
 
+      # --- UI option sets (advanced-search components) ---
+
+      def ui_options(metadata_operators_enabled:)
+        operators = available(metadata_operators_enabled:)
+        options = {
+          'standard' => options_for(operators.select { |op| op.ui_group == :standard }, :standard)
+        }
+        options['metadata'] = metadata_options(operators) if metadata_operators_enabled
+        options
+      end
+
+      def enum_operator_options(metadata_operators_enabled:)
+        options = ui_options(metadata_operators_enabled:)
+        {
+          'standard' => select_options(options.fetch('standard'), enum_operator_values.fetch('standard')),
+          'metadata' => select_options(
+            flatten_metadata_options(options.fetch('metadata', {})),
+            enum_operator_values.fetch('metadata')
+          )
+        }.compact_blank
+      end
+
+      def numeric_operator_options
+        select_options(ui_options(metadata_operators_enabled: false).fetch('standard'), numeric_operator_values)
+      end
+
+      def date_operator_options
+        select_options(ui_options(metadata_operators_enabled: false).fetch('standard'), date_operator_values)
+      end
+
+      def metadata_operator_options
+        ui_options(metadata_operators_enabled: true).fetch('metadata')
+      end
+
       # Standard operators valid for non-metadata date fields (e.g. created_at).
       def date_operator_values
         @date_operator_values ||=
@@ -129,22 +163,25 @@ module AdvancedSearch
       # Standard operators for non-metadata fields.
       def build_standard_operators # rubocop:disable Metrics/MethodLength
         [
-          op('=', arel_handler: :condition_equals, arel_args: %i[value field_name],
+          op('=', label_key: :equals, arel_handler: :condition_equals, arel_args: %i[value field_name],
                   graphql_name: 'EQUALS', graphql_group: :standard,
                   non_metadata: true, numeric_value: true, enum_standard: true),
-          op('!=', arel_handler: :condition_not_equals, arel_args: %i[value field_name],
+          op('!=', label_key: :not_equals, arel_handler: :condition_not_equals, arel_args: %i[value field_name],
                    graphql_name: 'NOT_EQUALS', graphql_group: :standard,
                    non_metadata: true, numeric_value: true, enum_standard: true),
-          op('<=', arel_handler: :condition_less_than_or_equal, arel_args: %i[value metadata_key field_name],
+          op('<=', label_key: :less_than, arel_handler: :condition_less_than_or_equal,
+                   arel_args: %i[value metadata_key field_name],
                    graphql_name: 'LESS_THAN_EQUALS', graphql_group: :standard,
                    combinable_group: :gleqt, non_metadata: true, numeric_value: true),
-          op('>=', arel_handler: :condition_greater_than_or_equal, arel_args: %i[value metadata_key field_name],
+          op('>=', label_key: :greater_than, arel_handler: :condition_greater_than_or_equal,
+                   arel_args: %i[value metadata_key field_name],
                    graphql_name: 'GREATER_THAN_EQUALS', graphql_group: :standard,
                    combinable_group: :gleqt, non_metadata: true, numeric_value: true),
           op('contains', arel_handler: :condition_contains, arel_args: %i[value model_class field_name],
                          graphql_name: 'CONTAINS', graphql_group: :standard,
                          non_metadata: true, standard_date_disallowed: true),
-          op('not_contains', arel_handler: :condition_not_contains, arel_args: %i[value model_class field_name],
+          op('not_contains', label_key: :does_not_contain, arel_handler: :condition_not_contains,
+                             arel_args: %i[value model_class field_name],
                              graphql_name: 'NOT_CONTAINS', graphql_group: :standard,
                              non_metadata: true, standard_date_disallowed: true),
           op('exists', arel_handler: :condition_exists, arel_args: [],
@@ -265,15 +302,67 @@ module AdvancedSearch
 
       # Builds an Operator with sensible defaults so each declaration only states
       # what differs from the common case (a standard, non-metadata operator).
-      def op(key, arel_handler:, arel_args:, ui_group: :standard, graphql_name: nil, graphql_group: nil, # rubocop:disable Metrics/ParameterLists
+      def op(key, arel_handler:, arel_args:, label_key: key, ui_group: :standard, graphql_name: nil, graphql_group: nil, # rubocop:disable Metrics/ParameterLists
              metadata_data_type: nil, combinable_group: nil, requires_metadata_flag: false, exists: false,
              between: false, non_metadata: false, numeric_value: false, enum_standard: false, enum_metadata: false,
              standard_date_disallowed: false)
         Operator.new(
-          key:, arel_handler:, arel_args: arel_args.freeze, ui_group:, graphql_name:, graphql_group:,
+          key:, label_key:, arel_handler:, arel_args: arel_args.freeze, ui_group:, graphql_name:, graphql_group:,
           metadata_data_type:, combinable_group:, requires_metadata_flag:, exists:, between:,
           non_metadata:, numeric_value:, enum_standard:, enum_metadata:, standard_date_disallowed:
         )
+      end
+
+      def options_for(operators, group)
+        operators.to_h do |operator|
+          [I18n.t("components.advanced_search_component.operations.#{group}.#{operator.label_key}"), operator.key]
+        end
+      end
+
+      def metadata_options(operators) # rubocop:disable Metrics/AbcSize
+        # rubocop:disable Layout/LineLength
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_not_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_contains')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_not_contains')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_in')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_not_in')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_starts_with')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_ends_with')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.text.text_between')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_not_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_less_than_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_greater_than_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_exists')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_not_exists')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.numeric.numeric_between')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_not_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_less_than_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_greater_than_equals')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_exists')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_not_exists')
+        # i18n-tasks-use t('components.advanced_search_component.operations.metadata.operations.date.date_between')
+        # rubocop:enable Layout/LineLength
+        {
+          I18n.t('components.advanced_search_component.operations.metadata.labels.existence') =>
+            options_for(operators.select { |op| op.exists && op.ui_group == :standard }, :standard),
+          I18n.t('components.advanced_search_component.operations.metadata.labels.text') =>
+            options_for(operators.select { |op| op.ui_group == :metadata_text }, 'metadata.operations.text'),
+          I18n.t('components.advanced_search_component.operations.metadata.labels.numeric') =>
+            options_for(operators.select { |op| op.ui_group == :metadata_numeric }, 'metadata.operations.numeric'),
+          I18n.t('components.advanced_search_component.operations.metadata.labels.date') =>
+            options_for(operators.select { |op| op.ui_group == :metadata_date }, 'metadata.operations.date')
+        }.reject { |_, options| options.empty? }
+      end
+
+      def select_options(options, keys)
+        options.select { |_, value| keys.include?(value) }
+      end
+
+      def flatten_metadata_options(options)
+        options.values.reduce({}, :merge)
       end
     end
   end

@@ -113,6 +113,35 @@ module AdvancedSearch
                    OperatorCatalog.date_operator_values.sort
     end
 
+    test 'ui_options preserves display order and wire values' do
+      options = OperatorCatalog.ui_options(metadata_operators_enabled: false)
+
+      assert_equal(
+        %w[= != <= >= contains not_contains exists not_exists in not_in starts_with ends_with between],
+        options.fetch('standard').values
+      )
+      assert_equal '=', options.fetch('standard').fetch('=')
+      assert_equal '<=', options.fetch('standard').fetch('<=')
+      assert_not options.key?('metadata')
+    end
+
+    test 'ui_options groups metadata operators and reuses standard existence labels' do
+      options = OperatorCatalog.ui_options(metadata_operators_enabled: true)
+      metadata = options.fetch('metadata')
+
+      assert_equal %w[exists not_exists], metadata.fetch('Existence options').values
+      assert_equal 'text_equals', metadata.fetch('Text options').values.first
+      assert_equal 'numeric_equals', metadata.fetch('Numeric options').values.first
+      assert_equal 'date_equals', metadata.fetch('Date options').values.first
+    end
+
+    test 'category option helpers select catalog operators' do
+      assert_equal %w[= != in not_in],
+                   OperatorCatalog.enum_operator_options(metadata_operators_enabled: false).fetch('standard').values
+      assert_equal %w[= != <= >= in not_in between], OperatorCatalog.numeric_operator_options.values
+      assert_equal %w[= != <= >= exists not_exists between], OperatorCatalog.date_operator_options.values
+    end
+
     # The standard comparison operators must forward field_name so that
     # non-metadata date fields (e.g. created_at) route to date-aware comparison.
     test 'standard comparison operators forward field_name to their handler' do

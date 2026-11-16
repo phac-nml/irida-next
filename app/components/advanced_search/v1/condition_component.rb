@@ -41,11 +41,7 @@ module AdvancedSearch
       end
 
       def metadata_operators
-        grouped_metadata_operators = {}
-        @operations['metadata'].each do |optgroup, options|
-          grouped_metadata_operators[optgroup] = options.to_a
-        end
-        grouped_metadata_operators
+        AdvancedSearch::OperatorCatalog.metadata_operator_options.transform_values(&:to_a)
       end
 
       def enum_field?
@@ -69,7 +65,7 @@ module AdvancedSearch
       end
 
       def numeric_operator_options
-        @operations['standard'].select { |_, value| AdvancedSearch::NUMERIC_OPERATOR_VALUES.include?(value) }
+        AdvancedSearch::OperatorCatalog.numeric_operator_options
       end
 
       def date_fields
@@ -81,7 +77,7 @@ module AdvancedSearch
       end
 
       def date_operator_options
-        @operations['standard'].select { |_, value| AdvancedSearch::DATE_OPERATOR_VALUES.include?(value) }
+        AdvancedSearch::OperatorCatalog.date_operator_options
       end
 
       def operator_select_options
@@ -102,17 +98,17 @@ module AdvancedSearch
       end
 
       def enum_operator_options
-        if Flipper.enabled?(:advanced_search_metadata_operators) && selected_field.starts_with?('metadata.')
-          # flatten metadata operators to exclude optgroup labeling
-          flattened_metadata_operators = @operations['metadata']
-                                         .values
-                                         .reduce({}, :merge)
-          flattened_metadata_operators.select do |_, value|
-            AdvancedSearch::ENUM_OPERATOR_VALUES['metadata'].include?(value)
-          end
-        else
-          @operations['standard'].select { |_, value| AdvancedSearch::ENUM_OPERATOR_VALUES['standard'].include?(value) }
-        end
+        metadata_operators_enabled = Flipper.enabled?(:advanced_search_metadata_operators)
+        options = AdvancedSearch::OperatorCatalog.enum_operator_options(metadata_operators_enabled:)
+        option_key = if selected_field.starts_with?('metadata.') &&
+                        metadata_operators_enabled &&
+                        options.key?('metadata')
+                       'metadata'
+                     else
+                       'standard'
+                     end
+
+        options.fetch(option_key, {})
       end
 
       def field_options_for_select
