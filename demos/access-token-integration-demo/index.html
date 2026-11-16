@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Access Token Demo</title>
   </head>
+
   <body>
     <button
       id="inxt-btn"
@@ -13,23 +14,7 @@
     >
       Connect to INXT
     </button>
-    <script>
-      // Opens the integration access token popup and logs the returned token.
-      const ORIGIN = 'http://localhost:3000';
-      const URL = ORIGIN + '/integration_access_token?caller=bdip_sheets';
 
-      document.getElementById('inxt-btn').addEventListener('click', () => {
-        var x = (window.screenX || window.screenLeft || 0);
-        var y = (window.screenY || window.screenTop || 0);
-        const options = `width=500,height=800,top=${y},left=${x}`
-        const popup = window.open(URL, 'access-token-popup', options);
-        if (!popup) console.warn('Popup blocked');
-      });
-
-      window.addEventListener('message', (event) => {
-        if (event.origin !== ORIGIN) return; // basic origin check
-        console.log('Received token:', event.data);
-      });
-    </script>
+    <script src="index.js" defer></script>
   </body>
 </html>

@@ -1,12 +1,18 @@
-<div class="@container">
+<div
+  class="@container"
+  data-controller="pathogen--tooltip"
+  data-pathogen--tooltip-portal-aria-label-value="<%= Pathogen::Tooltip.portal_aria_label %>"
+>
   <div class="flex flex-row @max-md:flex-col">
     <div
+      tabindex="0"
+      aria-describedby="<%= @tooltip_id %>"
+      data-pathogen--tooltip-target="trigger"
       class="
         overflow-hidden rounded-l-lg rounded-r-lg border border-slate-300 bg-slate-100 px-4 py-2 text-sm font-medium
         text-ellipsis text-slate-700 @md:!rounded-r-none @md:border-r-0 dark:border-slate-600 dark:bg-slate-700
         dark:text-slate-300
       "
-      title="<%= helpers.root_url %>"
     >
       <%= helpers.root_url %>
     </div>
@@ -74,4 +80,6 @@
       <div class="w-1 @max-md:hidden @min-md:mt-2 @min-md:ml-4 dark:text-slate-300">/</div>
     <% end %>
   </div>
+
+  <%= render Pathogen::Tooltip.new(text: helpers.root_url, id: @tooltip_id, placement: :top, class: "whitespace-normal wrap-anywhere") %>
 </div>

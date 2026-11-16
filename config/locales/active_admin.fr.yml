@@ -57,6 +57,7 @@ fr:
         enabled: Activée
       title: Fonctionnalités
     logout: Déconnexion
+    main_navigation: Navigation principale
     site_banners:
       disable: Désactiver
       disable_confirm: Désactiver cette bannière du site?

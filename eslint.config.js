@@ -61,6 +61,22 @@ export default defineConfig([
     },
   },
 
+  // Standalone demo scripts (plain browser scripts outside the asset pipeline)
+  {
+    name: "demo-javascript",
+    files: ["demos/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "script",
+      globals: {
+        ...globals.browser,
+      },
+    },
+    rules: {
+      "no-console": "off",
+    },
+  },
+
   // Build configuration and Node.js files
   {
     name: "node-files",
