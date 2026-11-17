@@ -39,6 +39,9 @@ module Irida
     config.assets.integrity_hash_algorithm = 'sha256'
 
     config.view_component.previews.default_layout = 'lookbook'
+    # Generators should subclass our shared `Component` base (adds Pathogen helpers,
+    # icon/color helpers, etc.) instead of `ViewComponent::Base` directly.
+    config.view_component.generate.parent_class = 'Component'
 
     # Version has_many and belongs_to associations (This feature is experimental due to the number of edge cases)
     # config.logidze.associations_versioning = true
