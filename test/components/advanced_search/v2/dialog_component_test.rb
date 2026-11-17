@@ -25,7 +25,10 @@ module AdvancedSearch
             Flipper.disable(:advanced_search_metadata_operators) unless metadata_operators
 
             I18n.with_locale(locale) do
-              render_preview(:v2_empty, from: AdvancedSearchComponentPreview)
+              # ViewComponent's preview dispatch wraps rendering in its own
+              # `I18n.with_locale(params[:locale] || I18n.default_locale)`, so the
+              # ambient locale above is only honoured if it's also passed as a param.
+              render_preview(:v2_empty, from: AdvancedSearchComponentPreview, params: { locale: locale })
 
               description = I18n.t('components.advanced_search_component.v1.description')
               rule = metadata_operators ? 'metadata_operators' : 'standard_operators'

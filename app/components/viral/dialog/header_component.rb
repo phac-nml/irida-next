@@ -3,7 +3,7 @@
 module Viral
   module Dialog
     # Header component for dialog dialog
-    class HeaderComponent < Viral::BaseComponent
+    class HeaderComponent < Component
       attr_reader :title, :closable
 
       def initialize(title:, closable: true, **system_arguments)
