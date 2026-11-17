@@ -40,7 +40,7 @@ module BotActions
     respond_to do |format|
       format.turbo_stream do
         if @bot_account.persisted?
-          @pagy, @bot_accounts = pagy(@bot_accounts, raise_range_error: true)
+          @pagy, @bot_accounts = pagy(@bot_accounts, limit: 20, page: 1)
 
           render status: :ok, locals: {
             type: 'success',
