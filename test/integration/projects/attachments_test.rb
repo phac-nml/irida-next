@@ -286,9 +286,7 @@ module Projects
 
       get namespace_project_attachments_path(group, projects(:project1), page: 50)
 
-      assert_response :redirect
-
-      assert_match(/page=1/, response.location)
+      assert_redirected_to namespace_project_attachments_path(group, projects(:project1))
 
       follow_redirect!
       assert_response :success

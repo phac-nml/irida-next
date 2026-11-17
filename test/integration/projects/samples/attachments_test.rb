@@ -663,9 +663,7 @@ module Projects
 
         get namespace_project_sample_path(@group, @project, @sample1), params: { tab: 'files', page: 999 }
 
-        assert_response :redirect
-
-        assert_match(/page=1/, response.location)
+        assert_redirected_to namespace_project_sample_path(@group, @project, @sample1)
 
         follow_redirect!
         assert_response :success

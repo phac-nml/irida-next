@@ -87,14 +87,16 @@ class ApplicationController < ActionController::Base
     new_user_session_path(params)
   end
 
-  # Rescues from Pagy::RangeError by redirecting to the first page
+  # Rescues from Pagy::RangeError by redirecting to the first page. The page param is dropped so
+  # Pagy falls back to its own default page, while the given limit (if any) is preserved.
   def redirect_to_first_page
-    redirect_to url_for(page: 1, limit: params[:limit] || 20)
+    redirect_to url_for(page: nil, limit: params[:limit] || nil)
   end
 
-  # Rescues from Pagy::LimitError by redirecting to the default limit
+  # Rescues from Pagy::LimitError by redirecting to the default limit. Both page and limit are
+  # dropped so Pagy falls back to its own defaults.
   def handle_invalid_limit(_exception)
-    redirect_to url_for(page: 1, limit: 20)
+    redirect_to url_for(page: nil, limit: nil)
   end
 
   def set_pagy_locale

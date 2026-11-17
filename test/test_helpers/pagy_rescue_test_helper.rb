@@ -4,7 +4,8 @@
 # Pagy::RangeError and Pagy::LimitError across the various controllers/actions that call pagy.
 module PagyRescueTestHelper
   # Asserts that requesting +path+ with a page far beyond the available results redirects to the
-  # first page, preserving the given (or default) limit, and does not set a flash message.
+  # first page, preserving the given limit (page is dropped so Pagy falls back to its own
+  # default), and does not set a flash message.
   #
   # +redirect_path+ defaults to +path+, but can be overridden for actions where multiple routes
   # map to the same controller/action (e.g. Groups#show), since url_for inside the rescue_from
@@ -13,7 +14,7 @@ module PagyRescueTestHelper
                                                       method: :get)
     public_send(method, path, params: params.merge(page: 999_999, limit:), as: as)
 
-    assert_redirected_to "#{redirect_path}?limit=#{limit}&page=1"
+    assert_redirected_to "#{redirect_path}?limit=#{limit}"
 
     follow_redirect!(as: as)
 
@@ -22,13 +23,14 @@ module PagyRescueTestHelper
   end
 
   # Asserts that requesting +path+ with an invalid limit (malformed string, or a clean integer
-  # that isn't one of the dropdown options) redirects to the first page with the default limit,
-  # and does not set a flash message. See +redirect_path+ note above.
-  def assert_pagy_limit_error_redirects_to_default_limit(path, invalid_limit, params: {}, default_limit: 20, # rubocop:disable Metrics/ParameterLists
-                                                         redirect_path: path, as: nil, method: :get)
+  # that isn't one of the dropdown options) redirects to the first page with the default limit by
+  # dropping both the page and limit params (so Pagy falls back to its own defaults), and does not
+  # set a flash message. See +redirect_path+ note above.
+  def assert_pagy_limit_error_redirects_to_default_limit(path, invalid_limit, params: {}, redirect_path: path, # rubocop:disable Metrics/ParameterLists
+                                                         as: nil, method: :get)
     public_send(method, path, params: params.merge(limit: invalid_limit), as: as)
 
-    assert_redirected_to "#{redirect_path}?limit=#{default_limit}&page=1"
+    assert_redirected_to redirect_path
 
     follow_redirect!(as: as)
 
