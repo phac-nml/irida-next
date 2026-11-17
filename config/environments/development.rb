@@ -91,7 +91,7 @@ Rails.application.configure do
 
   # LookBook
   config.lookbook.project_name = 'IRIDA Next'
-  config.view_component.preview_controller = 'PreviewController'
+  config.view_component.previews.controller = 'PreviewController'
   config.lookbook.preview_display_options = {
     theme: %w[light dark],
     lang: [

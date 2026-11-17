@@ -76,7 +76,7 @@ pathogen_view_components_opts =
   elsif ENV['USE_LOCAL_PATHOGEN'] == '1'
     { path: File.expand_path('../pathogen-view-components', __dir__) }
   else
-    { github: 'phac-nml/pathogen-view-components', tag: 'v1.1.16' }
+    { github: 'phac-nml/pathogen-view-components', tag: 'v1.1.19' }
   end
 gem 'pathogen_view_components', **pathogen_view_components_opts
 
