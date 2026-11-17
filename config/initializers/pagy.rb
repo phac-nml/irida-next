@@ -13,7 +13,7 @@ require 'pagy/classes/request'
 # For example:
 #
 Pagy::OPTIONS[:limit] = 20 # Limit the items per page
-Pagy::OPTIONS[:max_limit] = 100 # The client can request a limit up to 100
+Pagy::OPTIONS[:client_limit] = 100 # The client can request a limit up to 100
 # Pagy::OPTIONS[:max_pages] = 200          # Allow only 200 pages
 # Pagy::OPTIONS[:jsonapi] = true           # Use JSON:API compliant URLs
 
@@ -46,14 +46,14 @@ class Pagy
   class LimitError < Pagy::OptionError # rubocop:disable Style/Documentation
     def initialize(limit_value)
       @limit_value = limit_value
-      allowed = Viral::Pagy::LimitComponent::LIMITS.join(', ')
+      allowed = Irida::Pagination::LIMITS.join(', ')
       super(Pagy, :limit, "one of: #{allowed}", limit_value)
     end
   end
 end
 
 # Validates only the :limit option, raising Pagy::LimitError when it isn't exactly one of the
-# dropdown options (Viral::Pagy::LimitComponent::LIMITS), e.g. a clean integer like 30, or a
+# dropdown options (Irida::Pagination::LIMITS), e.g. a clean integer like 30, or a
 # dirty string like "50abc" that String#to_i would otherwise silently truncate to 50. All other
 # options (e.g. :page, :count) pass through to Pagy's native assign_and_check via super.
 module PagyAssignAndCheckOverride # rubocop:disable Style/OneClassPerFile
@@ -69,12 +69,12 @@ module PagyAssignAndCheckOverride # rubocop:disable Style/OneClassPerFile
     raise Pagy::LimitError, value unless value.respond_to?(:to_i)
 
     integer = value.to_i
-    raise Pagy::LimitError, value if integer.to_s != value.to_s || Viral::Pagy::LimitComponent::LIMITS.exclude?(integer)
+    raise Pagy::LimitError, value if integer.to_s != value.to_s || Irida::Pagination::LIMITS.exclude?(integer)
   end
 end
 
 # Overrides Pagy::Request#resolve_limit so that an invalid limit query param (e.g.
-# "?limit=50abc") or one that isn't one of the dropdown options (Viral::Pagy::LimitComponent::LIMITS)
+# "?limit=50abc") or one that isn't one of the dropdown options (Irida::Pagination::LIMITS)
 # raises Pagy::LimitError instead of being silently converted/accepted.
 module PagyRequestResolveLimit # rubocop:disable Style/OneClassPerFile
   def resolve_limit
@@ -100,7 +100,7 @@ module PagyRequestResolveLimit # rubocop:disable Style/OneClassPerFile
     limit_str = limit_value.to_s
     limit_int = limit_str.to_i
     clean     = limit_int.to_s == limit_str
-    allowed   = Viral::Pagy::LimitComponent::LIMITS.include?(limit_int)
+    allowed   = Irida::Pagination::LIMITS.include?(limit_int)
     raise Pagy::LimitError, limit_value unless clean && allowed
   end
 end

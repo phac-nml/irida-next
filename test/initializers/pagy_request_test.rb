@@ -11,7 +11,7 @@ class PagyAssignAndCheckTest < ActiveSupport::TestCase
   end
 
   test 'assign_and_check accepts every limit dropdown option' do
-    Viral::Pagy::LimitComponent::LIMITS.each do |limit|
+    Irida::Pagination::LIMITS.each do |limit|
       pagy = Pagy::Offset.new(count: 100, page: 1, limit:)
 
       assert_equal limit, pagy.limit
@@ -19,7 +19,7 @@ class PagyAssignAndCheckTest < ActiveSupport::TestCase
   end
 
   test 'assign_and_check rejects a clean string limit not in the dropdown options' do
-    # 30 converts cleanly but is not one of Viral::Pagy::LimitComponent::LIMITS
+    # 30 converts cleanly but is not one of Irida::Pagination::LIMITS
     assert_raises(Pagy::LimitError) do
       Pagy::Offset.new(count: 100, page: 1, limit: '30')
     end
@@ -46,7 +46,7 @@ class PagyAssignAndCheckTest < ActiveSupport::TestCase
       Pagy::Offset.new(count: 100, page: 1, limit: '50abc')
     end
 
-    assert_match(/one of: #{Viral::Pagy::LimitComponent::LIMITS.join(', ')}/, error.message)
+    assert_match(/one of: #{Irida::Pagination::LIMITS.join(', ')}/, error.message)
   end
 
   test 'assign_and_check rejects negative values' do
