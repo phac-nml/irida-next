@@ -112,7 +112,9 @@ module WorkflowExecutions
         coerce_workflow_params!(sanitized_params, definition[:properties])
       end
 
-      sanitized_params
+      # re-apply pipeline-configured defaults (incl. hidden properties, which were stripped above)
+      # after sanitization so overridden defaults for hidden params aren't lost
+      sanitized_params.reverse_merge(workflow.default_workflow_params.with_indifferent_access)
     end
 
     # Names of the workflow params that are actually rendered in the submission form (and therefore
@@ -142,10 +144,6 @@ module WorkflowExecutions
 
     def autoset_params
       params.merge!(@workflow.default_params)
-
-      return if @workflow.default_workflow_params.empty?
-
-      params['workflow_params'].reverse_merge!(@workflow.default_workflow_params)
     end
 
     def samples_workflow_execution_attributes
