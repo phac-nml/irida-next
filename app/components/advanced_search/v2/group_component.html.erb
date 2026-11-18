@@ -12,13 +12,6 @@
     <%= t("components.advanced_search_component.group", index: @group_number) %>
   <% end %>
 
-  <p
-    id="<%= @form.field_id(:groups_attributes, @group_index, :match_all) %>"
-    class="text-(length:--type-meta) text-[var(--pvc-color-text-muted)]"
-  >
-    <%= t("components.advanced_search_component.v2.group_match_all") %>
-  </p>
-
   <%= @form.fields_for :groups, @group, child_index: @group_index do |groups_form| %>
     <% @group.conditions.each_with_index do |condition, condition_index| %>
       <%= render AdvancedSearch::V2::ConditionComponent.new(

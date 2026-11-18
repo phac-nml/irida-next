@@ -69,11 +69,6 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
                            subject: I18n.t('components.advanced_search_component.v2.subject.samples'))
         assert_selector '[data-advanced-search-connective="or"][aria-hidden="true"]', count: 1
         assert_selector '[data-advanced-search-connective="and"][aria-hidden="true"]', count: 2
-        all(GROUPS).each do |group|
-          helper = find("[id='#{group['aria-describedby']}']")
-          assert_equal I18n.t('components.advanced_search_component.v2.group_match_all'), helper.text
-          assert_nil helper['aria-hidden']
-        end
 
         assert_selector GROUPS, count: 2
         within all(GROUPS)[0] do

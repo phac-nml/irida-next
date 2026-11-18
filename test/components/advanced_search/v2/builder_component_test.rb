@@ -25,11 +25,6 @@ module AdvancedSearch
             html = Nokogiri::HTML.fragment(render_builder(search:))
             groups = html.css("fieldset[data-advanced-search--v2--builder-target='groupsContainer']")
             assert_equal 2, groups.size # Existing group plus the new-group template.
-            groups.each do |group|
-              helper = html.at_css("[id='#{group['aria-describedby']}']")
-              assert_equal I18n.t('components.advanced_search_component.v2.group_match_all'), helper.text.strip
-              assert_nil helper['aria-hidden']
-            end
             %w[and or].each do |connective|
               divider = html.at_css("[data-advanced-search-connective='#{connective}']")
               assert_equal I18n.t("components.advanced_search_component.v2.connective.#{connective}"),
