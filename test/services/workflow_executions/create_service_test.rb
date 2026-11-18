@@ -324,6 +324,39 @@ module WorkflowExecutions
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
+    test 'sanitized_workflow_params retains overridden default for a hidden property' do
+      # the "calculate-age" pipeline overrides the (otherwise visible) "transformation" param to be
+      # hidden with a new default of "age", which must survive sanitization even though it's hidden
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/metadatatransformation#calculate-age',
+            workflow_version: '1.1.0' },
+        workflow_params:
+        {
+          age_header: 'calculated_age',
+          metadata_1_header: 'dob',
+          transformation: 'malicious-value',
+          config_profile_name: 'evil',
+          malicious_param: 'injected',
+          input: 'gid://irida/Attachment/1'
+        },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 7'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_equal 'calculated_age', @workflow_execution.workflow_params['age_header']
+      assert_equal 'dob', @workflow_execution.workflow_params['metadata_1_header']
+      assert_equal 'age', @workflow_execution.workflow_params['transformation']
+      assert_not @workflow_execution.workflow_params.key?('config_profile_name')
+      assert_not @workflow_execution.workflow_params.key?('malicious_param')
+      assert_not @workflow_execution.workflow_params.key?('input')
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
     test 'test create new workflow execution omits blank optional numeric params' do
       workflow_params = {
         metadata: { pipeline_id: 'phac-nml/iridanextexample', workflow_version: '1.0.2' },
