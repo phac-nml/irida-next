@@ -20,7 +20,7 @@ describe("flash controller", () => {
     await mount();
     await vi.advanceTimersByTimeAsync(20);
     expect(element.style.opacity).toBe("1");
-    expect(element.style.transform).toBe("translateY(0) scale(1)");
+    expect(element.style.transform).toBe("translateY(0px) scale(1)");
     await vi.advanceTimersByTimeAsync(980);
     expect(element.isConnected).toBe(true);
     expect(element.style.opacity).toBe("0");
