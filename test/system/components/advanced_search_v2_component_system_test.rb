@@ -11,6 +11,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
   def setup
     Flipper.enable(:advanced_search_v2)
     Flipper.enable(:advanced_search_with_auto_complete)
+    Flipper.enable(:advanced_search_metadata_operators)
   end
 
   [true, false].each do |autocomplete|
@@ -89,7 +90,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     assert_selector CONDITIONS, count: 1
     within first(CONDITIONS) do
       assert_equal 'metadata.country', find("input[name$='[field]']", visible: :all).value
-      assert_equal '=', find("select[name$='[operator]']").value
+      assert_equal 'text_equals', find("select[name$='[operator]']").value
       assert_equal 'Canada', find("input[name$='[value]']").value
     end
 
@@ -97,7 +98,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     assert_selector CONDITIONS, count: 2
     within all(CONDITIONS)[1] do
       choose_field('country')
-      find("select[name$='[operator]']").find("option[value='=']").select_option
+      find("select[name$='[operator]']").find("option[value='text_equals']").select_option
       find("input[name$='[value]']").fill_in with: 'Mexico'
     end
     within first(CONDITIONS) do
@@ -120,7 +121,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     condition_name = 'q[groups_attributes][0][conditions_attributes][1]'
     assert_equal [
       ["#{condition_name}[field]", 'metadata.country'],
-      ["#{condition_name}[operator]", '='],
+      ["#{condition_name}[operator]", 'text_equals'],
       ["#{condition_name}[value]", 'Mexico']
     ], query_fields
   end
@@ -137,7 +138,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
       condition = group.all(CONDITIONS)[1]
       within condition do
         choose_field('country')
-        find("select[name$='[operator]']").find("option[value='in']").select_option
+        find("select[name$='[operator]']").find("option[value='text_in']").select_option
         find("input[data-list-input-target='input']").send_keys('Canada', ',')
         assert_selector '.search-tag', text: 'Canada'
       end
@@ -166,7 +167,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
         assert_selector "[role='option'][data-value='metadata.age']"
         assert_combobox_references
         find("[role='option'][data-value='metadata.age']").click
-        find("select[name$='[operator]']").find("option[value='between']").select_option
+        find("select[name$='[operator]']").find("option[value='numeric_between']").select_option
         assert_selector "input[name='#{value_name}']", count: 2
         find("input[id$='from_value']").fill_in with: '10'
         find("input[id$='to_value']").fill_in with: '20'
@@ -179,7 +180,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
       condition_name = 'q[groups_attributes][1][conditions_attributes][1]'
       assert_equal [
         ["#{condition_name}[field]", 'metadata.age'],
-        ["#{condition_name}[operator]", 'between'],
+        ["#{condition_name}[operator]", 'numeric_between'],
         [value_name, '10'],
         [value_name, '20']
       ], query_fields
@@ -242,7 +243,7 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
         name = 'q[groups_attributes][0][conditions_attributes][0]'
         assert_equal [
           ["#{name}[field]", 'metadata.country'],
-          ["#{name}[operator]", 'in'],
+          ["#{name}[operator]", 'text_in'],
           ["#{name}[value][]", 'Canada'],
           ["#{name}[value][]", 'Mexico'],
           ["#{name}[value][]", '']
