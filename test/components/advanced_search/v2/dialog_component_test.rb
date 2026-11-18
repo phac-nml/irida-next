@@ -86,7 +86,7 @@ module AdvancedSearch
         builder = page.find('#advanced-search-builder', visible: :all)
         state = builder['data-advanced-search--v2--builder-initial-state-value']
 
-        assert_equal [[{ 'field' => 'metadata.country', 'operator' => 'in', 'values' => %w[Canada Mexico] }]],
+        assert_equal [[{ 'field' => 'metadata.country', 'operator' => 'text_in', 'values' => %w[Canada Mexico] }]],
                      JSON.parse(state)
       end
 
