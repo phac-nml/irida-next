@@ -78,9 +78,9 @@ end
 # raises Pagy::LimitError instead of being silently converted/accepted.
 module PagyRequestResolveLimit # rubocop:disable Style/OneClassPerFile
   def resolve_limit
-    default   = @options[:limit] || Pagy::DEFAULT[:limit]
-    max_limit = @options[:max_limit]
-    return default unless max_limit
+    default = @options[:limit] || Pagy::DEFAULT[:limit]
+    client_limit = @options[:client_limit]
+    return default unless client_limit
 
     limit_key   = @options[:limit_key] || Pagy::DEFAULT[:limit_key]
     limit_value = @params.dig(@options[:root_key], limit_key) || @params[limit_key]
@@ -88,7 +88,7 @@ module PagyRequestResolveLimit # rubocop:disable Style/OneClassPerFile
     validate_limit_value!(limit_value)
 
     limit = limit_value.to_s.to_i
-    limit.zero? ? default : [limit, max_limit].min
+    limit.zero? ? default : [limit, client_limit].min
   end
 
   private
