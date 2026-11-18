@@ -54,14 +54,16 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
       groups: [
         Sample::SearchGroup.new(
           conditions: [
-            Sample::SearchCondition.new(field: 'metadata.country', operator: '=', value: 'Canada'),
-            Sample::SearchCondition.new(field: 'metadata.collection_date', operator: '>=', value: '2024-01-01'),
-            Sample::SearchCondition.new(field: 'metadata.collection_date', operator: '<=', value: '2024-12-01')
+            Sample::SearchCondition.new(field: 'metadata.country', operator: 'text_equals', value: 'Canada'),
+            Sample::SearchCondition.new(field: 'metadata.collection_date', operator: 'date_greater_than_equals',
+                                        value: '2024-01-01'),
+            Sample::SearchCondition.new(field: 'metadata.collection_date', operator: 'date_less_than_equals',
+                                        value: '2024-12-01')
           ]
         ),
         Sample::SearchGroup.new(
           conditions: [
-            Sample::SearchCondition.new(field: 'metadata.outbreak_code', operator: '=', value: '2406MLGX6-1')
+            Sample::SearchCondition.new(field: 'metadata.outbreak_code', operator: 'text_equals', value: '2406MLGX6-1')
           ]
         )
       ]
@@ -101,7 +103,8 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
     search = Sample::Query.new(
       groups: [
         Sample::SearchGroup.new(
-          conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: 'in', value: %w[Canada Mexico])]
+          conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: 'text_in',
+                                                   value: %w[Canada Mexico])]
         )
       ]
     )
@@ -117,7 +120,7 @@ class AdvancedSearchComponentPreview < ViewComponent::Preview
     search = Sample::Query.new(
       groups: [
         Sample::SearchGroup.new(
-          conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: '=', value: 'Canada')]
+          conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: 'text_equals', value: 'Canada')]
         )
       ]
     )
