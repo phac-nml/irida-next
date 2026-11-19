@@ -39,8 +39,8 @@ importers:
         specifier: ^0.5.11
         version: 0.5.11(tailwindcss@4.3.5)
       debounce:
-        specifier: ^3.0.0
-        version: 3.0.0
+        specifier: ^4.0.0
+        version: 4.0.0
       deepmerge:
         specifier: ^4.3.1
         version: 4.3.1
@@ -1142,9 +1142,9 @@ packages:
     resolution: {integrity: sha512-JQUCCK+/CAGbGGx618PlFZMXH81Jtj7t73CHv9dd/zVWvxgGT2zLFRjnKb+Ng46GIwcy+f7f88qd4duqllK+WQ==}
     engines: {node: ^22.14.0 || >=24.0.0}
 
-  debounce@3.0.0:
-    resolution: {integrity: sha512-64byRbF0/AirwbuHqB3/ZpMG9/nckDa6ZA0yd6UnaQNwbbemCOwvz2sL5sjXLHhZHADyiwLm0M5qMhltUUx+TA==}
-    engines: {node: '>=20'}
+  debounce@4.0.0:
+    resolution: {integrity: sha512-o6nMNFRtqLR6mRlyt0b21cgYPSKAEMZFpROIRS9ZRH6hhSJWvGErqeSCJnWyiwVQYMSw7f/DZLilF5YRDwFz7w==}
+    engines: {node: '>=22.2'}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -2869,7 +2869,7 @@ snapshots:
     transitivePeerDependencies:
       - '@noble/hashes'
 
-  debounce@3.0.0: {}
+  debounce@4.0.0: {}
 
   debug@4.4.3(supports-color@7.2.0):
     dependencies:
