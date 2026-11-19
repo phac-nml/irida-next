@@ -189,11 +189,6 @@ en:
           and: AND
           or: OR
         empty_state: Add a condition to start filtering.
-        intro: Find %{subject} matching ANY of the following groups.
-        subject:
-          attachments: files
-          samples: samples
-          workflow_executions: workflow executions
     attachments:
       dialogs:
         delete_attachment_component:
