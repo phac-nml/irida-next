@@ -45,7 +45,8 @@ module WorkflowExecutions
         }
       }.to_json
 
-      @workflows_without_error = ['phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
+      @workflows_without_error = ['Calculate Age 1.1.0 Calculates the age between two dates.',
+                                  'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
                                   'phac-nml/iridanextexample 1.0.3 IRIDA Next Example Pipeline',
                                   'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
                                   'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
@@ -225,7 +226,8 @@ module WorkflowExecutions
     end
 
     def workflows_with_error(disabled_button_text)
-      ['phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
+      ['Calculate Age 1.1.0 Calculates the age between two dates.',
+       'phac-nml/gasclustering 0.4.2 Genomic Address Service Clustering Workflow',
        'phac-nml/iridanextexample 1.0.2 IRIDA Next Example Pipeline',
        'phac-nml/iridanextexample 1.0.1 IRIDA Next Example Pipeline',
        'phac-nml/snvphylnfc 2.4.0 SNVPhyl nf-core pipeline',

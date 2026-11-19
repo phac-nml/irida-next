@@ -299,7 +299,10 @@ module WorkflowExecutions
         {
           assembler: '',
           project_name: 'assembly',
-          random_seed: '0'
+          random_seed: '0',
+          config_profile_name: 'evil',
+          malicious_param: 'injected',
+          input: 'gid://irida/Attachment/1'
         },
         submitter_id: @user.id,
         namespace_id: @project.namespace.id,
@@ -312,9 +315,45 @@ module WorkflowExecutions
       assert_equal '', @workflow_execution.workflow_params['assembler']
       assert_equal 'assembly', @workflow_execution.workflow_params['project_name']
       assert_equal 0, @workflow_execution.workflow_params['random_seed']
+      assert_not @workflow_execution.workflow_params.key?('config_profile_name')
+      assert_not @workflow_execution.workflow_params.key?('malicious_param')
+      assert_not @workflow_execution.workflow_params.key?('input')
       expected_tags = { createdBy: @user.email, namespaceId: @workflow_execution.namespace.puid,
                         samplesCount: @workflow_execution.samples_workflow_executions.size.to_s }
       assert_equal expected_tags, @workflow_execution.tags.transform_keys(&:to_sym)
+      assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
+    end
+
+    test 'sanitized_workflow_params retains overridden default for a hidden property' do
+      # the "calculate-age" pipeline overrides the (otherwise visible) "transformation" param to be
+      # hidden with a new default of "age", which must survive sanitization even though it's hidden
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/metadatatransformation#calculate-age',
+            workflow_version: '1.1.0' },
+        workflow_params:
+        {
+          age_header: 'calculated_age',
+          metadata_1_header: 'dob',
+          transformation: 'malicious-value',
+          config_profile_name: 'evil',
+          malicious_param: 'injected',
+          input: 'gid://irida/Attachment/1'
+        },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: @samples_workflow_executions_attributes,
+        name: 'New Workflow Execution 7'
+      }
+
+      @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+
+      assert_equal 'calculated_age', @workflow_execution.workflow_params['age_header']
+      assert_equal 'dob', @workflow_execution.workflow_params['metadata_1_header']
+      assert_equal 'age', @workflow_execution.workflow_params['transformation']
+      assert_not @workflow_execution.workflow_params.key?('config_profile_name')
+      assert_not @workflow_execution.workflow_params.key?('malicious_param')
+      assert_not @workflow_execution.workflow_params.key?('input')
       assert_enqueued_jobs(1, except: Turbo::Streams::BroadcastStreamJob)
     end
 
