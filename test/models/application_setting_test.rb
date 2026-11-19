@@ -176,6 +176,88 @@ class ApplicationSettingTest < ActiveSupport::TestCase
     assert_includes error_text, '/data_grid_samples_table/name'
   end
 
+  test 'workflow_execution_fields defaults to an empty hash' do
+    settings = ApplicationSetting.build_from_defaults
+
+    assert_equal({}, settings.workflow_execution_fields)
+    assert settings.valid?
+  end
+
+  test 'workflow_execution_fields accepts a valid field definition' do
+    settings = ApplicationSetting.build_from_defaults(
+      workflow_execution_fields: {
+        'compute_queue' => {
+          'type' => 'string',
+          'title' => 'Compute queue',
+          'description' => 'Where this workflow execution will run.',
+          'enum' => %w[onprem azure],
+          'default' => 'onprem',
+          'required' => true,
+          'pipelines' => ['phac-nml/iridanextexample']
+        }
+      }
+    )
+
+    assert settings.valid?
+  end
+
+  test 'workflow_execution_fields rejects an unknown type' do
+    settings = ApplicationSetting.build_from_defaults(
+      workflow_execution_fields: {
+        'compute_queue' => { 'type' => 'object' }
+      }
+    )
+
+    assert_not settings.valid?
+    assert settings.errors[:workflow_execution_fields].any?
+  end
+
+  test 'workflow_execution_fields rejects a missing type' do
+    settings = ApplicationSetting.build_from_defaults(
+      workflow_execution_fields: {
+        'compute_queue' => { 'title' => 'Compute queue' }
+      }
+    )
+
+    assert_not settings.valid?
+    assert settings.errors[:workflow_execution_fields].any?
+  end
+
+  test 'workflow_execution_fields rejects unknown properties' do
+    settings = ApplicationSetting.build_from_defaults(
+      workflow_execution_fields: {
+        'compute_queue' => { 'type' => 'string', 'unexpected' => true }
+      }
+    )
+
+    assert_not settings.valid?
+    assert settings.errors[:workflow_execution_fields].any?
+  end
+
+  test 'workflow_execution_fields rejects a non-lowercase key' do
+    settings = ApplicationSetting.build_from_defaults(
+      workflow_execution_fields: {
+        'ComputeQueue' => { 'type' => 'string' }
+      }
+    )
+
+    assert_not settings.valid?
+    assert settings.errors[:workflow_execution_fields].any?
+  end
+
+  test 'workflow_execution_fields rejects reserved system tag keys' do
+    ApplicationSetting::RESERVED_WORKFLOW_EXECUTION_FIELD_KEYS.each do |reserved_key|
+      settings = ApplicationSetting.build_from_defaults(
+        workflow_execution_fields: {
+          reserved_key => { 'type' => 'string' }
+        }
+      )
+
+      assert_not settings.valid?, "expected #{reserved_key} to be rejected"
+      assert_includes settings.errors[:workflow_execution_fields].join(' '), reserved_key
+    end
+  end
+
   test '#require_personal_access_token_expiry? returns the value of require_personal_access_token_expiry' do
     settings = ApplicationSetting.create_from_defaults
     assert_not settings.require_personal_access_token_expiry?
