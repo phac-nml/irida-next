@@ -210,7 +210,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   scope_for :relation do |relation,
                           archived: false,
                           access_level: Member::AccessLevel.accessible,
-                          include_shared_links: true|
+                          include_shared_links: true,
+                          use_traversal_ids: true|
     relation
       .with(
         # 1. Accessible namespaces for the user based on their memberships
@@ -219,7 +220,8 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
                      scope_options: { access_level: access_level,
                                       include_project_namespaces: true,
                                       include_route: false,
-                                      include_shared_links: include_shared_links }
+                                      include_shared_links: include_shared_links,
+                                      use_traversal_ids: use_traversal_ids }
         ),
 
         # 2. Private project namespaces
@@ -258,11 +260,7 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
     when Member::AccessLevel::MAINTAINER
       return relation.none if obj.project_namespace? && obj.parent.user_namespace?
 
-      top_level_ancestor = if obj.project_namespace?
-                             obj.parent.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
-                           else
-                             obj.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
-                           end
+      top_level_ancestor = top_level_group_ancestor(obj)
 
       group_and_subgroup_ids = top_level_ancestor.self_and_descendant_ids
 
@@ -283,10 +281,11 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
                                                 include_shared_links: false })
   end
 
-  scope_for :relation, :manageable do |relation, include_shared_links: true|
+  scope_for :relation, :manageable do |relation, include_shared_links: true, use_traversal_ids: true|
     authorized_scope(relation, type: :relation,
                                scope_options: { access_level: Member::AccessLevel.manageable,
-                                                include_shared_links: include_shared_links })
+                                                include_shared_links: include_shared_links,
+                                                use_traversal_ids: use_traversal_ids })
   end
 
   scope_for :relation, :personal do |relation|
@@ -334,6 +333,24 @@ class ProjectPolicy < NamespacePolicy # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  # Resolve the top-level (root) Group ancestor of `obj` (a Group or a
+  # project namespace). When traversal_ids are available, the root
+  # ancestor's id is simply the first entry in the relevant namespace's
+  # traversal_ids chain - the root is always a Group here, since the
+  # caller already excludes project namespaces whose parent is a user
+  # namespace, and a project namespace can never itself be a top-level
+  # ancestor - so it can be looked up directly by primary key instead of
+  # querying self_and_ancestors. Falls back to the query-based lookup for
+  # the routes strategy or namespaces whose traversal_ids have not been
+  # backfilled yet.
+  def top_level_group_ancestor(obj)
+    base = obj.project_namespace? ? obj.parent : obj
+
+    return Group.find(base.traversal_ids.first) if base.use_traversal_ids?
+
+    base.self_and_ancestors.find_by(type: Group.sti_name, parent: nil)
+  end
 
   def check_project_archived
     deny! if record.namespace.archived?

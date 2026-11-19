@@ -6,6 +6,8 @@ john_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAA
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
 
 jane_doe_namespace:
   name: jane.doe@localhost
@@ -13,6 +15,8 @@ jane_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAB
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:jane_doe_namespace, :uuid) %>
 
 jean_doe_namespace:
   name: jean.doe@localhost
@@ -20,6 +24,8 @@ jean_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAC
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:jean_doe_namespace, :uuid) %>
 
 james_doe_namespace:
   name: james.doe@localhost
@@ -27,6 +33,8 @@ james_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAD
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:james_doe_namespace, :uuid) %>
 
 david_doe_namespace:
   name: david.doe@localhost
@@ -34,6 +42,8 @@ david_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAE
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:david_doe_namespace, :uuid) %>
 
 jeff_doe_namespace:
   name: jeff.doe@localhost
@@ -41,6 +51,8 @@ jeff_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAF
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
 
 private_ryan_namespace:
   name: private.ryan@localhost
@@ -48,6 +60,8 @@ private_ryan_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   puid: INXT_USR_AAAAAAAAAG
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:private_ryan_namespace, :uuid) %>
 
 joan_doe_namespace:
   name: joan.doe@localhost
@@ -55,6 +69,8 @@ joan_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAH
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:joan_doe_namespace, :uuid) %>
 
 micha_doe_namespace:
   name: micha.doe@localhost
@@ -62,6 +78,8 @@ micha_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAI
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:micha_doe_namespace, :uuid) %>
 
 ryan_doe_namespace:
   name: ryan.doe@localhost
@@ -69,6 +87,8 @@ ryan_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAJ
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:ryan_doe_namespace, :uuid) %>
 
 user_25_namespace:
   name: user.25@localhost
@@ -76,6 +96,8 @@ user_25_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user25, :uuid) %>
   puid: INXT_USR_AAAAAAAAZK
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user_25_namespace, :uuid) %>
 
 user_26_namespace:
   name: user.26@localhost
@@ -83,6 +105,8 @@ user_26_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
   puid: INXT_USR_AAAAAAAAAK
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user_26_namespace, :uuid) %>
 
 alph_abet_namespace:
   name: alph.abet@localhost
@@ -90,6 +114,8 @@ alph_abet_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet, :uuid) %>
   puid: INXT_USR_AAAAAAAAAL
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:alph_abet_namespace, :uuid) %>
 
 private_joan_namespace:
   name: private.joan@localhost
@@ -97,6 +123,8 @@ private_joan_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   puid: INXT_USR_AAAAAAAAAM
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:private_joan_namespace, :uuid) %>
 
 private_micha_namespace:
   name: private.micha@localhost
@@ -104,6 +132,8 @@ private_micha_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
   puid: INXT_USR_AAAAAAAAAN
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:private_micha_namespace, :uuid) %>
 
 user27_namespace:
   name: user.27@localhost
@@ -111,6 +141,8 @@ user27_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
   puid: INXT_USR_AAAAAAAAAO
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user27_namespace, :uuid) %>
 
 user28_namespace:
   name: user.28@localhost
@@ -118,6 +150,8 @@ user28_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
   puid: INXT_USR_AAAAAAAAAP
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user28_namespace, :uuid) %>
 
 user29_namespace:
   name: user.29@localhost
@@ -125,6 +159,8 @@ user29_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
   puid: INXT_USR_AAAAAAAAAQ
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user29_namespace, :uuid) %>
 
 user30_namespace:
   name: user.30@localhost
@@ -132,6 +168,8 @@ user30_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
   puid: INXT_USR_AAAAAAAAAR
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user30_namespace, :uuid) %>
 
 user32_namespace:
   name: user.32@localhost
@@ -139,6 +177,8 @@ user32_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
   puid: INXT_USR_AAAAAAAZZR
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user32_namespace, :uuid) %>
 
 metadata_doe_namespace:
   name: metadata.doe@localhost
@@ -146,6 +186,8 @@ metadata_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAS
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:metadata_doe_namespace, :uuid) %>
 
 mary_doe_namespace:
   name: mary.doe@localhost
@@ -153,6 +195,8 @@ mary_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAT
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:mary_doe_namespace, :uuid) %>
 
 sample_actions_doe_namespace:
   name: sample.actions.doe@localhost
@@ -160,6 +204,8 @@ sample_actions_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAU
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe_namespace, :uuid) %>
 
 shared_sample_actions_doe_namespace:
   name: shared.sample.actions.doe@localhost
@@ -167,6 +213,8 @@ shared_sample_actions_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAV
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe_namespace, :uuid) %>
 
 subgroup_sample_actions_doe_namespace:
   name: subgroup.sample.actions.doe@localhost
@@ -174,6 +222,8 @@ subgroup_sample_actions_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAW
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe_namespace, :uuid) %>
 
 steve_doe_namespace:
   name: steve.doe@localhost
@@ -181,6 +231,8 @@ steve_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAX
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:steve_doe_namespace, :uuid) %>
 
 user31_namespace:
   name: user.31@localhost
@@ -188,6 +240,8 @@ user31_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
   puid: INXT_USR_AAAAAAAAAY
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:user31_namespace, :uuid) %>
 
 chunked_samples_doe_namespace:
   name: chunked_samples_doe@localhost
@@ -195,3 +249,5 @@ chunked_samples_doe_namespace:
   type: User
   owner_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
   puid: INXT_USR_AAAAAAAAAZ
+  traversal_ids:
+    - <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe_namespace, :uuid) %>
