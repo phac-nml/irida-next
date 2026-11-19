@@ -52,13 +52,15 @@ class Pagy
   end
 end
 
-# Validates only the :limit option, raising Pagy::LimitError when it isn't exactly one of the
-# dropdown options (Irida::Pagination::LIMITS), e.g. a clean integer like 30, or a
-# dirty string like "50abc" that String#to_i would otherwise silently truncate to 50. All other
-# options (e.g. :page, :count) pass through to Pagy's native assign_and_check via super.
+# Validates the :limit and :page options, raising Pagy::LimitError/Pagy::RangeError when they
+# aren't clean integer representations, e.g. a dirty string like "50abc" or "2abc" that
+# String#to_i would otherwise silently truncate to 50 or 2. :limit must additionally be one of
+# the dropdown options (Irida::Pagination::LIMITS). All other options (e.g. :count) pass through
+# to Pagy's native assign_and_check via super.
 module PagyAssignAndCheckOverride # rubocop:disable Style/OneClassPerFile
   def assign_and_check(name_min)
     validate_limit!(@options[:limit]) if name_min.key?(:limit) && @options[:limit].is_a?(String)
+    validate_page!(@options[:page]) if name_min.key?(:page) && @options[:page].is_a?(String)
 
     super
   end
@@ -70,6 +72,16 @@ module PagyAssignAndCheckOverride # rubocop:disable Style/OneClassPerFile
 
     integer = value.to_i
     raise Pagy::LimitError, value if integer.to_s != value.to_s || Irida::Pagination::LIMITS.exclude?(integer)
+  end
+
+  # Raises Pagy::RangeError (rather than a :limit-style custom error) so an invalid page is
+  # caught by the existing rescue_from Pagy::RangeError handler, which drops only the page and
+  # redirects, preserving any given limit.
+  def validate_page!(value)
+    integer = value.respond_to?(:to_i) ? value.to_i : nil
+    return if integer && integer.to_s == value.to_s
+
+    raise Pagy::RangeError.new(Pagy, :page, 'to be a valid positive integer', value)
   end
 end
 
@@ -105,6 +117,33 @@ module PagyRequestResolveLimit # rubocop:disable Style/OneClassPerFile
   end
 end
 
+# Overrides Pagy::Request#resolve_page so that an invalid page query param (e.g. "?page=2abc")
+# raises Pagy::RangeError instead of being silently converted/accepted.
+module PagyRequestResolvePage # rubocop:disable Style/OneClassPerFile
+  def resolve_page(force_integer: true)
+    page_key   = @options[:page_key] || Pagy::DEFAULT[:page_key]
+    page_value = @params.dig(@options[:root_key], page_key) || @params[page_key]
+
+    validate_page_value!(page_value)
+
+    super
+  end
+
+  private
+
+  # Validate the string-to-integer conversion is clean
+  def validate_page_value!(page_value)
+    return unless page_value
+
+    page_str = page_value.to_s
+    page_int = page_str.to_i
+    return if page_int.to_s == page_str
+
+    raise Pagy::RangeError.new(Pagy, :page, 'to be a valid positive integer', page_value)
+  end
+end
+
 # Prepend at the end to override assign_and_check
 Pagy.prepend PagyAssignAndCheckOverride
 Pagy::Request.prepend PagyRequestResolveLimit
+Pagy::Request.prepend PagyRequestResolvePage

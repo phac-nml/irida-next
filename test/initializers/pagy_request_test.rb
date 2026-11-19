@@ -70,12 +70,15 @@ class PagyAssignAndCheckTest < ActiveSupport::TestCase
     assert_equal 2, pagy.page
   end
 
-  test 'assign_and_check passes page through to native Pagy behavior (e.g. "2abc" silently becomes 2)' do
-    # Only :limit is validated by our override; other options (e.g. :page) pass through to
-    # Pagy's native assign_and_check via super, which silently truncates "2abc" to 2.
-    pagy = Pagy::Offset.new(count: 100, page: '2abc', limit: 20)
+  test 'assign_and_check rejects invalid page like 2abc' do
+    # Invalid page with non-numeric suffix should raise Pagy::RangeError instead of being
+    # silently truncated to 2 by String#to_i, so the existing rescue_from Pagy::RangeError
+    # handler redirects instead of accepting the malformed value.
+    error = assert_raises(Pagy::RangeError) do
+      Pagy::Offset.new(count: 100, page: '2abc', limit: 20)
+    end
 
-    assert_equal 2, pagy.page
+    assert_match(/expected :page to be a valid positive integer/, error.message)
   end
 
   test 'PagyAssignAndCheckOverride is prepended to Pagy' do
