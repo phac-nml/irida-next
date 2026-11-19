@@ -6,12 +6,13 @@
     level: @level,
     posinset: @posinset,
     setsize: @setsize,
-    aria: { label: namespace_row_aria_label(@group) },
+    aria: { label: namespace_row_aria_label(@group, presenter: @namespace_row_data.fetch(@group.id)) },
     id: dom_id(@group)
   ) do %>
     <%= render NamespaceRow::ContentsComponent.new(
       namespace: @group,
       icon_size: :small,
+      presenter: @namespace_row_data.fetch(@group.id),
     ) %>
   <% end %>
 
@@ -22,13 +23,14 @@
       level: @level + 1,
       posinset: namespace_index + 1,
       setsize: @children.size,
-      aria: { label: namespace_row_aria_label(namespace) },
+      aria: { label: namespace_row_aria_label(namespace, presenter: @namespace_row_data.fetch(namespace.id)) },
       button_arguments: {data: {"toggle-url": public_send("group_subgroups_url", { group_id: @group.full_path, parent_id: namespace.id, collapse: false, level: @level + 1, posinset: namespace_index + 1, setsize: @children.size })}},
       id: dom_id(namespace)
     ) do %>
       <%= render NamespaceRow::ContentsComponent.new(
         namespace: namespace,
         icon_size: :small,
+        presenter: @namespace_row_data.fetch(namespace.id),
       ) %>
     <% end %>
   <% end %>

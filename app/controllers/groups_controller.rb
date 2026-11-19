@@ -36,7 +36,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
     @q = all_namespaces.ransack(params[search_key], search_key:)
 
     set_default_sort
-    @pagy, @namespaces = pagy(@q.result.include_route, raise_range_error: true)
+    set_namespaces
   end
 
   def new
@@ -149,6 +149,11 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
 
   def set_default_sort
     @q.sorts = 'created_at desc' if @q.sorts.empty?
+  end
+
+  def set_namespaces
+    @pagy, @namespaces = pagy(@q.result.include_route, raise_range_error: true)
+    @namespace_row_data = NamespaceRowPresenter.build_collection(namespaces: @namespaces, user: current_user)
   end
 
   def parent_group
