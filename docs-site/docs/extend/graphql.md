@@ -60,8 +60,8 @@ query {
 
 ```graphql
 query {
-  samples (first:5){
-    nodes{
+  samples(first: 5) {
+    nodes {
       name
       id
     }
@@ -112,14 +112,14 @@ query {
 
 ```graphql
 query {
-  node(id: "gid://irida/Sample/1"){
-    ... on Sample{
-      id,
+  node(id: "gid://irida/Sample/1") {
+    ... on Sample {
+      id
       name
       description
       metadata
-      project{
-        id,
+      project {
+        id
         fullPath
       }
     }
@@ -211,5 +211,44 @@ curl "http://localhost:3000/api/graphql" --header "Authorization: Basic <your to
 response
 
 ```json
-{"data":{"currentUser":{"email":"user0@email.com"}}}
+{ "data": { "currentUser": { "email": "user0@email.com" } } }
 ```
+
+## Authentication with Entra ID Bearer Tokens
+
+If your IRIDA Next instance is configured to use [Entra ID (Azure AD)](../configuration/authentication.md) for sign-in,
+trusted integrations can authenticate GraphQL API requests as the signed-in Entra ID user, instead of a shared
+Personal Access Token/bot account. This is useful for integrations (such as BDIP) that create samples or upload
+files to IRIDA Next on behalf of users who are already signed into the same Entra tenant.
+
+### How it works
+
+1. The integration obtains an access token for the signed-in user via Entra ID's
+   [On-Behalf-Of flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-on-behalf-of-flow),
+   scoped to this IRIDA Next instance's app registration (its `client_id`, or `api_audience` if configured).
+2. The integration sends the access token as a bearer token:
+
+   ```bash
+   curl "http://localhost:3000/api/graphql" --header "Authorization: Bearer <entra_id access token>" --header "Content-Type: application/json" --request POST --data "{\"query\": \"query {currentUser{email}}}\"}"
+   ```
+
+3. IRIDA Next verifies the token's signature (against Entra ID's published signing keys), issuer, audience,
+   expiry and tenant, then looks up the local user matching the token's `oid`/`tid` claims. The user must already
+   exist in IRIDA Next (e.g. by having signed in at least once via the entra_id provider).
+4. IRIDA Next also verifies the token's granted scopes (the `scp` claim). The token **must** include an
+   `access_as_user` scope; otherwise authentication fails and the request is treated as anonymous.
+5. If valid, the request is authenticated as that user, but is still restricted by any `api`/`read_api` scopes
+   present in the token, exactly like a Personal Access Token: a token with only `read_api` may perform queries
+   but not mutations, and a token with neither scope is authenticated but cannot query or mutate the API.
+
+### Requirements
+
+- `entra_id` must be an enabled `omniauth_provider` (see [Connecting to an Authentication Server](../configuration/authentication.md)).
+- The `entra_id` credentials (`client_id`, `tenant_id`) must be configured.
+- The user performing the action must already have an IRIDA Next account linked to their Entra ID identity.
+- The app registration must expose an `access_as_user` scope (delegated permission), and the integration must
+  request it (along with `api` and/or `read_api`, as appropriate) when acquiring the access token via the
+  On-Behalf-Of flow.
+
+Unlike Personal Access Tokens, Entra ID access tokens are short-lived (typically ~1 hour), so integrations using
+this method are responsible for refreshing/re-exchanging tokens as needed.
