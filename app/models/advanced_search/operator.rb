@@ -10,6 +10,7 @@ module AdvancedSearch
   #
   # Attributes:
   # - key: canonical, persisted operator string (e.g. "=", "text_equals"). Never renamed.
+  # - label_key: locale segment for the operator label.
   # - arel_handler: method on AdvancedSearch::Operators used to build the Arel condition.
   # - arel_args: ordered argument tokens passed after (scope, node). Reserved tokens
   #   (:value, :field_name, :model_class, :metadata_key) are resolved by the dispatcher;
@@ -30,6 +31,7 @@ module AdvancedSearch
   # - standard_date_disallowed: standard operator that may not be used on a standard date field.
   Operator = Data.define(
     :key,
+    :label_key,
     :arel_handler,
     :arel_args,
     :ui_group,
