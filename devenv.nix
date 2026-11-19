@@ -33,7 +33,7 @@ lib.mkMerge [
       libyaml.dev
       openssl.dev
       coreutils
-      postgresql_14
+      postgresql_18
       nextflow
       nodejs_24
       jq
@@ -79,7 +79,7 @@ lib.mkMerge [
     # https://devenv.sh/services/
     services.postgres = {
       enable = true;
-      package = pkgs.postgresql_14;
+      package = pkgs.postgresql_18;
       createDatabase = false;
       port = 5432;
       initialScript = ''

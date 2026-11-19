@@ -1,4 +1,4 @@
 nodejs 24.14.1
 pnpm 11.22.0
 ruby 3.4.10
-postgres 14.17
+postgres 18.1

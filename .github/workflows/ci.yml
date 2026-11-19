@@ -114,7 +114,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14.17
+        image: postgres:18.1
         env:
           POSTGRES_DB: irida_next_test
           POSTGRES_PASSWORD: test
@@ -237,7 +237,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14.17
+        image: postgres:18.1
         env:
           POSTGRES_DB: irida_next_test
           POSTGRES_PASSWORD: test
