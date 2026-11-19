@@ -437,7 +437,7 @@ input[type="search"] {
 }
 
 @utility field_with_errors {
-  .form-field &div {
+  .form-field & {
     @apply block w-full;
   }
 }
