@@ -25,6 +25,33 @@ module Combobox
         end
       end
 
+      test 'indicator controls have equal targets and preserve selection behavior' do
+        visit('/rails/view_components/combobox_component/default')
+        within "div[data-controller='combobox--v1']" do
+          targets = page.evaluate_script(<<~JS)
+            Array.from(document.querySelectorAll('[data-controller="combobox--v1"] button')).map((button) => {
+                const rect = button.getBoundingClientRect();
+                return { width: rect.width, height: rect.height };
+              })
+          JS
+          assert_equal 2, targets.size
+          assert_equal targets.first, targets.last
+          targets.each do |target|
+            assert_operator target['width'], :>=, 44
+            assert_operator target['height'], :>=, 44
+          end
+
+          click_button I18n.t('combobox_component.clear_selection')
+          assert_equal '', find("input[role='combobox']").value
+          assert_no_button I18n.t('combobox_component.clear_selection')
+          click_button I18n.t('combobox_component.show_options')
+          assert_selector '[role="listbox"]'
+          find('[role="option"][data-value="metadata.country"]').click
+          assert_equal 'country', find("input[role='combobox']").value
+          assert_button I18n.t('combobox_component.clear_selection')
+        end
+      end
+
       def test_default # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         visit('/rails/view_components/combobox_component/default')
         within "div[data-controller='combobox--v1']" do
