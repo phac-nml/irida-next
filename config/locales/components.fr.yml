@@ -189,11 +189,6 @@ fr:
           and: ET
           or: OU
         empty_state: Ajoutez une condition pour commencer à filtrer.
-        intro: Trouvez des %{subject} correspondant à AU MOINS UN des groupes suivants.
-        subject:
-          attachments: fichiers
-          samples: échantillons
-          workflow_executions: exécutions de pipeline
     attachments:
       dialogs:
         delete_attachment_component:

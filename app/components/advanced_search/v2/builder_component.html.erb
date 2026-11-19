@@ -14,10 +14,6 @@
   },
 ) do %>
   <div class="space-y-4">
-    <%= render Pathogen::Typography::Text.new(variant: :muted) do %>
-      <%= t("components.advanced_search_component.v2.intro", subject: subject) %>
-    <% end %>
-
     <%= helpers.form_error_summary(@form) %>
 
     <div class="mb-4"><%= render partial: "shared/form/required_field_legend" %></div>

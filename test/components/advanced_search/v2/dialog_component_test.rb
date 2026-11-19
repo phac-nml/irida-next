@@ -18,25 +18,6 @@ module AdvancedSearch
                         text: I18n.t('components.advanced_search_component.title')
       end
 
-      %i[en fr].each do |locale|
-        { v2_empty: 'samples', v2_workflow: 'workflow_executions' }.each do |preview, subject|
-          test "explains the search subject in #{locale} for #{preview}" do
-            I18n.with_locale(locale) do
-              # ViewComponent's preview dispatch wraps rendering in its own
-              # `I18n.with_locale(params[:locale] || I18n.default_locale)`, so the
-              # ambient locale above is only honoured if it's also passed as a param.
-              render_preview(preview, from: AdvancedSearchComponentPreview, params: { locale: locale })
-
-              intro = I18n.t('components.advanced_search_component.v2.intro',
-                             subject: I18n.t("components.advanced_search_component.v2.subject.#{subject}"))
-              assert_selector 'dialog #advanced-search-builder p:not([aria-hidden])', text: intro, visible: :all
-              assert_no_selector 'dialog p',
-                                 text: I18n.t('components.advanced_search_component.v1.description'), visible: :all
-            end
-          end
-        end
-      end
-
       %i[default empty workflow].each do |preview|
         test "#{preview} preview stays on v1 when v2 is enabled" do
           Flipper.enable(:advanced_search_v2)
@@ -49,14 +30,11 @@ module AdvancedSearch
         end
       end
 
-      test 'standalone builder explains the search without a dialog' do
+      test 'standalone builder renders without a dialog' do
         render_preview(:v2_builder, from: AdvancedSearchComponentPreview)
 
         assert_selector "form #advanced-search-builder[data-controller='advanced-search--v2--builder']"
         assert_no_selector 'dialog', visible: :all
-        assert_selector 'p:not([aria-hidden])',
-                        text: I18n.t('components.advanced_search_component.v2.intro',
-                                     subject: I18n.t('components.advanced_search_component.v2.subject.samples'))
       end
 
       %i[v2_builder_empty v2_builder_multiple].each do |preview|

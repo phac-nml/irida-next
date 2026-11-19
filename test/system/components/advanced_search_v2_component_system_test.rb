@@ -66,8 +66,6 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
 
         # The dialog controller drives the host-agnostic builder through the Stimulus outlet:
         # on open it clones the server-rendered groups/conditions into the live DOM.
-        assert_text I18n.t('components.advanced_search_component.v2.intro',
-                           subject: I18n.t('components.advanced_search_component.v2.subject.samples'))
         assert_selector '[data-advanced-search-connective="or"][aria-hidden="true"]', count: 1
         assert_selector '[data-advanced-search-connective="and"][aria-hidden="true"]', count: 2
 
