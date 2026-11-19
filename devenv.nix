@@ -1,5 +1,19 @@
 { pkgs, lib, config, inputs, ... }:
 
+let
+  # Override for ruby-3.4.13: nixpkgs-ruby's published versions.json does not
+  # yet include this release (fixing the GHSA-34m4-m9fh-gqp5 et al. Regexp/String
+  # advisories), so build it directly from the upstream source tarball using
+  # nixpkgs-ruby's own package function until upstream catches up.
+  ruby_3_4_13 = pkgs.callPackage "${inputs.nixpkgs-ruby}/ruby/package-fn.nix" {
+    version = "3.4.13";
+    versionSource = {
+      url = "https://cache.ruby-lang.org/pub/ruby/3.4/ruby-3.4.13.tar.gz";
+      sha256 = "d0d3bf3dd8c224a3c3b7ecd816a0f1b2cbcf4f87b5afcbdbe91d3fef177f351a";
+    };
+    versionComparison = import "${inputs.nixpkgs-ruby}/lib/version-comparison.nix";
+  };
+in
 lib.mkMerge [
   {
     env.GA4GH_WES_URL = "http://localhost:1122";
@@ -46,7 +60,12 @@ lib.mkMerge [
     # https://devenv.sh/languages/
     languages.ruby = {
       enable = true;
-      versionFile = ./.ruby-version;
+      # NOTE: nixpkgs-ruby's versions.json does not have "3.4.13" yet, so
+      # versionFile/version (which both resolve via nixpkgs-ruby.lib) can't be
+      # used here without erroring. .ruby-version still declares "3.4.13" for
+      # Bundler/rbenv/CI; `package` below builds that same version directly so
+      # the two stay in sync.
+      package = ruby_3_4_13;
       bundler.enable = false; # don't install bundler package from nix as this is already included with ruby
     };
 
