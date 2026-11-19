@@ -423,14 +423,12 @@ module Projects
 
     test 'accessing metadata templates index on invalid page causes pagy overflow redirect at project level' do
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
-      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      # The rescue_from handler should redirect to the first page
       get namespace_project_metadata_templates_path(@project_namespace.parent, @project_namespace.project, page: 50)
 
-      # Should be redirected to first page
-      assert_response :redirect
-      # Check both page and limit are in the redirect URL (order may vary)
-      assert_match(/page=1/, response.location)
-      assert_match(/limit=20/, response.location)
+      # Should be redirected to first page, dropping page and limit so Pagy falls back to its defaults
+      assert_redirected_to namespace_project_metadata_templates_path(@project_namespace.parent,
+                                                                     @project_namespace.project)
 
       # Follow the redirect and verify it's successful
       follow_redirect!

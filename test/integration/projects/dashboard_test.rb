@@ -191,18 +191,21 @@ module Projects
       sign_in users(:john_doe)
 
       # Accessing page 50 (arbitrary number) when only < 50 pages exist should cause Pagy::RangeError
-      # The rescue_from handler should redirect to first page with page=1 and limit=20
+      # The rescue_from handler should redirect to the first page
       get dashboard_projects_path(page: 50)
 
-      # Should be redirected to first page
-      assert_response :redirect
-      # Check both page and limit are in the redirect URL (order may vary)
-      assert_match(/page=1/, response.location)
-      assert_match(/limit=20/, response.location)
+      # Should be redirected to first page, dropping page and limit so Pagy falls back to its defaults
+      assert_redirected_to dashboard_projects_path
 
       # Follow the redirect and verify it's successful
       follow_redirect!
       assert_response :success
+    end
+
+    test 'accessing projects index with an invalid limit redirects to the first page with the default limit' do
+      sign_in users(:john_doe)
+
+      assert_pagy_limit_error_redirects_to_default_limit(dashboard_projects_path, '50abc')
     end
 
     test 'should update samples count after a sample deletion' do

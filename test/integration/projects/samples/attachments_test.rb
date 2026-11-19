@@ -663,12 +663,19 @@ module Projects
 
         get namespace_project_sample_path(@group, @project, @sample1), params: { tab: 'files', page: 999 }
 
-        assert_response :redirect
-
-        assert_match(/page=1/, response.location)
+        assert_redirected_to namespace_project_sample_path(@group, @project, @sample1)
 
         follow_redirect!
         assert_response :success
+      end
+
+      test 'accessing the sample attachments tab with an invalid limit redirects to the first page ' \
+           'with the default limit' do
+        sign_in users(:john_doe)
+
+        assert_pagy_limit_error_redirects_to_default_limit(
+          namespace_project_sample_path(@group, @project, @sample1), '50abc', params: { tab: 'files' }
+        )
       end
 
       test 'can filter attachments by filename or puid' do

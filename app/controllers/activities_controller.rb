@@ -27,7 +27,7 @@ class ActivitiesController < ApplicationController
   def activity
     return @activity if defined?(@activity)
 
-    @activity = PublicActivity::Activity.find_by(id: params[:id])
+    @activity = PublicActivity::Activity.find_by(id: params[:id]) || not_found
   end
 
   def activity_owner

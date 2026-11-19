@@ -31,7 +31,7 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @created_namespace_group_link = GroupLinks::GroupLinkService.new(current_user, @namespace,
                                                                      group_link_params).execute
-    @pagy, @namespace_group_links = pagy(load_namespace_group_links, raise_range_error: true)
+    @pagy, @namespace_group_links = pagy(load_namespace_group_links, limit: 20, page: 1)
 
     if @created_namespace_group_link.persisted?
       respond_to do |format|

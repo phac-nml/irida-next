@@ -275,12 +275,18 @@ module Groups
 
       get group_attachments_path(group, page: 50)
 
-      assert_response :redirect
-
-      assert_match(/page=1/, response.location)
+      assert_redirected_to group_attachments_path(group)
 
       follow_redirect!
       assert_response :success
+    end
+
+    test 'attempting to access attachments with an invalid limit redirects to the first page ' \
+         'with the default limit' do
+      sign_in users(:john_doe)
+      group = groups(:group_one)
+
+      assert_pagy_limit_error_redirects_to_default_limit(group_attachments_path(group), '50abc')
     end
 
     test 'can filter attachments by filename or puid' do

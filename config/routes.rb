@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     end
 
     draw :profile
+    draw :activities
   end
   # End of the /-/ scope.
 
@@ -73,7 +74,6 @@ Rails.application.routes.draw do
   draw :dashboard
   draw :user
   draw :project
-  draw :activities
 
   draw :system
   draw :development

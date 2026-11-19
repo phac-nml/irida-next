@@ -2,6 +2,7 @@
 
 require 'pagy/toolbox/helpers/support/series'
 require 'pagy/toolbox/helpers/support/a_lambda'
+require 'pagy/classes/request'
 
 # Pagy initializer file (43.2.1)
 # See https://ddnexus.github.io/pagy/resources/initializer/
@@ -12,7 +13,7 @@ require 'pagy/toolbox/helpers/support/a_lambda'
 # For example:
 #
 Pagy::OPTIONS[:limit] = 20 # Limit the items per page
-Pagy::OPTIONS[:max_limit] = 100 # The client can request a limit up to 100
+Pagy::OPTIONS[:client_limit] = 100 # The client can request a limit up to 100
 # Pagy::OPTIONS[:max_pages] = 200          # Allow only 200 pages
 # Pagy::OPTIONS[:jsonapi] = true           # Use JSON:API compliant URLs
 
@@ -38,10 +39,111 @@ Pagy::OPTIONS[:max_limit] = 100 # The client can request a limit up to 100
 #
 # Pagy.translate_with_the_slower_i18n_gem!
 
-############# Calendar Localization for non-en locales ####################################
-# See https://ddnexus.github.io/pagy/toolbox/paginators/calendar#localization for details.
-# Add your desired locales to the list and uncomment the following line to enable them,
-# regardless of whether you use the I18n gem for translations or not, whether with
-# Rails or not.
-#
 # Pagy::Calendar.localize_with_rails_i18n_gem(*your_locales)
+
+# Custom exception for limit validation errors
+class Pagy
+  class LimitError < Pagy::OptionError # rubocop:disable Style/Documentation
+    def initialize(limit_value)
+      @limit_value = limit_value
+      allowed = Irida::Pagination::LIMITS.join(', ')
+      super(Pagy, :limit, "one of: #{allowed}", limit_value)
+    end
+  end
+end
+
+# Validates the :limit and :page options, raising Pagy::LimitError/Pagy::RangeError when they
+# aren't clean integer representations, e.g. a dirty string like "50abc" or "2abc" that
+# String#to_i would otherwise silently truncate to 50 or 2. :limit must additionally be one of
+# the dropdown options (Irida::Pagination::LIMITS). All other options (e.g. :count) pass through
+# to Pagy's native assign_and_check via super.
+module PagyAssignAndCheckOverride # rubocop:disable Style/OneClassPerFile
+  def assign_and_check(name_min)
+    validate_limit!(@options[:limit]) if name_min.key?(:limit) && @options[:limit].is_a?(String)
+    validate_page!(@options[:page]) if name_min.key?(:page) && @options[:page].is_a?(String)
+
+    super
+  end
+
+  private
+
+  def validate_limit!(value)
+    raise Pagy::LimitError, value unless value.respond_to?(:to_i)
+
+    integer = value.to_i
+    raise Pagy::LimitError, value if integer.to_s != value.to_s || Irida::Pagination::LIMITS.exclude?(integer)
+  end
+
+  # Raises Pagy::RangeError (rather than a :limit-style custom error) so an invalid page is
+  # caught by the existing rescue_from Pagy::RangeError handler, which drops only the page and
+  # redirects, preserving any given limit.
+  def validate_page!(value)
+    integer = value.respond_to?(:to_i) ? value.to_i : nil
+    return if integer && integer.to_s == value.to_s
+
+    raise Pagy::RangeError.new(Pagy, :page, 'to be a valid positive integer', value)
+  end
+end
+
+# Overrides Pagy::Request#resolve_limit so that an invalid limit query param (e.g.
+# "?limit=50abc") or one that isn't one of the dropdown options (Irida::Pagination::LIMITS)
+# raises Pagy::LimitError instead of being silently converted/accepted.
+module PagyRequestResolveLimit # rubocop:disable Style/OneClassPerFile
+  def resolve_limit
+    default = @options[:limit] || Pagy::DEFAULT[:limit]
+    client_limit = @options[:client_limit]
+    return default unless client_limit
+
+    limit_key   = @options[:limit_key] || Pagy::DEFAULT[:limit_key]
+    limit_value = @params.dig(@options[:root_key], limit_key) || @params[limit_key]
+
+    validate_limit_value!(limit_value)
+
+    limit = limit_value.to_s.to_i
+    limit.zero? ? default : [limit, client_limit].min
+  end
+
+  private
+
+  # Validate the string-to-integer conversion is clean and the value is an allowed dropdown option
+  def validate_limit_value!(limit_value)
+    return unless limit_value
+
+    limit_str = limit_value.to_s
+    limit_int = limit_str.to_i
+    clean     = limit_int.to_s == limit_str
+    allowed   = Irida::Pagination::LIMITS.include?(limit_int)
+    raise Pagy::LimitError, limit_value unless clean && allowed
+  end
+end
+
+# Overrides Pagy::Request#resolve_page so that an invalid page query param (e.g. "?page=2abc")
+# raises Pagy::RangeError instead of being silently converted/accepted.
+module PagyRequestResolvePage # rubocop:disable Style/OneClassPerFile
+  def resolve_page(force_integer: true)
+    page_key   = @options[:page_key] || Pagy::DEFAULT[:page_key]
+    page_value = @params.dig(@options[:root_key], page_key) || @params[page_key]
+
+    validate_page_value!(page_value)
+
+    super
+  end
+
+  private
+
+  # Validate the string-to-integer conversion is clean
+  def validate_page_value!(page_value)
+    return unless page_value
+
+    page_str = page_value.to_s
+    page_int = page_str.to_i
+    return if page_int.to_s == page_str
+
+    raise Pagy::RangeError.new(Pagy, :page, 'to be a valid positive integer', page_value)
+  end
+end
+
+# Prepend at the end to override assign_and_check
+Pagy.prepend PagyAssignAndCheckOverride
+Pagy::Request.prepend PagyRequestResolveLimit
+Pagy::Request.prepend PagyRequestResolvePage

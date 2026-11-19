@@ -30,6 +30,7 @@ require 'test_helpers/sorting_test_helper'
 require 'test_helpers/w3c_validation_helpers'
 require 'test_helpers/user_opt_in_features_test_helper'
 require 'test_helpers/ip_test_helpers'
+require 'test_helpers/pagy_rescue_test_helper'
 require 'turbo/broadcastable/test_helper'
 require 'minitest/retry'
 
@@ -68,6 +69,7 @@ module ActiveSupport
     include W3cValidationHelpers
     include SortingTestHelper
     include UserOptInFeaturesTestHelper
+    include PagyRescueTestHelper
 
     PublicActivity.enabled = true
   end

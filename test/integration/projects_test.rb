@@ -588,6 +588,20 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_select 'p', text: I18n.t('action_policy.policy.project.activity?', name: project.name)
   end
 
+  test 'accessing project activity on invalid page causes pagy overflow redirect' do
+    project = projects(:project2)
+
+    assert_pagy_range_error_redirects_to_first_page(namespace_project_activity_path(project.namespace.parent, project))
+  end
+
+  test 'accessing project activity with an invalid limit redirects to the first page with the default limit' do
+    project = projects(:project2)
+
+    assert_pagy_limit_error_redirects_to_default_limit(
+      namespace_project_activity_path(project.namespace.parent, project), '50abc'
+    )
+  end
+
   test 'can destroy a project' do
     project = projects(:john_doe_project2)
 
