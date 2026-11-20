@@ -584,7 +584,7 @@ GEM
       i18n (>= 0.5.0)
       railties (>= 6.1)
     public_suffix (7.0.5)
-    puma (8.1.1)
+    puma (8.1.2)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -882,7 +882,7 @@ DEPENDENCIES
   playwright-ruby-client (= 1.64.0)
   propshaft
   public_activity
-  puma (~> 8.0)
+  puma (~> 8.1)
   rack-cors
   rails (~> 8.1.4)
   rails_icons (~> 1.10)
