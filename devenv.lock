@@ -110,11 +110,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794951313,
-        "narHash": "sha256-8CWuilBFq9o9Rp0KNaxnA+qBvd125AXUz0xP7zZ7GHw=",
+        "lastModified": 1795162480,
+        "narHash": "sha256-Yuj3BarDzdSQa6KqfJQgWKBusEku+w/JCNb9VCPIvlU=",
         "owner": "cachix",
         "repo": "nixpkgs-python",
-        "rev": "5e4728a41877b4b5d4a447df8c5d5a487afbdcc3",
+        "rev": "bd2cb9c719f07bdd8405d2fe8274c965fe990113",
         "type": "github"
       },
       "original": {
@@ -132,11 +132,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795011914,
-        "narHash": "sha256-2utIzDZUO2BoB8YTSWyUZ+Arqmqmr90oJ3qhhslwTFM=",
+        "lastModified": 1795120127,
+        "narHash": "sha256-qXWQvZlA0rsmYbYJct7fZer2LWcO55HVzNLPXH3i77M=",
         "owner": "bobvanderlinden",
         "repo": "nixpkgs-ruby",
-        "rev": "baa9cd01834a5b8eed9803264bd45c2038353fdd",
+        "rev": "189ac8d78384c79bbf93fc311a09cc30e23c5937",
         "type": "github"
       },
       "original": {
