@@ -283,15 +283,14 @@ module WorkflowExecutions
       # manually enter a metadata value for sample34
       find("td[id='#{sample34.id}_metadata_2'] input[type='text']").fill_in with: manual_value
 
-      assert_selector "td[id='#{sample34.id}_metadata_2'] input[type='text']", text: manual_value
-
       # select metadata field and verify sample34's respective metadata value is loaded in
       select 'metadatafield2', from: 'metadata_2'
       assert_selector '#field-metadata_2', text: 'metadatafield2'
+      # verify metadata field overwritten
       assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample34.metadata['metadatafield2']
 
-      # verify manually entered metadata was discarded
-      assert_no_selector "td[id='#{sample34.id}_metadata_2'] input[type='text'][value='#{manual_value}']"
+      # verify metadata text field no longer exists
+      assert_no_selector "td[id='#{sample34.id}_metadata_2'] input[type='text']"
 
       # undo filter and verify other samples' metadata is loaded and retained
       find('input#samplesheet-filter').fill_in with: ''
