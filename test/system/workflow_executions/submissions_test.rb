@@ -221,6 +221,8 @@ module WorkflowExecutions
       sample33 = samples(:sample33)
       sample34 = samples(:sample34)
       sample35 = samples(:sample35)
+
+      manual_value = 'manually entered metadata'
       # required mlst.json file for gasclustering submission
       sample33.attachments.create!(
         file: Rails.root.join('test/fixtures/files/s.mlst.json')
@@ -278,14 +280,26 @@ module WorkflowExecutions
       # assert previous metadata selection is retained for sample34 after filtering
       assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample34.metadata['metadatafield1']
 
+      # manually enter a metadata value for sample34
+      find("td[id='#{sample34.id}_metadata_2'] input[type='text']").fill_in with: manual_value
+
+      assert_field(
+        "td[id='#{sample34.id}_metadata_2'] input[type='text']",
+        with: manual_value
+      )
+
       # select metadata field and verify sample34's respective metadata value is loaded in
       select 'metadatafield2', from: 'metadata_2'
       assert_selector '#field-metadata_2', text: 'metadatafield2'
       assert_selector "td[id='#{sample34.id}_metadata_2'] span", text: sample34.metadata['metadatafield2']
 
+      # verify manually entered metadata was discarded
+      assert_no_selector "td[id='#{sample34.id}_metadata_2'] input[type='text'][value='#{manual_value}']"
+
       # undo filter and verify other samples' metadata is loaded and retained
       find('input#samplesheet-filter').fill_in with: ''
       find('input#samplesheet-filter').send_keys :enter
+
       # check new metadata dropdown selected values
       assert_selector '#field-metadata_1', text: 'metadatafield1'
       assert_selector '#field-metadata_2', text: 'metadatafield2'

@@ -2199,4 +2199,34 @@ describe("nextflow v2 samplesheet controller", () => {
 
     expect(document.querySelector('[data-payload-type="other"]')).toBeNull();
   });
+
+  it("keeps manually entered metadata editable after pagination", async () => {
+    const allSamples = range(1, 6);
+    setupStandardSamplesheetAttributes(allSamples);
+    application = await startController();
+
+    const sample1MetadataInput = document.getElementById(
+      "sample-1-id_metadata_1_input",
+    );
+
+    expect(sample1MetadataInput).toBeTruthy();
+
+    sample1MetadataInput.value = "manually entered value";
+    sample1MetadataInput.dispatchEvent(
+      new Event("change", {
+        bubbles: true,
+      }),
+    );
+
+    // Navigate away and back to force the metadata cell to be re-rendered.
+    getNextBtn().click();
+    getPreviousBtn().click();
+
+    const updatedMetadataInput = document.getElementById(
+      "sample-1-id_metadata_1_input",
+    );
+
+    expect(updatedMetadataInput).toBeTruthy();
+    expect(updatedMetadataInput).toHaveValue("manually entered value");
+  });
 });

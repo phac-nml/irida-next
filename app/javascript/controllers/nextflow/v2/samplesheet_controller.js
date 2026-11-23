@@ -126,7 +126,7 @@ export default class extends Controller {
   #sampleAttributesRequestFailed = false;
 
   // tracks metadata values manually added by the user
-  #userEditedMetadata;
+  #userEditedMetadata = {};
 
   connect() {
     this.#updateMetadataColumnHeaderNames();
@@ -584,7 +584,11 @@ export default class extends Controller {
 
   #insertMetadataContent(cell, columnName, sampleId) {
     const metadataValue = this.#retrieveSampleData(sampleId, columnName);
-    if (this.#userEditedMetadata[columnName].includes(sampleId)) {
+
+    if (
+      Object.hasOwn(this.#userEditedMetadata, columnName) &&
+      this.#userEditedMetadata[columnName].includes(sampleId)
+    ) {
       this.#insertTextInputContent(cell, columnName, sampleId);
     } else if (metadataValue) {
       const metadataContent =
@@ -823,7 +827,6 @@ export default class extends Controller {
     );
 
     if (metadataSamplesheetColumns.length > 0) {
-      this.#userEditedMetadata = {};
       metadataSamplesheetColumns.forEach((metadataSamplesheetColumn) => {
         const columnName = metadataSamplesheetColumn.getAttribute(
           "data-metadata-header",
