@@ -283,10 +283,7 @@ module WorkflowExecutions
       # manually enter a metadata value for sample34
       find("td[id='#{sample34.id}_metadata_2'] input[type='text']").fill_in with: manual_value
 
-      assert_field(
-        "td[id='#{sample34.id}_metadata_2'] input[type='text']",
-        with: manual_value
-      )
+      assert_selector "td[id='#{sample34.id}_metadata_2'] input[type='text']", text: manual_value
 
       # select metadata field and verify sample34's respective metadata value is loaded in
       select 'metadatafield2', from: 'metadata_2'

@@ -584,13 +584,11 @@ export default class extends Controller {
 
   #insertMetadataContent(cell, columnName, sampleId) {
     const metadataValue = this.#retrieveSampleData(sampleId, columnName);
-
     if (
+      metadataValue &&
       Object.hasOwn(this.#userEditedMetadata, columnName) &&
-      this.#userEditedMetadata[columnName].includes(sampleId)
+      !this.#userEditedMetadata[columnName].includes(sampleId)
     ) {
-      this.#insertTextInputContent(cell, columnName, sampleId);
-    } else if (metadataValue) {
       const metadataContent =
         this.metadataTemplateTarget.content.cloneNode(true);
       metadataContent.querySelector("span").textContent = metadataValue;
