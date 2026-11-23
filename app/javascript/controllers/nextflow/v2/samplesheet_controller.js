@@ -125,6 +125,9 @@ export default class extends Controller {
   // fallback in case fetching samples failed
   #sampleAttributesRequestFailed = false;
 
+  // tracks metadata values manually added by the user
+  #userEditedMetadata;
+
   connect() {
     this.#updateMetadataColumnHeaderNames();
     this.element.setAttribute("data-controller-connected", "true");
@@ -389,6 +392,14 @@ export default class extends Controller {
     const columnName = event.params.columnName;
     const value = event.target.value;
     this.#setSampleData(sampleId, columnName, value);
+
+    // track metadata value added manually by user
+    if (
+      Object.hasOwn(this.#userEditedMetadata, columnName) &&
+      !this.#userEditedMetadata[columnName].includes(sampleId)
+    ) {
+      this.#userEditedMetadata[columnName].push(sampleId);
+    }
   }
 
   // handles changes to file cells; triggered by nextflow/file_controller.js
@@ -573,7 +584,9 @@ export default class extends Controller {
 
   #insertMetadataContent(cell, columnName, sampleId) {
     const metadataValue = this.#retrieveSampleData(sampleId, columnName);
-    if (metadataValue) {
+    if (this.#userEditedMetadata[columnName].includes(sampleId)) {
+      this.#insertTextInputContent(cell, columnName, sampleId);
+    } else if (metadataValue) {
       const metadataContent =
         this.metadataTemplateTarget.content.cloneNode(true);
       metadataContent.querySelector("span").textContent = metadataValue;
@@ -795,6 +808,8 @@ export default class extends Controller {
       this.#submitMetadataChange({
         [metadataSamplesheetColumn]: metadataField,
       });
+      // reset metadata manually added by user
+      this.#userEditedMetadata[metadataSamplesheetColumn] = [];
     } else {
       this.#queuedMetadataChanges[metadataSamplesheetColumn] = metadataField;
     }
@@ -807,20 +822,24 @@ export default class extends Controller {
       ".metadata_field-header",
     );
 
-    metadataSamplesheetColumns.forEach((metadataSamplesheetColumn) => {
-      const columnName = metadataSamplesheetColumn.getAttribute(
-        "data-metadata-header",
-      );
-      const metadataField = metadataSamplesheetColumn.value;
+    if (metadataSamplesheetColumns.length > 0) {
+      this.#userEditedMetadata = {};
+      metadataSamplesheetColumns.forEach((metadataSamplesheetColumn) => {
+        const columnName = metadataSamplesheetColumn.getAttribute(
+          "data-metadata-header",
+        );
+        const metadataField = metadataSamplesheetColumn.value;
 
-      const metadataParameter = this.element.querySelector(
-        `input[data-metadata-header-name="${columnName}"]`,
-      );
+        const metadataParameter = this.element.querySelector(
+          `input[data-metadata-header-name="${columnName}"]`,
+        );
 
-      if (metadataParameter && metadataParameter.value !== metadataField) {
-        metadataParameter.value = metadataField;
-      }
-    });
+        if (metadataParameter && metadataParameter.value !== metadataField) {
+          metadataParameter.value = metadataField;
+        }
+        this.#userEditedMetadata[columnName] = [];
+      });
+    }
   }
 
   #appendInputsToMetadataForm(metadataFormContent, metadataParams) {
