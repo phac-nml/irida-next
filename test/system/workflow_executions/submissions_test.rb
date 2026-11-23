@@ -222,7 +222,6 @@ module WorkflowExecutions
       sample34 = samples(:sample34)
       sample35 = samples(:sample35)
 
-      manual_value = 'manually entered metadata'
       # required mlst.json file for gasclustering submission
       sample33.attachments.create!(
         file: Rails.root.join('test/fixtures/files/s.mlst.json')
@@ -281,7 +280,7 @@ module WorkflowExecutions
       assert_selector "td[id='#{sample34.id}_metadata_1'] span", text: sample34.metadata['metadatafield1']
 
       # manually enter a metadata value for sample34
-      find("td[id='#{sample34.id}_metadata_2'] input[type='text']").fill_in with: manual_value
+      find("td[id='#{sample34.id}_metadata_2'] input[type='text']").fill_in with: 'manually entered metadata'
 
       # select metadata field and verify sample34's respective metadata value is loaded in
       select 'metadatafield2', from: 'metadata_2'
