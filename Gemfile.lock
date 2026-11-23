@@ -163,7 +163,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.26.1)
       msgpack (~> 1.5)
-    brakeman (8.1.0)
+    brakeman (8.1.1)
       racc
     builder (3.3.0)
     bundler-audit (0.9.3)
@@ -329,7 +329,7 @@ GEM
       signet (>= 0.16, < 2.a)
     graphiql-rails (1.10.5)
       railties
-    graphql (2.6.15)
+    graphql (2.6.16)
       base64
       fiber-storage
       logger
@@ -588,11 +588,11 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.8)
+    rack (3.2.9)
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
-    rack-protection (4.2.1)
+    rack-protection (4.2.2)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
