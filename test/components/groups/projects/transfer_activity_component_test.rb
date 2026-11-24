@@ -15,7 +15,7 @@ module Groups
       end
 
       test 'project transfer into group activity' do
-        activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+        activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.projects.transfer_in')
@@ -40,7 +40,7 @@ module Groups
       test 'project transfer into group and project deleted activity' do
         ::Projects::DestroyService.new(@project, @user).execute
 
-        activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+        activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.projects.transfer_in')

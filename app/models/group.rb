@@ -110,7 +110,7 @@ class Group < Namespace
     PublicActivity::Activity.where(
       trackable_id: id,
       trackable_type: 'Namespace'
-    )
+    ).order(created_at: :desc)
   end
 
   def has_samples? # rubocop:disable Naming/PredicatePrefix

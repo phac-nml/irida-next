@@ -14,7 +14,7 @@ class AutomatedPipelineActivityComponentTest < ViewComponentTestCase
   end
 
   test 'automated workflow execution setup activity' do
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('namespaces_project_namespace.automated_pipeline.create')
@@ -38,7 +38,7 @@ class AutomatedPipelineActivityComponentTest < ViewComponentTestCase
   test 'automated workflow execution destroy activity' do
     ::AutomatedWorkflowExecutions::DestroyService.new(@automated_workflow_execution, @user).execute
 
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('activity.namespaces_project_namespace.automated_pipeline.destroy')

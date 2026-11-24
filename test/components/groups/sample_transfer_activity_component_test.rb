@@ -13,7 +13,7 @@ module Groups
     test 'group sample transfer activity' do
       group = groups(:group_sample_transfer)
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.samples.transfer')

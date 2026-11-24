@@ -18,7 +18,7 @@ module Activities
         ::Projects::Samples::DestroyService.new(project_namespace, @user,
                                                 { sample_ids: [sample.id] }).execute
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.destroy_multiple')
@@ -47,7 +47,7 @@ module Activities
       test 'sample transfer activity dialog source project' do
         project_namespace = namespaces_project_namespaces(:project1_namespace)
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.transfer')
@@ -78,7 +78,7 @@ module Activities
       test 'sample transfer activity dialog target project' do
         project_namespace = namespaces_project_namespaces(:project2_namespace)
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.transferred_from')
@@ -105,7 +105,7 @@ module Activities
       test 'project import samples activity dialog' do
         project_namespace = namespaces_project_namespaces(:project1_namespace)
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('namespaces_project_namespace.import_samples.create')
@@ -141,7 +141,7 @@ module Activities
 
         Samples::Metadata::BulkUpdateService.new(project_namespace, payload, metadata_fields, @user).execute
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.bulk_metadata_update')
@@ -181,7 +181,7 @@ module Activities
         Samples::Metadata::BulkUpdateService.new(group, payload, metadata_fields, @user).execute
 
         # verify project 30 activity
-        activities = project30_namespace.human_readable_activity(project30_namespace.retrieve_project_activity).reverse
+        activities = project30_namespace.human_readable_activity(project30_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.bulk_metadata_update')
@@ -204,7 +204,7 @@ module Activities
         end
 
         # verify project 31 activity
-        activities = project31_namespace.human_readable_activity(project31_namespace.retrieve_project_activity).reverse
+        activities = project31_namespace.human_readable_activity(project31_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.bulk_metadata_update')

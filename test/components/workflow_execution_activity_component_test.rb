@@ -14,7 +14,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
   end
 
   test 'workflow launched on sample activity' do
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('workflow_execution.automated_workflow.launch')
@@ -38,7 +38,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
 
   test 'workflow launched on sample and sample deleted activity' do
     Projects::Samples::DestroyService.new(@project.namespace, @user, { sample_ids: [@sample1.id] }).execute
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('workflow_execution.automated_workflow.launch')
@@ -63,7 +63,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
   test 'workflow launched on sample and workflow execution deleted activity' do
     ::WorkflowExecutions::CancelService.new(@user, { workflow_execution: @workflow_execution }).execute
     ::WorkflowExecutions::DestroyService.new(@user, { workflow_execution: @workflow_execution }).execute
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('workflow_execution.automated_workflow.launch')
@@ -91,7 +91,7 @@ class WorkflowExecutionActivityComponentTest < ViewComponentTestCase
 
     Projects::Samples::DestroyService.new(@project.namespace, @user, { sample_ids: [@sample1.id] }).execute
 
-    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+    activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('workflow_execution.automated_workflow.launch')

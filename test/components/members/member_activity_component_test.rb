@@ -13,7 +13,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
   end
 
   test 'add member to project activity' do
-    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity).reverse
+    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.create') && activity[:member] == @member
@@ -38,7 +38,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
     update_params = { access_level: Member::AccessLevel::UPLOADER }
     ::Members::UpdateService.new(@member, @project_namespace, @user, update_params).execute
 
-    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity).reverse
+    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.update')
@@ -62,7 +62,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
   test 'soft delete member in project activity' do
     ::Members::DestroyService.new(@member, @project_namespace, @user).execute
 
-    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity).reverse
+    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.destroy')
@@ -86,7 +86,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
     @member.destroy
     Member.only_deleted.where(id: @member.id).first.destroy
 
-    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity).reverse
+    activities = @project_namespace.human_readable_activity(@project_namespace.retrieve_project_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.create') && activity[:member_email] == @member.user.email
@@ -109,7 +109,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
 
   test 'add member to group activity' do
     member = members(:group_one_member_james_doe)
-    activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+    activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.create') && activity[:member] == member
@@ -135,7 +135,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
     update_params = { access_level: Member::AccessLevel::UPLOADER }
     ::Members::UpdateService.new(member, @group, @user, update_params).execute
 
-    activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+    activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.update')
@@ -160,7 +160,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
     member = members(:group_one_member_james_doe)
     ::Members::DestroyService.new(member, @group, @user).execute
 
-    activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+    activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.destroy')
@@ -186,7 +186,7 @@ class MemberActivityComponentTest < ViewComponentTestCase
     member.destroy
     Member.only_deleted.where(id: member.id).first.destroy
 
-    activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+    activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
     assert_equal(1, activities.count do |activity|
       activity[:key].include?('member.create') && activity[:member_email] == member.user.email

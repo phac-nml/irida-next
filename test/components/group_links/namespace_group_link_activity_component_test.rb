@@ -15,7 +15,7 @@ module GroupLinks
     end
 
     test 'project create namespace group link activity' do
-      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.namespace_group_link.create')
@@ -41,7 +41,7 @@ module GroupLinks
     test 'project update namespace group link activity' do
       params = { group_access_level: Member::AccessLevel::GUEST }
       ::GroupLinks::GroupLinkUpdateService.new(@user, @namespace_group_link, params).execute
-      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.namespace_group_link.update')
@@ -66,7 +66,7 @@ module GroupLinks
 
     test 'project destroy namespace group link activity' do
       ::GroupLinks::GroupUnlinkService.new(@user, @namespace_group_link).execute
-      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.namespace_group_link.destroy')
@@ -92,7 +92,7 @@ module GroupLinks
     test 'project create namespace group link and permanently destroy activity' do
       ::GroupLinks::GroupUnlinkService.new(@user, @namespace_group_link).execute
       NamespaceGroupLink.only_deleted.find_by(id: @namespace_group_link.id).destroy!
-      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity).reverse
+      activities = @project.namespace.human_readable_activity(@project.namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.namespace_group_link.create')
@@ -116,7 +116,7 @@ module GroupLinks
     end
 
     test 'group create namespace group link activity' do
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.create')
@@ -142,7 +142,7 @@ module GroupLinks
     test 'group update namespace group link activity' do
       params = { group_access_level: Member::AccessLevel::GUEST }
       ::GroupLinks::GroupLinkUpdateService.new(@user, @group_namespace_group_link, params).execute
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.update')
@@ -167,7 +167,7 @@ module GroupLinks
 
     test 'group destroy namespace group link activity' do
       ::GroupLinks::GroupUnlinkService.new(@user, @group_namespace_group_link).execute
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.destroy')
@@ -193,7 +193,7 @@ module GroupLinks
     test 'group create namespace group link and destroy permanently activity' do
       ::GroupLinks::GroupUnlinkService.new(@user, @group_namespace_group_link).execute
       NamespaceGroupLink.only_deleted.find_by(id: @group_namespace_group_link.id).destroy!
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.create')
@@ -216,7 +216,7 @@ module GroupLinks
                       text: @group_namespace_group_link.group.puid
 
       group = groups(:david_doe_group_four)
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.created')
@@ -242,7 +242,7 @@ module GroupLinks
 
     test 'namespace group link group shared activity' do
       group = groups(:david_doe_group_four)
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.created')
@@ -268,7 +268,7 @@ module GroupLinks
 
     test 'namespace group link project shared activity' do
       group = groups(:group_charlie)
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.namespace_group_link.created')
