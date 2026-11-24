@@ -42,7 +42,7 @@ pre-commit:
         - ".octocov.yml"
         - ".rubocop.yml"
         - "lefthook.yml"
-        - "pnpm-lock.yaml"
+        - "**/pnpm-lock.yaml"
         - "config/i18n-tasks.yml"
         - "config/locales/*.yml"
         - "config/locales/**/*.yml"
@@ -51,7 +51,7 @@ pre-commit:
         - ".github/workflows/*.yml"
         - ".github/workflows/**/*.yml"
         - "test/fixtures/*.yml"
-        - "pnpm*.yaml"
+        - "**/pnpm-workspace.yaml"
       run: yq -i -S '.' -Y {staged_files}
       stage_fixed: true
 
