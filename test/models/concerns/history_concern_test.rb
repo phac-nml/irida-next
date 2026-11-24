@@ -10,10 +10,7 @@ class HistoryConcernTest < ActiveSupport::TestCase
 
     project.namespace.create_logidze_snapshot!
 
-    current_ts = DateTime.now.strftime('%Q').to_i
-    updated_at = DateTime.parse(Time.zone.at(0, current_ts, :millisecond).to_s)
-
-    expected_result = [{ version: 1, user: 'System', updated_at:, restored: false,
+    expected_result = [{ version: 1, user: 'System', updated_at: Time.current, restored: false,
                          deleted: false, transferred: false }]
 
     log_data = project.namespace.log_data_without_changes
@@ -84,10 +81,7 @@ class HistoryConcernTest < ActiveSupport::TestCase
 
     sample.create_logidze_snapshot!
 
-    current_ts = DateTime.now.strftime('%Q').to_i
-    updated_at = DateTime.parse(Time.zone.at(0, current_ts, :millisecond).to_s)
-
-    expected_result = [{ version: 1, user: 'System', updated_at:, restored: false,
+    expected_result = [{ version: 1, user: 'System', updated_at: Time.current, restored: false,
                          deleted: false, transferred: false }]
 
     log_data = sample.log_data_without_changes
@@ -105,10 +99,7 @@ class HistoryConcernTest < ActiveSupport::TestCase
 
     group.create_logidze_snapshot!
 
-    current_ts = DateTime.now.strftime('%Q').to_i
-    updated_at = DateTime.parse(Time.zone.at(0, current_ts, :millisecond).to_s)
-
-    expected_result = [{ version: 1, user: 'System', updated_at:, restored: false,
+    expected_result = [{ version: 1, user: 'System', updated_at: Time.current, restored: false,
                          deleted: false, transferred: false }]
 
     log_data = group.log_data_without_changes
