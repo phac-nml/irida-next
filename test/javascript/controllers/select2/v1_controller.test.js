@@ -283,6 +283,22 @@ describe("select2/v1 controller", () => {
     expect(input().getAttribute("aria-expanded")).toBe("false");
   });
 
+  it("matches dropdown width to the input when opening", async () => {
+    application = await mount();
+    Object.defineProperty(input(), "offsetWidth", {
+      configurable: true,
+      value: 312,
+    });
+
+    controllerFor(application).showDropdown();
+
+    const dropdownEl = document.querySelector(
+      '[data-select2--v1-target="dropdown"]',
+    );
+    expect(dropdownEl.style.width).toBe("312px");
+    expect(dropdownEl.style.minWidth).toBe("312px");
+  });
+
   it("hides on focusout when focus leaves the dropdown", async () => {
     application = await mount();
     const dropdownEl = document.querySelector(

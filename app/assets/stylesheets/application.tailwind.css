@@ -4,8 +4,6 @@
 @source "../../views/**/*.erb";
 @source "../../helpers/**/*.rb";
 
-@plugin "@tailwindcss/forms";
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -138,6 +136,145 @@ input[type="search"] {
   }
 }
 
+/*
+  Base styling for native form controls.
+
+  Replaces the @tailwindcss/forms plugin (base strategy) with a tokenized
+  equivalent so inputs, selects, textareas, checkboxes, radios and file inputs
+  keep their appearance without the npm dependency. The IRIDA `.form-field`
+  utilities and Pathogen form components layer on top of these base rules.
+  Focus styling is intentionally omitted: the global `:focus-visible` rule
+  above already provides the design-contract focus outline.
+*/
+@layer base {
+  input:where([type="text"]),
+  input:where(:not([type])),
+  input:where([type="email"]),
+  input:where([type="url"]),
+  input:where([type="password"]),
+  input:where([type="number"]),
+  input:where([type="date"]),
+  input:where([type="datetime-local"]),
+  input:where([type="month"]),
+  input:where([type="search"]),
+  input:where([type="tel"]),
+  input:where([type="time"]),
+  input:where([type="week"]),
+  select:where([multiple]),
+  textarea,
+  select {
+    appearance: none;
+    background-color: #fff;
+    border-width: 1px;
+    border-color: var(--pvc-color-border-strong);
+    border-radius: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--pvc-color-text-muted);
+    opacity: 1;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    print-color-adjust: exact;
+  }
+
+  select:where([multiple]),
+  select:where([size]:not([size="1"])) {
+    background-image: initial;
+    background-position: initial;
+    background-repeat: unset;
+    background-size: initial;
+    padding-right: 0.75rem;
+    print-color-adjust: unset;
+  }
+
+  input:where([type="checkbox"]),
+  input:where([type="radio"]) {
+    appearance: none;
+    print-color-adjust: exact;
+    display: inline-block;
+    vertical-align: middle;
+    background-origin: border-box;
+    user-select: none;
+    flex-shrink: 0;
+    height: 1rem;
+    width: 1rem;
+    padding: 0;
+    color: var(--pvc-color-accent-solid);
+    background-color: #fff;
+    border-width: 1px;
+    border-color: var(--pvc-color-border-strong);
+  }
+
+  input:where([type="checkbox"]) {
+    border-radius: 0;
+  }
+
+  input:where([type="radio"]) {
+    border-radius: 100%;
+  }
+
+  input:where([type="checkbox"]):checked,
+  input:where([type="radio"]):checked {
+    border-color: transparent;
+    background-color: currentColor;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  input:where([type="checkbox"]):checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  }
+
+  input:where([type="radio"]):checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+  }
+
+  input:where([type="checkbox"]):checked:hover,
+  input:where([type="checkbox"]):checked:focus,
+  input:where([type="radio"]):checked:hover,
+  input:where([type="radio"]):checked:focus {
+    border-color: transparent;
+    background-color: currentColor;
+  }
+
+  input:where([type="checkbox"]):indeterminate {
+    border-color: transparent;
+    background-color: currentColor;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");
+  }
+
+  input:where([type="checkbox"]):indeterminate:hover,
+  input:where([type="checkbox"]):indeterminate:focus {
+    border-color: transparent;
+    background-color: currentColor;
+  }
+
+  input:where([type="file"]) {
+    background: unset;
+    border-color: inherit;
+    border-width: 0;
+    border-radius: 0;
+    padding: 0;
+    font-size: unset;
+    line-height: inherit;
+  }
+}
+
 @utility collapsed {
   & {
     grid-template-columns: 0 1fr !important;
@@ -185,8 +322,12 @@ input[type="search"] {
     @apply mb-1 block text-sm font-medium text-slate-900 dark:text-white;
   }
 
+  & label {
+    @apply font-semibold;
+  }
+
   & abbr.req {
-    @apply align-baseline text-sm leading-none text-red-500 no-underline;
+    @apply align-baseline text-sm leading-none text-[var(--pvc-color-danger-strong)] no-underline;
   }
 
   & div.field_with_errors {
@@ -194,19 +335,19 @@ input[type="search"] {
   }
 
   & input[type="text"] {
-    @apply block w-full rounded-lg border border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block min-h-11 w-full rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] text-slate-900 sm:text-sm dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="search"] {
-    @apply block w-full rounded-lg border border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block min-h-11 w-full rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] text-slate-900 sm:text-sm dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="password"] {
-    @apply block w-full rounded-lg border border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block min-h-11 w-full rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] text-slate-900 sm:text-sm dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="email"] {
-    @apply block w-full rounded-lg border border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block min-h-11 w-full rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] text-slate-900 sm:text-sm dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & input[type="text"].prefixed {
@@ -226,7 +367,7 @@ input[type="search"] {
   }
 
   &.datepicker input[type="text"] {
-    @apply block w-full rounded-lg border border-slate-300 pl-10 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block min-h-11 w-full rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] pl-10 text-slate-900 sm:text-sm dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & .select2 input[type="text"] {
@@ -240,7 +381,7 @@ input[type="search"] {
   }
 
   & select {
-    @apply block w-full rounded-lg border-slate-300 text-slate-900 sm:text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block min-h-11 w-full rounded-[var(--pvc-radius-control)] border-[var(--pvc-color-border-strong)] text-slate-900 sm:text-sm dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 
   & select optgroup {
@@ -252,7 +393,7 @@ input[type="search"] {
   }
 
   & input[type="file"] {
-    @apply block h-11 w-full overflow-hidden rounded-lg border border-slate-300 bg-slate-50 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-400 dark:placeholder-slate-400;
+    @apply block h-11 w-full overflow-hidden rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-slate-50 text-sm text-slate-900 dark:bg-slate-700 dark:text-slate-400 dark:placeholder-slate-400;
   }
 
   & input[type="file"]::file-selector-button {
@@ -287,11 +428,11 @@ input[type="search"] {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply block w-full rounded-r-lg border border-slate-300 bg-white text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
+    @apply block w-full rounded-r-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-white text-sm text-slate-900 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
   }
 
   & textarea {
-    @apply block w-full rounded-lg border border-slate-300 text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
+    @apply block w-full rounded-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] text-sm text-slate-900 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400;
   }
 }
 
@@ -329,7 +470,7 @@ input[type="search"] {
     line-height: inherit;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    @apply block w-full rounded-r-lg border border-slate-300 bg-white text-sm text-slate-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
+    @apply block w-full rounded-r-[var(--pvc-radius-control)] border border-[var(--pvc-color-border-strong)] bg-white text-sm text-slate-900 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:drop-shadow-sm;
   }
 }
 
@@ -727,7 +868,7 @@ a.pill-focus-reset:focus-visible {
   @apply relative text-slate-900 dark:text-white;
 
   input {
-    @apply relative m-0 box-border w-full cursor-pointer rounded-lg border border-slate-300 px-3 py-2 pr-20 align-bottom outline-none focus-visible:shadow-none focus-visible:outline dark:border-slate-600 dark:bg-slate-800;
+    @apply relative m-0 box-border w-full cursor-pointer rounded-[var(--pvc-radius-control)] border border-slate-300 px-3 py-2 pr-20 align-bottom outline-none focus-visible:shadow-none focus-visible:outline dark:border-slate-600 dark:bg-slate-800;
   }
 
   input[aria-invalid="true"] {
