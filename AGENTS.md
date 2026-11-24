@@ -4,7 +4,7 @@
 
 **IRIDA Next** is an open-source bioinformatics platform built by PHAC-NML for the storage, management, and Nextflow-based analysis of genomic sequences and metadata.
 
-- **Backend:** Ruby on Rails 8 (Ruby 3.4.x), PostgreSQL 14 (`hstore` and `pg_trgm` extensions).
+- **Backend:** Ruby on Rails 8 (Ruby 3.4.x), PostgreSQL 18 (`hstore` and `pg_trgm` extensions).
 - **Frontend:** ViewComponent (`Pathogen::*` components), Stimulus, Turbo, Tailwind CSS, bundled with `esbuild`.
 - **Workflow Execution:** Nextflow (25.10.2) via GA4GH WES (`sapporo-service` on `http://localhost:1122`).
 - **Environment:** `devenv.sh` (Nix) manages all runtimes, system packages, databases, and background processes.
