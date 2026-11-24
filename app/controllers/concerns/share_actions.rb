@@ -158,5 +158,11 @@ module ShareActions # rubocop:disable Metrics/ModuleLength
 
   def set_default_sort
     @q.sorts = 'group_name asc' if @q.sorts.empty?
+
+    # Append a tie-breaker sort on id (in the same direction as the primary sort) so that
+    # namespace group links with equal values for the sorted column (e.g. group_access_level,
+    # expires_at) always have a stable, deterministic relative order.
+    primary_sort = @q.sorts.first
+    @q.build_sort(name: 'id', dir: primary_sort.dir) unless primary_sort.name == 'id'
   end
 end
