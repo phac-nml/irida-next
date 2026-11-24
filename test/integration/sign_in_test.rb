@@ -36,18 +36,26 @@ class SignInTest < ActionDispatch::IntegrationTest
   test 'should display sign in with custom text and icon' do
     custom_provider = 'entra_id'
     custom_text = 'Tyrell Corporation'
-    Rails.configuration.auth_config["#{custom_provider}_text"] = custom_text
-    Rails.configuration.auth_config["#{custom_provider}_icon"] = @test_file_relative_path
+    overrides = { "#{custom_provider}_text" => custom_text, "#{custom_provider}_icon" => @test_file_relative_path }
+    original_bracket = Rails.configuration.auth_config.method(:[])
 
-    get new_user_session_path
+    # Stub (rather than mutate) auth_config so the override only applies for the duration of this
+    # block and is automatically restored afterwards - otherwise it leaks into other tests sharing
+    # the same Rails.configuration singleton (e.g. the "default text and icon" test) within the
+    # same test worker process. Falling back to the original method for any other key (instead of
+    # a blanket stub) avoids breaking unrelated auth_config lookups, such as the 'omniauth_providers'
+    # key read when Devise lazily builds its omniauth routes/middleware.
+    Rails.configuration.auth_config.stub(:[], ->(key) { overrides.fetch(key) { original_bracket.call(key) } }) do
+      get new_user_session_path
 
-    assert_response :success
-    # Local Account button
-    assert_select 'a', text: I18n.t(:'devise.sessions.new.local_button')
-    # Custom text for entra_id button
-    assert_select 'button span span span', text: I18n.t(:'devise.sessions.new.omniauth', provider: custom_text)
-    # Custom icon for entra_id
-    assert_select "button span svg.icon-#{custom_provider}_icon"
+      assert_response :success
+      # Local Account button
+      assert_select 'a', text: I18n.t(:'devise.sessions.new.local_button')
+      # Custom text for entra_id button
+      assert_select 'button span span span', text: I18n.t(:'devise.sessions.new.omniauth', provider: custom_text)
+      # Custom icon for entra_id
+      assert_select "button span svg.icon-#{custom_provider}_icon"
+    end
   end
 
   test 'should display no authentication methods message when no providers and password authentication disabled' do
