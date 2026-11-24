@@ -88,7 +88,6 @@ function renderFixture({ existingGroups = "", initialState = [] } = {}) {
       data-advanced-search--v2--builder-enum-operations-value='{"standard":{}}'
       data-advanced-search--v2--builder-operations-value='{"standard":{"Equals":"="}}'
     >
-      <p data-advanced-search--v2--builder-target="emptyState" hidden>Add a condition to start filtering.</p>
       <div data-advanced-search--v2--builder-target="searchGroupsContainer"></div>
       <template data-advanced-search--v2--builder-target="andTemplate"><div data-advanced-search-connective="and" aria-hidden="true">AND</div></template>
       <template data-advanced-search--v2--builder-target="orTemplate"><div data-advanced-search-connective="or" aria-hidden="true">OR</div></template>
@@ -253,31 +252,6 @@ describe("advanced-search--v2--builder", () => {
       container.querySelectorAll("[data-advanced-search-connective]"),
     ).toHaveLength(0);
     expect(container.querySelector("input").name).toBe("q[groups_attributes]");
-  });
-
-  it("shows guidance beside blank conditions and hides it after selecting a field", async () => {
-    application = await startController();
-    const controller = controllerInstance(application);
-    const prompt = builderElement().querySelector(
-      '[data-advanced-search--v2--builder-target="emptyState"]',
-    );
-    controller.render();
-    expect(groups()).toHaveLength(1);
-    expect(conditions(groups()[0])).toHaveLength(1);
-    expect(prompt.hidden).toBe(false);
-    const field = conditions(groups()[0])[0].querySelector("[name$='[field]']");
-    field.value = "name";
-    controller.handleFieldChange({ target: field });
-    expect(prompt.hidden).toBe(true);
-    field.value = "";
-    controller.handleFieldChange({ target: field });
-    expect(prompt.hidden).toBe(false);
-    controller.clear();
-    expect(prompt.hidden).toBe(true);
-    controller.render();
-    expect(prompt.hidden).toBe(false);
-    controller.clearForm();
-    expect(prompt.hidden).toBe(true);
   });
 
   it("addCondition appends conditions with incrementing indices", async () => {

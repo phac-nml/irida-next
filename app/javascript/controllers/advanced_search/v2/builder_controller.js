@@ -35,7 +35,6 @@ const replaceChildrenWithFragment = (element, items) => {
 export default class AdvancedSearchBuilderController extends Controller {
   static targets = [
     "emptySearchTemplate",
-    "emptyState",
     "andTemplate",
     "orTemplate",
     "conditionsContainer",
@@ -110,7 +109,6 @@ export default class AdvancedSearchBuilderController extends Controller {
     this.searchGroupsContainerTarget.innerHTML = "";
     this.#nextGroupIndex = 0;
     this.#nextConditionIndexes = new WeakMap();
-    this.#updateEmptyState();
   }
 
   clearForm() {
@@ -282,7 +280,6 @@ export default class AdvancedSearchBuilderController extends Controller {
         ? event.target.value
         : this.#selectedConditionField(condition);
 
-    this.#updateEmptyState();
     const previousField = condition.dataset.advancedSearchSelectedField || "";
     if (previousField === selectedField) {
       return;
@@ -338,23 +335,12 @@ export default class AdvancedSearchBuilderController extends Controller {
         this.andTemplateTarget,
       );
     });
-    this.#updateEmptyState();
   }
 
   #insertConnectives(siblings, template) {
     siblings.slice(1).forEach((sibling) => {
       sibling.before(template.content.cloneNode(true));
     });
-  }
-
-  #updateEmptyState() {
-    const groups = this.#groupElements();
-    const hasSelectedField = groups.some((group) =>
-      this.#conditionElements(group).some((condition) =>
-        this.#selectedConditionField(condition),
-      ),
-    );
-    this.emptyStateTarget.hidden = groups.length === 0 || hasSelectedField;
   }
 
   #groupActionsContainer(group) {

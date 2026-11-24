@@ -250,24 +250,6 @@ class AdvancedSearchV2ComponentSystemTest < ApplicationSystemTestCase
     end
   end
 
-  test 'empty guidance survives opening and follows field selection' do
-    open_preview(:v2_empty)
-    within 'dialog' do
-      prompt = I18n.t('components.advanced_search_component.v2.empty_state')
-      assert_text prompt
-      assert_no_button I18n.t('components.advanced_search_component.remove_group_button')
-      assert_selector GROUPS, count: 1
-      assert_selector CONDITIONS, count: 1
-      assert_no_selector '[data-advanced-search-connective]'
-      choose_field('country')
-      assert_no_text prompt
-      click_button I18n.t('components.advanced_search_component.remove_condition_aria_label')
-      assert_text prompt
-      assert_selector CONDITIONS, count: 1
-      assert_accessible
-    end
-  end
-
   private
 
   def open_preview(preview)
