@@ -10,6 +10,12 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
     @authorization_header = "Basic #{@basic_auth}"
   end
 
+  test 'should execute an anonymous graphql introspection query' do
+    post api_graphql_path, params: { query: '{ __schema }' }
+
+    assert_response :success
+  end
+
   test 'should execute the graphql query' do
     post api_graphql_path, params: { query: '{ __schema }' },
                            headers: { Authorization: @authorization_header }
@@ -34,6 +40,27 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   test 'should execute the graphql query when variables is an empty hash' do
     post api_graphql_path, params: { query: '{ __schema }', variables: '{}' },
                            headers: { Authorization: @authorization_header }
+
+    assert_response :success
+  end
+
+  test 'should reject session requests without a csrf token' do
+    sign_in users(:john_doe)
+
+    post api_graphql_path, params: { query: '{ __schema }' }
+
+    assert_response :unprocessable_content
+  end
+
+  test 'should execute session requests with a csrf token' do
+    sign_in users(:john_doe)
+    get root_path
+
+    csrf_token = response.body.match(/name="csrf-token" content="([^"]+)"/)[1]
+
+    post api_graphql_path,
+         params: { query: '{ __schema }' },
+         headers: { 'X-CSRF-Token' => csrf_token }
 
     assert_response :success
   end

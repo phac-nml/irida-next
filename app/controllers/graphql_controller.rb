@@ -11,13 +11,10 @@ class GraphqlController < ApplicationController
   # this was only needed for accessing current user in view components
   skip_around_action :set_current_user
 
-  # If accessing from outside this domain, nullify the session
-  # This allows for outside API access while preventing CSRF attacks,
-  # but you'll have to authenticate your user separately
-  skip_forgery_protection with: :null_session, only: :execute
-
   # must come first: current_user is set up here
   before_action :authenticate_sessionless_user!, only: [:execute]
+  # API-token clients are sessionless and must not require a browser CSRF token.
+  before_action :verify_session_authenticity_token, only: [:execute]
 
   around_action :use_logidze_responsible, only: [:execute]
 
@@ -69,5 +66,11 @@ class GraphqlController < ApplicationController
 
     render json: { errors: [{ message: err.message, backtrace: err.backtrace }], data: {} },
            status: :internal_server_error
+  end
+
+  def verify_session_authenticity_token
+    return if token.present? || current_user.nil?
+
+    verify_authenticity_token
   end
 end
