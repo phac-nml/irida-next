@@ -188,7 +188,6 @@ fr:
         connective:
           and: ET
           or: OU
-        empty_state: Ajoutez une condition pour commencer à filtrer.
     attachments:
       dialogs:
         delete_attachment_component:
