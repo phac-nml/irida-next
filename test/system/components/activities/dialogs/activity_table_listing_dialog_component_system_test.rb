@@ -15,7 +15,7 @@ module Activities
       test 'sample clone activity dialog source project' do
         project_namespace = namespaces_project_namespaces(:project1_namespace)
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.clone')
@@ -49,7 +49,7 @@ module Activities
       test 'sample clone activity dialog target project' do
         project_namespace = namespaces_project_namespaces(:project2_namespace)
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('project_namespace.samples.cloned_from')
@@ -81,7 +81,7 @@ module Activities
                                                  { workflow_execution:,
                                                    namespace: project_namespace }).execute
 
-        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+        activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
         assert_equal(2, activities.count do |activity|
           activity[:key].include?('activity.namespaces_project_namespace.workflow_executions.destroy_html')
@@ -113,7 +113,7 @@ module Activities
 
       test 'group samples destroy activity dialog' do
         group_namespace = groups(:group_one)
-        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
+        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.samples.destroy')
@@ -146,7 +146,7 @@ module Activities
       test 'group import samples activity dialog' do
         group_namespace = groups(:group_one)
 
-        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
+        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.import_samples.create')
@@ -179,7 +179,7 @@ module Activities
         login_as user
         group = groups(:group_sample_transfer)
 
-        activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+        activities = group.human_readable_activity(group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.samples.transfer')
@@ -241,7 +241,7 @@ module Activities
                                          nil
                                        )
 
-        activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+        activities = group.human_readable_activity(group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.samples.clone')
@@ -289,7 +289,7 @@ module Activities
         metadata_fields = %w[metadatafield1 metadatafield2 metadatafield3 metadatafield4]
 
         Samples::Metadata::BulkUpdateService.new(group_namespace, payload, metadata_fields, @user).execute
-        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity).reverse
+        activities = group_namespace.human_readable_activity(group_namespace.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.samples.bulk_metadata_update')

@@ -13,7 +13,7 @@ module Projects
     test 'sample transfer source project actvity' do
       project_namespace = namespaces_project_namespaces(:project1_namespace)
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.transfer')
@@ -43,7 +43,7 @@ module Projects
     test 'sample transfer target project actvity' do
       project_namespace = namespaces_project_namespaces(:project2_namespace)
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.transferred_from')
@@ -78,7 +78,7 @@ module Projects
       project_namespace_to_destroy.destroy!
       project_namespace_to_destroy.really_destroy!
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.transferred_from')
@@ -113,7 +113,7 @@ module Projects
       project_namespace_to_destroy.destroy!
       project_namespace_to_destroy.really_destroy!
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.transfer')

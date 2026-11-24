@@ -13,7 +13,7 @@ module Groups
     end
 
     test 'create subgroup activity' do
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.subgroups.create')
@@ -36,7 +36,7 @@ module Groups
     test 'remove subgroup activity' do
       ::Groups::DestroyService.new(@subgroup, @user).execute
 
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.subgroups.destroy')
@@ -59,7 +59,7 @@ module Groups
     test 'create subgroup and then soft delete activity' do
       ::Groups::DestroyService.new(@subgroup, @user).execute
 
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.subgroups.create')
@@ -86,7 +86,7 @@ module Groups
       .merge(group: @subgroup))
       ::Groups::TransferService.new(@subgroup, @user, transfer_form).execute
 
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.subgroups.create')

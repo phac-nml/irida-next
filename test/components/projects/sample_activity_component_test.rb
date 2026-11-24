@@ -12,7 +12,7 @@ module Projects
 
     test 'sample create activity' do
       project_namespace = namespaces_project_namespaces(:project1_namespace)
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
       sample = samples(:sample1)
 
       assert_equal(1, activities.count do |activity|
@@ -40,7 +40,7 @@ module Projects
       valid_params = { name: 'new-sample1-name', description: 'new-sample1-description' }
       ::Samples::UpdateService.new(sample, @user, valid_params).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.update')
@@ -69,7 +69,7 @@ module Projects
 
       Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.update')
@@ -95,7 +95,7 @@ module Projects
 
       Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('namespaces_project_namespace.samples.destroy_multiple')
@@ -121,7 +121,7 @@ module Projects
       Projects::Samples::DestroyService.new(project_namespace, @user,
                                             { sample_ids: [sample.id], reason: 'cleanup' }).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('namespaces_project_namespace.samples.destroy_multiple_with_reason')
@@ -148,7 +148,7 @@ module Projects
 
       Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample1.id, sample2.id] }).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.destroy_multiple')
@@ -177,7 +177,7 @@ module Projects
       Projects::Samples::DestroyService.new(project_namespace, @user,
                                             { sample_ids: [sample1.id, sample2.id], reason: 'cleanup' }).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.destroy_multiple_with_reason')
@@ -205,7 +205,7 @@ module Projects
       params = { 'metadata' => { 'metadatafield1' => 'value1', 'metadatafield2' => 'value2' } }
       ::Samples::Metadata::UpdateService.new(project_namespace.project, sample, @user, params).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.metadata.update')
@@ -228,7 +228,7 @@ module Projects
 
     test 'sample attachment create activity' do
       project_namespace = namespaces_project_namespaces(:project1_namespace)
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
       sample = samples(:sample1)
 
       assert_equal(1, activities.count do |activity|
@@ -256,7 +256,7 @@ module Projects
 
       ::Attachments::DestroyService.new(sample, attachment, @user).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.attachment.destroy')
@@ -285,7 +285,7 @@ module Projects
 
       Projects::Samples::DestroyService.new(project_namespace, @user, { sample_ids: [sample.id] }).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.samples.attachment.create')
@@ -307,7 +307,7 @@ module Projects
 
     test 'batch sample import actvity' do
       project_namespace = namespaces_project_namespaces(:project1_namespace)
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.import_samples.create')

@@ -18,7 +18,7 @@ module Groups
 
       ::Groups::TransferService.new(group2, @user, transfer_form).execute
 
-      activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+      activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.transfer_in_no_exisiting_namespace')
@@ -48,7 +48,7 @@ module Groups
 
       ::Groups::TransferService.new(subgroup, @user, transfer_form).execute
 
-      activities = group2.human_readable_activity(group2.retrieve_group_activity).reverse
+      activities = group2.human_readable_activity(group2.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.transfer_in_html')
@@ -81,7 +81,7 @@ module Groups
 
       subgroup.destroy!
 
-      activities = group2.human_readable_activity(group2.retrieve_group_activity).reverse
+      activities = group2.human_readable_activity(group2.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.transfer_in_html')

@@ -6,7 +6,7 @@ class ActivityComponentPreview < ViewComponent::Preview
   #
   def default
     project_namespace = Project.first.namespace
-    @activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+    @activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
     @pagy = Pagy::Offset.new(count: @activities.length, page: 1, limit: 10,
                              request: Pagy::Request.new(request: { base_url: 'localhost:3000', path: '/', params: {} }))
 

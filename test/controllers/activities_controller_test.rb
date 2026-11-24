@@ -15,7 +15,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should render correct activity dialog depending on dialog_type param' do
-    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity)
 
     activity_to_render = activities.find do |a|
       a[:key] == 'activity.namespaces_project_namespace.samples.transfer_html'
@@ -35,7 +35,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     Projects::Samples::DestroyService.new(@namespace, users(:james_doe), { sample_ids: [@sample.id] }).execute
 
-    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity)
 
     activity_to_render = activities.find do |a|
       a[:key] == 'activity.namespaces_project_namespace.samples.destroy_multiple_html'
@@ -49,7 +49,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     Projects::Samples::DestroyService.new(@namespace, @user, { sample_ids: [@sample2.id] }).execute
 
-    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity)
 
     activity_to_render = activities.find do |a|
       a[:key] == 'activity.namespaces_project_namespace.samples.destroy_multiple_html'
@@ -61,7 +61,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should display error alert if dialog type is unable to be loaded' do
-    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity)
 
     activity_to_render = activities.find do |a|
       a[:key] == 'activity.namespaces_project_namespace.samples.transfer_html'
@@ -76,7 +76,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   test 'should not display activity dialog for an unauthorized user' do
     sign_in users(:metadata_doe)
 
-    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity)
 
     activity_to_render = activities.find do |a|
       a[:key] == 'activity.namespaces_project_namespace.samples.transfer_html'
@@ -94,7 +94,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'render workflow executions destroy' do
-    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity).reverse
+    activities = @namespace.human_readable_activity(@namespace.retrieve_project_activity)
 
     activity_to_render = activities.find do |a|
       a[:key] == 'activity.namespaces_project_namespace.workflow_executions.destroy_html'

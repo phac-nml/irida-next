@@ -94,7 +94,7 @@ class GroupsController < Groups::ApplicationController # rubocop:disable Metrics
   def activity
     authorize! @group
 
-    group_activities = @group.retrieve_group_activity.order(created_at: :desc)
+    group_activities = @group.retrieve_group_activity
 
     @pagy, raw_activities = pagy(group_activities, limit: 10, raise_range_error: true)
 

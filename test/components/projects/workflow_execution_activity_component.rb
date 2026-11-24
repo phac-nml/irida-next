@@ -13,7 +13,7 @@ module Projects
     test 'destroy workflow execution' do
       project_namespace = namespaces_project_namespaces(:project1_namespace)
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('namespaces_project_namespace.workflow_executions.destroy_html')

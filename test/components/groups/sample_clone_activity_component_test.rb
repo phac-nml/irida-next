@@ -22,7 +22,7 @@ module Groups
                                      nil
                                    )
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.samples.clone')

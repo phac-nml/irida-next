@@ -14,7 +14,7 @@ module Groups
       end
 
       test 'project created in group activity' do
-        activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+        activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.projects.create')
@@ -37,7 +37,7 @@ module Groups
       test 'project removed from group activity' do
         ::Projects::DestroyService.new(@project, @user).execute
 
-        activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+        activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.projects.destroy')
@@ -60,7 +60,7 @@ module Groups
       test 'project created in group and then removed activity' do
         ::Projects::DestroyService.new(@project, @user).execute
 
-        activities = @group.human_readable_activity(@group.retrieve_group_activity).reverse
+        activities = @group.human_readable_activity(@group.retrieve_group_activity)
 
         assert_equal(1, activities.count do |activity|
           activity[:key].include?('group.projects.create')

@@ -16,7 +16,7 @@ module Groups
     test 'add template activity' do
       template = metadata_templates(:valid_group_metadata_template)
       group = groups(:group_one)
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.metadata_template.create')
@@ -45,7 +45,7 @@ module Groups
         @user, template, params
       ).execute
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.metadata_template.update')
@@ -76,7 +76,7 @@ module Groups
       # Permanently destroyed
       MetadataTemplate.find_by(id: template.id).really_destroy!
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.metadata_template.update')
@@ -103,7 +103,7 @@ module Groups
         @user, template
       ).execute
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.metadata_template.destroy')
@@ -133,7 +133,7 @@ module Groups
 
       MetadataTemplate.only_deleted.find_by(id: template.id).really_destroy!
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.metadata_template.destroy')

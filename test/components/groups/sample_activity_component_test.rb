@@ -12,7 +12,7 @@ module Groups
 
     test 'batch sample import activity' do
       group = groups(:group_one)
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('group.import_samples.create')
@@ -40,7 +40,7 @@ module Groups
       params = { sample_ids: [sample1.id, sample2.id] }
       Groups::Samples::DestroyService.new(group, @user, params).execute
 
-      activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+      activities = group.human_readable_activity(group.retrieve_group_activity)
 
       assert_equal(2, activities.count do |activity|
         activity[:key].include?('group.samples.destroy')

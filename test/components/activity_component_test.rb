@@ -7,7 +7,7 @@ class ActivityComponentTest < ViewComponentTestCase
     project_namespace = projects(:project1).namespace
     project2_namespace = projects(:project2).namespace
 
-    @activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+    @activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
     @project2_activities = project2_namespace.human_readable_activity(
       project2_namespace.retrieve_project_activity
     ).reverse
@@ -64,7 +64,7 @@ class ActivityComponentTest < ViewComponentTestCase
   test 'listing of group activity' do
     group = groups(:group_one)
 
-    @activities = group.human_readable_activity(group.retrieve_group_activity).reverse
+    @activities = group.human_readable_activity(group.retrieve_group_activity)
 
     # Limit set to 10 per page
     @pagy = Pagy::Offset.new(count: 10, page: 1, limit: 10)

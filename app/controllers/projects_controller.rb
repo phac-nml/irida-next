@@ -74,7 +74,7 @@ class ProjectsController < Projects::ApplicationController # rubocop:disable Met
   def activity
     authorize! @project
 
-    project_activities = @project.namespace.retrieve_project_activity.order(created_at: :desc)
+    project_activities = @project.namespace.retrieve_project_activity
 
     @pagy, raw_activities = pagy(project_activities, limit: 10, raise_range_error: true)
 

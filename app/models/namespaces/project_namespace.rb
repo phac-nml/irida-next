@@ -93,7 +93,7 @@ module Namespaces
       PublicActivity::Activity.where(
         trackable_id: id,
         trackable_type: 'Namespace'
-      )
+      ).order(created_at: :desc)
     end
 
     def validate_public_namespace_type

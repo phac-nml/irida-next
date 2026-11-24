@@ -16,7 +16,7 @@ module Projects
     test 'add template activity' do
       template = metadata_templates(:valid_metadata_template)
       project_namespace = namespaces_project_namespaces(:project1_namespace)
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.metadata_template.create')
@@ -45,7 +45,7 @@ module Projects
         @user, template, params
       ).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.metadata_template.update')
@@ -76,7 +76,7 @@ module Projects
       # Permanently destroyed
       MetadataTemplate.find_by(id: template.id).really_destroy!
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
 
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.metadata_template.update')
@@ -103,7 +103,7 @@ module Projects
         @user, template
       ).execute
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.metadata_template.destroy')
       end)
@@ -132,7 +132,7 @@ module Projects
 
       MetadataTemplate.only_deleted.find_by(id: template.id).really_destroy!
 
-      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity).reverse
+      activities = project_namespace.human_readable_activity(project_namespace.retrieve_project_activity)
       assert_equal(1, activities.count do |activity|
         activity[:key].include?('project_namespace.metadata_template.destroy')
       end)
