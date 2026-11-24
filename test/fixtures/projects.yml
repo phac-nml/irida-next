@@ -1,4 +1,12 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#
+# Every other project fixture below is given an explicit, staggered created_at/updated_at
+# (oldest at the bottom of the file) so project1 is deterministically the most recently
+# created/updated project. Without this, every fixture gets the same auto-assigned
+# timestamp at fixture load time, so sorting ties are broken non-deterministically and
+# dashboard sorting tests (see test/integration/projects/dashboard_test.rb) can flake.
+# project1 is intentionally left with the default fixture-load timestamp (rather than an
+# explicit one) so it still naturally ranks behind any project created during a test run.
 
 project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
@@ -9,394 +17,552 @@ project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
   samples_count: 20
+  created_at: <%= 1.hour.ago %>
+  updated_at: <%= 1.hour.ago %>
 
 john_doe_project2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 2.hours.ago %>
+  updated_at: <%= 2.hours.ago %>
 
 john_doe_project3:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project3_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
 
 john_doe_project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 4.hours.ago %>
+  updated_at: <%= 4.hours.ago %>
 
 project4:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project4_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 5.hours.ago %>
+  updated_at: <%= 5.hours.ago %>
 
 project5:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project5_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 6.hours.ago %>
+  updated_at: <%= 6.hours.ago %>
 
 project6:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project6_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 7.hours.ago %>
+  updated_at: <%= 7.hours.ago %>
 
 project7:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project7_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 8.hours.ago %>
+  updated_at: <%= 8.hours.ago %>
 
 project8:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project8_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 9.hours.ago %>
+  updated_at: <%= 9.hours.ago %>
 
 project9:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project9_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 10.hours.ago %>
+  updated_at: <%= 10.hours.ago %>
 
 project10:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project10_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 11.hours.ago %>
+  updated_at: <%= 11.hours.ago %>
 
 project11:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project11_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 12.hours.ago %>
+  updated_at: <%= 12.hours.ago %>
 
 project12:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project12_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 13.hours.ago %>
+  updated_at: <%= 13.hours.ago %>
 
 project13:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project13_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 14.hours.ago %>
+  updated_at: <%= 14.hours.ago %>
 
 project14:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project14_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 15.hours.ago %>
+  updated_at: <%= 15.hours.ago %>
 
 project15:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project15_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 16.hours.ago %>
+  updated_at: <%= 16.hours.ago %>
 
 project16:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project16_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 17.hours.ago %>
+  updated_at: <%= 17.hours.ago %>
 
 project17:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project17_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 18.hours.ago %>
+  updated_at: <%= 18.hours.ago %>
 
 project18:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project18_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 19.hours.ago %>
+  updated_at: <%= 19.hours.ago %>
 
 project19:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project19_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 20.hours.ago %>
+  updated_at: <%= 20.hours.ago %>
 
 project20:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project20_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 21.hours.ago %>
+  updated_at: <%= 21.hours.ago %>
 
 project21:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project21_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 22.hours.ago %>
+  updated_at: <%= 22.hours.ago %>
 
 project22:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 23.hours.ago %>
+  updated_at: <%= 23.hours.ago %>
 
 project23:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project23_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 24.hours.ago %>
+  updated_at: <%= 24.hours.ago %>
 
 project24:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 25.hours.ago %>
+  updated_at: <%= 25.hours.ago %>
 
 project25:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 26.hours.ago %>
+  updated_at: <%= 26.hours.ago %>
 
 project26:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 27.hours.ago %>
+  updated_at: <%= 27.hours.ago %>
 
 project32:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project32_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 28.hours.ago %>
+  updated_at: <%= 28.hours.ago %>
 
 projectA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 29.hours.ago %>
+  updated_at: <%= 29.hours.ago %>
 
 namespace_group_link_group_one_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 30.hours.ago %>
+  updated_at: <%= 30.hours.ago %>
 
 namespace_group_link_group_three_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 31.hours.ago %>
+  updated_at: <%= 31.hours.ago %>
 
 project28:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project28_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 32.hours.ago %>
+  updated_at: <%= 32.hours.ago %>
 
 project29:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 33.hours.ago %>
+  updated_at: <%= 33.hours.ago %>
 
 project30:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 34.hours.ago %>
+  updated_at: <%= 34.hours.ago %>
 
 project31:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 35.hours.ago %>
+  updated_at: <%= 35.hours.ago %>
 
 projectAlpha:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 36.hours.ago %>
+  updated_at: <%= 36.hours.ago %>
 
 projectBravo:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 37.hours.ago %>
+  updated_at: <%= 37.hours.ago %>
 
 projectCharlie:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 38.hours.ago %>
+  updated_at: <%= 38.hours.ago %>
 
 projectAlpha1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 39.hours.ago %>
+  updated_at: <%= 39.hours.ago %>
 
 projectDelta:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDelta_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 40.hours.ago %>
+  updated_at: <%= 40.hours.ago %>
 
 projectEcho:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEcho_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 41.hours.ago %>
+  updated_at: <%= 41.hours.ago %>
 
 projectDeltaSubgroupA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectDeltaSubgroupA_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 42.hours.ago %>
+  updated_at: <%= 42.hours.ago %>
 
 projectEchoSubgroupB:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectEchoSubgroupB_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 43.hours.ago %>
+  updated_at: <%= 43.hours.ago %>
 
 projectFoxtrotSubgroupA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 44.hours.ago %>
+  updated_at: <%= 44.hours.ago %>
 
 project27:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user27_project1_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 45.hours.ago %>
+  updated_at: <%= 45.hours.ago %>
 
 projectHotel:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 46.hours.ago %>
+  updated_at: <%= 46.hours.ago %>
 
 projectJeff:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 47.hours.ago %>
+  updated_at: <%= 47.hours.ago %>
 
 project33:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 48.hours.ago %>
+  updated_at: <%= 48.hours.ago %>
 
 project34:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project34_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 49.hours.ago %>
+  updated_at: <%= 49.hours.ago %>
 
 project35:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project35_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 50.hours.ago %>
+  updated_at: <%= 50.hours.ago %>
 
 project36:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 51.hours.ago %>
+  updated_at: <%= 51.hours.ago %>
 
 project37:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user21, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project37_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 52.hours.ago %>
+  updated_at: <%= 52.hours.ago %>
 
 project38:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project38_namespace, :uuid) %>
   samples_count: 200
+  created_at: <%= 53.hours.ago %>
+  updated_at: <%= 53.hours.ago %>
 
 user29_project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 54.hours.ago %>
+  updated_at: <%= 54.hours.ago %>
 
 project_janitor_end_to_end:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 55.hours.ago %>
+  updated_at: <%= 55.hours.ago %>
 
 project_janitor_DELETE:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
   samples_count: 4
+  created_at: <%= 56.hours.ago %>
+  updated_at: <%= 56.hours.ago %>
 
 empty_project:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:empty_project_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 57.hours.ago %>
+  updated_at: <%= 57.hours.ago %>
 
 projectIndia:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 58.hours.ago %>
+  updated_at: <%= 58.hours.ago %>
 
 projectIndia1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia1_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 59.hours.ago %>
+  updated_at: <%= 59.hours.ago %>
 
 projectJuliett:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 60.hours.ago %>
+  updated_at: <%= 60.hours.ago %>
 
 projectJuliett1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett1_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 61.hours.ago %>
+  updated_at: <%= 61.hours.ago %>
 
 projectMike:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMike_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 62.hours.ago %>
+  updated_at: <%= 62.hours.ago %>
 
 projectMikeA:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeA_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 63.hours.ago %>
+  updated_at: <%= 63.hours.ago %>
 
 projectMikeB:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeB_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 64.hours.ago %>
+  updated_at: <%= 64.hours.ago %>
 
 projectMetadata:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 65.hours.ago %>
+  updated_at: <%= 65.hours.ago %>
 
 projectMetadata2:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe_projectMetadata2_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 66.hours.ago %>
+  updated_at: <%= 66.hours.ago %>
 
 projectGroupSampleTransfer:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 67.hours.ago %>
+  updated_at: <%= 67.hours.ago %>
 
 projectGroupSampleTransferTarget:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 68.hours.ago %>
+  updated_at: <%= 68.hours.ago %>
 
 projectGroupSampleActions:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_actions_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 69.hours.ago %>
+  updated_at: <%= 69.hours.ago %>
 
 projectSubGroupSampleActions:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_subgroup_sample_actions_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 70.hours.ago %>
+  updated_at: <%= 70.hours.ago %>
 
 projectSharedGroupSampleActionsOwner:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_owner_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 71.hours.ago %>
+  updated_at: <%= 71.hours.ago %>
 
 projectSharedGroupSampleActionsMaintainer:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_maintainer_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 72.hours.ago %>
+  updated_at: <%= 72.hours.ago %>
 
 projectSharedGroupSampleActionsAnalyst:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_analyst_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 73.hours.ago %>
+  updated_at: <%= 73.hours.ago %>
 
 projectSharedGroupSampleActionsGuest:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_guest_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 74.hours.ago %>
+  updated_at: <%= 74.hours.ago %>
 
 projectUser31:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectUser31_namespace, :uuid) %>
   samples_count: 1
+  created_at: <%= 75.hours.ago %>
+  updated_at: <%= 75.hours.ago %>
 
 projectChunkedSamples:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_chunked_samples_namespace,
     :uuid) %>
   samples_count: 0
+  created_at: <%= 76.hours.ago %>
+  updated_at: <%= 76.hours.ago %>
 
 projectUser32:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:user32_project1_namespace, :uuid) %>
   samples_count: 3
+  created_at: <%= 77.hours.ago %>
+  updated_at: <%= 77.hours.ago %>
 
 subgroup1Project1:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:public_subgroup1_project1_namespace, :uuid) %>
   samples_count: 0
+  created_at: <%= 78.hours.ago %>
+  updated_at: <%= 78.hours.ago %>
 
 snvphyl_project:
   creator_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_project_namespace, :uuid) %>
   samples_count: 2
+  created_at: <%= 79.hours.ago %>
+  updated_at: <%= 79.hours.ago %>
