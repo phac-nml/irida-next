@@ -368,33 +368,3 @@ snvphyl_group_attachment_ref_file:
   record: snvphyl_group_attachment_ref (Attachment)
   blob: snvphyl_group_attachment_ref_blob
 
-# workflow execution sample authorization test files
-attachment_sample45_file:
-  name: file
-  record: attachment_sample45 (Attachment)
-  blob: attachment_sample45_blob
-
-attachment_sample2_file:
-  name: file
-  record: attachment_sample2 (Attachment)
-  blob: attachment_sample2_blob
-
-attachment_sample30_file:
-  name: file
-  record: attachment_sample30 (Attachment)
-  blob: attachment_sample30_blob
-
-attachment_sample_alpha_file:
-  name: file
-  record: attachment_sample_alpha (Attachment)
-  blob: attachment_sample_alpha_blob
-
-attachment_sample_bravo_file:
-  name: file
-  record: attachment_sample_bravo (Attachment)
-  blob: attachment_sample_bravo_blob
-
-attachment_sample_charlie_file:
-  name: file
-  record: attachment_sample_charlie (Attachment)
-  blob: attachment_sample_charlie_blob

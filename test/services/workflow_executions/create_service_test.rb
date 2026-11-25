@@ -6,6 +6,8 @@ require 'webmock/minitest'
 
 module WorkflowExecutions
   class CreateServiceTest < ActiveStorageTestCase
+    include ActionDispatch::TestProcess::FixtureFile
+
     def setup
       @user = users(:john_doe)
       @project = projects(:project1)
@@ -20,6 +22,14 @@ module WorkflowExecutions
           }
         }
       }
+    end
+
+    def create_test_attachment(sample)
+      Attachment.create!(
+        attachable: sample,
+        file: fixture_file_upload('test_file.fastq', 'text/plain'),
+        metadata: { 'format' => 'fastq', 'compression' => 'none' }
+      )
     end
 
     test 'test create new workflow execution' do
@@ -187,7 +197,7 @@ module WorkflowExecutions
       # referencing this foreign sample (and its own attachment) must not be allowed to proceed,
       # otherwise the foreign sample's data would be exfiltrated via this workflow execution's run.
       foreign_sample = samples(:sample45)
-      foreign_attachment = attachments(:attachment_sample45)
+      foreign_attachment = create_test_attachment(foreign_sample)
       assert_not_predicate Member.effective_access_level(foreign_sample.project.namespace, @user), :positive?
 
       samples_workflow_executions_attributes = {
@@ -221,8 +231,8 @@ module WorkflowExecutions
     test 'test create workflow execution from a project succeeds with multiple samples belonging to that project' do
       sample2 = samples(:sample2)
       sample30 = samples(:sample30)
-      attachment_sample2 = attachments(:attachment_sample2)
-      attachment_sample30 = attachments(:attachment_sample30)
+      attachment_sample2 = create_test_attachment(sample2)
+      attachment_sample30 = create_test_attachment(sample30)
 
       samples_workflow_executions_attributes = {
         '0': {
@@ -281,9 +291,9 @@ module WorkflowExecutions
       sample_alpha = samples(:sampleAlpha)
       sample_bravo = samples(:sampleBravo)
       sample_charlie = samples(:sampleCharlie)
-      attachment_alpha = attachments(:attachment_sample_alpha)
-      attachment_bravo = attachments(:attachment_sample_bravo)
-      attachment_charlie = attachments(:attachment_sample_charlie)
+      attachment_alpha = create_test_attachment(sample_alpha)
+      attachment_bravo = create_test_attachment(sample_bravo)
+      attachment_charlie = create_test_attachment(sample_charlie)
 
       samples_workflow_executions_attributes = {
         '0': {

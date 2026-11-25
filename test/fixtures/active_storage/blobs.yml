@@ -156,10 +156,3 @@ snvphyl_sample2_attachment_rev_blob: <%= ActiveStorage::FixtureSet.blob filename
 snvphyl_project_attachment_ref_blob: <%= ActiveStorage::FixtureSet.blob filename: "reference.fasta.gz", service_name: "test" %>
 snvphyl_group_attachment_ref_blob: <%= ActiveStorage::FixtureSet.blob filename: "reference.fasta.gz", service_name: "test" %>
 
-# workflow execution sample authorization test files
-attachment_sample45_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
-attachment_sample2_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
-attachment_sample30_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
-attachment_sample_alpha_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
-attachment_sample_bravo_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>
-attachment_sample_charlie_blob: <%= ActiveStorage::FixtureSet.blob filename: "test_file.fastq", service_name: "test" %>

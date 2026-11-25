@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
+  include ActionDispatch::TestProcess::FixtureFile
+
   SUBMIT_WORKFLOW_EXECUTION_MUTATION = <<~GRAPHQL
     mutation(
       $name: String!,
@@ -45,6 +47,14 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
     @sample = samples(:sample1)
     @attachment1 = attachments(:attachment1)
     @attachment2 = attachments(:attachment2)
+  end
+
+  def create_test_attachment(sample)
+    Attachment.create!(
+      attachable: sample,
+      file: fixture_file_upload('test_file.fastq', 'text/plain'),
+      metadata: { 'format' => 'fastq', 'compression' => 'none' }
+    )
   end
 
   test 'submit workflow execution mutation should work' do
@@ -293,7 +303,7 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
     # no access to. An authenticated user must not be able to pull another project's sample (and its
     # attachment) into a workflow execution submitted against a project they *do* have access to.
     foreign_sample = samples(:sample45)
-    foreign_attachment = attachments(:attachment_sample45)
+    foreign_attachment = create_test_attachment(foreign_sample)
     assert_not_predicate Member.effective_access_level(foreign_sample.project.namespace, user), :positive?
 
     samples_workflow_executions_attributes = [
