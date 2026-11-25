@@ -67,8 +67,9 @@ class GraphqlController < ApplicationController
   end
 
   def find_selected_operation
-    operations = GraphQL.parse(query).definitions.each_with_object({}) do |definition, hash|
-      hash[definition.name] = definition if definition.is_a?(GraphQL::Language::Nodes::OperationDefinition)
+    operations = {}
+    GraphQL.parse(query).definitions.each do |definition|
+      operations[definition.name] = definition if definition.is_a?(GraphQL::Language::Nodes::OperationDefinition)
     end
     return nil if operations.empty?
 
@@ -79,14 +80,10 @@ class GraphqlController < ApplicationController
   end
 
   # Handle variables in form data, JSON body, or a blank value
-  def prepare_variables(variables_param) # rubocop:disable Metrics/MethodLength
+  def prepare_variables(variables_param)
     case variables_param
     when String
-      if variables_param.present?
-        JSON.parse(variables_param) || {}
-      else
-        {}
-      end
+      variables_param.present? ? JSON.parse(variables_param) : {}
     when Hash
       variables_param
     when ActionController::Parameters
