@@ -69,7 +69,7 @@ include: group.new_record? ? %i[name description path parent_id] : %i[name descr
                   </div>
 
                   <div class="shrink-0">
-                    <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+                    <%= render Pathogen::CopyableValue.new(value: namespace.puid) %>
                   </div>
                 </div>
               <% end %>

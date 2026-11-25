@@ -199,7 +199,7 @@
                       ) do %>
                       <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
                         <%= project.namespace.name %>
-                        <%= render PuidComponent.new(puid: project.namespace.puid, show_clipboard: false) %>
+                        <%= render Pathogen::CopyableValue.new(value: project.namespace.puid) %>
                       </span>
 
                       <span class="pointer-events-none block text-slate-600 dark:text-white">

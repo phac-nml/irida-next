@@ -53,7 +53,7 @@
           <div class="flex items-center space-x-2">
             <% if namespace.deleted? %>
               <div><%= namespace.name %></div>
-              <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+              <%= render Pathogen::CopyableValue.new(value: namespace.puid) %>
               <%= render Viral::PillComponent.new(color: :red) do %>
                 <%= t(:".deleted") %>
               <% end %>
@@ -64,7 +64,7 @@
                 turbo_frame: "_top",
               },
               class: "underline hover:decoration-2" %>
-              <%= render PuidComponent.new(puid: namespace.puid, show_clipboard: false) %>
+              <%= render Pathogen::CopyableValue.new(value: namespace.puid) %>
             <% end %>
           </div>
         </dd>

@@ -23,10 +23,10 @@
         </div>
       <% end %>
 
-      <% if @id %>
+      <% if @id.present? %>
         <div class="order-last lg:order-0 <%= icon? ? 'pl-12' : '' %>">
           <div class="inline-block">
-            <%= render PuidComponent.new(puid: id) %>
+            <%= render Pathogen::CopyableValue.new(value: id) %>
           </div>
         </div>
       <% end %>

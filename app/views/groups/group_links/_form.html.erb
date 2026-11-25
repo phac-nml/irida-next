@@ -42,7 +42,7 @@ if Flipper.enabled?(:v2_select2, Current.user)
                     ) do %>
             <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
               <%= group.name %>
-              <%= render PuidComponent.new(puid: group.puid, show_clipboard: false) %>
+              <%= render Pathogen::CopyableValue.new(value: group.puid) %>
             </span>
           <% end %>
         <% end %>

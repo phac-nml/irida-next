@@ -397,8 +397,6 @@ fr:
       screen_reader_context: 'Tableau de bord du projet: %{project_name}'
       view_more_activity: Voir plus d'activité
       view_more_samples: Voir plus d'échantillons
-    puid:
-      title: 'Copier à la valeur du presse-papiers : %{puid}'
     ransack:
       sort_dropdown_component:
         prefix: Trier par
