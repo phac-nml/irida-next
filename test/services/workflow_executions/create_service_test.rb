@@ -181,6 +181,155 @@ module WorkflowExecutions
       assert_equal 'completed', @workflow_execution_completing.reload.state
     end
 
+    test 'test create workflow execution rejects samples from an inaccessible project' do
+      # sample45 belongs to user29_project1, a project @user (john_doe) is not a member of and has no
+      # access to. Submitting a workflow execution against @project (which @user can access) while
+      # referencing this foreign sample (and its own attachment) must not be allowed to proceed,
+      # otherwise the foreign sample's data would be exfiltrated via this workflow execution's run.
+      foreign_sample = samples(:sample45)
+      foreign_attachment = attachments(:attachment_sample45)
+      assert_not_predicate Member.effective_access_level(foreign_sample.project.namespace, @user), :positive?
+
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: foreign_sample.id,
+          samplesheet_params: {
+            sample: foreign_sample.puid,
+            fastq_1: foreign_attachment.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes,
+        name: 'New Workflow Execution Unauthorized Sample'
+      }
+
+      assert_enqueued_jobs(0, except: Turbo::Streams::BroadcastStreamJob) do
+        @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+      end
+
+      assert_not @workflow_execution.persisted?
+      assert_empty SamplesWorkflowExecution.where(sample_id: foreign_sample.id)
+    end
+
+    test 'test create workflow execution from a project succeeds with multiple samples belonging to that project' do
+      sample2 = samples(:sample2)
+      sample30 = samples(:sample30)
+      attachment_sample2 = attachments(:attachment_sample2)
+      attachment_sample30 = attachments(:attachment_sample30)
+
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: @sample.id,
+          samplesheet_params: {
+            sample: @sample.puid,
+            fastq_1: @attachment.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        },
+        '1': {
+          sample_id: sample2.id,
+          samplesheet_params: {
+            sample: sample2.puid,
+            fastq_1: attachment_sample2.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        },
+        '2': {
+          sample_id: sample30.id,
+          samplesheet_params: {
+            sample: sample30.puid,
+            fastq_1: attachment_sample30.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: @user.id,
+        namespace_id: @project.namespace.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes,
+        name: 'New Workflow Execution From Project'
+      }
+
+      assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob) do
+        @workflow_execution = WorkflowExecutions::CreateService.new(@user, workflow_params).execute
+      end
+
+      assert_empty @workflow_execution.errors
+      assert @workflow_execution.persisted?
+      assert_equal [@sample.id, sample2.id, sample30.id].sort,
+                   SamplesWorkflowExecution.where(workflow_execution_id: @workflow_execution.id)
+                                           .pluck(:sample_id).sort
+    end
+
+    test 'test create workflow execution from a group succeeds with samples from the group, ' \
+         'a linked project, and a linked group project' do
+      user = users(:private_ryan)
+      group = groups(:group_alpha)
+
+      # sampleAlpha belongs to a project directly under group_alpha, sampleBravo belongs to projectBravo
+      # which is linked directly to group_alpha, and sampleCharlie belongs to projectCharlie which is
+      # under group_charlie, a group linked to group_alpha. private_ryan (owner of group_alpha) must be
+      # able to submit a workflow execution against group_alpha referencing all three.
+      sample_alpha = samples(:sampleAlpha)
+      sample_bravo = samples(:sampleBravo)
+      sample_charlie = samples(:sampleCharlie)
+      attachment_alpha = attachments(:attachment_sample_alpha)
+      attachment_bravo = attachments(:attachment_sample_bravo)
+      attachment_charlie = attachments(:attachment_sample_charlie)
+
+      samples_workflow_executions_attributes = {
+        '0': {
+          sample_id: sample_alpha.id,
+          samplesheet_params: {
+            sample: sample_alpha.puid,
+            fastq_1: attachment_alpha.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        },
+        '1': {
+          sample_id: sample_bravo.id,
+          samplesheet_params: {
+            sample: sample_bravo.puid,
+            fastq_1: attachment_bravo.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        },
+        '2': {
+          sample_id: sample_charlie.id,
+          samplesheet_params: {
+            sample: sample_charlie.puid,
+            fastq_1: attachment_charlie.to_global_id # rubocop:disable Naming/VariableNumber
+          }
+        }
+      }
+
+      workflow_params = {
+        metadata:
+          { pipeline_id: 'phac-nml/iridanextexample',
+            workflow_version: '1.0.2' },
+        submitter_id: user.id,
+        namespace_id: group.id,
+        samples_workflow_executions_attributes: samples_workflow_executions_attributes,
+        name: 'New Workflow Execution From Group'
+      }
+
+      assert_enqueued_jobs(1, only: WorkflowExecutionPreparationJob) do
+        @workflow_execution = WorkflowExecutions::CreateService.new(user, workflow_params).execute
+      end
+
+      assert_empty @workflow_execution.errors
+      assert @workflow_execution.persisted?
+      assert_equal [sample_alpha.id, sample_bravo.id, sample_charlie.id].sort,
+                   SamplesWorkflowExecution.where(workflow_execution_id: @workflow_execution.id)
+                                           .pluck(:sample_id).sort
+    end
+
     test 'test create new workflow execution with missing required pipeline id' do
       workflow_params = {
         metadata:

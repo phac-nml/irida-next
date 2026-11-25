@@ -7,6 +7,48 @@ attachment1:
   created_at: <%= 3.hours.ago %>
   updated_at: <%= 3.hours.ago %>
 
+attachment_sample45:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample45 (Sample)
+  puid: INXT_ATT_AAAAAAAAAZ
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
+
+attachment_sample2:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample2 (Sample)
+  puid: INXT_ATT_AAAAAAAAAX
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
+
+attachment_sample30:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sample30 (Sample)
+  puid: INXT_ATT_AAAAAAAAAY
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
+
+attachment_sample_alpha:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sampleAlpha (Sample)
+  puid: INXT_ATT_AAAAAAAAZC
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
+
+attachment_sample_bravo:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sampleBravo (Sample)
+  puid: INXT_ATT_AAAAAAAAZD
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
+
+attachment_sample_charlie:
+  metadata: { "compression": "none", "format": "fastq" }
+  attachable: sampleCharlie (Sample)
+  puid: INXT_ATT_AAAAAAAAZE
+  created_at: <%= 3.hours.ago %>
+  updated_at: <%= 3.hours.ago %>
+
 attachment2:
   metadata: { "compression": "none", "format": "fastq" }
   attachable: sample1 (Sample)

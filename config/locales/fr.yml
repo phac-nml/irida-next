@@ -2334,6 +2334,7 @@ fr:
     create:
       error_message: 'Les erreurs suivantes ont empêché la création de l’exécution du flux de travail :'
       required_workflow_param_blank: Le paramètre de flux de travail '%{property}' est obligatoire et ne peut pas être vide
+      unauthorized_samples: 'Vous n’avez pas la permission d’utiliser les échantillons suivants avec les identifiants d’échantillon : %{sample_ids}'
     edit_dialog:
       description: Vous modifiez l’exécution du flux de travail '%{workflow_execution_id}'
       name_placeholder: Entrez le nom d’exécution du flux de travail

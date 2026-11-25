@@ -33,6 +33,11 @@ module WorkflowExecutions
       # non persisted workflow execution object if selected samples exceeds/doesn't meet this requirement
       validate_samples_requirement_for_pipeline(@workflow_execution)
 
+      # Ensure every referenced sample belongs to (or is otherwise accessible from) the namespace the
+      # workflow execution is being submitted against, so a user cannot pull samples/attachments from a
+      # project they don't have access to into their own project's workflow execution/outputs.
+      validate_samples_authorized_for_namespace
+
       autoset_samplesheet_params
       validate_samplesheet_params
 
@@ -180,6 +185,24 @@ module WorkflowExecutions
       workflow_execution.errors.add(:base,
                                     I18n.t('shared.workflow_executions.sample_limits.max_samples_exceeded',
                                            max_samples: max_samples))
+    end
+
+    def validate_samples_authorized_for_namespace
+      sample_ids = samples_workflow_execution_attributes.pluck(:sample_id)
+      return if sample_ids.empty?
+
+      authorized_sample_ids = authorized_scope(
+        Sample, type: :relation, as: :namespace_samples,
+                scope_options: { namespace: @workflow_execution.namespace }
+      ).where(id: sample_ids).pluck(:id)
+
+      unauthorized_sample_ids = sample_ids - authorized_sample_ids
+      return if unauthorized_sample_ids.empty?
+
+      @workflow_execution.errors.add(
+        :base,
+        I18n.t('workflow_executions.create.unauthorized_samples', sample_ids: unauthorized_sample_ids.join(', '))
+      )
     end
 
     def create_activities
