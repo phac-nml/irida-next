@@ -8,15 +8,15 @@ class GraphqlController < ApplicationController
   # Unauthenticated users have access to the API for public data
   skip_before_action :authenticate_user!
 
+  # must come first: current_user is set up here
+  prepend_before_action :authenticate_sessionless_user!, only: [:execute]
+
   # this was only needed for accessing current user in view components
   skip_around_action :set_current_user
 
-  skip_before_action :verify_authenticity_token, only: :execute
-
-  # must come first: current_user is set up here
-  before_action :authenticate_sessionless_user!, only: [:execute]
-  # API-token clients are sessionless and must not require a browser CSRF token.
-  before_action :verify_session_authenticity_token, only: [:execute]
+  # Skip CSRF for token-authenticated or anonymous requests; still enforce it for
+  # browser-session-authenticated requests without a token.
+  skip_before_action :verify_authenticity_token, if: :token_authenticated_or_anonymous?
 
   around_action :use_logidze_responsible, only: [:execute]
 
@@ -70,9 +70,7 @@ class GraphqlController < ApplicationController
            status: :internal_server_error
   end
 
-  def verify_session_authenticity_token
-    return if token.present? || current_user.nil?
-
-    verify_authenticity_token
+  def token_authenticated_or_anonymous?
+    token.present? || current_user.nil?
   end
 end
