@@ -10,35 +10,35 @@ const ARIA = {
 
 const TEMPLATES = `
   <template data-${P}-target="sampleCloneTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
   </tr></template>
   <template data-${P}-target="workflowTableRow"><tr>
     <td><span data-${P}-target="workflowName"></span></td>
     <td><span data-${P}-target="workflowId"></span></td>
   </tr></template>
   <template data-${P}-target="importSampleTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
     <td><span data-${P}-target="projectId"></span></td>
   </tr></template>
   <template data-${P}-target="groupSampleTransferTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="transferredFrom"></span><span></span></td>
-    <td><span data-${P}-target="transferredTo"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="transferredFrom"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="transferredTo"></span><span data-pathogen--copyable-value-target="text"></span></td>
   </tr></template>
   <template data-${P}-target="destroySampleTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="projectName"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="projectName"></span><span data-pathogen--copyable-value-target="text"></span></td>
   </tr></template>
   <template data-${P}-target="groupSampleCloneTableRow"><tr>
-    <td><span data-${P}-target="projectId"></span><span></span></td>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="projectId"></span><span></span></td>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
+    <td><span data-${P}-target="projectId"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="projectId"></span><span data-pathogen--copyable-value-target="text"></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
   </tr></template>
   <template data-${P}-target="listRow"><li>
     <span data-${P}-target="itemName"></span>
-    <p><span></span><span></span></p>
+    <p><span></span><span data-pathogen--copyable-value-target="text"></span></p>
   </li></template>`;
 
 describe("activities ExtendedDetailsController", () => {
@@ -248,7 +248,10 @@ describe("activities ExtendedDetailsController", () => {
     expect(
       item.querySelector(`[data-${P}-target='itemName']`).textContent,
     ).toBe("S1");
-    expect(item.querySelector("p > span:nth-child(2)").textContent).toBe("P1");
+    expect(
+      item.querySelector('[data-pathogen--copyable-value-target="text"]')
+        .textContent,
+    ).toBe("P1");
   });
 
   it("paginates through pages and toggles button states", async () => {
