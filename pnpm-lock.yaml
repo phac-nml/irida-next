@@ -88,8 +88,8 @@ importers:
         specifier: ^4.1.11
         version: 4.1.11(vitest@4.1.11)
       axe-core:
-        specifier: ^4.14.0
-        version: 4.14.0
+        specifier: ^4.14.1
+        version: 4.14.1
       esbuild:
         specifier: ^0.28.2
         version: 0.28.2
@@ -1090,8 +1090,8 @@ packages:
   ast-v8-to-istanbul@1.0.5:
     resolution: {integrity: sha512-UPAgKJFSEGMWSDr3LX4tqnAb4f7KGT8O40Tyx8wbYmmZ/yn58lNCm8h3svs3eXgiGd5AXxz8NDOvXWvicq+rJA==}
 
-  axe-core@4.14.0:
-    resolution: {integrity: sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==}
+  axe-core@4.14.1:
+    resolution: {integrity: sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==}
     engines: {node: '>=4'}
 
   balanced-match@4.0.4:
@@ -2817,7 +2817,7 @@ snapshots:
       estree-walker: 3.0.3
       js-tokens: 10.0.0
 
-  axe-core@4.14.0: {}
+  axe-core@4.14.1: {}
 
   balanced-match@4.0.4: {}
 
