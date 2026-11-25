@@ -6,8 +6,15 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
+    @allow_forgery_protection = ActionController::Base.allow_forgery_protection
+    ActionController::Base.allow_forgery_protection = true
+
     @basic_auth = Base64.encode64("#{users(:john_doe).email}:JQ2w5maQc4zgvC8GGMEp")
     @authorization_header = "Basic #{@basic_auth}"
+  end
+
+  teardown do
+    ActionController::Base.allow_forgery_protection = @allow_forgery_protection
   end
 
   test 'should execute an anonymous graphql introspection query' do
@@ -55,6 +62,7 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
   test 'should execute session requests with a csrf token' do
     sign_in users(:john_doe)
     get root_path
+    follow_redirect! if response.redirect?
 
     csrf_token = response.body.match(/name="csrf-token" content="([^"]+)"/)[1]
 

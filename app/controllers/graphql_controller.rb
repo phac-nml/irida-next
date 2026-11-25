@@ -11,6 +11,8 @@ class GraphqlController < ApplicationController
   # this was only needed for accessing current user in view components
   skip_around_action :set_current_user
 
+  skip_before_action :verify_authenticity_token, only: :execute
+
   # must come first: current_user is set up here
   before_action :authenticate_sessionless_user!, only: [:execute]
   # API-token clients are sessionless and must not require a browser CSRF token.
