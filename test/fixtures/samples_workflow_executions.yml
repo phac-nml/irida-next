@@ -1,475 +1,410 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 samples_workflow_executions_valid:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
+  id: 7085dc4d-d4d2-5159-b38b-4441dec29c91
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAAA,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+  workflow_execution_id: 0b885298-237a-5556-8524-9d448a2099a2
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 samples_workflow_executions_mismatch_file_id:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid) %>
+  id: fa682f25-2e0a-51f7-895e-6160c9a969b9
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAAA,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentA, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/9c64bf01-fdab-53d2-8730-5aea46b5f40a
+  workflow_execution_id: 0b885298-237a-5556-8524-9d448a2099a2
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_2": "",
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
-  }
-
+  id: dee0fac3-f9b7-5f0e-8eca-331ffbf5062d
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_2: ''
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+  workflow_execution_id: 18ccf0b3-28ab-591c-80cb-996e657fe5ec
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_prepared:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_prepared, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 38d2177d-8221-50a7-aa13-02fd0b2c37be
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 9022898d-c9d2-56b4-b6f3-a890d4167d91
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_submitted:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_submitted, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: d392baa3-1bcc-5a94-9f1f-109e269ca83a
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 85830d9b-fde8-5710-87b0-fcf3f1823d8e
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_completed:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: fc6deb29-0ad3-5ef4-a77f-6cc4f8ea4e9a
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 9219f9c2-5cbc-5c6e-be10-e64ecb88c87a
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_completed_2_files:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_2_files, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment2, :uuid)}" %>
-  }
-
+  id: cd344520-7a34-5e3b-9a16-b7ab4ca772f1
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: gid://irida/Attachment/7530d700-526b-5f54-813b-1c53ace57de3
+  workflow_execution_id: 26c3726a-fe60-5a14-97b6-75923a291ac8
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_error:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_error, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 5654bde2-22c0-594f-ab03-5b920777183d
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: e96ad0ff-0db6-54ab-af23-7509610b53b9
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_canceling:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceling, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 8291dbdf-7afd-5ce2-aa03-5887cd2fba82
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: bb487181-99a9-56e6-b486-67c40e221828
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_canceled:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceled, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 6cdd79ec-b489-59d5-928b-631c6fc61389
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: a7fe60e2-00b6-5157-80d4-08c9d8c42d86
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_running:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_running, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 69f65f01-4715-54ea-9d37-65ba1e9e631f
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: b2b9a851-0ebb-52f5-8d2f-330be3cb78e7
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_irida_next_example_new:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_new, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 2b02c17d-77c9-506e-8caa-85960f0194c4
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: e1be0ff6-4df8-5f5a-bae6-6b1673ff93e0
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample41_irida_next_example_completing_c:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABQ"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_c, :uuid) %>
-
+  id: 23883768-fb1a-513e-8699-b29df1dad30f
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABQ
+  workflow_execution_id: 0bc3e28f-f6be-5549-affe-eb429ea0a6fe
+  sample_id: 456cc5ed-32e7-5f26-8faa-b9566c886d47
 sample42_irida_next_example_completing_c:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABR"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_c, :uuid) %>
-
+  id: 790fa2a8-7d76-5700-9fca-316b4e966c2f
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABR
+  workflow_execution_id: 0bc3e28f-f6be-5549-affe-eb429ea0a6fe
+  sample_id: 27001919-2cf3-516e-b6cd-1d32714944f0
 sample41_irida_next_example_completing_d:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABQ"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_d, :uuid) %>
-
+  id: 7c30aaed-f59b-544b-b182-89faf22501f6
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABQ
+  workflow_execution_id: b1a7d23f-cd95-5425-9e99-6c38dea9391a
+  sample_id: 456cc5ed-32e7-5f26-8faa-b9566c886d47
 sample42_irida_next_example_completing_d:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABR"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_d, :uuid) %>
-
+  id: 8f3a77d5-e45d-5ee7-b2cc-fbbf232e85e8
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABR
+  workflow_execution_id: b1a7d23f-cd95-5425-9e99-6c38dea9391a
+  sample_id: 27001919-2cf3-516e-b6cd-1d32714944f0
 sample41_irida_next_example_completing_e:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABQ"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_e, :uuid) %>
-
+  id: a41c5ce8-3953-51ad-8174-f6a5ed3025d5
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABQ
+  workflow_execution_id: 532cd362-c709-5389-9cd8-733b99983928
+  sample_id: 456cc5ed-32e7-5f26-8faa-b9566c886d47
 sample42_irida_next_example_completing_e:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABR"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_e, :uuid) %>
-
+  id: 00a2c9fa-2dc6-552d-b57a-2fd6704e8c18
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABR
+  workflow_execution_id: 532cd362-c709-5389-9cd8-733b99983928
+  sample_id: 27001919-2cf3-516e-b6cd-1d32714944f0
 sample41_irida_next_example_completing_f:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample41, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABQ"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_f, :uuid) %>
-
+  id: 58fccf2e-2746-5b46-9677-0a098841e23b
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABQ
+  workflow_execution_id: 9fb7f7b1-1965-5eca-83e9-c3d80df95b11
+  sample_id: 456cc5ed-32e7-5f26-8faa-b9566c886d47
 sample42_irida_next_example_completing_f:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample42, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABR"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_f, :uuid) %>
-
+  id: dbb5aada-6b86-5226-a740-ece87990d550
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABR
+  workflow_execution_id: 9fb7f7b1-1965-5eca-83e9-c3d80df95b11
+  sample_id: 27001919-2cf3-516e-b6cd-1d32714944f0
 sampleA_irida_next_example_completing_g:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAAA3"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_g, :uuid) %>
-
+  id: f6f42c72-1928-5031-999d-c5833f6e0ce0
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAA3
+  workflow_execution_id: b67b1b21-901f-5e14-830f-efebfe7a3e71
+  sample_id: 0253e656-57d2-5fac-81f3-b83265ab09d9
 sampleB_irida_next_example_completing_g:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAAA4"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_g, :uuid) %>
-
+  id: 65248ca9-5a8a-557c-9cf0-ddd3890cbf29
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAA4
+  workflow_execution_id: b67b1b21-901f-5e14-830f-efebfe7a3e71
+  sample_id: 8b62bdf1-e8c8-5d69-93a2-1fdd58e815f4
 sample41_irida_next_example_completing_h:
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABQ"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_h, :uuid) %>
-
+  id: 6f05693c-e642-54c2-8547-2ffbb9545b0c
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABQ
+  workflow_execution_id: 0d52c081-6653-51cf-914b-165e9c2ebb74
 sample42_irida_next_example_completing_h:
-  samplesheet_params: {
-    "sample": "INXT_SAM_AAAAAAAABR"
-  }
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_h, :uuid) %>
-
+  id: 27d80245-ac81-528b-83c9-223a04633ce4
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAABR
+  workflow_execution_id: 0d52c081-6653-51cf-914b-165e9c2ebb74
 sample46_irida_next_example_completed_with_output:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample46, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>
-  samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample46, :uuid)}" %>,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:samples_workflow_execution_completed_output, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: c9b8f7b4-9910-5ec7-b784-b89d70589a83
+  samplesheet_params:
+    sample: Sample_83d5aa7c-3f2c-56ba-9e94-932f4ea2dbc4
+    fastq_1: gid://irida/Attachment/aafd113b-06cd-5a48-8caa-ff74149abdfe
+    fastq_2: ''
+  workflow_execution_id: e75eddc7-e59e-5676-ab34-3247bcceebe3
+  sample_id: 83d5aa7c-3f2c-56ba-9e94-932f4ea2dbc4
 sample47_workflow_execution_completed_shared2:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample47, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>
-  samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample47, :uuid)}" %>,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:samples_shared_workflow_execution_completed_output, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 1eb6cfcc-9b06-5d9d-9360-04ac91882dc3
+  samplesheet_params:
+    sample: Sample_b790de03-9b19-5abd-aa44-65157f14934e
+    fastq_1: gid://irida/Attachment/09b4a4fd-e539-5950-a4ff-20c2aa715054
+    fastq_2: ''
+  workflow_execution_id: d308e9e9-3210-5d91-b21f-68691fbf3cdd
+  sample_id: b790de03-9b19-5abd-aa44-65157f14934e
 sample47_workflow_execution_completed_group_shared2:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample47, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>
-  samplesheet_params: {
-    "sample": <%= "Sample_#{ActiveRecord::FixtureSet.identify(:sample47, :uuid)}" %>,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:samples_group_shared_workflow_execution_completed_output, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 489c073b-8b24-5715-ae1a-3d8c0f6aa9f0
+  samplesheet_params:
+    sample: Sample_b790de03-9b19-5abd-aa44-65157f14934e
+    fastq_1: gid://irida/Attachment/0b09fcb9-7469-5834-ad29-ab0b71d09376
+    fastq_2: ''
+  workflow_execution_id: 454b5622-1c0a-544e-8dc0-50ca769b0127
+  sample_id: b790de03-9b19-5abd-aa44-65157f14934e
 sample1_workflow_execution_group_shared_canceled:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_canceled, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 60b35bdf-7f3b-5dab-bafa-b2c39a1dd3e6
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 4f2943b0-68f9-50c3-b754-2de4335cdc8b
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_prepared:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_prepared, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: b3c68a8b-979e-54c1-a6a0-d04b21ee1ef5
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: f941361f-9636-513a-a5fd-6ddf5bf38bd6
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_submitted:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_submitted, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 22ca88ec-15ee-57bf-b3df-853b9bdcf070
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: ac005dc7-59c5-5bf9-81e8-1cbe50c82c34
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_completed:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_completed, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 238cdd35-05d9-5656-a709-ad4c2ffecbf1
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 0ce74f60-ed05-53e4-8cd9-423e305a8b0d
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_error:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_error, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ab96a7ff-e253-5d37-a42c-7a6c6dde49f0
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: acf30e1a-5e63-570e-ab82-81bdcff115d5
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_canceling:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_canceling, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 8798c9be-42b9-5c73-8eb8-eef8fc5e0fe3
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 82ea6146-d6fa-5d22-bd6b-cc1f3e4232c5
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_running:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_running, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 3c4da341-0773-5b2c-9bc2-fd8d1c32ea0d
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: cc593fe1-e95c-5fdc-856f-aff4ecdae2e2
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_workflow_execution_group_shared_new:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared_new, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 7e0a8111-cff8-549f-8f65-333bc8b6cd00
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: bff50341-2316-5e80-956b-efe0c68362aa
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_submitted:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_submitted, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ecfaf2da-5d71-5039-b03f-4a2cc14a024c
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 280b262c-953a-5bb1-9bdb-6c0145111e12
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_completed:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_completed, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ee83eafe-5b43-5873-a689-f3f7060fcd31
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 16505865-7c0b-5673-bb74-c6017c1d8eee
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_error:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_error, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ce5ff40e-d691-58be-a6a3-f14bf269d565
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 813416ba-326a-519e-8b4a-f7a7a7c86a27
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_canceling:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_canceling, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ddd76813-bcd1-57c6-8313-6c7c6793140a
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: aade3fa0-110b-5912-b80d-aaafec78c8fd
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_canceled:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_canceled, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 3778f517-7a30-5468-b490-98f8990812f7
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: 529b0314-82d4-59e1-b0ac-59f130a5c199
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_running:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_running, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ed0d69c4-293e-50bd-9e34-49de760277cf
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: e37d2621-33e7-5381-ad9a-2d170fc49504
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 sample1_automated_example_new:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_new, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_AAAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 3b18275d-ffb9-526c-bb84-5894f03d07b7
+  samplesheet_params:
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+    fastq_2: ''
+  workflow_execution_id: e8a5937c-d633-5f19-8b0e-9b3cde17d379
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 end_to_end_example:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleEndToEnd, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_end_to_end, :uuid) %>
+  id: 4dcc69f4-340f-5e4c-bbb0-846f90403d5e
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAA
+    fastq_1: gid://irida/Attachment/9ee79292-8555-564b-bfcb-12f3e050716c
+    fastq_2: gid://irida/Attachment/472286c6-dba4-5bed-9802-7948697b903e
+  workflow_execution_id: 7508713b-4634-528a-be8b-8198eacafcf3
+  sample_id: 69b61b17-9661-5f83-bfdd-885dd4df4cd3
   metadata: {}
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAA,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD, :uuid)}" %>,
-    "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV, :uuid)}" %>
-  }
-
 sample_completed_DELETE:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_DELETE, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAB,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentDELETE, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: ad998e35-f127-5a37-b09e-bbbf6c539fbd
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAB
+    fastq_1: gid://irida/Attachment/b248e788-7684-5101-815f-a72446223c31
+    fastq_2: ''
+  workflow_execution_id: 2473dac8-2ec5-5264-81dc-649f4da392c3
+  sample_id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
 sample_error_DELETE:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_error_DELETE, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAB,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentDELETE, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: f1027a9a-150a-53c1-ab06-55612cb989e9
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAB
+    fastq_1: gid://irida/Attachment/b248e788-7684-5101-815f-a72446223c31
+    fastq_2: ''
+  workflow_execution_id: d6957a79-8657-555a-92f6-7bbb503c4098
+  sample_id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
 sample_canceled_DELETE:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceled_DELETE, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAB,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachmentDELETE, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
-
+  id: 01c5a444-5e2d-5757-aef9-932b12e45fb2
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAB
+    fastq_1: gid://irida/Attachment/b248e788-7684-5101-815f-a72446223c31
+    fastq_2: ''
+  workflow_execution_id: a905a226-ab45-5e99-a01a-e313d0b21287
+  sample_id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
 sample_completed_unclean_DELETE:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_unclean_DELETE, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAB,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment_completed_unclean_DELETE, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 3d8d1d8c-57d3-5103-87f0-b98e152207a9
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAB
+    fastq_1: gid://irida/Attachment/8ce7c8a5-47ba-5d82-9e48-24b152ac63d3
+    fastq_2: ''
+  workflow_execution_id: 55f03c42-c743-5c88-970d-1ac27aa0ab7c
+  sample_id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
 sample_error_unclean_DELETE:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_error_unclean_DELETE, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAB,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment_error_unclean_DELETE, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 4214277f-5236-5a5f-b66e-0dc92805fbd3
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAB
+    fastq_1: gid://irida/Attachment/15ffdc5a-02da-50e3-9f76-3babdec2a1c5
+    fastq_2: ''
+  workflow_execution_id: 7c68a66f-7e57-5666-9637-d5e41f951218
+  sample_id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
 sample_canceled_unclean_DELETE:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_canceled_unclean_DELETE, :uuid) %>
-  samplesheet_params: {
-    "sample": INXT_SAM_ABAAAAAAAB,
-    "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment_canceled_unclean_DELETE, :uuid)}" %>,
-    "fastq_2": ""
-  }
-
+  id: 30ad5aa4-1cf8-5ee4-b42d-de5c343a69f7
+  samplesheet_params:
+    sample: INXT_SAM_ABAAAAAAAB
+    fastq_1: gid://irida/Attachment/7af7e02c-9f74-5f9c-a3c1-21ee3eb64a75
+    fastq_2: ''
+  workflow_execution_id: 59c6687c-8642-58fe-a739-f04fee309515
+  sample_id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
 samples_irida_next_example_completing_a:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_completing_a, :uuid) %>
+  id: 2f9b9456-4b87-592b-8fa3-40f402a0011d
   samplesheet_params:
-    {
-      "sample": "INXT_SAM_AAAAAAAAAA",
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+  workflow_execution_id: 1a0c3865-f349-53b8-83b6-92fd6ada0375
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 samples_automated_example_prepared:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_example_prepared, :uuid) %>
+  id: a1dc9f16-6912-5ab2-bf9f-8c980b0d3cc6
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAAA,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+  workflow_execution_id: 2499ad44-36e3-5e59-b995-1061ddf6256a
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 samples_automated_workflow_execution:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:automated_workflow_execution, :uuid) %>
+  id: 0bb9ada0-f236-5496-89bb-772b44c2be06
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAAA,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:attachment1, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAAA
+    fastq_1: gid://irida/Attachment/73c5dfa9-a192-5f37-bd40-7740ef1bf088
+  workflow_execution_id: 0a461ad5-6fce-5bce-9ece-2b8b4df166de
+  sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
 samples_workflow_executions_preparation_test_1:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample_preparation_test_1, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_three_samples, :uuid) %>
+  id: 1e1f75f7-8017-5a6e-919f-9f72c7663344
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAZA,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_1, :uuid)}" %>,
-      "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_1B, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAZA
+    fastq_1: gid://irida/Attachment/5cb29408-c8b6-5b88-9cf9-18e1910589ef
+    fastq_2: gid://irida/Attachment/a6ccbaef-5cd2-515f-bc9a-a4212fa1a7d2
+  workflow_execution_id: 835a1ca4-72cf-5fde-80d7-33dee0c95a6a
+  sample_id: b3bff706-0afa-509f-a6de-1c15c3a57f38
 samples_workflow_executions_preparation_test_2:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample_preparation_test_2, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_three_samples, :uuid) %>
+  id: 99d533ac-66e7-5ba6-a19d-9cf38c9ee4f6
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAZB,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_2, :uuid)}" %>,
-      "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_2B, :uuid)}" %>
-    }
-
+    sample: INXT_SAM_AAAAAAAAZB
+    fastq_1: gid://irida/Attachment/fc199e76-a41a-5526-9798-824bc6ad7259
+    fastq_2: gid://irida/Attachment/b8eb0f9b-3f25-56a1-88ea-2dfd07ca1091
+  workflow_execution_id: 835a1ca4-72cf-5fde-80d7-33dee0c95a6a
+  sample_id: 5b091c75-e16f-5b12-b699-a866e3359197
 samples_workflow_executions_preparation_test_3:
-  sample_id: <%= ActiveRecord::FixtureSet.identify(:sample_preparation_test_3, :uuid) %>
-  workflow_execution_id: <%= ActiveRecord::FixtureSet.identify(:irida_next_example_three_samples, :uuid) %>
+  id: c1ce4459-e6cd-5510-b9a9-25122ceefd98
   samplesheet_params:
-    {
-      "sample": INXT_SAM_AAAAAAAAZC,
-      "fastq_1": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_3, :uuid)}" %>,
-      "fastq_2": <%= "gid://irida/Attachment/#{ActiveRecord::FixtureSet.identify(:sample_preparation_test_attachment_3B, :uuid)}" %>
-    }
+    sample: INXT_SAM_AAAAAAAAZC
+    fastq_1: gid://irida/Attachment/aa071e7d-b2b2-5882-ab9d-dc8822030466
+    fastq_2: gid://irida/Attachment/63716219-7ada-51b5-beab-6e3e82565d1a
+  workflow_execution_id: 835a1ca4-72cf-5fde-80d7-33dee0c95a6a
+  sample_id: ca8e9d01-df1a-5ec3-ade5-819112bd4f24

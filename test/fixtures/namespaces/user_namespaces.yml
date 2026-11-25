@@ -1,197 +1,196 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 john_doe_namespace:
+  id: f6fba10c-4146-5d0d-a384-2a83d4829200
   name: john.doe@localhost
   path: john.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   puid: INXT_USR_AAAAAAAAAA
-
 jane_doe_namespace:
+  id: b3ebdd2b-2c2c-500a-8260-ce10bacc3b83
   name: jane.doe@localhost
   path: jane.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
+  owner_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
   puid: INXT_USR_AAAAAAAAAB
-
 jean_doe_namespace:
+  id: 9f956780-9ceb-5db0-a2bd-bdfee97c445d
   name: jean.doe@localhost
   path: jean.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe, :uuid) %>
+  owner_id: 64b23de3-cc51-5573-9bee-569f28635996
   puid: INXT_USR_AAAAAAAAAC
-
 james_doe_namespace:
+  id: 1e708689-221c-5d5f-af3f-c61c041195b7
   name: james.doe@localhost
   path: james.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
+  owner_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
   puid: INXT_USR_AAAAAAAAAD
-
 david_doe_namespace:
+  id: 9c67572d-5e4a-52c1-96e5-e62486b44596
   name: david.doe@localhost
   path: david.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
+  owner_id: 924388df-593a-5082-b70d-fbb49f1fe592
   puid: INXT_USR_AAAAAAAAAE
-
 jeff_doe_namespace:
+  id: eedc45c8-b764-59cf-8a0b-1cec81bfc0b2
   name: jeff.doe@localhost
   path: jeff.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  owner_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
   puid: INXT_USR_AAAAAAAAAF
-
 private_ryan_namespace:
+  id: '0822f00c-03b0-5cbc-9564-ce8ca8dabea1'
   name: private.ryan@localhost
   path: private.ryan_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  owner_id: acb740cc-2ba8-53fa-b8c2-051b7f804c4a
   puid: INXT_USR_AAAAAAAAAG
-
 joan_doe_namespace:
+  id: f72e9407-4785-5afe-9665-c37e886bc236
   name: joan.doe@localhost
   path: joan.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
+  owner_id: e47fecab-35da-58d4-b597-38d482363d41
   puid: INXT_USR_AAAAAAAAAH
-
 micha_doe_namespace:
+  id: 8d42fc18-16e8-5180-9ab1-d4e51cf27892
   name: micha.doe@localhost
   path: micha.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
+  owner_id: 3cbe9429-8b52-560e-8eac-443765d17d38
   puid: INXT_USR_AAAAAAAAAI
-
 ryan_doe_namespace:
+  id: ac0ee9ef-6c49-550f-88ab-42472faf2a6c
   name: ryan.doe@localhost
   path: ryan.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
+  owner_id: d996c8a7-4fe6-531c-a960-f31945639f8b
   puid: INXT_USR_AAAAAAAAAJ
-
 user_25_namespace:
+  id: 4edd2d08-5b72-592e-9cb8-0eeca9a784ce
   name: user.25@localhost
   path: user.25_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user25, :uuid) %>
+  owner_id: 1ed1b3e3-6bc7-5d61-8e50-b7ada571d8f6
   puid: INXT_USR_AAAAAAAAZK
-
 user_26_namespace:
+  id: 0cb11fc3-31be-5fb2-bfc0-5dc6b2061b58
   name: user.26@localhost
   path: user.26_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
+  owner_id: 1c6c6386-8320-5769-ad14-22059726a7ab
   puid: INXT_USR_AAAAAAAAAK
-
 alph_abet_namespace:
+  id: '0519c0bf-ae72-5848-9d9b-eebc29c7fdef'
   name: alph.abet@localhost
   path: alph.abet_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet, :uuid) %>
+  owner_id: d4b49323-f61b-5678-bf95-cc790d1f56bb
   puid: INXT_USR_AAAAAAAAAL
-
 private_joan_namespace:
+  id: d9d7cc60-9724-5c81-aa6c-4e4baedf24a9
   name: private.joan@localhost
   path: private.joan_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
+  owner_id: fdedd708-289b-5a38-b9cf-6905d59b2db5
   puid: INXT_USR_AAAAAAAAAM
-
 private_micha_namespace:
+  id: 5bb881b2-cf2f-50ce-9b5b-dc73be034b25
   name: private.micha@localhost
   path: private.micha_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_micha, :uuid) %>
+  owner_id: 32842e99-16c2-578b-8f58-7bbc7dfc4b0b
   puid: INXT_USR_AAAAAAAAAN
-
 user27_namespace:
+  id: 50e58130-bdcf-5741-b4ee-d27abca1de71
   name: user.27@localhost
   path: user.27_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
+  owner_id: b4dbb284-2d95-5c12-b296-84b8f9b5bc77
   puid: INXT_USR_AAAAAAAAAO
-
 user28_namespace:
+  id: 9a8ed308-2035-5a75-9beb-8c9a7fe12e12
   name: user.28@localhost
   path: user.28_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
+  owner_id: 1ec11ebe-7d76-566e-a177-5896d812a29b
   puid: INXT_USR_AAAAAAAAAP
-
 user29_namespace:
+  id: 7cd08961-e369-58c0-abed-678e8f67426a
   name: user.29@localhost
   path: user.29_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user29, :uuid) %>
+  owner_id: f0194365-ab54-56b2-9d0a-915c1f6eca9b
   puid: INXT_USR_AAAAAAAAAQ
-
 user30_namespace:
+  id: 8dc12e7e-0632-51dc-886f-8c22ddb51713
   name: user.30@localhost
   path: user.30_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
+  owner_id: c4f67b18-7cff-52c1-9848-089ab2d76d05
   puid: INXT_USR_AAAAAAAAAR
-
 user32_namespace:
+  id: 315ba125-294a-5776-9a60-63eaf5a49bd9
   name: user.32@localhost
   path: user.32_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
+  owner_id: 2ef3fd99-44ce-5fd8-9350-f823a72b7aa7
   puid: INXT_USR_AAAAAAAZZR
-
 metadata_doe_namespace:
+  id: be698ef5-6a17-5e65-9841-bfa35325c575
   name: metadata.doe@localhost
   path: metadata.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
+  owner_id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
   puid: INXT_USR_AAAAAAAAAS
-
 mary_doe_namespace:
+  id: 3d9d65c0-ea59-5662-8f76-8f5d19294a2d
   name: mary.doe@localhost
   path: mary.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  owner_id: 00d705fb-6c7e-59cf-8eb4-d7352b440693
   puid: INXT_USR_AAAAAAAAAT
-
 sample_actions_doe_namespace:
+  id: 1c6edf63-a34d-5c73-b73c-7bc385d1cc97
   name: sample.actions.doe@localhost
   path: sample.actions.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  owner_id: aca8a717-05a0-5ad0-a91d-bda9a044a87d
   puid: INXT_USR_AAAAAAAAAU
-
 shared_sample_actions_doe_namespace:
+  id: 5d376b56-0759-5a4d-a439-8c770b6b766a
   name: shared.sample.actions.doe@localhost
   path: shared.sample.actions.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  owner_id: bb6e0dcc-9f84-587b-aca8-52c03638cff6
   puid: INXT_USR_AAAAAAAAAV
-
 subgroup_sample_actions_doe_namespace:
+  id: fe602bbd-dea2-5fa0-b80f-925043b30832
   name: subgroup.sample.actions.doe@localhost
   path: subgroup.sample.actions.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>
+  owner_id: '09eb3380-5b5f-5667-82a6-cb9ae00956bb'
   puid: INXT_USR_AAAAAAAAAW
-
 steve_doe_namespace:
+  id: 7ec4db25-b3dd-55f8-bf63-fd554755e665
   name: steve.doe@localhost
   path: steve.doe_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
+  owner_id: 16156416-35a7-5165-aa73-211da105d110
   puid: INXT_USR_AAAAAAAAAX
-
 user31_namespace:
+  id: 9b91d01d-40b1-5a87-944c-8b611023f09a
   name: user.31@localhost
   path: user.31_at_localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
+  owner_id: 7f723b47-eba0-59c9-87f6-dd9fe95efb41
   puid: INXT_USR_AAAAAAAAAY
-
 chunked_samples_doe_namespace:
+  id: dffdc9e1-3f2b-52dc-8788-27e8c607151e
   name: chunked_samples_doe@localhost
   path: chunked-samples-doe-at-localhost
   type: User
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
+  owner_id: 8eef4f61-dff3-5633-a69a-5f0d19e421ad
   puid: INXT_USR_AAAAAAAAAZ

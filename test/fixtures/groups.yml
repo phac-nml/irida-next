@@ -1,675 +1,1210 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-DEFAULTS: &DEFAULTS
-  type: Group
-  metadata_summary: {}
-
 group_one:
-  <<: *DEFAULTS
+  id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   name: Group 1
   path: group-1
+  type: Group
   description: Group 1 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 633, "metadatafield2": 106 }
+  metadata_summary:
+    metadatafield1: 633
+    metadatafield2: 106
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   puid: INXT_GRP_AAAAAAAAAA
-  attachments_updated_at: <%= 2.hours.ago %>
+  attachments_updated_at: "<%= 2.hours.ago %>"
   samples_count: 25
-
 subgroup1:
-  <<: *DEFAULTS
+  id: 58516594-01a1-5197-aa5c-4974e8b51f7e
   name: Subgroup 1
   path: subgroup-1
+  type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
+  metadata_summary: {}
+  parent_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   puid: INXT_GRP_AAAAAAAAAB
   samples_count: 2
-
-<% (Namespace::MAX_ANCESTORS-2).times do |n| %>
-subgroup<%= (n+2) %>:
-  <<: *DEFAULTS
-  name: <%= "Subgroup #{n+2}" %>
-  path: <%= "subgroup-#{n+2}" %>
-  description: <%= "Subgroup #{n+2} description" %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
-  puid: <%= "INXT_GRP_AAAAAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
+subgroup2:
+  id: d85c4cd3-095e-5505-8cc3-664276cf0c47
+  name: Subgroup 2
+  path: subgroup-2
+  type: Group
+  description: Subgroup 2 description
+  metadata_summary: {}
+  parent_id: 58516594-01a1-5197-aa5c-4974e8b51f7e
+  puid: INXT_GRP_AAAAAABAAA
   samples_count: 0
-<% end %>
-
+subgroup3:
+  id: 54d33c2c-0b41-52e6-b819-e3dd6207b4a3
+  name: Subgroup 3
+  path: subgroup-3
+  type: Group
+  description: Subgroup 3 description
+  metadata_summary: {}
+  parent_id: d85c4cd3-095e-5505-8cc3-664276cf0c47
+  puid: INXT_GRP_AAAAAABAAB
+  samples_count: 0
+subgroup4:
+  id: 1466a666-4b9e-5281-80e7-d2660b018675
+  name: Subgroup 4
+  path: subgroup-4
+  type: Group
+  description: Subgroup 4 description
+  metadata_summary: {}
+  parent_id: 54d33c2c-0b41-52e6-b819-e3dd6207b4a3
+  puid: INXT_GRP_AAAAAABAAC
+  samples_count: 0
+subgroup5:
+  id: d150f479-7a60-5f0e-8e1b-371f567b9766
+  name: Subgroup 5
+  path: subgroup-5
+  type: Group
+  description: Subgroup 5 description
+  metadata_summary: {}
+  parent_id: 1466a666-4b9e-5281-80e7-d2660b018675
+  puid: INXT_GRP_AAAAAABAAD
+  samples_count: 0
+subgroup6:
+  id: e5ed0fcf-5f6d-5651-a741-cee58708ed9d
+  name: Subgroup 6
+  path: subgroup-6
+  type: Group
+  description: Subgroup 6 description
+  metadata_summary: {}
+  parent_id: d150f479-7a60-5f0e-8e1b-371f567b9766
+  puid: INXT_GRP_AAAAAABAAE
+  samples_count: 0
+subgroup7:
+  id: 37ac327e-3b61-5d3c-9b76-f13baf5805c6
+  name: Subgroup 7
+  path: subgroup-7
+  type: Group
+  description: Subgroup 7 description
+  metadata_summary: {}
+  parent_id: e5ed0fcf-5f6d-5651-a741-cee58708ed9d
+  puid: INXT_GRP_AAAAAABAAF
+  samples_count: 0
+subgroup8:
+  id: db8a4e0a-fa7d-5bcb-bd50-06886b5e82f8
+  name: Subgroup 8
+  path: subgroup-8
+  type: Group
+  description: Subgroup 8 description
+  metadata_summary: {}
+  parent_id: 37ac327e-3b61-5d3c-9b76-f13baf5805c6
+  puid: INXT_GRP_AAAAAABAAG
+  samples_count: 0
+subgroup9:
+  id: 95bc3cd6-2e73-5f10-925b-439ac41c91c5
+  name: Subgroup 9
+  path: subgroup-9
+  type: Group
+  description: Subgroup 9 description
+  metadata_summary: {}
+  parent_id: db8a4e0a-fa7d-5bcb-bd50-06886b5e82f8
+  puid: INXT_GRP_AAAAAABAAH
+  samples_count: 0
 group_two:
-  <<: *DEFAULTS
+  id: 24df2ad2-6c45-578d-9e80-b326f81b7e17
   name: Group 2
   path: group-2
+  type: Group
   description: Group 2 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAC
   samples_count: 0
-
 group_three:
-  <<: *DEFAULTS
+  id: ce644a8c-caa1-56ae-858a-d25119a932c2
   name: Group 3
   path: group-3
+  type: Group
   description: Group 3 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAD
   samples_count: 2
-
 subgroup_one_group_three:
-  <<: *DEFAULTS
+  id: 9c9caa9a-1c54-5d3f-b36b-149f52587527
   name: Subgroup 1 Group 3
   path: subgroup-1-group-3
+  type: Group
   description: Subgroup 1 Group 3
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
+  metadata_summary: {}
+  parent_id: ce644a8c-caa1-56ae-858a-d25119a932c2
   puid: INXT_GRP_AAAAAAAAAE
   samples_count: 2
-
 david_doe_group_four:
-  <<: *DEFAULTS
+  id: 2f468475-0c1a-59c5-8151-d5fc10372bf4
   name: Group 4
   path: group-4
+  type: Group
   description: David's first group
+  metadata_summary:
+    unique.metadata.field: 1
+    metadata field with spaces: 1
   puid: INXT_GRP_AAAAAAAAAF
-  metadata_summary: { "unique.metadata.field": 1, "metadata field with spaces": 1 }
   samples_count: 1
-
 group_five:
-  <<: *DEFAULTS
+  id: cdfde8fa-8b68-5492-ae84-e8b05ff2dd55
   name: Group 5
   path: group-5
+  type: Group
   description: Group 5 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAG
   samples_count: 2
-
 subgroup_one_group_five:
-  <<: *DEFAULTS
+  id: 8310f807-f172-5bcc-8cf7-07a3f25619c3
   name: Subgroup 1 Group 5
   path: subgroup-1-group-5
+  type: Group
   description: Subgroup 1 Group 5
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
+  metadata_summary: {}
+  parent_id: cdfde8fa-8b68-5492-ae84-e8b05ff2dd55
   puid: INXT_GRP_AAAAAAAAAH
   samples_count: 0
-
 group_six:
-  <<: *DEFAULTS
+  id: ab33a44e-48f2-5654-94d4-f44c709727c4
   name: Group 6
   path: group-6
+  type: Group
   description: Group 6 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAI
   samples_count: 0
-
 subgroup_one_group_six:
-  <<: *DEFAULTS
+  id: f8120edd-fb0a-538a-b3b2-f568998e327e
   name: Group 6
   path: group-6
+  type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
+  metadata_summary: {}
+  parent_id: ab33a44e-48f2-5654-94d4-f44c709727c4
   puid: INXT_GRP_AAAAAAAAAJ
   samples_count: 0
-
 group_seven:
-  <<: *DEFAULTS
+  id: 88fc96cc-8d5c-5930-a822-4d1faf2a0c4c
   name: Group 7
   path: group-7
+  type: Group
   description: Group 7 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAK
   samples_count: 0
-
 group_eight:
-  <<: *DEFAULTS
+  id: ca3be7b6-90d3-5a34-a887-d7249b463b80
   name: Group 8
   path: group-8
+  type: Group
   description: Group 8 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAL
   samples_count: 0
-
-<% [*("a".."z")].each_with_index do |letter, index| %>
-group_<%= letter %>:
-  <<: *DEFAULTS
-  name: <%= "Group #{letter.capitalize}" %>
-  path: <%= "group-#{letter}" %>
-  description: <%= "Group #{letter} description" %>
-  created_at: <%= (index + 1).days.ago %>
-  updated_at: <%= (index + 1).days.ago %>
-  puid: <%= "INXT_GRP_AAAAAAABA#{letter.capitalize}" %>
+group_a:
+  id: 6935520c-e7db-5a77-9d7a-a07072479832
+  name: Group A
+  path: group-a
+  type: Group
+  description: Group a description
+  created_at: "<%= 1.days.ago %>"
+  updated_at: "<%= 1.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAA
   samples_count: 0
-<% end %>
-
+group_b:
+  id: 38c01456-e076-5d6d-9573-948cb2d86453
+  name: Group B
+  path: group-b
+  type: Group
+  description: Group b description
+  created_at: "<%= 2.days.ago %>"
+  updated_at: "<%= 2.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAB
+  samples_count: 0
+group_c:
+  id: 700fffb4-4307-5a8b-b4ba-46edeaadf66d
+  name: Group C
+  path: group-c
+  type: Group
+  description: Group c description
+  created_at: "<%= 3.days.ago %>"
+  updated_at: "<%= 3.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAC
+  samples_count: 0
+group_d:
+  id: 1d32da27-da75-5bd3-97ee-14ded2c8da3f
+  name: Group D
+  path: group-d
+  type: Group
+  description: Group d description
+  created_at: "<%= 4.days.ago %>"
+  updated_at: "<%= 4.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAD
+  samples_count: 0
+group_e:
+  id: 93df8c30-d20a-59d5-9e30-e2fda4851d4d
+  name: Group E
+  path: group-e
+  type: Group
+  description: Group e description
+  created_at: "<%= 5.days.ago %>"
+  updated_at: "<%= 5.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAE
+  samples_count: 0
+group_f:
+  id: 1fd2bb1b-e57f-5bfb-95d3-01918361bc45
+  name: Group F
+  path: group-f
+  type: Group
+  description: Group f description
+  created_at: "<%= 6.days.ago %>"
+  updated_at: "<%= 6.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAF
+  samples_count: 0
+group_g:
+  id: ef2a10fd-3462-5fd8-b526-0bbe39ac6938
+  name: Group G
+  path: group-g
+  type: Group
+  description: Group g description
+  created_at: "<%= 7.days.ago %>"
+  updated_at: "<%= 7.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAG
+  samples_count: 0
+group_h:
+  id: f797abe2-8c6f-50b0-aa73-aabea72ef3a9
+  name: Group H
+  path: group-h
+  type: Group
+  description: Group h description
+  created_at: "<%= 8.days.ago %>"
+  updated_at: "<%= 8.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAH
+  samples_count: 0
+group_i:
+  id: fa76acf3-3c2a-591b-bf2c-b42834ebf970
+  name: Group I
+  path: group-i
+  type: Group
+  description: Group i description
+  created_at: "<%= 9.days.ago %>"
+  updated_at: "<%= 9.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAI
+  samples_count: 0
+group_j:
+  id: 1a72aa76-8165-5f9d-93ef-6cdfea5a32b8
+  name: Group J
+  path: group-j
+  type: Group
+  description: Group j description
+  created_at: "<%= 10.days.ago %>"
+  updated_at: "<%= 10.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAJ
+  samples_count: 0
+group_k:
+  id: 3152adf1-4fc7-5904-81cc-99f7136699e8
+  name: Group K
+  path: group-k
+  type: Group
+  description: Group k description
+  created_at: "<%= 11.days.ago %>"
+  updated_at: "<%= 11.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAK
+  samples_count: 0
+group_l:
+  id: 7a46c643-5d95-50ae-b909-3d777815d174
+  name: Group L
+  path: group-l
+  type: Group
+  description: Group l description
+  created_at: "<%= 12.days.ago %>"
+  updated_at: "<%= 12.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAL
+  samples_count: 0
+group_m:
+  id: 42b6da34-a81d-5bd1-9ee3-d529bf72fc6a
+  name: Group M
+  path: group-m
+  type: Group
+  description: Group m description
+  created_at: "<%= 13.days.ago %>"
+  updated_at: "<%= 13.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAM
+  samples_count: 0
+group_n:
+  id: 8c088063-25de-52f6-b212-bad096af3a84
+  name: Group N
+  path: group-n
+  type: Group
+  description: Group n description
+  created_at: "<%= 14.days.ago %>"
+  updated_at: "<%= 14.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAN
+  samples_count: 0
+group_o:
+  id: 20ad5c6c-fcba-5efd-b5d5-95666c69f943
+  name: Group O
+  path: group-o
+  type: Group
+  description: Group o description
+  created_at: "<%= 15.days.ago %>"
+  updated_at: "<%= 15.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAO
+  samples_count: 0
+group_p:
+  id: 20147a22-cfe8-5b49-abb1-bf0a42872f18
+  name: Group P
+  path: group-p
+  type: Group
+  description: Group p description
+  created_at: "<%= 16.days.ago %>"
+  updated_at: "<%= 16.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAP
+  samples_count: 0
+group_q:
+  id: a6011c33-895a-529c-9d62-8fbaf7cb6a56
+  name: Group Q
+  path: group-q
+  type: Group
+  description: Group q description
+  created_at: "<%= 17.days.ago %>"
+  updated_at: "<%= 17.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAQ
+  samples_count: 0
+group_r:
+  id: f0483be4-2cf4-55f1-a53c-94ce4de74a8c
+  name: Group R
+  path: group-r
+  type: Group
+  description: Group r description
+  created_at: "<%= 18.days.ago %>"
+  updated_at: "<%= 18.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAR
+  samples_count: 0
+group_s:
+  id: e7d3997c-ae06-586f-a333-d9851ca4a46e
+  name: Group S
+  path: group-s
+  type: Group
+  description: Group s description
+  created_at: "<%= 19.days.ago %>"
+  updated_at: "<%= 19.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAS
+  samples_count: 0
+group_t:
+  id: 6ef9bd86-5316-5075-bc9a-d27eca3a9d13
+  name: Group T
+  path: group-t
+  type: Group
+  description: Group t description
+  created_at: "<%= 20.days.ago %>"
+  updated_at: "<%= 20.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAT
+  samples_count: 0
+group_u:
+  id: 9ca1a4a7-6b49-503c-8d42-234cd0c66948
+  name: Group U
+  path: group-u
+  type: Group
+  description: Group u description
+  created_at: "<%= 21.days.ago %>"
+  updated_at: "<%= 21.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAU
+  samples_count: 0
+group_v:
+  id: 1c40fe37-5909-59ad-963f-37f871058f59
+  name: Group V
+  path: group-v
+  type: Group
+  description: Group v description
+  created_at: "<%= 22.days.ago %>"
+  updated_at: "<%= 22.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAV
+  samples_count: 0
+group_w:
+  id: 6a5257af-4f33-5a20-80cb-0def7940520d
+  name: Group W
+  path: group-w
+  type: Group
+  description: Group w description
+  created_at: "<%= 23.days.ago %>"
+  updated_at: "<%= 23.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAW
+  samples_count: 0
+group_x:
+  id: 1993f6a1-5707-5ad8-bf35-a35a4f9076d6
+  name: Group X
+  path: group-x
+  type: Group
+  description: Group x description
+  created_at: "<%= 24.days.ago %>"
+  updated_at: "<%= 24.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAX
+  samples_count: 0
+group_y:
+  id: 1a1bb2a0-348b-5cb5-9439-14d3382f274c
+  name: Group Y
+  path: group-y
+  type: Group
+  description: Group y description
+  created_at: "<%= 25.days.ago %>"
+  updated_at: "<%= 25.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAY
+  samples_count: 0
+group_z:
+  id: c9c70272-795d-531c-bffe-dc34d560b6aa
+  name: Group Z
+  path: group-z
+  type: Group
+  description: Group z description
+  created_at: "<%= 26.days.ago %>"
+  updated_at: "<%= 26.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AAAAAAABAZ
+  samples_count: 0
 namespace_group_link_group_one:
-  <<: *DEFAULTS
+  id: c4bd0d67-2854-5b90-9795-11c59173d209
   name: Group One
   path: group-one
+  type: Group
   description: Group One description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAM
   samples_count: 0
-
 namespace_group_link_group_two:
-  <<: *DEFAULTS
+  id: 072fc770-3d9d-56f4-bd4e-f829303fb0f3
   name: Group Two
   path: group-two
+  type: Group
   description: Group Two description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAN
   samples_count: 0
-
 namespace_group_link_group_three:
-  <<: *DEFAULTS
+  id: eb98362e-ee66-5b89-bfd1-e22159462e19
   name: Group Three
   path: group-three
+  type: Group
   description: Group Three description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAO
   samples_count: 0
-
 group_nine:
-  <<: *DEFAULTS
+  id: 26c989e2-75ea-506a-bccf-c2773b7797c6
   name: Group 9
   path: group-9
+  type: Group
   description: Group 9 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAP
   samples_count: 0
-
 subgroup_one_group_nine:
-  <<: *DEFAULTS
+  id: 6c62395a-9842-5fc2-bf98-7314c798c6c0
   name: Subgroup 1 Group 9
   path: subgroup-1-group-9
+  type: Group
   description: Subgroup 1 Group 9 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
+  metadata_summary: {}
+  parent_id: 26c989e2-75ea-506a-bccf-c2773b7797c6
   puid: INXT_GRP_AAAAAAAAAQ
   samples_count: 0
-
 group_ten:
-  <<: *DEFAULTS
+  id: 314cca0e-8b3f-5e4a-8ae7-83c2f228e4c6
   name: Group 10
   path: group-10-subgroup-1-group-9
+  type: Group
   description: Group 10 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
+  metadata_summary: {}
+  parent_id: 6c62395a-9842-5fc2-bf98-7314c798c6c0
   puid: INXT_GRP_AAAAAAAAAR
   samples_count: 0
-
 group_alpha:
-  <<: *DEFAULTS
+  id: 2507ff65-5e3e-540f-9f05-016b2ed9dc7b
   name: Group Alpha
   path: group-alpha
+  type: Group
   description: Group Alpha description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAS
   samples_count: 2
-
 group_bravo:
-  <<: *DEFAULTS
+  id: cdb01d9b-0d1f-5a06-bb50-6c19cdb57db5
   name: Group Bravo
   path: group-bravo
+  type: Group
   description: Group bravo description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAT
   samples_count: 1
-
 group_charlie:
-  <<: *DEFAULTS
+  id: a3c80881-341b-50b2-8b0a-4ec8b8926d6c
   name: Group Charlie
   path: group-charlie
+  type: Group
   description: Group Charlie description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAU
   samples_count: 1
-
 group_alpha_subgroup1:
-  <<: *DEFAULTS
+  id: 56b2deee-1f33-5b41-b769-4f78fa630ebf
   name: Subgroup 1
   path: group-alpha/subgroup-1
+  type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
+  metadata_summary: {}
+  parent_id: 2507ff65-5e3e-540f-9f05-016b2ed9dc7b
   puid: INXT_GRP_AAAAAAAAAV
   samples_count: 1
-
 group_eleven:
-  <<: *DEFAULTS
+  id: d2d6952e-c010-5fe0-ab5c-4fa1406d571f
   name: Group 11
   path: group-11
+  type: Group
   description: Group 11 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAAW
   samples_count: 0
-
 group_twelve:
-  <<: *DEFAULTS
+  id: d0d08657-c27d-5d0f-bf2f-2b7b87d9f0d7
   name: Group 12
   path: group-12
+  type: Group
   description: Group 12 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 3, "metadatafield2": 3 }
+  metadata_summary:
+    metadatafield1: 3
+    metadatafield2: 3
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   puid: INXT_GRP_AAAAAAAAAX
   samples_count: 4
-
 subgroup_twelve_a:
-  <<: *DEFAULTS
+  id: 5b45bc26-f903-5baa-b64f-59ebf48f2731
   name: Subgroup 12 A
   path: subgroup-12-a
+  type: Group
   description: Subgroup 12 A description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
-  metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
+  metadata_summary:
+    metadatafield1: 2
+    metadatafield2: 2
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  parent_id: d0d08657-c27d-5d0f-bf2f-2b7b87d9f0d7
   puid: INXT_GRP_AAAAAAAAAY
   samples_count: 3
-
 subgroup_twelve_b:
-  <<: *DEFAULTS
+  id: 7fee7c1d-fe14-5dd0-99f5-1660038f5203
   name: Subgroup 12 B
   path: subgroup-12-b
+  type: Group
   description: Subgroup 12 B description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  parent_id: d0d08657-c27d-5d0f-bf2f-2b7b87d9f0d7
   puid: INXT_GRP_AAAAAAAAAZ
   samples_count: 1
-
 subgroup_twelve_a_a:
-  <<: *DEFAULTS
+  id: ed65125b-2269-59c8-b597-e02602d21526
   name: Subgroup 12 A A
   path: subgroup-12-a-a
+  type: Group
   description: Subgroup 12 A A description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  parent_id: 5b45bc26-f903-5baa-b64f-59ebf48f2731
   puid: INXT_GRP_AAAAAAAAA2
   samples_count: 2
-
 group_delta:
-  <<: *DEFAULTS
+  id: df851fc0-2faf-570a-8831-b5cb2a04d472
   name: Group Delta
   path: group-delta
+  type: Group
   description: Group Delta description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA3
   samples_count: 0
-
 group_delta_subgroupA:
-  <<: *DEFAULTS
+  id: c838d643-65eb-5f8e-9ed9-646e25d40f49
   name: Subgroup A
   path: group-delta/subgroup-a
+  type: Group
   description: Subgroup A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
+  metadata_summary: {}
+  parent_id: df851fc0-2faf-570a-8831-b5cb2a04d472
   puid: INXT_GRP_AAAAAAAAA4
   samples_count: 0
-
 group_echo:
-  <<: *DEFAULTS
+  id: c3fcc11b-7e23-5adc-b681-f73b8ecf3c44
   name: Group Echo
   path: group-echo
+  type: Group
   description: Group Echo description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA5
   samples_count: 0
-
 group_echo_subgroupB:
-  <<: *DEFAULTS
+  id: d76c2a64-7e79-5747-875f-d4f233152235
   name: Subgroup B
   path: group-echo/subgroup-b
+  type: Group
   description: Subgroup B description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
+  metadata_summary: {}
+  parent_id: c3fcc11b-7e23-5adc-b681-f73b8ecf3c44
   puid: INXT_GRP_AAAAAAAAA6
   samples_count: 0
-
 group_foxtrot:
-  <<: *DEFAULTS
+  id: 6d312902-6b00-545c-899f-250abb8b67f8
   name: Group Foxtrot
   path: group-foxtrot
+  type: Group
   description: Group Foxtrot description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAAA7
   samples_count: 0
-
 group_foxtrot_subgroupA:
-  <<: *DEFAULTS
+  id: 54f96f72-784f-56ff-80f1-3070d2e93ed8
   name: Subgroup A
   path: group-foxtrot/subgroup-a
+  type: Group
   description: Subgroup A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid) %>
+  metadata_summary: {}
+  parent_id: 6d312902-6b00-545c-899f-250abb8b67f8
   puid: INXT_GRP_AAAAAAAABA
   samples_count: 0
-
 group_golf:
-  <<: *DEFAULTS
+  id: d6a5a99a-feed-5eea-ae2a-896bfd7272f6
   name: Group Golf
   path: group-golf
+  type: Group
   description: Group Golf description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABB
   samples_count: 0
-
 group_hotel:
-  <<: *DEFAULTS
+  id: 339335a7-bd42-5918-9aef-f231c670b4df
   name: Group Hotel
   path: group-hotel
+  type: Group
   description: Group Hotel description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   puid: INXT_GRP_AAAAAAAABC
   samples_count: 1
-
 group_thirteen:
-  <<: *DEFAULTS
+  id: 5a93bedb-a0e7-5194-a9d6-419f815f86a4
   name: Group 13
   path: group-13
+  type: Group
   description: Group 13 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABD
   samples_count: 0
-
 group_fourteen:
-  <<: *DEFAULTS
+  id: 6d654d67-de72-5360-8ac9-fe802dbd1bc8
   name: Group 14
   path: group-14
+  type: Group
   description: Group 14 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABE
   samples_count: 1
-
 group_fifteen:
-  <<: *DEFAULTS
+  id: 2c90c2e8-b329-56ce-8d67-2e50ca766a0a
   name: Group 15
   path: group-15
+  type: Group
   description: Group 15 description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAABF
   samples_count: 3
-
 group_sixteen:
-  <<: *DEFAULTS
+  id: 648c4942-32b9-52b4-96b8-7916441efaa3
   name: Group 16
   path: group-16
+  type: Group
   description: Group 16 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   puid: INXT_GRP_AAAAAAAABG
   samples_count: 3
-
 group_seventeen:
-  <<: *DEFAULTS
+  id: c350b02f-0fdc-51c3-be9a-7bc8c25c51da
   name: Group 17
   path: group-17
+  type: Group
   description: Group 17 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   puid: INXT_GRP_AAAAAAAABI
   samples_count: 200
-
 user30_group_one:
-  <<: *DEFAULTS
+  id: 2faf2b0a-8c4c-5bf7-b430-7543467767ee
   name: User 30 Group 1
   path: user-30-group-1
+  type: Group
   description: Group 1 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
+  metadata_summary: {}
+  owner_id: c4f67b18-7cff-52c1-9848-089ab2d76d05
   puid: INXT_GRP_AAAAAAAABH
   samples_count: 0
-
 janitor_doe_group:
-  <<: *DEFAULTS
+  id: 76bd4ace-8e4b-51f4-97f6-820616e051cc
   name: Group EndToEnd
   path: group-end_to_end
+  type: Group
   description: Group 1 description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: d58b446f-b562-5905-92fe-0eee7781920a
   puid: INXT_GRP_ABAAAAAAAA
   samples_count: 0
-
 empty_group:
-  <<: *DEFAULTS
+  id: 744c51a8-a6cf-5824-becf-7e9d81f5c6d9
   name: Empty Group
   path: empty-group
+  type: Group
   description: Group without any Samples
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 723debe0-3e32-52f7-a6c0-1bdabb7d3455
   puid: INXT_GRP_AAAAAAAABHI
   samples_count: 0
-
 group_jeff:
-  <<: *DEFAULTS
+  id: 60773ded-ac64-5bdf-b99d-44238175a7ee
   name: Group Jeff
   path: group-jeff
+  type: Group
   description: Group Jeff description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
   puid: INXT_GRP_AAAAAAJEFF
   samples_count: 0
-
 group_india:
-  <<: *DEFAULTS
+  id: 072e222e-2438-5390-bb27-b5b11c7a78df
   name: Group India
   path: group-india
+  type: Group
   description: Group India description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACA
   samples_count: 3
-
 group_india_subgroup1:
-  <<: *DEFAULTS
+  id: aecee3f3-8990-522c-b112-155211a93072
   name: Subgroup 1
   path: group-india/subgroup-1
+  type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+  metadata_summary: {}
+  parent_id: 072e222e-2438-5390-bb27-b5b11c7a78df
   puid: INXT_GRP_AAAAAAAACB
   samples_count: 1
-
 group_juliett:
-  <<: *DEFAULTS
+  id: b900430f-f763-5d95-86c5-0e7212c5a1fe
   name: Group Juliett
   path: group-juliett
+  type: Group
   description: Group Juliett description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACC
   samples_count: 3
-
 group_juliett_subgroup1:
-  <<: *DEFAULTS
+  id: 6cbf15be-46ee-5fbc-8741-f6b14fce6919
   name: Subgroup 1
   path: group-juliett/subgroup-1
+  type: Group
   description: Subgroup 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+  metadata_summary: {}
+  parent_id: b900430f-f763-5d95-86c5-0e7212c5a1fe
   puid: INXT_GRP_AAAAAAAACD
   samples_count: 1
-
 group_kilo:
-  <<: *DEFAULTS
+  id: 1ce57ff2-51c9-5362-97d4-abea71a1ab3c
   name: Group Kilo
   path: group-kilo
+  type: Group
   description: Group Kilo description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACE
   samples_count: 0
-
 group_lima:
-  <<: *DEFAULTS
+  id: 60599412-d9db-54a6-9869-6a8b8f220318
   name: Group Lima
   path: group-lima
+  type: Group
   description: Group Lima description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACF
   samples_count: 0
-
 group_mike:
-  <<: *DEFAULTS
+  id: bca65d3a-48b6-56c1-9a25-406d163ab692
   name: Group Mike
   path: group-mike
+  type: Group
   description: Group Mike description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACG
   samples_count: 6
-
 subgroup_mike_a:
-  <<: *DEFAULTS
+  id: 1d88aa97-f601-5b8e-8f43-091ea5493342
   name: Subgroup Mike A
   path: subgroup-mike-a
+  type: Group
   description: Subgroup Mike A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  metadata_summary: {}
+  parent_id: bca65d3a-48b6-56c1-9a25-406d163ab692
   puid: INXT_GRP_AAAAAAAACH
   samples_count: 2
-
 subgroup_mike_b:
-  <<: *DEFAULTS
+  id: 15464118-c6ef-53d3-beca-e92d406b729a
   name: Subgroup Mike B
   path: subgroup-mike-b
+  type: Group
   description: Subgroup Mike B description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  metadata_summary: {}
+  parent_id: bca65d3a-48b6-56c1-9a25-406d163ab692
   puid: INXT_GRP_AAAAAAAACI
   samples_count: 2
-
 subgroup_mike_a_a:
-  <<: *DEFAULTS
+  id: fb6a65e7-13c5-5a0b-8dac-b17895094ce2
   name: Subgroup Mike A A
   path: subgroup-mike-a-a
+  type: Group
   description: Subgroup Mike A A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
+  metadata_summary: {}
+  parent_id: 1d88aa97-f601-5b8e-8f43-091ea5493342
   puid: INXT_GRP_AAAAAAAACJ
   samples_count: 0
-
 group_oscar:
-  <<: *DEFAULTS
+  id: 7d4fafe0-9c50-5534-bcac-7385f9d68c8b
   name: Group Oscar
   path: group-oscar
+  type: Group
   description: Group Oscar description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACK
   samples_count: 0
-
 subgroup_oscar_a:
-  <<: *DEFAULTS
+  id: e272524d-8b70-5baa-b394-d2fdd9f6e40e
   name: Subgroup Oscar A
   path: subgroup-oscar-a
+  type: Group
   description: Subgroup Oscar A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
+  metadata_summary: {}
+  parent_id: 7d4fafe0-9c50-5534-bcac-7385f9d68c8b
   puid: INXT_GRP_AAAAAAAACL
   samples_count: 0
-
 group_papa:
-  <<: *DEFAULTS
+  id: 58a07447-5893-5cfc-ab79-1ee516a4a397
   name: Group Papa
   path: group-papa
+  type: Group
   description: Group Papa description
+  metadata_summary: {}
   puid: INXT_GRP_AAAAAAAACM
   samples_count: 0
-
 subgroup_papa_a:
-  <<: *DEFAULTS
+  id: c2d4a741-e9c4-519f-bae6-d918afea1057
   name: Subgroup Papa A
   path: subgroup-papa-a
+  type: Group
   description: Subgroup Papa A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
+  metadata_summary: {}
+  parent_id: 58a07447-5893-5cfc-ab79-1ee516a4a397
   puid: INXT_GRP_AAAAAAAACN
   samples_count: 0
-
 group_metadata:
-  <<: *DEFAULTS
+  id: 6bbe101e-9d6c-5d9b-a825-279ac0eb4afa
   name: Group Metadata
   path: group-metadata
+  type: Group
   description: Group Metadata description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
-  metadata_summary: { "example_date": 3, "example_float": 3, "example_integer": 3 }
+  metadata_summary:
+    example_date: 3
+    example_float: 3
+    example_integer: 3
+  owner_id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
   puid: INXT_GRP_AAAAAAAACO
   samples_count: 3
-
 group_sample_transfer:
-  <<: *DEFAULTS
+  id: a27c9dd3-dc5d-5715-b361-bf2a4c28e0ae
   name: Group Sample Transfer
   path: group-sample-transfer
+  type: Group
   description: Group Sample Transfer description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 00d705fb-6c7e-59cf-8eb4-d7352b440693
   puid: INXT_GRP_AAAAAAAACP
   samples_count: 3
-
 group_sample_transfer_target:
-  <<: *DEFAULTS
+  id: 0ef32842-5f6a-5da1-a18f-f3682ac21d4f
   name: Group Sample Transfer Target
   path: group-sample-transfer-target
+  type: Group
   description: Group Sample Transfer Target description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 00d705fb-6c7e-59cf-8eb4-d7352b440693
   puid: INXT_GRP_AAAAAAAACQ
   samples_count: 0
-
 group_sample_actions:
-  <<: *DEFAULTS
+  id: ecc4080a-b627-51d4-824e-6aaa10a013ee
   name: Group Sample Actions
   path: group-sample-actions
+  type: Group
   description: Group Sample Actions description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  metadata_summary:
+    metadatafield1: 2
+    metadatafield2: 2
+  owner_id: aca8a717-05a0-5ad0-a91d-bda9a044a87d
   puid: INXT_GRP_AAAAAAAACR
-  metadata_summary: { "metadatafield1": 2, "metadatafield2": 2 }
   samples_count: 2
-
 subgroup_sample_actions:
-  <<: *DEFAULTS
+  id: 49548e26-db1a-54fd-bc79-944f653b9771
   name: Subgroup Sample Actions
   path: subgroup-sample-actions
+  type: Group
   description: Subgroup Sample Actions description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  parent_id: ecc4080a-b627-51d4-824e-6aaa10a013ee
   puid: INXT_GRP_AAAAAAAACS
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
-
 shared_group_sample_actions_owner:
-  <<: *DEFAULTS
+  id: e3a0461b-5caa-50ab-b7eb-d634d684f87e
   name: Shared Group Sample Actions Owner
   path: shared-group-sample-actions-owner
+  type: Group
   description: Shared Group Sample Actions Owner description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: bb6e0dcc-9f84-587b-aca8-52c03638cff6
   puid: INXT_GRP_AAAAAAAACT
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
-
 shared_group_sample_actions_maintainer:
-  <<: *DEFAULTS
+  id: fe3e780e-ba9b-566d-b190-36d09acc1564
   name: Shared Group Sample Actions Maintainer
   path: shared-group-sample-actions-maintainer
+  type: Group
   description: Shared Group Sample Actions Maintainer description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: bb6e0dcc-9f84-587b-aca8-52c03638cff6
   puid: INXT_GRP_AAAAAAAACU
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
-
 shared_group_sample_actions_analyst:
-  <<: *DEFAULTS
+  id: e8371f4d-3271-5853-ad1e-42d88dfc9e9b
   name: Shared Group Sample Actions Analyst
   path: shared-group-sample-actions-analyst
+  type: Group
   description: Shared Group Sample Actions Analyst description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: bb6e0dcc-9f84-587b-aca8-52c03638cff6
   puid: INXT_GRP_AAAAAAAACV
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
-
 shared_group_sample_actions_guest:
-  <<: *DEFAULTS
+  id: 1aa8d917-4c60-592c-acd7-6b22a00ee8a9
   name: Shared Group Sample Actions Guest
   path: shared-group-sample-actions-guest
+  type: Group
   description: Shared Group Sample Actions Guest description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: bb6e0dcc-9f84-587b-aca8-52c03638cff6
   puid: INXT_GRP_AAAAAAAACW
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
   samples_count: 1
-
-
-<% (1..10).each do |n| %>
-public_group<%= (n) %>:
-  <<: *DEFAULTS
-  name: <%= "Public Group #{n}" %>
-  public: true
-  path: <%= "public-group-#{n}" %>
-  description: <%= "Public Group #{n} description" %>
-  puid: <%= "INXT_GRP_AXATAA#{((n/26).round+66).chr}AA#{((n%26)+65).chr}" %>
+public_group1:
+  id: d2e42ec9-55eb-5836-bdc7-405cde9e246a
+  name: Public Group 1
+  path: public-group-1
+  type: Group
+  description: Public Group 1 description
+  created_at: "<%= 2.days.ago %>"
+  updated_at: "<%= 2.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAB
   samples_count: 0
-  created_at: <%= (n + 1).days.ago %>
-  updated_at: <%= (n + 1).days.ago %>
-<% end %>
-
+  public: true
+public_group2:
+  id: c099402c-8f36-56c0-a141-0012e6dcad0a
+  name: Public Group 2
+  path: public-group-2
+  type: Group
+  description: Public Group 2 description
+  created_at: "<%= 3.days.ago %>"
+  updated_at: "<%= 3.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAC
+  samples_count: 0
+  public: true
+public_group3:
+  id: 725ceb46-8b81-5b3f-b747-3d5d2586ea46
+  name: Public Group 3
+  path: public-group-3
+  type: Group
+  description: Public Group 3 description
+  created_at: "<%= 4.days.ago %>"
+  updated_at: "<%= 4.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAD
+  samples_count: 0
+  public: true
+public_group4:
+  id: 3671083b-1731-5936-8e13-aa740c255504
+  name: Public Group 4
+  path: public-group-4
+  type: Group
+  description: Public Group 4 description
+  created_at: "<%= 5.days.ago %>"
+  updated_at: "<%= 5.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAE
+  samples_count: 0
+  public: true
+public_group5:
+  id: 4e790cec-39cf-544d-9023-5b32b914c88a
+  name: Public Group 5
+  path: public-group-5
+  type: Group
+  description: Public Group 5 description
+  created_at: "<%= 6.days.ago %>"
+  updated_at: "<%= 6.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAF
+  samples_count: 0
+  public: true
+public_group6:
+  id: 959b954a-fc44-5ccd-94c7-5dfbed8ea7b3
+  name: Public Group 6
+  path: public-group-6
+  type: Group
+  description: Public Group 6 description
+  created_at: "<%= 7.days.ago %>"
+  updated_at: "<%= 7.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAG
+  samples_count: 0
+  public: true
+public_group7:
+  id: 931f0328-9ffb-5404-9bad-ac0ff894e1e9
+  name: Public Group 7
+  path: public-group-7
+  type: Group
+  description: Public Group 7 description
+  created_at: "<%= 8.days.ago %>"
+  updated_at: "<%= 8.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAH
+  samples_count: 0
+  public: true
+public_group8:
+  id: fa6821e6-0542-539f-af46-3eaf2bcd62c9
+  name: Public Group 8
+  path: public-group-8
+  type: Group
+  description: Public Group 8 description
+  created_at: "<%= 9.days.ago %>"
+  updated_at: "<%= 9.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAI
+  samples_count: 0
+  public: true
+public_group9:
+  id: 437c1506-3e98-5b8d-af01-92f8ec21129e
+  name: Public Group 9
+  path: public-group-9
+  type: Group
+  description: Public Group 9 description
+  created_at: "<%= 10.days.ago %>"
+  updated_at: "<%= 10.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAJ
+  samples_count: 0
+  public: true
+public_group10:
+  id: ba2a31af-3f18-56f3-9e1a-f18fd70bf9a3
+  name: Public Group 10
+  path: public-group-10
+  type: Group
+  description: Public Group 10 description
+  created_at: "<%= 11.days.ago %>"
+  updated_at: "<%= 11.days.ago %>"
+  metadata_summary: {}
+  puid: INXT_GRP_AXATAABAAK
+  samples_count: 0
+  public: true
 public_group1_subgroup1:
-  <<: *DEFAULTS
-  name: "Public Subgroup 1"
-  public: true
-  path: <%= "public-group-1-subgroup-1" %>
-  description: <%= "Public Subgroup 1 description" %>
-  puid: <%= "INXT_GRP_AXATAA#{((11/26).round+66).chr}AA#{((11%26)+65).chr}" %>
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
+  id: d963e71f-692b-5323-91f6-43b72f12b525
+  name: Public Subgroup 1
+  path: public-group-1-subgroup-1
+  type: Group
+  description: Public Subgroup 1 description
+  created_at: "<%= 1.days.ago %>"
+  updated_at: "<%= 1.days.ago %>"
+  metadata_summary: {}
+  parent_id: d2e42ec9-55eb-5836-bdc7-405cde9e246a
+  puid: INXT_GRP_AXATAABAAL
   samples_count: 0
-  created_at: <%= 1.days.ago %>
-  updated_at: <%= 1.days.ago %>
-
+  public: true
 snvphyl_group:
-  <<: *DEFAULTS
+  id: 0b188f38-a1ed-5124-910b-cb6ade75be1e
   name: SNVPhyl Group
   path: snvphyl-group
+  type: Group
   description: SNVPhyl Group description
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
-  metadata_summary: { "metadata_1": 2, "metadata_2": 2, "metadata_3": 2, "metadata_4": 2, "metadata_5": 2,
-                      "metadata_6": 2, "metadata_7": 2, "metadata_8": 2 }
+  metadata_summary:
+    metadata_1: 2
+    metadata_2: 2
+    metadata_3: 2
+    metadata_4: 2
+    metadata_5: 2
+    metadata_6: 2
+    metadata_7: 2
+    metadata_8: 2
+  owner_id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
   puid: INXT_GRP_AAAAAAAACX
-  attachments_updated_at: <%= 2.hours.ago %>
+  attachments_updated_at: "<%= 2.hours.ago %>"
   samples_count: 2
-
 clone_test_group_one:
-  <<: *DEFAULTS
+  id: 539b5cb9-7617-5577-bfc7-cb3248442325
   name: Clone Test Group One
   path: clone-test-group-one
+  type: Group
   description: Group for testing clone with no available projects
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
+  metadata_summary: {}
+  owner_id: a5be48c1-1e62-5600-ae87-a5666f69fc86
   puid: INXT_GRP_AAAAAAAACY
   samples_count: 0
-
 clone_test_group_two:
-  <<: *DEFAULTS
+  id: a38b8b35-6d50-5817-8510-3b1b393844c2
   name: Clone Test Group Two
   path: clone-test-group-two
+  type: Group
   description: Group for testing clone with no available destination groups
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
+  metadata_summary: {}
+  owner_id: a8f35467-4323-57b1-9060-2d56de95a23b
   puid: INXT_GRP_AAAAAAAACZ
   samples_count: 0

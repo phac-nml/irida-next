@@ -1,173 +1,97 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 project1_namespace_sample_clone_extended_details:
+  id: 6bab3d39-f680-5281-8eff-ad8b9379017e
   details:
-    {
-      "cloned_samples_data":
-        [
-          {
-            sample_name: "Project 1 Sample 1",
-            sample_puid: "INXT_SAM_AAAAAAAAAA",
-            clone_puid: "INXT_SAM_XAAAATAAAA",
-          },
-        ],
-      "cloned_samples_count": 1,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    cloned_samples_data:
+    - sample_name: Project 1 Sample 1
+      sample_puid: INXT_SAM_AAAAAAAAAA
+      clone_puid: INXT_SAM_XAAAATAAAA
+    cloned_samples_count: 1
 project1_namespace_sample_transfer_extended_details:
+  id: 9d93e94a-3a5e-5882-91b3-a70029a18ca6
   details:
-    {
-      "transferred_samples_data":
-        [
-          {
-            sample_name: "Project 1 Sample 1",
-            sample_puid: "INXT_SAM_AAAAAAAAAA",
-          },
-        ],
-      "transferred_samples_count": 1,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    transferred_samples_data:
+    - sample_name: Project 1 Sample 1
+      sample_puid: INXT_SAM_AAAAAAAAAA
+    transferred_samples_count: 1
 project1_namespace_workflow_execution_destroy_extended_details:
+  id: d33a6d83-2c51-5ebb-a9ca-9916c6f558fe
   details:
-    {
-      "deleted_workflow_executions_data":
-        [
-          {
-            workflow_id: "first_workflow_id",
-            workflow_name: "first_workflow_name",
-          },
-          {
-            workflow_id: "second_workflow_id",
-            workflow_name: "second_workflow_name",
-          },
-          {
-            workflow_id: "third_workflow_id",
-            workflow_name: "third_workflow_name",
-          },
-        ],
-      "workflow_exeuctions_deleted_count": 3,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    deleted_workflow_executions_data:
+    - workflow_id: first_workflow_id
+      workflow_name: first_workflow_name
+    - workflow_id: second_workflow_id
+      workflow_name: second_workflow_name
+    - workflow_id: third_workflow_id
+      workflow_name: third_workflow_name
+    workflow_exeuctions_deleted_count: 3
 project1_namespace_import_sample_create_extended_details:
+  id: dc81448f-1a7d-5e53-85e6-d198c2b726d4
   details:
-    {
-      "imported_samples_data":
-        [{ sample_name: "sample name", sample_puid: "sample puid" }],
-      "imported_samples_count": 1,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    imported_samples_data:
+    - sample_name: sample name
+      sample_puid: sample puid
+    imported_samples_count: 1
 group1_namespace_import_sample_create_extended_details:
+  id: e55edf18-5655-54ea-aa01-e2fafe00ed76
   details:
-    {
-      "imported_samples_data":
-        [
-          {
-            sample_name: "sample 1 name",
-            sample_puid: "sample 1 puid",
-            project_puid: "INXT_PRJ_AAAAAAAAAA",
-          },
-          {
-            sample_name: "sample 2 name",
-            sample_puid: "sample 2 puid",
-            project_puid: "INXT_PRJ_AAAAAAAAAB",
-          },
-        ],
-      "imported_samples_count": 2,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    imported_samples_data:
+    - sample_name: sample 1 name
+      sample_puid: sample 1 puid
+      project_puid: INXT_PRJ_AAAAAAAAAA
+    - sample_name: sample 2 name
+      sample_puid: sample 2 puid
+      project_puid: INXT_PRJ_AAAAAAAAAB
+    imported_samples_count: 2
 project_group_sample_transfer_sample_transfer_extended_details:
+  id: 33d2bbab-a836-5d0e-89e1-280054ce9cce
   details:
-    {
-      "transferred_samples_data":
-        [
-          {
-            sample_name: "Group Sample Transfer 1",
-            sample_puid: "INXT_SAM_AAAAAAAADQ",
-          },
-          {
-            sample_name: "Group Sample Transfer 2",
-            sample_puid: "INXT_SAM_AAAAAAAADR",
-          },
-          {
-            sample_name: "Group Sample Transfer 3",
-            sample_puid: "INXT_SAM_AAAAAAAADS",
-          },
-        ],
-      "transferred_samples_count": 3,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    transferred_samples_data:
+    - sample_name: Group Sample Transfer 1
+      sample_puid: INXT_SAM_AAAAAAAADQ
+    - sample_name: Group Sample Transfer 2
+      sample_puid: INXT_SAM_AAAAAAAADR
+    - sample_name: Group Sample Transfer 3
+      sample_puid: INXT_SAM_AAAAAAAADS
+    transferred_samples_count: 3
 group_sample_transfer_sample_transfer_extended_details:
+  id: b6276213-76dc-553e-a02e-85d7767f781a
   details:
-    {
-      "transferred_samples_data":
-        [
-          {
-            sample_name: "Group Sample Transfer 1",
-            sample_puid: "INXT_SAM_AAAAAAAADQ",
-            source_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>",
-            source_project_name: "Project Group Sample Transfer",
-            source_project_puid: "INXT_PRJ_AAAAAAAACC",
-            target_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
-            target_project_name: "Project Group Sample Transfer Target",
-            target_project_puid: "INXT_PRJ_AAAAAAAACD",
-          },
-          {
-            sample_name: "Group Sample Transfer 2",
-            sample_puid: "INXT_SAM_AAAAAAAADR",
-            source_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>",
-            source_project_name: "Project Group Sample Transfer",
-            source_project_puid: "INXT_PRJ_AAAAAAAACC",
-            target_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
-            target_project_name: "Project Group Sample Transfer Target",
-            target_project_puid: "INXT_PRJ_AAAAAAAACD",
-          },
-          {
-            sample_name: "Group Sample Transfer 3",
-            sample_puid: "INXT_SAM_AAAAAAAADS",
-            source_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>",
-            source_project_name: "Project Group Sample Transfer",
-            source_project_puid: "INXT_PRJ_AAAAAAAACC",
-            target_project_id: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
-            target_project_name: "Project Group Sample Transfer Target",
-            target_project_puid: "INXT_PRJ_AAAAAAAACD",
-          },
-        ],
-      "transferred_samples_count": 3,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    transferred_samples_data:
+    - sample_name: Group Sample Transfer 1
+      sample_puid: INXT_SAM_AAAAAAAADQ
+      source_project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
+      source_project_name: Project Group Sample Transfer
+      source_project_puid: INXT_PRJ_AAAAAAAACC
+      target_project_id: de6abd66-a6f0-5142-8f32-f4a39c722577
+      target_project_name: Project Group Sample Transfer Target
+      target_project_puid: INXT_PRJ_AAAAAAAACD
+    - sample_name: Group Sample Transfer 2
+      sample_puid: INXT_SAM_AAAAAAAADR
+      source_project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
+      source_project_name: Project Group Sample Transfer
+      source_project_puid: INXT_PRJ_AAAAAAAACC
+      target_project_id: de6abd66-a6f0-5142-8f32-f4a39c722577
+      target_project_name: Project Group Sample Transfer Target
+      target_project_puid: INXT_PRJ_AAAAAAAACD
+    - sample_name: Group Sample Transfer 3
+      sample_puid: INXT_SAM_AAAAAAAADS
+      source_project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
+      source_project_name: Project Group Sample Transfer
+      source_project_puid: INXT_PRJ_AAAAAAAACC
+      target_project_id: de6abd66-a6f0-5142-8f32-f4a39c722577
+      target_project_name: Project Group Sample Transfer Target
+      target_project_puid: INXT_PRJ_AAAAAAAACD
+    transferred_samples_count: 3
 group1_namespace_sample_destroy_extended_details:
+  id: cefe7050-c342-56ee-bedc-ef6322557388
   details:
-    {
-      "deleted_samples_data":
-        [
-          {
-            sample_name: "sample 1 name",
-            sample_puid: "sample 1 puid",
-            project_puid: "INXT_PRJ_AAAAAAAAAA",
-            project_name: "Project 1",
-          },
-          {
-            sample_name: "sample 2 name",
-            sample_puid: "sample 2 puid",
-            project_puid: "INXT_PRJ_AAAAAAAAAB",
-            project_name: "Project 2",
-          },
-        ],
-      "samples_deleted_count": 2,
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
+    deleted_samples_data:
+    - sample_name: sample 1 name
+      sample_puid: sample 1 puid
+      project_puid: INXT_PRJ_AAAAAAAAAA
+      project_name: Project 1
+    - sample_name: sample 2 name
+      sample_puid: sample 2 puid
+      project_puid: INXT_PRJ_AAAAAAAAAB
+      project_name: Project 2
+    samples_deleted_count: 2

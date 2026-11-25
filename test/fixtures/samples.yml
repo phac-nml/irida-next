@@ -1,755 +1,2691 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 sample1:
+  id: 98553bca-13ed-56fd-8954-9f91d55d2271
   name: Project 1 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
   puid: INXT_SAM_AAAAAAAAAA
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 3.hours.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample2:
+  id: a878d23c-9c02-5940-9a02-2556c868a0aa
   name: Project 1 Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
+  created_at: "<%= 2.weeks.ago %>"
+  updated_at: "<%= 2.days.ago %>"
   puid: INXT_SAM_AAAAAAAAAB
-  created_at: <%= 2.weeks.ago %>
-  updated_at: <%= 2.days.ago %>
-
-<% (3..21).each do |n| %>
-sample<%= (n) %>:
-  name: <%= "Project 2 Sample #{n}" %>
-  description: <%= "Sample #{n} description." %>
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project2, :uuid) %>
-  puid: <%= "INXT_SAM_AAAAAAAAA#{((n%26)+64).chr}" %>
-  created_at: <%= n.weeks.ago %>
-  updated_at: <%= n.days.ago %>
-<% end %>
-
+  project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+sample3:
+  id: b95a06a2-61d5-5b98-ae92-645b78c9ece9
+  name: Project 2 Sample 3
+  description: Sample 3 description.
+  created_at: "<%= 3.weeks.ago %>"
+  updated_at: "<%= 3.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAC
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample4:
+  id: f0fd18cb-37ff-54b9-b2f6-74c99d34914c
+  name: Project 2 Sample 4
+  description: Sample 4 description.
+  created_at: "<%= 4.weeks.ago %>"
+  updated_at: "<%= 4.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAD
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample5:
+  id: e36171d5-af97-562f-a26d-4e96446fca1a
+  name: Project 2 Sample 5
+  description: Sample 5 description.
+  created_at: "<%= 5.weeks.ago %>"
+  updated_at: "<%= 5.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAE
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample6:
+  id: 31f8d05f-a06b-512a-a473-2f39c515b3ad
+  name: Project 2 Sample 6
+  description: Sample 6 description.
+  created_at: "<%= 6.weeks.ago %>"
+  updated_at: "<%= 6.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAF
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample7:
+  id: 9716ea3a-2758-50a9-b4fc-94f6c8efb080
+  name: Project 2 Sample 7
+  description: Sample 7 description.
+  created_at: "<%= 7.weeks.ago %>"
+  updated_at: "<%= 7.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAG
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample8:
+  id: d7a4951e-f30c-55a0-bb94-e1faa34f8ee0
+  name: Project 2 Sample 8
+  description: Sample 8 description.
+  created_at: "<%= 8.weeks.ago %>"
+  updated_at: "<%= 8.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAH
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample9:
+  id: 5c4f9eac-7801-5150-acfc-964f853de3a2
+  name: Project 2 Sample 9
+  description: Sample 9 description.
+  created_at: "<%= 9.weeks.ago %>"
+  updated_at: "<%= 9.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAI
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample10:
+  id: bcfa4dbc-b82e-55fa-8268-25091349465d
+  name: Project 2 Sample 10
+  description: Sample 10 description.
+  created_at: "<%= 10.weeks.ago %>"
+  updated_at: "<%= 10.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAJ
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample11:
+  id: 98264d6d-9230-590c-8609-4624a870d71c
+  name: Project 2 Sample 11
+  description: Sample 11 description.
+  created_at: "<%= 11.weeks.ago %>"
+  updated_at: "<%= 11.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAK
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample12:
+  id: e42db6e3-562a-56da-a202-33ce76943211
+  name: Project 2 Sample 12
+  description: Sample 12 description.
+  created_at: "<%= 12.weeks.ago %>"
+  updated_at: "<%= 12.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAL
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample13:
+  id: f78a6bb6-ee8f-5d00-b54b-e397c7f857e7
+  name: Project 2 Sample 13
+  description: Sample 13 description.
+  created_at: "<%= 13.weeks.ago %>"
+  updated_at: "<%= 13.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAM
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample14:
+  id: c1e57209-0ff6-5ab2-9153-53f243f9abec
+  name: Project 2 Sample 14
+  description: Sample 14 description.
+  created_at: "<%= 14.weeks.ago %>"
+  updated_at: "<%= 14.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAN
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample15:
+  id: 871feac8-473e-5933-9f6e-3535adcca983
+  name: Project 2 Sample 15
+  description: Sample 15 description.
+  created_at: "<%= 15.weeks.ago %>"
+  updated_at: "<%= 15.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAO
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample16:
+  id: 89246cf1-f4c2-5616-af66-754bee8ad0f0
+  name: Project 2 Sample 16
+  description: Sample 16 description.
+  created_at: "<%= 16.weeks.ago %>"
+  updated_at: "<%= 16.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAP
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample17:
+  id: 796fd38c-8d2a-5da5-8273-5ec818aa16ee
+  name: Project 2 Sample 17
+  description: Sample 17 description.
+  created_at: "<%= 17.weeks.ago %>"
+  updated_at: "<%= 17.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAQ
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample18:
+  id: 3d865672-9fad-5dff-8089-6572054c399d
+  name: Project 2 Sample 18
+  description: Sample 18 description.
+  created_at: "<%= 18.weeks.ago %>"
+  updated_at: "<%= 18.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAR
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample19:
+  id: af36f019-aed9-5068-bad2-7b457d2a2e11
+  name: Project 2 Sample 19
+  description: Sample 19 description.
+  created_at: "<%= 19.weeks.ago %>"
+  updated_at: "<%= 19.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAS
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample20:
+  id: df52f97c-0833-55e3-a66c-d32c30bb435d
+  name: Project 2 Sample 20
+  description: Sample 20 description.
+  created_at: "<%= 20.weeks.ago %>"
+  updated_at: "<%= 20.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAT
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+sample21:
+  id: 50f64ee9-b00b-5aaa-9725-81ca631553a2
+  name: Project 2 Sample 21
+  description: Sample 21 description.
+  created_at: "<%= 21.weeks.ago %>"
+  updated_at: "<%= 21.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAAU
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
 sample22:
+  id: 99c4cdea-b935-5b06-8ca6-baf55aa1d406
   name: Project 2 Sample 22
   description: Sample 22 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project2, :uuid) %>
+  created_at: "<%= 22.weeks.ago %>"
+  updated_at: "<%= 22.days.ago %>"
   puid: INXT_SAM_AAAAAAAAAV
-  created_at: <%= 22.weeks.ago %>
-  updated_at: <%= 22.days.ago %>
-
+  project_id: 38e9e7c5-ea82-532a-89a2-09054f02cf25
 sample23:
+  id: e9b926c3-2b13-5925-b1d0-cbccfbb8eb7e
   name: Project 4 Sample 23
   description: Sample 23 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project4, :uuid) %>
+  created_at: "<%= 23.weeks.ago %>"
+  updated_at: "<%= 23.days.ago %>"
   puid: INXT_SAM_AAAAAAAAAW
-  created_at: <%= 23.weeks.ago %>
-  updated_at: <%= 23.days.ago %>
-
+  project_id: e82af966-b0bf-55ff-a545-4d9407bc2d26
 '1234':
+  id: a62fbec6-8665-5eb2-99d2-cd66455ab946
   name: 1234
   description: 1234 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project4, :uuid) %>
+  created_at: "<%= 23.weeks.ago %>"
+  updated_at: "<%= 23.days.ago %>"
   puid: INXT_SAM_BAAAAAAAAA
-  created_at: <%= 23.weeks.ago %>
-  updated_at: <%= 23.days.ago %>
-
+  project_id: e82af966-b0bf-55ff-a545-4d9407bc2d26
 sample24:
+  id: e0836d2e-94a4-589d-a24e-975e99ad820a
   name: John Doe Project 2 Sample 1
   description: John Doe Project 2 Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2, :uuid) %>
+  created_at: "<%= 24.weeks.ago %>"
+  updated_at: "<%= 24.days.ago %>"
   puid: INXT_SAM_AAAAAAAAAX
-  created_at: <%= 24.weeks.ago %>
-  updated_at: <%= 24.days.ago %>
-
+  project_id: 6876a033-471c-559c-a691-05b7c56182b8
 sample25:
+  id: 2fe66743-5581-5473-ae40-4573fad66366
   name: Project 25 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project25, :uuid) %>
+  created_at: "<%= 25.weeks.ago %>"
+  updated_at: "<%= 25.days.ago %>"
   puid: INXT_SAM_AAAAAAAAAY
-  created_at: <%= 25.weeks.ago %>
-  updated_at: <%= 25.days.ago %>
-
+  project_id: cbf68467-2b2b-5cb8-99d8-794e4f940e7b
 sample26:
+  id: c200ccf7-1fc4-513e-90ec-474ede7280f1
   name: Project 26 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
+  created_at: "<%= 26.weeks.ago %>"
+  updated_at: "<%= 26.days.ago %>"
   puid: INXT_SAM_AAAAAAAAAZ
-  created_at: <%= 26.weeks.ago %>
-  updated_at: <%= 26.days.ago %>
-
+  project_id: 7c524fab-c64c-5001-bef3-f354ee8f9da1
 sample27:
+  id: ee7b9f59-f2d9-587a-b35d-56775e1a0bae
   name: Project 26 Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
+  created_at: "<%= 27.weeks.ago %>"
+  updated_at: "<%= 27.days.ago %>"
   puid: INXT_SAM_AAAAAAAAA2
-  created_at: <%= 27.weeks.ago %>
-  updated_at: <%= 27.days.ago %>
-
+  project_id: 7c524fab-c64c-5001-bef3-f354ee8f9da1
 sampleA:
+  id: 0253e656-57d2-5fac-81f3-b83265ab09d9
   name: Project A Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA, :uuid) %>
+  created_at: "<%= 28.weeks.ago %>"
+  updated_at: "<%= 28.days.ago %>"
   puid: INXT_SAM_AAAAAAAAA3
-  created_at: <%= 28.weeks.ago %>
-  updated_at: <%= 28.days.ago %>
-  attachments_updated_at: <%= 28.hours.ago %>
-
+  project_id: 6a959cf0-53a6-5350-acfa-47d6bbc136cd
+  attachments_updated_at: "<%= 28.hours.ago %>"
 sampleB:
+  id: 8b62bdf1-e8c8-5d69-93a2-1fdd58e815f4
   name: Project A Sample B
   description: Sample B description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA, :uuid) %>
+  created_at: "<%= 29.weeks.ago %>"
+  updated_at: "<%= 29.days.ago %>"
   puid: INXT_SAM_AAAAAAAAA4
-  created_at: <%= 29.weeks.ago %>
-  updated_at: <%= 29.days.ago %>
-  attachments_updated_at: <%= 29.hours.ago %>
-
+  project_id: 6a959cf0-53a6-5350-acfa-47d6bbc136cd
+  attachments_updated_at: "<%= 29.hours.ago %>"
 sampleC:
+  id: d2e296df-1214-5568-8ffc-f5db00115abd
   name: Project A Sample C
   description: Sample C description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectA, :uuid) %>
+  created_at: "<%= 30.weeks.ago %>"
+  updated_at: "<%= 30.days.ago %>"
   puid: INXT_SAM_AAAAAAAAA5
-  created_at: <%= 30.weeks.ago %>
-  updated_at: <%= 30.days.ago %>
-  attachments_updated_at: <%= 30.hours.ago %>
-
+  project_id: 6a959cf0-53a6-5350-acfa-47d6bbc136cd
+  attachments_updated_at: "<%= 30.hours.ago %>"
 sample28:
+  id: 32b6db9b-4861-587a-ad1f-b8cd8a3acc7d
   name: Project 28 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project28, :uuid) %>
+  created_at: "<%= 31.weeks.ago %>"
+  updated_at: "<%= 31.days.ago %>"
+  metadata:
+    unique.metadata.field: unique_value
+    metadata field with spaces: spaces value
+  metadata_provenance:
+    unique.metadata.field:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadata field with spaces:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAAA6
-  created_at: <%= 31.weeks.ago %>
-  updated_at: <%= 31.days.ago %>
-  metadata: { 'unique.metadata.field': 'unique_value', 'metadata field with spaces': 'spaces value' }
-  metadata_provenance: { 'unique.metadata.field': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' }, 'metadata field with spaces': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: ed9c8a8e-5fc7-5ccb-9c44-11bab7eb618b
 sample29:
+  id: 7f3b4d97-e467-5a41-a0eb-7ffbf66a923b
   name: Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project25, :uuid) %>
+  created_at: "<%= 32.weeks.ago %>"
+  updated_at: "<%= 32.days.ago %>"
   puid: INXT_SAM_AAAAAAAAA7
-  created_at: <%= 32.weeks.ago %>
-  updated_at: <%= 32.days.ago %>
-
+  project_id: cbf68467-2b2b-5cb8-99d8-794e4f940e7b
 sample30:
+  id: 2a82f52f-b145-50b8-b2a2-2b62bf80fca1
   name: Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>
+  created_at: "<%= 33.weeks.ago %>"
+  updated_at: "<%= 33.days.ago %>"
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAABA
-  created_at: <%= 33.weeks.ago %>
-  updated_at: <%= 33.days.ago %>
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 15438e41-f27c-5010-b021-fe991c68bb04
 sample31:
+  id: ccbd7161-44ac-5c21-a4aa-db6ef802a247
   name: Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project26, :uuid) %>
+  created_at: "<%= 34.weeks.ago %>"
+  updated_at: "<%= 34.days.ago %>"
   puid: INXT_SAM_AAAAAAAABB
-  created_at: <%= 34.weeks.ago %>
-  updated_at: <%= 34.days.ago %>
-
+  project_id: 7c524fab-c64c-5001-bef3-f354ee8f9da1
 sample32:
+  id: b7e2db4d-97ad-5013-b7d8-b870ee1396c9
   name: Sample 32
   description: Sample 32 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project29, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: e1e65eee-135a-55a5-b2ce-921c6186b762
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: e1e65eee-135a-55a5-b2ce-921c6186b762
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAABC
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 7e37a20b-3d24-585a-9f30-3ce8bf03f8e6
 sample33:
+  id: f787b468-3641-5fad-95a9-9de9881d75ec
   name: Sample33
   description: Sample 33 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project30, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: e1e65eee-135a-55a5-b2ce-921c6186b762
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: e1e65eee-135a-55a5-b2ce-921c6186b762
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAABD
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-  'metadatafield2': { 'id': <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 96383a2d-90a1-53cc-9623-6b43731e4fb0
 sample34:
+  id: 96c7d64e-874f-55d4-a7d0-9ad94e841d96
   name: Sample 34
   description: Sample 34 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project31, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAABE
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-  'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' }}
-
+  project_id: 2d3d13ac-a90e-5bca-b1bb-38234a92daf7
 sample35:
+  id: ec10cca1-fb1c-589e-96c5-78837ae77731
   name: Sample 35
   description: Sample 35 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project31, :uuid) %>
   puid: INXT_SAM_AAAAAAAABF
-
+  project_id: 2d3d13ac-a90e-5bca-b1bb-38234a92daf7
 sampleAlpha:
+  id: 8a5e41b6-2869-554f-baaa-a472e836d818
   name: Sample Alpha
   description: Sample Alpha description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha, :uuid) %>
+  created_at: "<%= 35.week.ago %>"
+  updated_at: "<%= 35.day.ago %>"
   puid: INXT_SAM_AAAAAAAABG
-  created_at: <%= 35.week.ago %>
-  updated_at: <%= 35.day.ago %>
-
+  project_id: '06982c33-6709-5849-a5ad-bdcadb9afac5'
 sampleBravo:
+  id: 6f7639c8-9e1a-5118-9634-7269adbde227
   name: Sample Bravo
   description: Sample Bravo description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectBravo, :uuid) %>
+  created_at: "<%= 36.week.ago %>"
+  updated_at: "<%= 36.day.ago %>"
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAABH
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2' }
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-  'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-  'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' }}
-  created_at: <%= 36.week.ago %>
-  updated_at: <%= 36.day.ago %>
-
+  project_id: 997613be-aefa-54f0-862a-6534a34ae84c
 sampleCharlie:
+  id: e81af6ec-ce4d-5e19-90dc-ae38911d95b7
   name: Sample Charlie
   description: Sample Charlie description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectCharlie, :uuid) %>
+  created_at: "<%= 37.week.ago %>"
+  updated_at: "<%= 37.day.ago %>"
   puid: INXT_SAM_AAAAAAAABI
-  created_at: <%= 37.week.ago %>
-  updated_at: <%= 37.day.ago %>
-
+  project_id: c8404e50-7c30-50a5-a466-61e3a18843c9
 sampleAlpha1:
+  id: a8c87573-eac2-5cdf-b350-5e3b8e5e03a2
   name: Sample Alpha 1
   description: Sample Alpha 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectAlpha1, :uuid) %>
+  created_at: "<%= 38.week.ago %>"
+  updated_at: "<%= 38.day.ago %>"
   puid: INXT_SAM_AAAAAAAABJ
-  created_at: <%= 38.week.ago %>
-  updated_at: <%= 38.day.ago %>
-
+  project_id: bae9bf42-8f1e-521c-bc63-1f1c733ea0c9
 sample36:
+  id: b7e45ba1-b1a7-533e-95db-afceb5f12a42
   name: Sample 36
   description: Sample 36 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectHotel, :uuid) %>
   puid: INXT_SAM_AAAAAAAABK
-
+  project_id: 0f68b6c0-fe36-574c-9efb-4a944b1834ce
 sampleJeff:
+  id: ad0fdd34-7189-5de1-9ae7-a64b32bc3bea
   name: Sample Jeff
   description: Sample Jeff description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff, :uuid) %>
   puid: INXT_SAM_AAAAAAAABL
-
+  project_id: 45844c4a-b4d3-5fdd-b30e-52481dc20ea4
 sample37:
+  id: eb9a5e6a-d426-5c73-acd8-bb7a5a5a2599
   name: Project 1 Sample 2
   description: Sample with the same name.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project34, :uuid) %>
   puid: INXT_SAM_AAAAAAAABM
-
+  project_id: a06d9359-a1e5-5b0a-b4a4-e8f9d51ba211
 sample38:
+  id: 887326e7-b656-55d1-9386-36373dfe552f
   name: Project 35 Sample 1
   description: Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABN
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 8c392db5-3782-5c34-bd81-dba5268a56cd
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample39:
+  id: 51538e83-d146-5299-b307-5ae94418f27f
   name: Project 35 Sample 2
   description: Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  created_at: "<%= 2.weeks.ago %>"
+  updated_at: "<%= 2.days.ago %>"
   puid: INXT_SAM_AAAAAAAABO
-  created_at: <%= 2.weeks.ago %>
-  updated_at: <%= 2.days.ago %>
-
+  project_id: 8c392db5-3782-5c34-bd81-dba5268a56cd
 sample40:
+  id: 98fdc2c2-ea19-59c4-9a06-ef56a8249a74
   name: Project 35 Sample 3
   description: Sample 3 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project35, :uuid) %>
+  created_at: "<%= 2.weeks.ago %>"
+  updated_at: "<%= 2.days.ago %>"
   puid: INXT_SAM_AAAAAAAABP
-  created_at: <%= 2.weeks.ago %>
-  updated_at: <%= 2.days.ago %>
-
+  project_id: 8c392db5-3782-5c34-bd81-dba5268a56cd
 sample41:
+  id: 456cc5ed-32e7-5f26-8faa-b9566c886d47
   name: WorkflowExecutions test sample 1
   description: Sample description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project36, :uuid) %>
+  created_at: "<%= 2.weeks.ago %>"
+  updated_at: "<%= 2.days.ago %>"
+  metadata:
+    metadatafield1: value1
+    organism: the organism
   puid: INXT_SAM_AAAAAAAABQ
-  metadata: { 'metadatafield1': 'value1', 'organism': 'the organism' }
-  created_at: <%= 2.weeks.ago %>
-  updated_at: <%= 2.days.ago %>
-
+  project_id: 34d07b49-fc62-5510-9f50-36839cff1940
 sample42:
+  id: 27001919-2cf3-516e-b6cd-1d32714944f0
   name: WorkflowExecutions test sample 2
   description: Sample description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project36, :uuid) %>
+  created_at: "<%= 2.weeks.ago %>"
+  updated_at: "<%= 2.days.ago %>"
+  metadata:
+    metadatafield2: value2
+    organism: some organism
   puid: INXT_SAM_AAAAAAAABR
-  metadata: { 'metadatafield2': 'value2', 'organism': 'some organism' }
-  created_at: <%= 2.weeks.ago %>
-  updated_at: <%= 2.days.ago %>
-
+  project_id: 34d07b49-fc62-5510-9f50-36839cff1940
 sample43:
+  id: 2d144556-5bd0-5eb4-a7b8-91fa4e39d992
   name: Sample 43
   description: Sample 43 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  metadata:
+    insdc_accession: ERR86724108
+    country: Canada
   puid: INXT_SAM_AAAAAAAABS
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-  metadata: { 'insdc_accession': 'ERR86724108', country: "Canada" }
-
+  project_id: 2f436799-b2bc-5881-9a29-95d87fc87839
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample44:
+  id: 4df65a5d-70b9-57a3-a92f-13e08d04409c
   name: Sample 44
   description: Sample 44 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  metadata:
+    insdc_accession: ERR31551163
+    country: Moldova
   puid: INXT_SAM_AAAAAAAABT
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-  metadata: { 'insdc_accession': 'ERR31551163', country: "Moldova" }
-
+  project_id: 2f436799-b2bc-5881-9a29-95d87fc87839
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample45:
+  id: b6d9ed9b-cf19-5815-b7ef-9435461f2914
   name: Sample 45
   description: Sample 45 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:user29_project1, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABU
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 0d5a5f14-0951-5146-bad2-822c5521021e
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample46:
+  id: 83d5aa7c-3f2c-56ba-9e94-932f4ea2dbc4
   name: Sample 46
   description: Sample 46 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project37, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABV
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 2f436799-b2bc-5881-9a29-95d87fc87839
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sampleEndToEnd:
+  id: 69b61b17-9661-5f83-bfdd-885dd4df4cd3
   name: Sample EndToEnd
   description: Sample EndToEnd description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_end_to_end, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_ABAAAAAAAA
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: e3d89af7-6754-5e95-a27d-229c121bc3c6
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sampleDELETE:
+  id: fa085d6d-fa7d-561a-bfaa-c56a757d2355
   name: Sample EndToEnd
   description: Sample EndToEnd description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_ABAAAAAAAB
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 7338bd0c-3bf6-533b-afa4-4077bce2a889
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample_completed_unclean_DELETE:
+  id: 3d8d1d8c-57d3-5103-87f0-b98e152207a9
   name: Sample Completed Unclean
   description: Sample Completed Unclean description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_ABAAAAAAAD
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 7338bd0c-3bf6-533b-afa4-4077bce2a889
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample_error_unclean_DELETE:
+  id: 4214277f-5236-5a5f-b66e-0dc92805fbd3
   name: Sample Error Unclean
   description: Sample Error Unclean description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_ABAAAAAAAE
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 7338bd0c-3bf6-533b-afa4-4077bce2a889
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample_canceled_unclean_DELETE:
+  id: 30ad5aa4-1cf8-5ee4-b42d-de5c343a69f7
   name: Sample Canceled Unclean
   description: Sample Canceled Unclean description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_DELETE, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_ABAAAAAAAF
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
-
-<% (1..200).each do |n| %>
-bulk_sample<%= (n) %>:
-  name: <%= "Project 38 Sample #{n}" %>
-  description: <%= "Project 38 Sample #{n} description." %>
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project38, :uuid) %>
-  puid: <%= "INXT_SAM_AAAAAAAAC#{n}" %>
-  created_at: <%= n.weeks.ago %>
-  updated_at: <%= n.days.ago %>
-<% end %>
-
+  project_id: 7338bd0c-3bf6-533b-afa4-4077bce2a889
+  attachments_updated_at: "<%= 2.hours.ago %>"
+bulk_sample1:
+  id: 891261d5-7ccf-51b2-9c0d-120c5d0c67fd
+  name: Project 38 Sample 1
+  description: Project 38 Sample 1 description.
+  created_at: "<%= 1.weeks.ago %>"
+  updated_at: "<%= 1.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC1
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample2:
+  id: 9d750292-5b88-54d2-8054-7cec814a5600
+  name: Project 38 Sample 2
+  description: Project 38 Sample 2 description.
+  created_at: "<%= 2.weeks.ago %>"
+  updated_at: "<%= 2.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC2
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample3:
+  id: f689dd52-d54b-5fae-ac97-0003b1ca83ef
+  name: Project 38 Sample 3
+  description: Project 38 Sample 3 description.
+  created_at: "<%= 3.weeks.ago %>"
+  updated_at: "<%= 3.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC3
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample4:
+  id: 7c89dc08-cab0-5199-baa8-bb90793b1caa
+  name: Project 38 Sample 4
+  description: Project 38 Sample 4 description.
+  created_at: "<%= 4.weeks.ago %>"
+  updated_at: "<%= 4.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC4
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample5:
+  id: 2e95e554-e643-5997-9235-1358596f9b9c
+  name: Project 38 Sample 5
+  description: Project 38 Sample 5 description.
+  created_at: "<%= 5.weeks.ago %>"
+  updated_at: "<%= 5.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC5
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample6:
+  id: 2bbd4cee-1da5-5dc1-afd9-f577d3b89cbd
+  name: Project 38 Sample 6
+  description: Project 38 Sample 6 description.
+  created_at: "<%= 6.weeks.ago %>"
+  updated_at: "<%= 6.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC6
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample7:
+  id: c21c89e9-be18-56d6-89cb-425c506fe358
+  name: Project 38 Sample 7
+  description: Project 38 Sample 7 description.
+  created_at: "<%= 7.weeks.ago %>"
+  updated_at: "<%= 7.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC7
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample8:
+  id: 8b3081da-550f-5306-882e-0db9d95bb548
+  name: Project 38 Sample 8
+  description: Project 38 Sample 8 description.
+  created_at: "<%= 8.weeks.ago %>"
+  updated_at: "<%= 8.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC8
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample9:
+  id: b7f3c93e-a3d6-5ee7-8cb2-fbc85376a10a
+  name: Project 38 Sample 9
+  description: Project 38 Sample 9 description.
+  created_at: "<%= 9.weeks.ago %>"
+  updated_at: "<%= 9.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC9
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample10:
+  id: e0675331-f1c1-519a-a87c-ddf584821ff1
+  name: Project 38 Sample 10
+  description: Project 38 Sample 10 description.
+  created_at: "<%= 10.weeks.ago %>"
+  updated_at: "<%= 10.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC10
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample11:
+  id: 2e6c9d8e-64ca-5360-8435-b7474a0e8c09
+  name: Project 38 Sample 11
+  description: Project 38 Sample 11 description.
+  created_at: "<%= 11.weeks.ago %>"
+  updated_at: "<%= 11.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC11
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample12:
+  id: 5d622fe9-49cb-5a2c-baac-0ee35832fb89
+  name: Project 38 Sample 12
+  description: Project 38 Sample 12 description.
+  created_at: "<%= 12.weeks.ago %>"
+  updated_at: "<%= 12.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC12
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample13:
+  id: 6cb93e9b-616d-5722-a1c0-35bf461d0bfd
+  name: Project 38 Sample 13
+  description: Project 38 Sample 13 description.
+  created_at: "<%= 13.weeks.ago %>"
+  updated_at: "<%= 13.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC13
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample14:
+  id: e041298d-4e59-5202-ac2b-9c225a00c14c
+  name: Project 38 Sample 14
+  description: Project 38 Sample 14 description.
+  created_at: "<%= 14.weeks.ago %>"
+  updated_at: "<%= 14.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC14
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample15:
+  id: cc76e6d9-3f81-581b-893c-feabafe06f5a
+  name: Project 38 Sample 15
+  description: Project 38 Sample 15 description.
+  created_at: "<%= 15.weeks.ago %>"
+  updated_at: "<%= 15.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC15
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample16:
+  id: 47db57e4-9553-5dbe-854a-243ae0a1ecc7
+  name: Project 38 Sample 16
+  description: Project 38 Sample 16 description.
+  created_at: "<%= 16.weeks.ago %>"
+  updated_at: "<%= 16.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC16
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample17:
+  id: f72caf15-927f-5989-a92b-3aba5b65faa1
+  name: Project 38 Sample 17
+  description: Project 38 Sample 17 description.
+  created_at: "<%= 17.weeks.ago %>"
+  updated_at: "<%= 17.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC17
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample18:
+  id: eba3b5ba-304c-55de-9bb1-e1dc4bfaa5f7
+  name: Project 38 Sample 18
+  description: Project 38 Sample 18 description.
+  created_at: "<%= 18.weeks.ago %>"
+  updated_at: "<%= 18.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC18
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample19:
+  id: 5d81cd29-5174-5a15-9e0a-52eb2696a660
+  name: Project 38 Sample 19
+  description: Project 38 Sample 19 description.
+  created_at: "<%= 19.weeks.ago %>"
+  updated_at: "<%= 19.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC19
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample20:
+  id: 5d6c7c7a-8a27-5b75-adb0-51714578ebd9
+  name: Project 38 Sample 20
+  description: Project 38 Sample 20 description.
+  created_at: "<%= 20.weeks.ago %>"
+  updated_at: "<%= 20.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC20
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample21:
+  id: e25020dd-a768-53cf-b996-04fd0aa24983
+  name: Project 38 Sample 21
+  description: Project 38 Sample 21 description.
+  created_at: "<%= 21.weeks.ago %>"
+  updated_at: "<%= 21.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC21
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample22:
+  id: 8c7823ec-2cab-5639-86d5-27c18214d4de
+  name: Project 38 Sample 22
+  description: Project 38 Sample 22 description.
+  created_at: "<%= 22.weeks.ago %>"
+  updated_at: "<%= 22.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC22
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample23:
+  id: a0e83f39-cde5-50ae-9f5e-476aa9f07874
+  name: Project 38 Sample 23
+  description: Project 38 Sample 23 description.
+  created_at: "<%= 23.weeks.ago %>"
+  updated_at: "<%= 23.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC23
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample24:
+  id: 8dc7085d-f708-56b7-8fbb-585528bce4cb
+  name: Project 38 Sample 24
+  description: Project 38 Sample 24 description.
+  created_at: "<%= 24.weeks.ago %>"
+  updated_at: "<%= 24.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC24
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample25:
+  id: d50930d6-62f5-559b-b5a9-8db8db8fdd1a
+  name: Project 38 Sample 25
+  description: Project 38 Sample 25 description.
+  created_at: "<%= 25.weeks.ago %>"
+  updated_at: "<%= 25.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC25
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample26:
+  id: 71043a29-6de8-5f83-8cf0-4b77b42051f4
+  name: Project 38 Sample 26
+  description: Project 38 Sample 26 description.
+  created_at: "<%= 26.weeks.ago %>"
+  updated_at: "<%= 26.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC26
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample27:
+  id: f0546c2a-86b1-5488-9aad-3be4d53c89cb
+  name: Project 38 Sample 27
+  description: Project 38 Sample 27 description.
+  created_at: "<%= 27.weeks.ago %>"
+  updated_at: "<%= 27.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC27
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample28:
+  id: 6b37ae25-f06c-57ab-a779-d4e73745ba33
+  name: Project 38 Sample 28
+  description: Project 38 Sample 28 description.
+  created_at: "<%= 28.weeks.ago %>"
+  updated_at: "<%= 28.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC28
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample29:
+  id: 1d9afca6-55c1-5db3-be9d-02229b50fbf9
+  name: Project 38 Sample 29
+  description: Project 38 Sample 29 description.
+  created_at: "<%= 29.weeks.ago %>"
+  updated_at: "<%= 29.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC29
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample30:
+  id: 6fa4d25d-9ef2-5c79-a10b-b1b17674eace
+  name: Project 38 Sample 30
+  description: Project 38 Sample 30 description.
+  created_at: "<%= 30.weeks.ago %>"
+  updated_at: "<%= 30.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC30
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample31:
+  id: 59fe7d21-42fd-5a8a-bb70-32c48ef250e6
+  name: Project 38 Sample 31
+  description: Project 38 Sample 31 description.
+  created_at: "<%= 31.weeks.ago %>"
+  updated_at: "<%= 31.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC31
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample32:
+  id: 1d365c81-3fda-584e-b59d-5d02339be599
+  name: Project 38 Sample 32
+  description: Project 38 Sample 32 description.
+  created_at: "<%= 32.weeks.ago %>"
+  updated_at: "<%= 32.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC32
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample33:
+  id: 50e6302e-18f2-5f19-a67b-a43e5cd85165
+  name: Project 38 Sample 33
+  description: Project 38 Sample 33 description.
+  created_at: "<%= 33.weeks.ago %>"
+  updated_at: "<%= 33.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC33
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample34:
+  id: 1bb90493-4722-54b7-94ef-178da3424bee
+  name: Project 38 Sample 34
+  description: Project 38 Sample 34 description.
+  created_at: "<%= 34.weeks.ago %>"
+  updated_at: "<%= 34.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC34
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample35:
+  id: b5f22adb-2dc2-5965-a84b-28ba6dc79ea2
+  name: Project 38 Sample 35
+  description: Project 38 Sample 35 description.
+  created_at: "<%= 35.weeks.ago %>"
+  updated_at: "<%= 35.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC35
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample36:
+  id: ee0c416c-a417-5868-8826-e362b6f6482b
+  name: Project 38 Sample 36
+  description: Project 38 Sample 36 description.
+  created_at: "<%= 36.weeks.ago %>"
+  updated_at: "<%= 36.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC36
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample37:
+  id: 57e9882b-f8f2-5bff-bc67-d3bef7b7619f
+  name: Project 38 Sample 37
+  description: Project 38 Sample 37 description.
+  created_at: "<%= 37.weeks.ago %>"
+  updated_at: "<%= 37.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC37
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample38:
+  id: a7995c93-0f62-505d-869a-2ff72d4a178a
+  name: Project 38 Sample 38
+  description: Project 38 Sample 38 description.
+  created_at: "<%= 38.weeks.ago %>"
+  updated_at: "<%= 38.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC38
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample39:
+  id: '09a87768-5017-5187-aa30-f152e3ae3b6c'
+  name: Project 38 Sample 39
+  description: Project 38 Sample 39 description.
+  created_at: "<%= 39.weeks.ago %>"
+  updated_at: "<%= 39.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC39
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample40:
+  id: 51aca154-13f5-515c-99a8-5da7944269c5
+  name: Project 38 Sample 40
+  description: Project 38 Sample 40 description.
+  created_at: "<%= 40.weeks.ago %>"
+  updated_at: "<%= 40.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC40
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample41:
+  id: f440c9d2-1370-550d-9d02-8ed28c2bada4
+  name: Project 38 Sample 41
+  description: Project 38 Sample 41 description.
+  created_at: "<%= 41.weeks.ago %>"
+  updated_at: "<%= 41.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC41
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample42:
+  id: 5800c929-9200-5eb9-9249-037e813e4883
+  name: Project 38 Sample 42
+  description: Project 38 Sample 42 description.
+  created_at: "<%= 42.weeks.ago %>"
+  updated_at: "<%= 42.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC42
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample43:
+  id: 5dbf18a6-4677-5ab3-aff4-16cd543df185
+  name: Project 38 Sample 43
+  description: Project 38 Sample 43 description.
+  created_at: "<%= 43.weeks.ago %>"
+  updated_at: "<%= 43.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC43
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample44:
+  id: 81509ff3-c32d-59fd-ba48-b9da9ccd1d2e
+  name: Project 38 Sample 44
+  description: Project 38 Sample 44 description.
+  created_at: "<%= 44.weeks.ago %>"
+  updated_at: "<%= 44.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC44
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample45:
+  id: a93f3f75-4198-5127-98a8-9252af8e1fb1
+  name: Project 38 Sample 45
+  description: Project 38 Sample 45 description.
+  created_at: "<%= 45.weeks.ago %>"
+  updated_at: "<%= 45.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC45
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample46:
+  id: 2c7c1dd3-55a8-5724-b212-209a20761567
+  name: Project 38 Sample 46
+  description: Project 38 Sample 46 description.
+  created_at: "<%= 46.weeks.ago %>"
+  updated_at: "<%= 46.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC46
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample47:
+  id: e50aff4f-03ff-5895-a4b3-239b31832799
+  name: Project 38 Sample 47
+  description: Project 38 Sample 47 description.
+  created_at: "<%= 47.weeks.ago %>"
+  updated_at: "<%= 47.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC47
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample48:
+  id: f3b7ac68-7289-526a-afa2-54e61e9bcd55
+  name: Project 38 Sample 48
+  description: Project 38 Sample 48 description.
+  created_at: "<%= 48.weeks.ago %>"
+  updated_at: "<%= 48.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC48
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample49:
+  id: bb12f232-80c2-5e7b-9760-3f6dc670a690
+  name: Project 38 Sample 49
+  description: Project 38 Sample 49 description.
+  created_at: "<%= 49.weeks.ago %>"
+  updated_at: "<%= 49.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC49
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample50:
+  id: 53bd86b0-4011-54e1-8c2f-172f77893fab
+  name: Project 38 Sample 50
+  description: Project 38 Sample 50 description.
+  created_at: "<%= 50.weeks.ago %>"
+  updated_at: "<%= 50.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC50
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample51:
+  id: 067355ff-2ce6-530c-9691-8af87cb2831b
+  name: Project 38 Sample 51
+  description: Project 38 Sample 51 description.
+  created_at: "<%= 51.weeks.ago %>"
+  updated_at: "<%= 51.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC51
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample52:
+  id: 0c40529d-e1ae-5027-ac0e-d3866b4c5894
+  name: Project 38 Sample 52
+  description: Project 38 Sample 52 description.
+  created_at: "<%= 52.weeks.ago %>"
+  updated_at: "<%= 52.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC52
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample53:
+  id: 7d4a0091-b3ce-59b2-ba38-3b9f60634761
+  name: Project 38 Sample 53
+  description: Project 38 Sample 53 description.
+  created_at: "<%= 53.weeks.ago %>"
+  updated_at: "<%= 53.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC53
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample54:
+  id: c4b5aaab-0354-55ef-85e8-0fff58ad387f
+  name: Project 38 Sample 54
+  description: Project 38 Sample 54 description.
+  created_at: "<%= 54.weeks.ago %>"
+  updated_at: "<%= 54.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC54
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample55:
+  id: 8fcb2665-57bc-5bb6-bb9e-8c2e19fb16b2
+  name: Project 38 Sample 55
+  description: Project 38 Sample 55 description.
+  created_at: "<%= 55.weeks.ago %>"
+  updated_at: "<%= 55.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC55
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample56:
+  id: 45e3421a-d37b-5e60-815a-3673bbff3c72
+  name: Project 38 Sample 56
+  description: Project 38 Sample 56 description.
+  created_at: "<%= 56.weeks.ago %>"
+  updated_at: "<%= 56.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC56
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample57:
+  id: 35cef38f-a5ad-5c99-90a5-c0a3d82f7752
+  name: Project 38 Sample 57
+  description: Project 38 Sample 57 description.
+  created_at: "<%= 57.weeks.ago %>"
+  updated_at: "<%= 57.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC57
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample58:
+  id: 36b34160-df7e-51b3-ab4b-28a5daf20e7c
+  name: Project 38 Sample 58
+  description: Project 38 Sample 58 description.
+  created_at: "<%= 58.weeks.ago %>"
+  updated_at: "<%= 58.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC58
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample59:
+  id: 19b4e818-c85b-5350-90d1-d8198185f753
+  name: Project 38 Sample 59
+  description: Project 38 Sample 59 description.
+  created_at: "<%= 59.weeks.ago %>"
+  updated_at: "<%= 59.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC59
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample60:
+  id: 9d363ae4-7236-5107-8bbc-bfb26de4fb13
+  name: Project 38 Sample 60
+  description: Project 38 Sample 60 description.
+  created_at: "<%= 60.weeks.ago %>"
+  updated_at: "<%= 60.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC60
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample61:
+  id: 706bc520-fa2f-5f44-824c-3994169177c5
+  name: Project 38 Sample 61
+  description: Project 38 Sample 61 description.
+  created_at: "<%= 61.weeks.ago %>"
+  updated_at: "<%= 61.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC61
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample62:
+  id: 2c2a693d-4bb2-57e9-a9c0-fb6271126137
+  name: Project 38 Sample 62
+  description: Project 38 Sample 62 description.
+  created_at: "<%= 62.weeks.ago %>"
+  updated_at: "<%= 62.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC62
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample63:
+  id: 2684fd66-b08b-5a43-b62d-6835bb0b4067
+  name: Project 38 Sample 63
+  description: Project 38 Sample 63 description.
+  created_at: "<%= 63.weeks.ago %>"
+  updated_at: "<%= 63.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC63
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample64:
+  id: 13b367a2-430c-5f8e-a4cb-4f3d0d7e1e32
+  name: Project 38 Sample 64
+  description: Project 38 Sample 64 description.
+  created_at: "<%= 64.weeks.ago %>"
+  updated_at: "<%= 64.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC64
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample65:
+  id: be177f26-1cc3-5e55-a39f-9e9263780400
+  name: Project 38 Sample 65
+  description: Project 38 Sample 65 description.
+  created_at: "<%= 65.weeks.ago %>"
+  updated_at: "<%= 65.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC65
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample66:
+  id: 2ae7e90e-526b-5337-8964-742681e575fd
+  name: Project 38 Sample 66
+  description: Project 38 Sample 66 description.
+  created_at: "<%= 66.weeks.ago %>"
+  updated_at: "<%= 66.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC66
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample67:
+  id: a9a574fc-c2ff-5c71-b3a2-e703ad2875d2
+  name: Project 38 Sample 67
+  description: Project 38 Sample 67 description.
+  created_at: "<%= 67.weeks.ago %>"
+  updated_at: "<%= 67.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC67
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample68:
+  id: 8311370c-5c7e-5e95-b8d5-7997d1669f3c
+  name: Project 38 Sample 68
+  description: Project 38 Sample 68 description.
+  created_at: "<%= 68.weeks.ago %>"
+  updated_at: "<%= 68.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC68
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample69:
+  id: ccf64866-6d41-55a9-93c0-7e0e9d36d9b6
+  name: Project 38 Sample 69
+  description: Project 38 Sample 69 description.
+  created_at: "<%= 69.weeks.ago %>"
+  updated_at: "<%= 69.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC69
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample70:
+  id: 2b568dee-9426-5926-9bb7-86f01746adb8
+  name: Project 38 Sample 70
+  description: Project 38 Sample 70 description.
+  created_at: "<%= 70.weeks.ago %>"
+  updated_at: "<%= 70.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC70
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample71:
+  id: b7a3978d-3a96-5ed0-ac57-8a5aca59b566
+  name: Project 38 Sample 71
+  description: Project 38 Sample 71 description.
+  created_at: "<%= 71.weeks.ago %>"
+  updated_at: "<%= 71.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC71
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample72:
+  id: 133c2efe-a238-5c32-b2b8-4c6ed2aabd84
+  name: Project 38 Sample 72
+  description: Project 38 Sample 72 description.
+  created_at: "<%= 72.weeks.ago %>"
+  updated_at: "<%= 72.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC72
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample73:
+  id: a925b36a-33f4-5490-85c5-9f975bbff0fd
+  name: Project 38 Sample 73
+  description: Project 38 Sample 73 description.
+  created_at: "<%= 73.weeks.ago %>"
+  updated_at: "<%= 73.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC73
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample74:
+  id: 2bc79bbb-1ef7-54f9-9213-dad85d14e302
+  name: Project 38 Sample 74
+  description: Project 38 Sample 74 description.
+  created_at: "<%= 74.weeks.ago %>"
+  updated_at: "<%= 74.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC74
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample75:
+  id: 606dc0a5-64a9-5296-a2f7-49ed6ad58562
+  name: Project 38 Sample 75
+  description: Project 38 Sample 75 description.
+  created_at: "<%= 75.weeks.ago %>"
+  updated_at: "<%= 75.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC75
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample76:
+  id: 8b0df49b-4125-5bea-832b-0662f9bad0f2
+  name: Project 38 Sample 76
+  description: Project 38 Sample 76 description.
+  created_at: "<%= 76.weeks.ago %>"
+  updated_at: "<%= 76.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC76
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample77:
+  id: e4021e35-1276-5623-a90b-475156f5afe3
+  name: Project 38 Sample 77
+  description: Project 38 Sample 77 description.
+  created_at: "<%= 77.weeks.ago %>"
+  updated_at: "<%= 77.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC77
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample78:
+  id: 1553ca06-3e69-5eae-832c-8aa9026ce420
+  name: Project 38 Sample 78
+  description: Project 38 Sample 78 description.
+  created_at: "<%= 78.weeks.ago %>"
+  updated_at: "<%= 78.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC78
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample79:
+  id: a0647ab7-e723-58bb-afd5-63355bc46c95
+  name: Project 38 Sample 79
+  description: Project 38 Sample 79 description.
+  created_at: "<%= 79.weeks.ago %>"
+  updated_at: "<%= 79.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC79
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample80:
+  id: 0ffe03a0-1975-5001-94ca-5c6d68ebf47d
+  name: Project 38 Sample 80
+  description: Project 38 Sample 80 description.
+  created_at: "<%= 80.weeks.ago %>"
+  updated_at: "<%= 80.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC80
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample81:
+  id: e186d77e-4cc9-5bf7-bbaf-f569a030c7a5
+  name: Project 38 Sample 81
+  description: Project 38 Sample 81 description.
+  created_at: "<%= 81.weeks.ago %>"
+  updated_at: "<%= 81.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC81
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample82:
+  id: 9d4993dd-e499-5178-9a1e-1f194a800e88
+  name: Project 38 Sample 82
+  description: Project 38 Sample 82 description.
+  created_at: "<%= 82.weeks.ago %>"
+  updated_at: "<%= 82.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC82
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample83:
+  id: 63d1645a-b164-5da6-acab-cccd49b9150e
+  name: Project 38 Sample 83
+  description: Project 38 Sample 83 description.
+  created_at: "<%= 83.weeks.ago %>"
+  updated_at: "<%= 83.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC83
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample84:
+  id: 5e4241ae-bb54-5091-96a6-be037b1d892a
+  name: Project 38 Sample 84
+  description: Project 38 Sample 84 description.
+  created_at: "<%= 84.weeks.ago %>"
+  updated_at: "<%= 84.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC84
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample85:
+  id: 4ef127ff-bba2-5700-ac58-065b335ed7b0
+  name: Project 38 Sample 85
+  description: Project 38 Sample 85 description.
+  created_at: "<%= 85.weeks.ago %>"
+  updated_at: "<%= 85.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC85
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample86:
+  id: 2eb6a0fc-7d82-5474-be7c-f9fd2742be69
+  name: Project 38 Sample 86
+  description: Project 38 Sample 86 description.
+  created_at: "<%= 86.weeks.ago %>"
+  updated_at: "<%= 86.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC86
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample87:
+  id: d1911791-42d0-571c-8aff-950a0c246635
+  name: Project 38 Sample 87
+  description: Project 38 Sample 87 description.
+  created_at: "<%= 87.weeks.ago %>"
+  updated_at: "<%= 87.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC87
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample88:
+  id: a0a43ed8-d81e-558f-850e-d733b40dea44
+  name: Project 38 Sample 88
+  description: Project 38 Sample 88 description.
+  created_at: "<%= 88.weeks.ago %>"
+  updated_at: "<%= 88.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC88
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample89:
+  id: aad9282d-f24e-5b10-8a19-3be1506a6974
+  name: Project 38 Sample 89
+  description: Project 38 Sample 89 description.
+  created_at: "<%= 89.weeks.ago %>"
+  updated_at: "<%= 89.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC89
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample90:
+  id: a0319934-3ae6-5ef1-8eee-dfbb1518b747
+  name: Project 38 Sample 90
+  description: Project 38 Sample 90 description.
+  created_at: "<%= 90.weeks.ago %>"
+  updated_at: "<%= 90.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC90
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample91:
+  id: 0c738a88-53bb-53c7-9830-088bb6f3031a
+  name: Project 38 Sample 91
+  description: Project 38 Sample 91 description.
+  created_at: "<%= 91.weeks.ago %>"
+  updated_at: "<%= 91.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC91
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample92:
+  id: 258a5e0d-a0f8-5282-bc2e-473a1ed42fa3
+  name: Project 38 Sample 92
+  description: Project 38 Sample 92 description.
+  created_at: "<%= 92.weeks.ago %>"
+  updated_at: "<%= 92.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC92
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample93:
+  id: cb8aa18a-e355-5ca3-9df6-be893a506b2e
+  name: Project 38 Sample 93
+  description: Project 38 Sample 93 description.
+  created_at: "<%= 93.weeks.ago %>"
+  updated_at: "<%= 93.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC93
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample94:
+  id: 7a5ad22e-68b9-54ab-94e5-c8dd52406e4c
+  name: Project 38 Sample 94
+  description: Project 38 Sample 94 description.
+  created_at: "<%= 94.weeks.ago %>"
+  updated_at: "<%= 94.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC94
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample95:
+  id: eb4ad886-2e99-5c33-9b82-a47a64cd162e
+  name: Project 38 Sample 95
+  description: Project 38 Sample 95 description.
+  created_at: "<%= 95.weeks.ago %>"
+  updated_at: "<%= 95.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC95
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample96:
+  id: b9194f8e-340a-50a5-bc52-d41bdd11da62
+  name: Project 38 Sample 96
+  description: Project 38 Sample 96 description.
+  created_at: "<%= 96.weeks.ago %>"
+  updated_at: "<%= 96.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC96
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample97:
+  id: b4c46428-66ef-53a4-ada2-72199e72cdbc
+  name: Project 38 Sample 97
+  description: Project 38 Sample 97 description.
+  created_at: "<%= 97.weeks.ago %>"
+  updated_at: "<%= 97.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC97
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample98:
+  id: ac8832e3-0d4d-5250-a873-6f6c32c84f48
+  name: Project 38 Sample 98
+  description: Project 38 Sample 98 description.
+  created_at: "<%= 98.weeks.ago %>"
+  updated_at: "<%= 98.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC98
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample99:
+  id: 86e1ceb2-2301-5c22-b68d-6dce1910c9ae
+  name: Project 38 Sample 99
+  description: Project 38 Sample 99 description.
+  created_at: "<%= 99.weeks.ago %>"
+  updated_at: "<%= 99.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC99
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample100:
+  id: '05318acc-3a4d-545a-bb74-d3174ef6373f'
+  name: Project 38 Sample 100
+  description: Project 38 Sample 100 description.
+  created_at: "<%= 100.weeks.ago %>"
+  updated_at: "<%= 100.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC100
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample101:
+  id: 21a5a567-8d9d-56af-b3d1-c3d5a71fc5ad
+  name: Project 38 Sample 101
+  description: Project 38 Sample 101 description.
+  created_at: "<%= 101.weeks.ago %>"
+  updated_at: "<%= 101.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC101
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample102:
+  id: 7d53ffff-cf09-5ccb-ad06-24bc93ca260d
+  name: Project 38 Sample 102
+  description: Project 38 Sample 102 description.
+  created_at: "<%= 102.weeks.ago %>"
+  updated_at: "<%= 102.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC102
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample103:
+  id: 9712ab84-f6bc-5002-b489-56125e9cb651
+  name: Project 38 Sample 103
+  description: Project 38 Sample 103 description.
+  created_at: "<%= 103.weeks.ago %>"
+  updated_at: "<%= 103.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC103
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample104:
+  id: 15ca2ce4-37af-58b9-ac64-65f89d62b4c9
+  name: Project 38 Sample 104
+  description: Project 38 Sample 104 description.
+  created_at: "<%= 104.weeks.ago %>"
+  updated_at: "<%= 104.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC104
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample105:
+  id: b85187b8-78e1-5b17-805e-b5a044ab2ebd
+  name: Project 38 Sample 105
+  description: Project 38 Sample 105 description.
+  created_at: "<%= 105.weeks.ago %>"
+  updated_at: "<%= 105.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC105
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample106:
+  id: edcb6380-b172-5318-9b57-7263c02b6374
+  name: Project 38 Sample 106
+  description: Project 38 Sample 106 description.
+  created_at: "<%= 106.weeks.ago %>"
+  updated_at: "<%= 106.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC106
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample107:
+  id: 22dd3b88-129b-5680-a975-386859551ff2
+  name: Project 38 Sample 107
+  description: Project 38 Sample 107 description.
+  created_at: "<%= 107.weeks.ago %>"
+  updated_at: "<%= 107.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC107
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample108:
+  id: 147d6c05-eacb-5fd8-9108-2b8f0d1814d7
+  name: Project 38 Sample 108
+  description: Project 38 Sample 108 description.
+  created_at: "<%= 108.weeks.ago %>"
+  updated_at: "<%= 108.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC108
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample109:
+  id: ebf37e5a-5c84-57d4-a019-d1eee17c7c37
+  name: Project 38 Sample 109
+  description: Project 38 Sample 109 description.
+  created_at: "<%= 109.weeks.ago %>"
+  updated_at: "<%= 109.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC109
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample110:
+  id: 809aa43c-bd09-518f-975a-912eacf24e7b
+  name: Project 38 Sample 110
+  description: Project 38 Sample 110 description.
+  created_at: "<%= 110.weeks.ago %>"
+  updated_at: "<%= 110.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC110
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample111:
+  id: 50f04dc4-0fb0-53ba-a840-c7ad2dcb6f32
+  name: Project 38 Sample 111
+  description: Project 38 Sample 111 description.
+  created_at: "<%= 111.weeks.ago %>"
+  updated_at: "<%= 111.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC111
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample112:
+  id: c2b0914b-4017-58dc-940d-fa33c424d0ae
+  name: Project 38 Sample 112
+  description: Project 38 Sample 112 description.
+  created_at: "<%= 112.weeks.ago %>"
+  updated_at: "<%= 112.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC112
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample113:
+  id: 495e81a0-dedd-5c96-b3b0-a5c722266be9
+  name: Project 38 Sample 113
+  description: Project 38 Sample 113 description.
+  created_at: "<%= 113.weeks.ago %>"
+  updated_at: "<%= 113.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC113
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample114:
+  id: bbf7dd12-c51f-5296-83ba-228530964644
+  name: Project 38 Sample 114
+  description: Project 38 Sample 114 description.
+  created_at: "<%= 114.weeks.ago %>"
+  updated_at: "<%= 114.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC114
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample115:
+  id: 62f6dd75-1351-52ae-b39e-896f29410814
+  name: Project 38 Sample 115
+  description: Project 38 Sample 115 description.
+  created_at: "<%= 115.weeks.ago %>"
+  updated_at: "<%= 115.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC115
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample116:
+  id: 47fd4ed4-52e6-5d98-8fee-7660942d4144
+  name: Project 38 Sample 116
+  description: Project 38 Sample 116 description.
+  created_at: "<%= 116.weeks.ago %>"
+  updated_at: "<%= 116.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC116
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample117:
+  id: 6cbf0eeb-9732-5de8-a8a6-1e1e710968de
+  name: Project 38 Sample 117
+  description: Project 38 Sample 117 description.
+  created_at: "<%= 117.weeks.ago %>"
+  updated_at: "<%= 117.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC117
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample118:
+  id: 64683de6-4ea2-5dc0-82a4-5cf1823b6c35
+  name: Project 38 Sample 118
+  description: Project 38 Sample 118 description.
+  created_at: "<%= 118.weeks.ago %>"
+  updated_at: "<%= 118.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC118
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample119:
+  id: 64c270cd-c6a3-50f4-aeea-75b9a63b882a
+  name: Project 38 Sample 119
+  description: Project 38 Sample 119 description.
+  created_at: "<%= 119.weeks.ago %>"
+  updated_at: "<%= 119.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC119
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample120:
+  id: ad154007-cb02-5407-8bd5-41be995c96e1
+  name: Project 38 Sample 120
+  description: Project 38 Sample 120 description.
+  created_at: "<%= 120.weeks.ago %>"
+  updated_at: "<%= 120.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC120
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample121:
+  id: 66447784-6ca3-589b-832a-41cd65261f5f
+  name: Project 38 Sample 121
+  description: Project 38 Sample 121 description.
+  created_at: "<%= 121.weeks.ago %>"
+  updated_at: "<%= 121.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC121
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample122:
+  id: 8f247457-51a7-5acd-a3b1-2a91b2ba777f
+  name: Project 38 Sample 122
+  description: Project 38 Sample 122 description.
+  created_at: "<%= 122.weeks.ago %>"
+  updated_at: "<%= 122.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC122
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample123:
+  id: 1e5df890-8deb-52b8-ab31-95fe09f5d5b2
+  name: Project 38 Sample 123
+  description: Project 38 Sample 123 description.
+  created_at: "<%= 123.weeks.ago %>"
+  updated_at: "<%= 123.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC123
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample124:
+  id: 7d93c25d-1449-5134-af7f-28d71b83e4ce
+  name: Project 38 Sample 124
+  description: Project 38 Sample 124 description.
+  created_at: "<%= 124.weeks.ago %>"
+  updated_at: "<%= 124.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC124
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample125:
+  id: 3f65fa0b-9188-555d-8d2a-91cdf1f0ab87
+  name: Project 38 Sample 125
+  description: Project 38 Sample 125 description.
+  created_at: "<%= 125.weeks.ago %>"
+  updated_at: "<%= 125.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC125
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample126:
+  id: 124ede21-eb87-50eb-9db9-4deb7c77633c
+  name: Project 38 Sample 126
+  description: Project 38 Sample 126 description.
+  created_at: "<%= 126.weeks.ago %>"
+  updated_at: "<%= 126.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC126
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample127:
+  id: 165f1de9-9110-5ca6-9d47-790b014f7d73
+  name: Project 38 Sample 127
+  description: Project 38 Sample 127 description.
+  created_at: "<%= 127.weeks.ago %>"
+  updated_at: "<%= 127.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC127
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample128:
+  id: 6503c1d9-62ef-5c31-b152-3792b701a37f
+  name: Project 38 Sample 128
+  description: Project 38 Sample 128 description.
+  created_at: "<%= 128.weeks.ago %>"
+  updated_at: "<%= 128.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC128
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample129:
+  id: d5fe52b8-62d1-5119-90d7-7d6c2d2c4b07
+  name: Project 38 Sample 129
+  description: Project 38 Sample 129 description.
+  created_at: "<%= 129.weeks.ago %>"
+  updated_at: "<%= 129.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC129
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample130:
+  id: bc2b64c6-b97a-544f-bdbe-0aa1653cc916
+  name: Project 38 Sample 130
+  description: Project 38 Sample 130 description.
+  created_at: "<%= 130.weeks.ago %>"
+  updated_at: "<%= 130.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC130
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample131:
+  id: ea6fadc2-1682-5e6b-91f6-d1d98389282c
+  name: Project 38 Sample 131
+  description: Project 38 Sample 131 description.
+  created_at: "<%= 131.weeks.ago %>"
+  updated_at: "<%= 131.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC131
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample132:
+  id: 754a9c69-4933-5645-8a67-fcb87372864e
+  name: Project 38 Sample 132
+  description: Project 38 Sample 132 description.
+  created_at: "<%= 132.weeks.ago %>"
+  updated_at: "<%= 132.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC132
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample133:
+  id: 0fbabd0d-e406-514a-9fc0-5feefca5b116
+  name: Project 38 Sample 133
+  description: Project 38 Sample 133 description.
+  created_at: "<%= 133.weeks.ago %>"
+  updated_at: "<%= 133.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC133
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample134:
+  id: 13dd37bd-84a1-593e-9225-5c11c3430e76
+  name: Project 38 Sample 134
+  description: Project 38 Sample 134 description.
+  created_at: "<%= 134.weeks.ago %>"
+  updated_at: "<%= 134.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC134
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample135:
+  id: 7c070dbc-347d-5eb8-8a70-58b8ba9afa3d
+  name: Project 38 Sample 135
+  description: Project 38 Sample 135 description.
+  created_at: "<%= 135.weeks.ago %>"
+  updated_at: "<%= 135.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC135
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample136:
+  id: b3187d04-c56a-56d0-ae68-07eeab54d917
+  name: Project 38 Sample 136
+  description: Project 38 Sample 136 description.
+  created_at: "<%= 136.weeks.ago %>"
+  updated_at: "<%= 136.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC136
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample137:
+  id: 97946dd3-2e4c-5b92-a3c4-f6f634a1b459
+  name: Project 38 Sample 137
+  description: Project 38 Sample 137 description.
+  created_at: "<%= 137.weeks.ago %>"
+  updated_at: "<%= 137.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC137
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample138:
+  id: e532a85d-e372-56b3-934c-3f4a5984e3b7
+  name: Project 38 Sample 138
+  description: Project 38 Sample 138 description.
+  created_at: "<%= 138.weeks.ago %>"
+  updated_at: "<%= 138.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC138
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample139:
+  id: 8793f2c6-83bd-5cd7-b283-73fb7488c074
+  name: Project 38 Sample 139
+  description: Project 38 Sample 139 description.
+  created_at: "<%= 139.weeks.ago %>"
+  updated_at: "<%= 139.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC139
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample140:
+  id: 33447bd0-76a1-502e-bd7b-d6b173a95cfa
+  name: Project 38 Sample 140
+  description: Project 38 Sample 140 description.
+  created_at: "<%= 140.weeks.ago %>"
+  updated_at: "<%= 140.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC140
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample141:
+  id: e651478d-60ef-5b78-a8d0-2049881f993b
+  name: Project 38 Sample 141
+  description: Project 38 Sample 141 description.
+  created_at: "<%= 141.weeks.ago %>"
+  updated_at: "<%= 141.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC141
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample142:
+  id: 769ddd9f-7d27-5905-996b-f2f210f0f5a5
+  name: Project 38 Sample 142
+  description: Project 38 Sample 142 description.
+  created_at: "<%= 142.weeks.ago %>"
+  updated_at: "<%= 142.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC142
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample143:
+  id: 60d786b3-31ec-5d83-8a61-1209945863cc
+  name: Project 38 Sample 143
+  description: Project 38 Sample 143 description.
+  created_at: "<%= 143.weeks.ago %>"
+  updated_at: "<%= 143.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC143
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample144:
+  id: 33f3df2e-e1ba-578b-b887-2c2f26ce7f4a
+  name: Project 38 Sample 144
+  description: Project 38 Sample 144 description.
+  created_at: "<%= 144.weeks.ago %>"
+  updated_at: "<%= 144.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC144
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample145:
+  id: d7e8cbb5-2518-5f07-9225-389b5960c260
+  name: Project 38 Sample 145
+  description: Project 38 Sample 145 description.
+  created_at: "<%= 145.weeks.ago %>"
+  updated_at: "<%= 145.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC145
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample146:
+  id: 9bc62796-1c4a-549e-a9e4-d763e5163c2e
+  name: Project 38 Sample 146
+  description: Project 38 Sample 146 description.
+  created_at: "<%= 146.weeks.ago %>"
+  updated_at: "<%= 146.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC146
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample147:
+  id: 38d86862-f3a4-5f6a-8305-915447a8cc4c
+  name: Project 38 Sample 147
+  description: Project 38 Sample 147 description.
+  created_at: "<%= 147.weeks.ago %>"
+  updated_at: "<%= 147.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC147
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample148:
+  id: 8f512e4a-c0be-59fb-8930-07245ad62d77
+  name: Project 38 Sample 148
+  description: Project 38 Sample 148 description.
+  created_at: "<%= 148.weeks.ago %>"
+  updated_at: "<%= 148.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC148
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample149:
+  id: 77b61219-66a2-599d-83e1-dfb9456217e5
+  name: Project 38 Sample 149
+  description: Project 38 Sample 149 description.
+  created_at: "<%= 149.weeks.ago %>"
+  updated_at: "<%= 149.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC149
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample150:
+  id: 68cd8315-236d-58b1-bf1c-f34b8771e2b3
+  name: Project 38 Sample 150
+  description: Project 38 Sample 150 description.
+  created_at: "<%= 150.weeks.ago %>"
+  updated_at: "<%= 150.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC150
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample151:
+  id: 8ae04081-19c4-5a39-bb32-ac3989053cbe
+  name: Project 38 Sample 151
+  description: Project 38 Sample 151 description.
+  created_at: "<%= 151.weeks.ago %>"
+  updated_at: "<%= 151.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC151
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample152:
+  id: 2fb0dbee-9a99-5183-8859-100a94d75df3
+  name: Project 38 Sample 152
+  description: Project 38 Sample 152 description.
+  created_at: "<%= 152.weeks.ago %>"
+  updated_at: "<%= 152.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC152
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample153:
+  id: ce2f7e9c-5075-5144-be12-bf78d1965f3d
+  name: Project 38 Sample 153
+  description: Project 38 Sample 153 description.
+  created_at: "<%= 153.weeks.ago %>"
+  updated_at: "<%= 153.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC153
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample154:
+  id: 97a23ce9-2a2c-5b6d-9979-120dc443026c
+  name: Project 38 Sample 154
+  description: Project 38 Sample 154 description.
+  created_at: "<%= 154.weeks.ago %>"
+  updated_at: "<%= 154.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC154
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample155:
+  id: 15a1ba02-8378-518a-b7c4-82d08e611231
+  name: Project 38 Sample 155
+  description: Project 38 Sample 155 description.
+  created_at: "<%= 155.weeks.ago %>"
+  updated_at: "<%= 155.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC155
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample156:
+  id: e8006a37-4c72-5e86-a83e-0017421c34e3
+  name: Project 38 Sample 156
+  description: Project 38 Sample 156 description.
+  created_at: "<%= 156.weeks.ago %>"
+  updated_at: "<%= 156.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC156
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample157:
+  id: ee3ddaa0-f284-55da-9fad-90483d28a3ff
+  name: Project 38 Sample 157
+  description: Project 38 Sample 157 description.
+  created_at: "<%= 157.weeks.ago %>"
+  updated_at: "<%= 157.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC157
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample158:
+  id: 1978c15d-10d6-55b0-bc15-98f30141c3f5
+  name: Project 38 Sample 158
+  description: Project 38 Sample 158 description.
+  created_at: "<%= 158.weeks.ago %>"
+  updated_at: "<%= 158.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC158
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample159:
+  id: 94008717-565b-5f38-8656-39e65218e4da
+  name: Project 38 Sample 159
+  description: Project 38 Sample 159 description.
+  created_at: "<%= 159.weeks.ago %>"
+  updated_at: "<%= 159.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC159
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample160:
+  id: 1760c856-6eb2-5988-a9c5-7eca81f43edf
+  name: Project 38 Sample 160
+  description: Project 38 Sample 160 description.
+  created_at: "<%= 160.weeks.ago %>"
+  updated_at: "<%= 160.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC160
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample161:
+  id: 02bcd9bd-3cda-56b5-a06d-6326ffb90e2b
+  name: Project 38 Sample 161
+  description: Project 38 Sample 161 description.
+  created_at: "<%= 161.weeks.ago %>"
+  updated_at: "<%= 161.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC161
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample162:
+  id: 510863d1-b67a-551c-bf42-2e5a1ebc8051
+  name: Project 38 Sample 162
+  description: Project 38 Sample 162 description.
+  created_at: "<%= 162.weeks.ago %>"
+  updated_at: "<%= 162.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC162
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample163:
+  id: 88ef440c-b1d1-5e1d-af93-847bcd0a6c0d
+  name: Project 38 Sample 163
+  description: Project 38 Sample 163 description.
+  created_at: "<%= 163.weeks.ago %>"
+  updated_at: "<%= 163.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC163
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample164:
+  id: 1de540d6-d0ce-5032-94da-407f4522399a
+  name: Project 38 Sample 164
+  description: Project 38 Sample 164 description.
+  created_at: "<%= 164.weeks.ago %>"
+  updated_at: "<%= 164.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC164
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample165:
+  id: d7be6de9-53f0-58e7-a141-24580d600e88
+  name: Project 38 Sample 165
+  description: Project 38 Sample 165 description.
+  created_at: "<%= 165.weeks.ago %>"
+  updated_at: "<%= 165.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC165
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample166:
+  id: bf6c8c0c-44d3-5ce4-bc91-6a5f997976b6
+  name: Project 38 Sample 166
+  description: Project 38 Sample 166 description.
+  created_at: "<%= 166.weeks.ago %>"
+  updated_at: "<%= 166.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC166
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample167:
+  id: 8fb10831-98ac-5501-adcd-38a2ffce33a7
+  name: Project 38 Sample 167
+  description: Project 38 Sample 167 description.
+  created_at: "<%= 167.weeks.ago %>"
+  updated_at: "<%= 167.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC167
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample168:
+  id: 8d69c53a-e108-52ba-8c8e-d207d67a0062
+  name: Project 38 Sample 168
+  description: Project 38 Sample 168 description.
+  created_at: "<%= 168.weeks.ago %>"
+  updated_at: "<%= 168.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC168
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample169:
+  id: e3e1d452-17fe-5bd6-a348-e8787c2166b8
+  name: Project 38 Sample 169
+  description: Project 38 Sample 169 description.
+  created_at: "<%= 169.weeks.ago %>"
+  updated_at: "<%= 169.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC169
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample170:
+  id: 3711130a-b7f6-574b-984a-832867c5bb31
+  name: Project 38 Sample 170
+  description: Project 38 Sample 170 description.
+  created_at: "<%= 170.weeks.ago %>"
+  updated_at: "<%= 170.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC170
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample171:
+  id: 4cf8a175-d5cb-5fb3-a168-44e6f32400f5
+  name: Project 38 Sample 171
+  description: Project 38 Sample 171 description.
+  created_at: "<%= 171.weeks.ago %>"
+  updated_at: "<%= 171.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC171
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample172:
+  id: c3a08f0c-714c-5cc9-bc31-51f59ebf5da8
+  name: Project 38 Sample 172
+  description: Project 38 Sample 172 description.
+  created_at: "<%= 172.weeks.ago %>"
+  updated_at: "<%= 172.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC172
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample173:
+  id: f0475a11-f03d-5125-9fcd-0eeaba05dfd6
+  name: Project 38 Sample 173
+  description: Project 38 Sample 173 description.
+  created_at: "<%= 173.weeks.ago %>"
+  updated_at: "<%= 173.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC173
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample174:
+  id: 66f06d22-7e22-5b68-bedf-1b5e0ef76637
+  name: Project 38 Sample 174
+  description: Project 38 Sample 174 description.
+  created_at: "<%= 174.weeks.ago %>"
+  updated_at: "<%= 174.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC174
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample175:
+  id: 46d82d55-aba3-5284-ab4a-f73b8451cc88
+  name: Project 38 Sample 175
+  description: Project 38 Sample 175 description.
+  created_at: "<%= 175.weeks.ago %>"
+  updated_at: "<%= 175.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC175
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample176:
+  id: 6880ddd7-de50-5424-8377-869a3917e8fb
+  name: Project 38 Sample 176
+  description: Project 38 Sample 176 description.
+  created_at: "<%= 176.weeks.ago %>"
+  updated_at: "<%= 176.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC176
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample177:
+  id: c4d657f1-d841-5128-8f36-66ce784d46a7
+  name: Project 38 Sample 177
+  description: Project 38 Sample 177 description.
+  created_at: "<%= 177.weeks.ago %>"
+  updated_at: "<%= 177.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC177
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample178:
+  id: 1b441430-2838-5ad4-b94e-f0382d5fca64
+  name: Project 38 Sample 178
+  description: Project 38 Sample 178 description.
+  created_at: "<%= 178.weeks.ago %>"
+  updated_at: "<%= 178.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC178
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample179:
+  id: 69a5df7c-006b-5883-a329-a3f65aaa911c
+  name: Project 38 Sample 179
+  description: Project 38 Sample 179 description.
+  created_at: "<%= 179.weeks.ago %>"
+  updated_at: "<%= 179.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC179
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample180:
+  id: 72ffa475-1789-55d5-902c-6c16e160c064
+  name: Project 38 Sample 180
+  description: Project 38 Sample 180 description.
+  created_at: "<%= 180.weeks.ago %>"
+  updated_at: "<%= 180.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC180
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample181:
+  id: 9bfb266f-19e4-5af1-bebf-a6d87225e5fe
+  name: Project 38 Sample 181
+  description: Project 38 Sample 181 description.
+  created_at: "<%= 181.weeks.ago %>"
+  updated_at: "<%= 181.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC181
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample182:
+  id: f6d02371-653b-5c61-9541-aa4dd182a830
+  name: Project 38 Sample 182
+  description: Project 38 Sample 182 description.
+  created_at: "<%= 182.weeks.ago %>"
+  updated_at: "<%= 182.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC182
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample183:
+  id: 673fe5fe-d9d6-5ee4-8802-c6994a2979ca
+  name: Project 38 Sample 183
+  description: Project 38 Sample 183 description.
+  created_at: "<%= 183.weeks.ago %>"
+  updated_at: "<%= 183.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC183
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample184:
+  id: c62bd266-7144-5fc8-882e-ed7f5732320a
+  name: Project 38 Sample 184
+  description: Project 38 Sample 184 description.
+  created_at: "<%= 184.weeks.ago %>"
+  updated_at: "<%= 184.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC184
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample185:
+  id: b02a1794-8871-58b0-aa12-468b83515200
+  name: Project 38 Sample 185
+  description: Project 38 Sample 185 description.
+  created_at: "<%= 185.weeks.ago %>"
+  updated_at: "<%= 185.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC185
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample186:
+  id: f8c33d74-9b6d-5488-aa52-599a87380e9f
+  name: Project 38 Sample 186
+  description: Project 38 Sample 186 description.
+  created_at: "<%= 186.weeks.ago %>"
+  updated_at: "<%= 186.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC186
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample187:
+  id: 2ad65582-33dc-59d3-8640-0461875afe81
+  name: Project 38 Sample 187
+  description: Project 38 Sample 187 description.
+  created_at: "<%= 187.weeks.ago %>"
+  updated_at: "<%= 187.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC187
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample188:
+  id: f0f95981-c49d-5202-be05-5a8a03705993
+  name: Project 38 Sample 188
+  description: Project 38 Sample 188 description.
+  created_at: "<%= 188.weeks.ago %>"
+  updated_at: "<%= 188.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC188
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample189:
+  id: 700b23f8-1580-5c9f-9e4e-76000b10d383
+  name: Project 38 Sample 189
+  description: Project 38 Sample 189 description.
+  created_at: "<%= 189.weeks.ago %>"
+  updated_at: "<%= 189.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC189
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample190:
+  id: ba552aaf-2611-58ad-add3-6230c623fcd8
+  name: Project 38 Sample 190
+  description: Project 38 Sample 190 description.
+  created_at: "<%= 190.weeks.ago %>"
+  updated_at: "<%= 190.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC190
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample191:
+  id: 4457f6a1-1788-5d98-9bcd-d57f6f4919b7
+  name: Project 38 Sample 191
+  description: Project 38 Sample 191 description.
+  created_at: "<%= 191.weeks.ago %>"
+  updated_at: "<%= 191.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC191
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample192:
+  id: 4256251f-bc90-5bf8-a088-1c0d026ffada
+  name: Project 38 Sample 192
+  description: Project 38 Sample 192 description.
+  created_at: "<%= 192.weeks.ago %>"
+  updated_at: "<%= 192.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC192
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample193:
+  id: 931c74a5-e086-5b6d-bb52-96003e63eb89
+  name: Project 38 Sample 193
+  description: Project 38 Sample 193 description.
+  created_at: "<%= 193.weeks.ago %>"
+  updated_at: "<%= 193.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC193
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample194:
+  id: e03b8314-15a8-5625-96ec-a2b29f9fcde7
+  name: Project 38 Sample 194
+  description: Project 38 Sample 194 description.
+  created_at: "<%= 194.weeks.ago %>"
+  updated_at: "<%= 194.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC194
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample195:
+  id: bd486950-4b2c-5361-b9ca-db2928ec88e1
+  name: Project 38 Sample 195
+  description: Project 38 Sample 195 description.
+  created_at: "<%= 195.weeks.ago %>"
+  updated_at: "<%= 195.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC195
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample196:
+  id: ccb4b59e-27ab-59a9-a8e8-50de338d8871
+  name: Project 38 Sample 196
+  description: Project 38 Sample 196 description.
+  created_at: "<%= 196.weeks.ago %>"
+  updated_at: "<%= 196.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC196
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample197:
+  id: 42213f8a-f8d2-5e3a-b508-8e7d9a025150
+  name: Project 38 Sample 197
+  description: Project 38 Sample 197 description.
+  created_at: "<%= 197.weeks.ago %>"
+  updated_at: "<%= 197.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC197
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample198:
+  id: 54565a61-617e-5c76-8117-df35d5921519
+  name: Project 38 Sample 198
+  description: Project 38 Sample 198 description.
+  created_at: "<%= 198.weeks.ago %>"
+  updated_at: "<%= 198.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC198
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample199:
+  id: 419e0f5c-ae79-5ff7-86cb-62c58154ed8e
+  name: Project 38 Sample 199
+  description: Project 38 Sample 199 description.
+  created_at: "<%= 199.weeks.ago %>"
+  updated_at: "<%= 199.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC199
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
+bulk_sample200:
+  id: 5dfd79fd-5dce-5d5d-ba2a-a2ffd9d07134
+  name: Project 38 Sample 200
+  description: Project 38 Sample 200 description.
+  created_at: "<%= 200.weeks.ago %>"
+  updated_at: "<%= 200.days.ago %>"
+  puid: INXT_SAM_AAAAAAAAC200
+  project_id: 1bbc6265-96cc-59e9-9f42-c59a078bab36
 sample47:
+  id: b790de03-9b19-5abd-aa44-65157f14934e
   name: Sample 47
   description: Sample 47 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project22, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABW
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: d76a3950-b859-5d68-9884-7f1df31694b8
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample48:
+  id: 51deb899-da69-5be2-bccf-8992be70b37e
   name: Sample 48
   description: Sample 48 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:project22, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABX
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: d76a3950-b859-5d68-9884-7f1df31694b8
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample49:
+  id: c6cbeeb4-aeb7-5140-8a95-b0d5987b9926
   name: Sample 49
   description: Sample 49 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABY
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: e2671094-a602-5ab7-8174-98e158baf8cb
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample50:
+  id: 118509c0-f808-5f17-b291-836ddb30307d
   name: Sample 50
   description: Sample 50 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAABZ
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: e2671094-a602-5ab7-8174-98e158baf8cb
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample51:
+  id: 03b500df-87d0-53a8-abef-422c43f72027
   name: Sample 51
   description: Sample 51 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectIndia1, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADA
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: b1c87100-62f7-57ff-8710-b6b36d557d23
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample52:
+  id: af95a44b-1500-5e1b-872f-8a61388d8d23
   name: Sample 52
   description: Sample 52 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADB
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 0f5bc8bf-3c3a-5c48-8504-fa9d79f09e27
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample53:
+  id: 230aa862-13e2-5b52-b8db-9cf33ca2f5d0
   name: Sample 53
   description: Sample 53 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADC
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 0f5bc8bf-3c3a-5c48-8504-fa9d79f09e27
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample54:
+  id: 25174d8c-cd39-5216-9fe4-6507360c8d60
   name: Sample 54
   description: Sample 54 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectJuliett1, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADD
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: be8c6482-98b5-5220-b3b2-36078aeefd3b
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample55:
+  id: 52d820e4-6f39-5796-b9ae-f1a665b91407
   name: Sample 55
   description: Sample 55 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMike, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADE
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 0776dcec-83a8-58b6-a6d8-44a6e24a84d0
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample56:
+  id: c244a3b2-fb43-5d6d-8ed0-9c230df3d7e8
   name: Sample 56
   description: Sample 56 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMike, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADF
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 0776dcec-83a8-58b6-a6d8-44a6e24a84d0
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample57:
+  id: 537cc1a2-4130-5e94-aef4-bbade45d8a0e
   name: Sample 57
   description: Sample 57 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeA, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADG
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 9b799379-6a57-5117-9c2e-1c4422a2a202
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample58:
+  id: 6a1e3ada-1f84-5fbb-8515-3a4af453b86b
   name: Sample 58
   description: Sample 58 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeA, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADH
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 9b799379-6a57-5117-9c2e-1c4422a2a202
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample59:
+  id: 10f78c6b-5455-5aab-805a-bd64c66be6f1
   name: Sample 59
   description: Sample 59 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeB, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADI
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 7b2076f0-389f-59d5-af8a-14d043157ff0
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample60:
+  id: 340d1735-0da5-5f79-b91e-6bdec33f8c14
   name: Sample 60
   description: Sample 60 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMikeB, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
   puid: INXT_SAM_AAAAAAAADJ
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: 7b2076f0-389f-59d5-af8a-14d043157ff0
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample61:
+  id: 5c471590-2c5d-504d-9c8c-5ab12f2318fc
   name: Sample 61
   description: Sample 61 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata, :uuid) %>
+  metadata:
+    example_date: '2023-10-17'
+    example_float: '0.01'
+    example_integer: '1'
+  metadata_provenance:
+    example_date:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_float:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_integer:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADK
-  metadata: { 'example_date': '2023-10-17', 'example_float': '0.01', 'example_integer': '1' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 139664cd-c865-5d9c-a9a1-08f92d97b1a9
 sample62:
+  id: 83c187ab-3a29-5608-ac41-56e755ae0ef2
   name: Sample 62
   description: Sample 62 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata, :uuid) %>
+  metadata:
+    example_date: '2023-11-17'
+    example_float: '0.25'
+    example_integer: '25'
+  metadata_provenance:
+    example_date:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_float:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_integer:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADL
-  metadata: { 'example_date': '2023-11-17', 'example_float': '0.25', 'example_integer': '25' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 139664cd-c865-5d9c-a9a1-08f92d97b1a9
 sample63:
+  id: bc6b55e6-b8e2-5807-a051-d0d34570bcab
   name: Sample 63
   description: Sample 63 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata, :uuid) %>
+  metadata:
+    example_date: '2023-12-17'
+    example_float: '0.99'
+    example_integer: '100'
+  metadata_provenance:
+    example_date:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_float:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_integer:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADM
-  metadata: { 'example_date': '2023-12-17', 'example_float': '0.99', 'example_integer': '100' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 139664cd-c865-5d9c-a9a1-08f92d97b1a9
 sample64:
+  id: c57c13b4-2a99-5b2e-81ae-e48e1b07e038
   name: Sample 64
   description: Sample 64 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
+  metadata:
+    example_date: '2023-10-17'
+    example_float: '0.01'
+    example_integer: '1'
+  metadata_provenance:
+    example_date:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_float:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_integer:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADN
-  metadata: { 'example_date': '2023-10-17', 'example_float': '0.01', 'example_integer': '1' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 3f08fa94-4c7c-52cb-b6b0-8c34ea401be2
 sample65:
+  id: 7b14e965-13f0-5727-9862-c52094823ceb
   name: Sample 65
   description: Sample 65 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
+  metadata:
+    example_date: '2023-11-17'
+    example_float: '0.25'
+    example_integer: '25'
+  metadata_provenance:
+    example_date:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_float:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_integer:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADO
-  metadata: { 'example_date': '2023-11-17', 'example_float': '0.25', 'example_integer': '25' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 3f08fa94-4c7c-52cb-b6b0-8c34ea401be2
 sample66:
+  id: 89883b9f-e5fb-5e1e-9667-4adbad839f6a
   name: Sample 66
   description: Sample 66 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata2, :uuid) %>
+  metadata:
+    example_date: '2023-12-17'
+    example_float: '0.99'
+    example_integer: '100'
+  metadata_provenance:
+    example_date:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_float:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    example_integer:
+      id: bfe47422-4dc0-5226-a4dc-c04336f8a5cb
+      source: user
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADP
-  metadata: { 'example_date': '2023-12-17', 'example_float': '0.99', 'example_integer': '100' }
-  metadata_provenance: { 'example_date': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_float': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-    'example_integer': { 'id': <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>, 'source': 'user', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 3f08fa94-4c7c-52cb-b6b0-8c34ea401be2
 group_sample_transfer_sample1:
-  name: "Group Sample Transfer 1"
-  description: "Group Sample Transfer 1 description."
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
-  puid: "INXT_SAM_AAAAAAAADQ"
-
+  id: 07d85e0e-e88d-5967-9bc3-c8849436803e
+  name: Group Sample Transfer 1
+  description: Group Sample Transfer 1 description.
+  puid: INXT_SAM_AAAAAAAADQ
+  project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
 group_sample_transfer_sample2:
-  name: "Group Sample Transfer 2"
-  description: "Group Sample Transfer 2 description."
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
-  puid: "INXT_SAM_AAAAAAAADR"
-
+  id: 6ecfdbbb-ce05-5e3e-8c91-8ee210ad35c4
+  name: Group Sample Transfer 2
+  description: Group Sample Transfer 2 description.
+  puid: INXT_SAM_AAAAAAAADR
+  project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
 group_sample_transfer_sample3:
-  name: "Group Sample Transfer 3"
-  description: "Group Sample Transfer 3 description."
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid) %>
-  puid: "INXT_SAM_AAAAAAAADS"
-
+  id: 9dcea1c7-d2bb-51cd-b5a2-280069372e2c
+  name: Group Sample Transfer 3
+  description: Group Sample Transfer 3 description.
+  puid: INXT_SAM_AAAAAAAADS
+  project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
 sample67:
+  id: 13787bf4-ba36-5b85-8ac6-9e070630199f
   name: Sample 67
   description: Sample 67 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectGroupSampleActions, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADT
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 77f3a1ca-0300-5875-834f-40a7396755f8
 sample68:
+  id: 3530b6c4-50d4-5119-aa28-dd99797c5025
   name: Sample 68
   description: Sample 68 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSubGroupSampleActions, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADU
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: e9bff41c-36d3-5c3e-99a1-8bd55b55fe0e
 sample69:
+  id: 02afc7be-7bab-5230-91c6-604f9282a2ad
   name: Sample 69
   description: Sample 69 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsOwner, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADV
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: de285e09-4fc6-5586-b776-56cd03732eaa
 sample70:
+  id: e1919dec-2c9c-5ccc-8e10-b6cc430d9f08
   name: Sample 70
   description: Sample 70 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsMaintainer, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADW
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: b85b13c7-b934-5e7c-96cd-06cbbdf0d62b
 sample71:
+  id: 194700e8-54c4-59f4-8b20-e515b8dcbc8f
   name: Sample 71
   description: Sample 71 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsAnalyst, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADX
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 7e466b7d-5e3c-5e28-b6b7-8e9c73796544
 sample72:
+  id: 18064e26-259f-5694-aab1-009a37478ce2
   name: Sample 72
   description: Sample 72 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectSharedGroupSampleActionsGuest, :uuid) %>
+  metadata:
+    metadatafield1: value1
+    metadatafield2: value2
+  metadata_provenance:
+    metadatafield1:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
+    metadatafield2:
+      id: 1
+      source: analysis
+      updated_at: "<%= Time.local(2000,1,1).utc.as_json %>"
   puid: INXT_SAM_AAAAAAAADY
-  metadata: { 'metadatafield1': 'value1', 'metadatafield2': 'value2'}
-  metadata_provenance: { 'metadatafield1': { 'id': 1, 'source': 'analysis',
-                                             'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' },
-                         'metadatafield2': { 'id': 1, 'source': 'analysis', 'updated_at': '<%= Time.local(2000,1,1).utc.as_json %>' } }
-
+  project_id: 335b1287-6d1e-53b0-81fb-b8478a67faba
 sample73:
+  id: 16df2678-e6b2-57cc-bfe0-9db4d7f6f49a
   name: Sample 1
   description: Sample 1description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectUser31, :uuid) %>
+  created_at: "<%= 34.weeks.ago %>"
+  updated_at: "<%= 34.days.ago %>"
   puid: INXT_SAM_AAAAAAAAGT
-  created_at: <%= 34.weeks.ago %>
-  updated_at: <%= 34.days.ago %>
-
+  project_id: c905f43a-d3cf-526d-a619-a15eb77c41ae
 sample_preparation_test_1:
+  id: b3bff706-0afa-509f-a6de-1c15c3a57f38
   name: sample_preparation_test_1
   description: sample_preparation_test_1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectUser32, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
   puid: INXT_SAM_AAAAAAAAZA
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 3.hours.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: caaa4ac3-cda7-57a9-9873-5597b8d9453d
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample_preparation_test_2:
+  id: 5b091c75-e16f-5b12-b699-a866e3359197
   name: sample_preparation_test_2
   description: sample_preparation_test_2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectUser32, :uuid) %>
+  created_at: "<%= 2.week.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
   puid: INXT_SAM_AAAAAAAAZB
-  created_at: <%= 2.week.ago %>
-  updated_at: <%= 3.hours.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: caaa4ac3-cda7-57a9-9873-5597b8d9453d
+  attachments_updated_at: "<%= 2.hours.ago %>"
 sample_preparation_test_3:
+  id: ca8e9d01-df1a-5ec3-ade5-819112bd4f24
   name: sample_preparation_test_3
   description: sample_preparation_test_3 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:projectUser32, :uuid) %>
+  created_at: "<%= 3.week.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
   puid: INXT_SAM_AAAAAAAAZC
-  created_at: <%= 3.week.ago %>
-  updated_at: <%= 3.hours.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  project_id: caaa4ac3-cda7-57a9-9873-5597b8d9453d
+  attachments_updated_at: "<%= 2.hours.ago %>"
 snvphyl_sample1:
+  id: 86d76c81-0213-5e6e-a9fe-402681bb6828
   name: SNVPhyl Sample 1
   description: SNVPhyl Sample 1 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_project, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  metadata:
+    metadata_1: '1.1'
+    metadata_2: '2.1'
+    metadata_3: '3.1'
+    metadata_4: '4.1'
+    metadata_5: '5.1'
+    metadata_6: '6.1'
+    metadata_7: '7.1'
+    metadata_8: '8.1'
+  metadata_provenance:
+    metadata_1:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_2:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_3:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_4:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_5:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_6:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_7:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_8:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
   puid: INXT_SAM_AAAAAAAAEA
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-  metadata: { 'metadata_1': '1.1',
-              'metadata_2': '2.1',
-              'metadata_3': '3.1',
-              'metadata_4': '4.1',
-              'metadata_5': '5.1',
-              'metadata_6': '6.1',
-              'metadata_7': '7.1',
-              'metadata_8': '8.1' }
-  metadata_provenance: { 'metadata_1': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_2': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_3': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_4': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_5': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_6': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_7': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_8': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> } }
-
+  project_id: 2b14d66e-5758-5123-aaac-56d26cc3ea6d
+  attachments_updated_at: "<%= 2.hours.ago %>"
 snvphyl_sample2:
+  id: 3f4feea6-5793-531f-9ff4-625a69e06d7a
   name: SNVPhyl Sample 2
   description: SNVPhyl Sample 2 description.
-  project_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_project, :uuid) %>
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  metadata:
+    metadata_1: '1.1'
+    metadata_2: '2.2'
+    metadata_3: '3.2'
+    metadata_4: '4.2'
+    metadata_5: '5.2'
+    metadata_6: '6.2'
+    metadata_7: '7.1'
+    metadata_8: '8.2'
+  metadata_provenance:
+    metadata_1:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_2:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_3:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_4:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_5:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_6:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_7:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
+    metadata_8:
+      id: 1e06b4cb-f58f-5a9e-94fa-e77a8d6f7d48
+      source: user
+      updated_at: "<%= 1.day.ago.to_datetime.as_json %>"
   puid: INXT_SAM_AAAAAAAAEB
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  attachments_updated_at: <%= 2.hours.ago %>
-  metadata: { 'metadata_1': '1.1',
-              'metadata_2': '2.2',
-              'metadata_3': '3.2',
-              'metadata_4': '4.2',
-              'metadata_5': '5.2',
-              'metadata_6': '6.2',
-              'metadata_7': '7.1',
-              'metadata_8': '8.2' }
-  metadata_provenance: { 'metadata_1': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_2': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_3': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_4': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_5': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_6': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_7': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> },
-                         'metadata_8': { 'id': <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>,
-                                         'source': 'user',
-                                         'updated_at': <%= 1.day.ago.to_datetime %> } }
+  project_id: 2b14d66e-5758-5123-aaac-56d26cc3ea6d
+  attachments_updated_at: "<%= 2.hours.ago %>"

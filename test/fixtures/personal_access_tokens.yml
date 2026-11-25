@@ -1,197 +1,646 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 john_doe_expired_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 233337f6-c5f2-584c-8f81-92eb7f78e1c7
   scopes:
-    - api
+  - api
   name: Expired PAT
   revoked: false
-  expires_at: <%= Irida::CurrentSettings.current_application_settings.cleanup_inactive_access_tokens_after_days.days.ago.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "byb8myzkJ7HNeFS2La-8") %>
-  last_used_at: nil
-
+  expires_at: "<%= Irida::CurrentSettings.current_application_settings.cleanup_inactive_access_tokens_after_days.days.ago.to_date
+    %>"
+  token_digest: 933bb47b9ffac2bcbdb064af823542aa9bb6c82f5798da9e2c41a5399622e770
+  last_used_at:
+  user_id: e1e65eee-135a-55a5-b2ce-921c6186b762
 john_doe_revoked_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 9f381d4e-ea23-51fc-a22d-6bcfb72d14be
   scopes:
-    - api
+  - api
   name: Revoked PAT
   revoked: true
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "osvR7Re6ZN_7sem8wF9z") %>
-  last_used_at: nil
-  updated_at: <%= 31.days.ago %>
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 184023fa5b3fc1029d454879da8822f8c93adebb83b6e8142944614350cef68a
+  last_used_at:
+  updated_at: "<%= 31.days.ago %>"
+  user_id: e1e65eee-135a-55a5-b2ce-921c6186b762
 john_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 1cf88c29-eeee-5d91-973a-d3e7f3464f11
   scopes:
-    - api
+  - api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "JQ2w5maQc4zgvC8GGMEp") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 1ae4ab71ceb2fc4fac4296496b7c9c1918c241ee398bd71dc54d75127439585a
+  last_used_at:
+  user_id: e1e65eee-135a-55a5-b2ce-921c6186b762
 john_doe_valid_read_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 903bc089-df87-552b-9510-fc12f7bfd8f5
   scopes:
-    - read_api
+  - read_api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "X83wwK3sWCjn4xdCyZtH") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 3f9c9a5feac5af5cceb7fdd30185245df05f628720842c6f2e87d2909fc926ba
+  last_used_at:
+  user_id: e1e65eee-135a-55a5-b2ce-921c6186b762
 john_doe_non_expirable_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: d58fa411-5366-5924-a4f5-d69f3de0141a
   scopes:
-    - api
+  - api
   name: Non Expirable PAT
   revoked: false
-  expires_at: nil
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "b8rH5_yCXFi-fxirkvfz") %>
-  last_used_at: nil
-
+  expires_at:
+  token_digest: 7588a26c4a0ca6eb78b3fcc2f650ccd71bbf43ac2b2b963b0f39db820901c31e
+  last_used_at:
+  user_id: e1e65eee-135a-55a5-b2ce-921c6186b762
 john_doe_valid_pat_used:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 42254d9d-84cd-5845-8d70-93d323c8f4c5
   scopes:
-    - api
+  - api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "JQ2w5maQc4zgvC8GGMEr") %>
-  last_used_at: <%= 1.day.ago %>
-  last_used_ips: ['192.168.1.2', '192.168.1.1']
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 813360c7e0c8222802870d59aa19a848f579d84fdce4ac5dd9378f0492b8e2a4
+  last_used_at: "<%= 1.day.ago %>"
+  user_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  last_used_ips:
+  - 192.168.1.2
+  - 192.168.1.1
 jane_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
+  id: cd21f105-b324-5e4a-bbf5-ee8da5cb59a9
   scopes:
-    - api
+  - api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "MMx_KskxBCx9tpc5qusm") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 32773dcca96cc9cc2bda81300203eb96523d5cef638c88fe970c1ceb5f03f2e0
+  last_used_at:
+  user_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
 jeff_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  id: dc1afa85-0ef7-5aa9-8bd7-bf992b0b4074
   scopes:
-    - api
+  - api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "JX2w5maQc4zgvC8GGMEp") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 9cb80e0aef42a0d0e5dd233026afe76685d17a1b66a1a748e0cba7683c57c5f9
+  last_used_at:
+  user_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
 jeff_doe_valid_read_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  id: 74dd5d16-0dda-5a5e-9e74-641d796d5faf
   scopes:
-    - read_api
+  - read_api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "XX3wwK3sWCjn4xdCyZtH") %>
-  last_used_at: nil
-
-<% 22.times do |n| %>
-user_bot_account<%= (n) %>_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:"user_bot_account#{n}", :uuid) %>
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 0a2c37d0c0ea99ca85e96cd738a7ff6a5281d64412e8e43f1bbca759c3144c50
+  last_used_at:
+  user_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+user_bot_account0_valid_pat:
+  id: da85054b-e65b-5f9c-ab37-2993dc5e3b11
   scopes:
-    - read_api
-    - api
-  name: Valid PAT<%= (n) %>
+  - read_api
+  - api
+  name: Valid PAT0
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "DX3wwK3sWCjn#{n}xdCyZtH") %>
-  last_used_at: nil
-<% end %>
-
-<% 21.times do |n| %>
-user_group_bot_account<%= (n) %>_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:"user_group_bot_account#{n}", :uuid) %>
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 9a8caf19fb5eba6aa2fcd2b353ae182067c7b166361055c81a57b2883fae756e
+  last_used_at:
+  user_id: 7c44d2d8-51aa-5611-9ab3-04d61505af1a
+user_bot_account1_valid_pat:
+  id: bdaddc7e-5e03-5869-ab3e-fe039dd7df21
   scopes:
-    - read_api
-    - api
-  name: Valid PAT<%= (n) %>
+  - read_api
+  - api
+  name: Valid PAT1
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "AX3wwK3sWCjn#{n}xdCyZtH") %>
-  last_used_at: nil
-<% end %>
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: e5125ec3730aeb5def0ddc60cf66aa330b733e0de617fa128113787c5e191044
+  last_used_at:
+  user_id: 52615bed-d806-5747-81c3-025186818f0d
+user_bot_account2_valid_pat:
+  id: 26c4ade7-100a-5d9e-a491-9e0b1a201f31
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT2
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 26f22a144fecbaa33f57f26a8962fb6e6bf94d7ff03d1f43b1f05abc42f37056
+  last_used_at:
+  user_id: 97cfca0b-3cd8-5bdb-9cf5-b3c8414aed61
+user_bot_account3_valid_pat:
+  id: ff43ad94-7682-5ae0-a1f6-21e397c33310
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT3
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 319fc9025f1f340ee09865d093db94ac82aa92b361d791afeb1975eb5ec86ceb
+  last_used_at:
+  user_id: c79af3e0-7726-5e03-99d8-9518a56fbdce
+user_bot_account4_valid_pat:
+  id: b0f37a1a-e366-5e78-96eb-f2b7c82982c8
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT4
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 17747831fc2ab5bd8376d2a605f720a75d964a365bce9f41ba3fa2ac516483fb
+  last_used_at:
+  user_id: 8d6763e3-aa2e-50ad-a36e-bd8098501f4b
+user_bot_account5_valid_pat:
+  id: 677c90b0-20ba-56d9-a9a3-92e309d32dad
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT5
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 11f8010c7de173f4f97255f5bc63f189728f09b80014dbe8fd91cf5a09cc7afd
+  last_used_at:
+  user_id: 95aa40de-496e-503a-9ae8-2382753068eb
+user_bot_account6_valid_pat:
+  id: ef5cf6a7-1fb2-5e24-a3d6-c230421c81ea
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT6
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 01b8f4da5e0969699a407bf1f9a447ede3ebe91b42d49fd72baf55213964fdd9
+  last_used_at:
+  user_id: cdfe4695-88b0-5550-8dc0-1158a21227d5
+user_bot_account7_valid_pat:
+  id: 787afdf3-b2a9-57f6-bc0b-3f0b862812ee
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT7
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: c27413d7a47c419e5bd82419df4b7c44d2476c2f5a38447235694a34b0829ac3
+  last_used_at:
+  user_id: ac0993ab-9d74-5cd6-91fe-238ad8f8e64d
+user_bot_account8_valid_pat:
+  id: c8b66077-d397-5995-91bb-72ac185008b8
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT8
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 9b502777997f2751ef3b1d2e8c07276ecab2a79a4126994aebfbfe0bab05bf15
+  last_used_at:
+  user_id: 1ddd5418-8eb5-53cf-9c33-a891f9d85dce
+user_bot_account9_valid_pat:
+  id: 6f396900-6767-5d03-b00c-25c2b5f9642c
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT9
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 4d7dc6ceb519455c120ca1e5a89bd47224a588d28c28c4128e2f8ae7fc3c6359
+  last_used_at:
+  user_id: ed8ad16d-621e-53e0-a61c-f9008967a4d2
+user_bot_account10_valid_pat:
+  id: 90a2f798-a3e1-53da-92f6-0f3d4897da4c
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT10
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: '04318d6c24ef314407d549cafcc9eeed66e196a4f82281cefecedde97301a35a'
+  last_used_at:
+  user_id: 0a00fae0-d062-550b-8c48-23f651b722a9
+user_bot_account11_valid_pat:
+  id: ce7d470d-49c2-5232-9de1-fffa31ae1fe6
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT11
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 2e8ca4fe04f6a1e5d7d09e3472de558b1175289466104070e0877c98be052d04
+  last_used_at:
+  user_id: 31302485-a8f3-5fa7-9561-4830fe535c24
+user_bot_account12_valid_pat:
+  id: e33e8fb8-013b-5037-b796-c851215c1479
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT12
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: e4dc4aba2aa321174e288bc874ae52724e6a1e5592246b1fcc4d6bfb0fb75756
+  last_used_at:
+  user_id: 06d6edd8-af16-5f6b-928e-fa955513c543
+user_bot_account13_valid_pat:
+  id: b890889e-f42c-5899-a5a5-9f2cc48439bf
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT13
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 4bdcae796204b92057e3173ca73676ae5a17a35efc74fb9e0507b8cc52b57b7a
+  last_used_at:
+  user_id: ccb078f7-cebd-541f-ad25-a3dbecfe1271
+user_bot_account14_valid_pat:
+  id: ffb721e8-d055-5162-962a-efdf8b88c08d
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT14
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: c93f1408f32bb881d1d66d986642544cac722737ce54be8439d029af70693983
+  last_used_at:
+  user_id: fb0d67a0-43bd-55fe-a720-93bcff225882
+user_bot_account15_valid_pat:
+  id: 83542bc2-3c9a-53d7-92d9-c94bba93e893
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT15
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 3ac2808b7a0f95819fba1d39c013cc388c302d99f8881963b6ccb418241cf19d
+  last_used_at:
+  user_id: 1c74f456-9a3a-5f45-92e5-a98533b89251
+user_bot_account16_valid_pat:
+  id: e9e02b0e-0633-5b5b-8a4f-c4fbcd8ad42a
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT16
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 5b0bdddaa7f85803a84e4e4d60310efdbd5b630071819e40b9fc226c490d32a5
+  last_used_at:
+  user_id: 6e2cd667-6110-5f46-a55f-79ea9028181f
+user_bot_account17_valid_pat:
+  id: 5c6e9270-7d2b-5362-8105-155a1d312e1a
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT17
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: f9e2c1d3d661c9a19133c7d9b41686de3f8800d5a4324c6d7f05248d7ee4cd75
+  last_used_at:
+  user_id: cc797dd2-23df-59ca-a498-994c294183ae
+user_bot_account18_valid_pat:
+  id: 5e9ab6cb-1d9c-5f1c-92e7-a8905a3044e4
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT18
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: b3a95192a757dee3b1b11b90ab0b366fd69db2ea09b34928a291fff507d76b4c
+  last_used_at:
+  user_id: de8f7180-3d54-5b61-bb30-a9581024ab90
+user_bot_account19_valid_pat:
+  id: 28a69ea6-73e5-5e0b-927e-0abe8233da91
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT19
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: dc7a60ed5e334979cc852a3088813d4c0c94d0c07e41fb57430a9b343e619fd5
+  last_used_at:
+  user_id: c9ffa6f4-888f-528a-92ce-fa47fe606fa7
+user_bot_account20_valid_pat:
+  id: a9c4b785-7cdd-5eea-ac15-6c13b9acd88c
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT20
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 389bf20bf00bf3e779e45412d07e956d065ee51170b645755d51e33a87392dfc
+  last_used_at:
+  user_id: a6f564a1-bbf3-58a3-9df1-8dd8feb352ba
+user_bot_account21_valid_pat:
+  id: 933b1a3b-9de9-5212-b831-76e16d62c809
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT21
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 85688b413be479cb439a3e1f1a27bd16273e31f7b35d90d234745a98ecebeb7a
+  last_used_at:
+  user_id: 0e5a6ddd-bc9e-59bb-9cd9-ae827726bfa6
+user_group_bot_account0_valid_pat:
+  id: 1c043198-b0bf-506f-bddb-894e6744c250
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT0
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 16141635700a00b07810a9cffea06bc59985366a616587157b1e0d3f276f04e8
+  last_used_at:
+  user_id: 2bf52959-0a7a-5e54-b2dc-bce64fc57ae3
+user_group_bot_account1_valid_pat:
+  id: 80ed1732-4103-53ea-bc5d-ddc81ccec591
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT1
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 60c9a4853521533baca784dab9a1875ce9d33807ed9ea8b8e4e5053c56cb8ccd
+  last_used_at:
+  user_id: c472999d-b2f7-55f7-882d-6f9f90ec784d
+user_group_bot_account2_valid_pat:
+  id: f4673324-d126-5312-8b13-ab6a1fe6b019
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT2
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: a6ec06430fdf051c5a1e86e683817c57a64c6b7427e262c5369d1ed9e1628f89
+  last_used_at:
+  user_id: d4ac452b-157e-5bb8-ba89-22ac508335f5
+user_group_bot_account3_valid_pat:
+  id: 6d721ae8-fc08-5dfb-bc6e-4a6c9b672309
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT3
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: ea462c07bd73ac9fd3f892cfe7275bede0a5a96c7bbb48414d2338d60529a6bc
+  last_used_at:
+  user_id: 3c8dabe9-ecc8-5953-9448-58cddf2323e2
+user_group_bot_account4_valid_pat:
+  id: a88d761d-443e-54e8-bcb5-c3008d003321
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT4
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 3773a8cff1336c5e46911dc1da8d8c39e818c9e00776151a4b4407285b461745
+  last_used_at:
+  user_id: 000eac5f-a3af-58a5-8d9d-19e753e2a60e
+user_group_bot_account5_valid_pat:
+  id: 5336f26f-8266-5b5b-b95a-d5e6a726dd0d
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT5
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: c4dd72aba67677787c0e116ef8a977d7b9859d3b7ba4bba7b47f4e97ebd1d145
+  last_used_at:
+  user_id: 25a6d2c2-815c-5272-bff0-278bef95a467
+user_group_bot_account6_valid_pat:
+  id: 15dd86f5-9a85-5149-a42a-fa97106bce64
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT6
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: d79a054a516fe50a67bf3344a7c58d07331c1a2439b1cc223b3c127503167984
+  last_used_at:
+  user_id: 10b9b229-778f-5fd0-aa45-787dc63d043b
+user_group_bot_account7_valid_pat:
+  id: a280e50a-5fbd-54a9-978c-82c0920958ff
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT7
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 05bb72333847aac3738a70bdcf8467fc8ba6dbf16a81a87524fb129d4eac4a20
+  last_used_at:
+  user_id: c98bd3f0-4865-59cb-9e0a-ca1de910ee30
+user_group_bot_account8_valid_pat:
+  id: d423d986-7499-5e93-af25-588c1f1c68bf
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT8
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 39e6274a7d4bdda2c0ca829cc194f6fa164f1458ea489dca768e1b3788c23858
+  last_used_at:
+  user_id: f1535a0b-80b7-5dd8-9785-4bf69d36950e
+user_group_bot_account9_valid_pat:
+  id: 62eeb63a-d649-5c32-9ba1-fb1d5b0d07d2
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT9
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 5e462ddb1caf52a9e35d01ea35cbe37fd686693ed0a88a49de6128a92b02dc09
+  last_used_at:
+  user_id: 9617e7f7-5f97-564d-a745-0018454accbb
+user_group_bot_account10_valid_pat:
+  id: e30c234a-738f-54e3-9a26-44b484d46477
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT10
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: c8e778699499430035d23107279c97a8549f720165cab71c4046e00c15570bab
+  last_used_at:
+  user_id: 3cdb142a-516a-5eed-b20f-4c2e5b90aa67
+user_group_bot_account11_valid_pat:
+  id: aa158348-3d5e-5d17-b19b-0d2badaed09c
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT11
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: bb39bdba08429c81a3fc0cda2e129aaea5591c06c92ff4520093016f892fe5f1
+  last_used_at:
+  user_id: 9119f6b6-e1df-55b8-b46a-a177f02aca3f
+user_group_bot_account12_valid_pat:
+  id: be3415c5-5378-5c46-aed5-3e5848d98268
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT12
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 0cd91011e6ee41b9f9bd8ad2ed8713763e02ef4fe69fe76d736b5b4c32b4aa1a
+  last_used_at:
+  user_id: '09b45d29-963d-5004-a33f-ca60a09188f6'
+user_group_bot_account13_valid_pat:
+  id: 629868ea-e758-5e85-8547-394197baf1d4
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT13
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: bd46fae8872e8403c99a03954233ed45500a4259baedea443bcacdf471f4bac0
+  last_used_at:
+  user_id: 3805c8d0-5e6d-57ba-a323-bc43a021b464
+user_group_bot_account14_valid_pat:
+  id: 7eceaad0-e581-5b9f-8d06-9f7c158aa4ab
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT14
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 1ada6539923f74ae970a986d2429dbb0c028eee6a9e90315fcce0f05a6b465b7
+  last_used_at:
+  user_id: e671ce44-f0f6-56a8-b103-da47d8f0ee8a
+user_group_bot_account15_valid_pat:
+  id: dd5dbfff-35f0-5c9d-8ee3-7d4384cd16b8
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT15
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: f407a95bd4831e001fad1e11ba97c751a3b773de94a989bc1af5bad1bc7d8745
+  last_used_at:
+  user_id: 9a6daf72-9998-5fd0-8e61-b8f2926b856e
+user_group_bot_account16_valid_pat:
+  id: 1ac05921-f04a-54bf-b10c-1f0f27a2e796
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT16
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: ef610807081266ad9a5548add216dc1f19c8502802c04490bf8fb4c917a0d0e2
+  last_used_at:
+  user_id: 64a9d20d-ecd2-5f3e-96c3-cbc2dc8a6f38
+user_group_bot_account17_valid_pat:
+  id: 4a126eac-f31a-5e2a-a690-34eb5f35b8da
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT17
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 78c5b88d23cad6636684f8a9d250fe760eb6c6320fa550719258f69ac11b3152
+  last_used_at:
+  user_id: 67f9f310-2352-5679-ad18-04998307c90a
+user_group_bot_account18_valid_pat:
+  id: 717ebdf6-ab88-5161-b845-95bbc11a9b68
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT18
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 4661a28adf4acf7fd156750baefcaca0fb555f85d0bac8d1332d80de7fb0e2d2
+  last_used_at:
+  user_id: 80b61fda-9ca4-58b3-963e-ba7e3a39d8cf
+user_group_bot_account19_valid_pat:
+  id: 33ecf31d-9f77-5a5e-8820-380a0f406641
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT19
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 8f806f15f3aa417476528b402c9c298dcb4cead6b9fc32c517df16217e2465e3
+  last_used_at:
+  user_id: ae186dc7-4b5e-562d-86dc-2fec2ba2b51b
+user_group_bot_account20_valid_pat:
+  id: 6bc9ade8-0f3e-5c0a-a5fd-99ee126e1178
+  scopes:
+  - read_api
+  - api
+  name: Valid PAT20
+  revoked: false
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 0d123786dbb5811a72c1529275c6e7725b0030b81f09717dabd88e2f2540ba50
+  last_used_at:
+  user_id: 654b1c1a-1ee4-5163-9dac-9be61b1ecd67
 projectJeff_bot_account_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
+  id: '0974099a-a8d4-521f-ac51-4f967a54c369'
   scopes:
-    - read_api
-    - api
+  - read_api
+  - api
   name: Valid PAT1 %>
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "FX3wwK3sWCjn1xdCyZtA") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 7cf17f0ef9d822f65280e29bb13c598960675b0246b172ec4ff93aee5856e000
+  last_used_at:
+  user_id: 20022ad4-80eb-507b-81ee-4fb20c122c81
 groupJeff_bot_account_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid) %>
+  id: 1eee94bf-b354-5339-81ad-b29003986122
   scopes:
-    - read_api
-    - api
+  - read_api
+  - api
   name: Valid PAT1 %>
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "FX3wwK3sWCjn1xdCyZtB") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: cae9e923e6f0e40fb8e621d5647b4c1392ad5897d9143d3c1f577e95f61c57f6
+  last_used_at:
+  user_id: 26636ea9-1985-5bb0-8ead-738eaf9dc6ac
 user_bot_account0_expired_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
+  id: 6c3bc875-678e-55fa-9a21-866aca91ccd7
   scopes:
-    - read_api
-    - api
+  - read_api
+  - api
   name: Expired Valid PAT0
   revoked: false
-  expires_at: <%= 10.days.ago.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "VX3wwK3sWCjn0xdCyZtH") %>
-  last_used_at: nil
-
+  expires_at: "<%= 10.days.ago.to_date %>"
+  token_digest: fde7fd2ccfe9ce7babf28961ab91d509db016e386283cad3adc2306ab665b29a
+  last_used_at:
+  user_id: 7c44d2d8-51aa-5611-9ab3-04d61505af1a
 user_group_bot_account0_expired_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
+  id: c9b4fda5-12dd-5565-a2bf-0b228335ba9b
   scopes:
-    - read_api
-    - api
+  - read_api
+  - api
   name: Expired PAT 0
   revoked: false
-  expires_at: <%= 5.days.ago.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "TA3wwK3sWCjn0xdCyZtH") %>
-  last_used_at: nil
-
+  expires_at: "<%= 5.days.ago.to_date %>"
+  token_digest: d2f0f7cd52cf8f69b5714a46a262655ee944889eef8bc30683a5ee4204470e41
+  last_used_at:
+  user_id: 2bf52959-0a7a-5e54-b2dc-bce64fc57ae3
 user_bot_account0_revoked_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
+  id: 9de63ad7-da45-566c-8017-09add3b67204
   scopes:
-    - read_api
-    - api
+  - read_api
+  - api
   name: Revoked Valid PAT0
   revoked: true
-  expires_at: <%= 10.days.ago.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "VX3wwK3sWTjn0xdCyZtH") %>
-  last_used_at: nil
-  updated_at: <%= 31.days.ago %>
-
+  expires_at: "<%= 10.days.ago.to_date %>"
+  token_digest: f5b20865c768f5dbcf943d46a8b0af769db4798c41d6dec6953a0ce2b688177f
+  last_used_at:
+  updated_at: "<%= 31.days.ago %>"
+  user_id: 7c44d2d8-51aa-5611-9ab3-04d61505af1a
 user_group_bot_account0_revoked_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
+  id: fb8ee40c-1622-5443-9696-61db8a542838
   scopes:
-    - read_api
-    - api
+  - read_api
+  - api
   name: Revoked PAT 0
   revoked: true
-  expires_at: <%= 5.days.ago.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "TA3wwK3sWCjr0xdCyZtH") %>
-  last_used_at: nil
-  updated_at: <%= 29.days.ago %>
-
+  expires_at: "<%= 5.days.ago.to_date %>"
+  token_digest: a97c13768d8462a44b8263a89bdb65425b5fe4f7bedcb20d98a8052211286772
+  last_used_at:
+  updated_at: "<%= 29.days.ago %>"
+  user_id: 2bf52959-0a7a-5e54-b2dc-bce64fc57ae3
 sample_actions_doe_valid_pat:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
+  id: 4543c9c8-747e-5cce-a402-226cc5abb6c1
   scopes:
-    - api
+  - api
   name: Valid PAT
   revoked: false
-  expires_at: <%= 10.days.from_now.to_date %>
-  token_digest: <%= Devise.token_generator.digest(PersonalAccessToken, :token_digest, "JQ2w5maQc4zgvC8GGMEq") %>
-  last_used_at: nil
+  expires_at: "<%= 10.days.from_now.to_date %>"
+  token_digest: 7f02e450297b2a5e44469767dea3339201c9739e13ab82e78a7be1a03b72f0dd
+  last_used_at:
+  user_id: aca8a717-05a0-5ad0-a91d-bda9a044a87d

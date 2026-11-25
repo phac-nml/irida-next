@@ -1,950 +1,1961 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-DEFAULTS: &DEFAULTS
-  workflow_type: "NFL"
-  workflow_type_version: "DSL2"
-  workflow_engine: "nextflow"
-  workflow_engine_version: "24.10.3"
-  metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
-
 workflow_execution_valid:
-  <<: *DEFAULTS
+  id: 0b885298-237a-5556-8524-9d448a2099a2
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_execution_valid"
-
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.3
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_1
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  name: workflow_execution_valid
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 workflow_execution_gasclustering:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/gasclustering", workflow_version: "0.4.2" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "0.4.2" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_execution_gasclustering"
-
+  id: 9840fb36-27b0-5ebf-9f22-680a2506853c
+  metadata:
+    pipeline_id: phac-nml/gasclustering
+    workflow_version: 0.4.2
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 0.4.2
+  workflow_url: my_workflow_url
+  run_id: my_run_id_1
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  name: workflow_execution_gasclustering
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 irida_next_example:
-  <<: *DEFAULTS
-  workflow_params: { "assembler": "stub" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  id: 18ccf0b3-28ab-591c-80cb-996e657fe5ec
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    assembler: stub
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   email_notification: true
+  name: irida_next_example
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example"
-
 irida_next_example_non_executable:
-  <<: *DEFAULTS
+  id: 1711604f-baf2-5fac-858e-a2733c99c138
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.0" }
-  workflow_params: { "assembler": "stub" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.0
+  workflow_params:
+    assembler: stub
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   email_notification: true
+  name: irida_next_example_non_executable
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_non_executable"
-
 irida_next_example_prepared:
-  <<: *DEFAULTS
+  id: 9022898d-c9d2-56b4-b6f3-a890d4167d91
   metadata:
-    { pipeline_id: "irida_next_example_prepared", workflow_version: "1.0dev" }
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "prepared"
+    pipeline_id: irida_next_example_prepared
+    workflow_version: 1.0dev
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_prepared
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
   email_notification: true
+  state: prepared
+  name: irida_next_example_prepared
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_prepared"
-
 irida_next_example_submitted:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_prepared"
-  run_id: "my_run_id_5"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "submitted"
+  id: 85830d9b-fde8-5710-87b0-fcf3f1823d8e
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_prepared
+  run_id: my_run_id_5
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: submitted
+  name: irida_next_example_submitted
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_submitted"
-
 irida_next_example_completed:
-  <<: *DEFAULTS
+  id: 9219f9c2-5cbc-5c6e-be10-e64ecb88c87a
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { input: "/nextflow/samplesheet_schema.json", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_6"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "completed"
-  blob_run_directory: "not a run dir"
+    input: "/nextflow/samplesheet_schema.json"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_6
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_example_completed
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-  name: "irida_next_example_completed"
-
 irida_next_example_completed_2_files:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_6"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "irida_next_example_completed_2_files"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+  id: 26c3726a-fe60-5a14-97b6-75923a291ac8
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_6
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_example_completed_2_files
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-
 irida_next_example_completed_unclean:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed_unclean"
-  run_id: "my_run_id_6a"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "completed"
-  blob_run_directory: "not a run dir"
+  id: 78cd282d-9864-5521-9ce4-3142f738cf57
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed_unclean
+  run_id: my_run_id_6a
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_example_completed_unclean
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_completed_unclean"
-
 irida_next_example_error:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_error"
-  run_id: "my_run_id_7"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "error"
+  id: e96ad0ff-0db6-54ab-af23-7509610b53b9
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_error
+  run_id: my_run_id_7
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: error
+  name: irida_next_example_error
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-  name: "irida_next_example_error"
-
 irida_next_example_error_unclean:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_error_unclean"
-  run_id: "my_run_id_7a"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "error"
+  id: 5f894bc9-497e-5f8b-be45-c1f85f042123
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_error_unclean
+  run_id: my_run_id_7a
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: error
+  name: irida_next_example_error_unclean
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_error_unclean"
-
 irida_next_example_canceling:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_canceling"
-  run_id: "my_run_id_8"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "canceling"
+  id: bb487181-99a9-56e6-b486-67c40e221828
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_canceling
+  run_id: my_run_id_8
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: canceling
+  name: irida_next_example_canceling
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_canceling"
-
 irida_next_example_canceled:
-  <<: *DEFAULTS
+  id: a7fe60e2-00b6-5157-80d4-08c9d8c42d86
   metadata:
-    { pipeline_id: "irida_next_example_canceled", workflow_version: "1.0dev" }
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_canceled"
-  run_id: "my_run_id_9"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "canceled"
+    pipeline_id: irida_next_example_canceled
+    workflow_version: 1.0dev
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_canceled
+  run_id: my_run_id_9
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: canceled
+  name: irida_next_example_canceled
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-  name: "irida_next_example_canceled"
-
 irida_next_example_canceled_unclean:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_canceled_unclean"
-  run_id: "my_run_id_9a"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "canceled"
+  id: 7a27af5d-fe69-5d64-9ef8-c1277c6d37da
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_canceled_unclean
+  run_id: my_run_id_9a
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: canceled
+  name: irida_next_example_canceled_unclean
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_canceled_unclean"
-
 irida_next_example_running:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_running"
-  run_id: "my_run_id_10"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "running"
+  id: b2b9a851-0ebb-52f5-8d2f-330be3cb78e7
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_running
+  run_id: my_run_id_10
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: running
+  name: irida_next_example_running
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_running"
-
 irida_next_example_new:
-  <<: *DEFAULTS
-  workflow_params: { }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_new"
-  run_id: "my_run_id_12"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "initial"
+  id: e1be0ff6-4df8-5f5a-bae6-6b1673ff93e0
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_12
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: initial
+  name: irida_next_example_new
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "irida_next_example_new"
-
 irida_next_example_completing_a:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_a"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: 1a0c3865-f349-53b8-83b6-92fd6ada0375
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_a
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
   email_notification: true
+  state: completing
+  name: irida_next_example_completing_a
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_a"
-
 irida_next_example_completing_b:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_b"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: d7c6c2d9-154e-5794-9368-abdd2fa4f9ed
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_b
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
+  state: completing
+  name: irida_next_example_completing_b
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_b"
-
 irida_next_example_completing_c:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_c"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: 0bc3e28f-f6be-5549-affe-eb429ea0a6fe
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_c
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
   update_samples: true
+  state: completing
+  name: irida_next_example_completing_c
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_c"
-
 irida_next_example_completing_d:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_d"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: b1a7d23f-cd95-5425-9e99-6c38dea9391a
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_d
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
+  state: completing
+  name: irida_next_example_completing_d
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_d"
-
 irida_next_example_completing_e:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_e"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: 532cd362-c709-5389-9cd8-733b99983928
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_e
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
+  state: completing
+  name: irida_next_example_completing_e
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_e"
-
 irida_next_example_completing_f:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_f"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: 9fb7f7b1-1965-5eca-83e9-c3d80df95b11
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_f
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
+  email_notification: true
   update_samples: false
-  email_notification: true
+  state: completing
+  name: irida_next_example_completing_f
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_f"
-
 irida_next_example_completing_g:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_g"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
-  update_samples: true
+  id: b67b1b21-901f-5e14-830f-efebfe7a3e71
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_g
+  submitter_id: fb9027a4-a078-519d-ace9-cf17b0041892
+  blob_run_directory: not a run dir
   email_notification: true
+  update_samples: true
+  state: completing
+  name: irida_next_example_completing_g
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_g"
-
 irida_next_example_completing_h:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed"
-  run_id: "my_run_id_h"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  state: "completing"
-  blob_run_directory: "not a run dir"
+  id: 0d52c081-6653-51cf-914b-165e9c2ebb74
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed
+  run_id: my_run_id_h
+  submitter_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  blob_run_directory: not a run dir
   update_samples: true
+  state: completing
+  name: irida_next_example_completing_h
+  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
   cleaned: false
-  name: "irida_next_example_completing_h"
-
 irida_next_example_completed_with_output:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed_with_output"
-  run_id: "my_run_id_13"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project37_namespace, :uuid) %>
-  name: "irida_next_example_completed_with_output"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+  id: e75eddc7-e59e-5676-ab34-3247bcceebe3
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed_with_output
+  run_id: my_run_id_13
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_example_completed_with_output
+  namespace_id: ddda998c-70bc-57a4-a97c-cc03aadb54b2
   cleaned: false
-
 automated_workflow_execution:
-  <<: *DEFAULTS
+  id: 0a461ad5-6fce-5bce-9ece-2b8b4df166de
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "project_name": "assembly", "random_seed": "1" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_completed_with_output"
-  run_id: "my_run_id_13"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "completed"
-  blob_run_directory: "not a run dir"
+    assembler: stub
+    project_name: assembly
+    random_seed: '1'
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_completed_with_output
+  run_id: my_run_id_13
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  blob_run_directory: not a run dir
+  state: completed
+  name: automated_workflow_execution
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-  name: "automated_workflow_execution"
-
-# <% (1..25).each do |n| %>
-workflow_execution<%= (n) %>:
-  <<: *DEFAULTS
-  workflow_params: { }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_example_new"
-  run_id: <%= "my_run_id_#{n}" %>
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid) %>
-  state: "initial"
+workflow_execution1:
+  id: 439f8547-877f-595a-9a25-b5f21feb4e62
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_1
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution1
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
   cleaned: false
-  name: <%= "workflow_execution#{n}" %>
-# <% end %>
-
+workflow_execution2:
+  id: 528101b5-8d91-5ef7-b985-c03c613c4343
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_2
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution2
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution3:
+  id: 7c5c01de-a389-5cfa-8350-447fde50845d
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_3
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution3
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution4:
+  id: f9806fa7-34dc-5583-8d1b-4fbe6d7636d7
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_4
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution4
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution5:
+  id: 996063a9-b57b-513f-a5ee-10dbfdafa9e8
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_5
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution5
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution6:
+  id: 74f6807b-3174-5c5a-90c1-19218ceefb9f
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_6
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution6
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution7:
+  id: 6b3b3991-2081-5db3-bed3-9accfee6c5a0
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_7
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution7
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution8:
+  id: 5698ce76-e493-5603-a0a9-06bfadd87249
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_8
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution8
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution9:
+  id: b8f45133-b51c-5034-a138-060bc0a0651c
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_9
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution9
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution10:
+  id: 55b573e9-5591-54cd-9205-f367c934a179
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_10
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution10
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution11:
+  id: 2c9c2796-eb3f-5725-8462-b378f20b9a22
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_11
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution11
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution12:
+  id: e4b9c2ec-a765-5da3-b4a3-4ba9d8eb1dd0
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_12
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution12
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution13:
+  id: 0d7b6a98-02e3-5ed5-bb30-13c1c27729c5
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_13
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution13
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution14:
+  id: e72eae08-97c2-535c-b723-0a9aa838caf3
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_14
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution14
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution15:
+  id: d42e47c4-c27a-5d63-b583-75c240fc83ec
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_15
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution15
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution16:
+  id: 54d3e90c-cdae-5fd4-8312-9514a598212b
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_16
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution16
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution17:
+  id: 688fe220-b16c-5fe1-9cdc-0d9cfeeabffc
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_17
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution17
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution18:
+  id: '088cbd85-7c67-50a0-b6c6-1e084e11add4'
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_18
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution18
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution19:
+  id: 43eab7a6-c085-5260-95ab-c4ffdd08a296
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_19
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution19
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution20:
+  id: 6f069713-79d8-5265-a7bb-433e6aace6a8
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_20
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution20
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution21:
+  id: d440f492-5b24-5cb5-993b-da5b9f4eb56b
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_21
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution21
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution22:
+  id: 03f41510-7234-5cef-a202-9350ba228594
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_22
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution22
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution23:
+  id: d36c8982-5e36-5059-9102-53f4872512b9
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_23
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution23
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution24:
+  id: 779b81a0-64fc-5e44-8789-c20f0f559b2e
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_24
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution24
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
+workflow_execution25:
+  id: a3aea178-b3ba-5c7e-bf63-a3556e8d00a6
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params: {}
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_example_new
+  run_id: my_run_id_25
+  submitter_id: 67c5433f-9529-5cae-bae7-8d5faded6a93
+  state: initial
+  name: workflow_execution25
+  namespace_id: b97fbe8b-39f6-5f57-9020-008a910aab82
+  cleaned: false
 workflow_execution_existing:
-  <<: *DEFAULTS
+  id: 9aec580d-2997-5957-a0c9-b10ec4e92632
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "project_name": "assembly", "random_seed": "1" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_execution_existing"
-
+    assembler: stub
+    project_name: assembly
+    random_seed: '1'
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_1
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  name: workflow_execution_existing
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 automated_example_prepared:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_prepared"
-  run_id: "my_run_id_4"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "prepared"
+  id: 2499ad44-36e3-5e59-b995-1061ddf6256a
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_prepared
+  run_id: my_run_id_4
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
   email_notification: true
+  state: prepared
+  name: automated_example_prepared
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "automated_example_prepared"
-
 automated_example_submitted:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_submitted"
-  run_id: "my_run_id_5"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "submitted"
+  id: 280b262c-953a-5bb1-9bdb-6c0145111e12
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_submitted
+  run_id: my_run_id_5
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  state: submitted
+  name: automated_example_submitted
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "automated_example_submitted"
-
 automated_example_completed:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_completed"
-  run_id: "my_run_id_6"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "automated_example_completed"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+  id: 16505865-7c0b-5673-bb74-c6017c1d8eee
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_completed
+  run_id: my_run_id_6
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  blob_run_directory: not a run dir
+  state: completed
+  name: automated_example_completed
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-
 automated_example_error:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_error"
-  run_id: "my_run_id_7"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "error"
+  id: 813416ba-326a-519e-8b4a-f7a7a7c86a27
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_error
+  run_id: my_run_id_7
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  state: error
+  name: automated_example_error
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-  name: "automated_example_error"
-
 automated_example_canceling:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_canceling"
-  run_id: "my_run_id_8"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "canceling"
+  id: aade3fa0-110b-5912-b80d-aaafec78c8fd
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_canceling
+  run_id: my_run_id_8
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  state: canceling
+  name: automated_example_canceling
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "automated_example_canceling"
-
 automated_example_canceled:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_canceled"
-  run_id: "my_run_id_9"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "automated_example_canceled"
-  state: "canceled"
+  id: 529b0314-82d4-59e1-b0ac-59f130a5c199
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_canceled
+  run_id: my_run_id_9
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  state: canceled
+  name: automated_example_canceled
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-
 automated_example_running:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_running"
-  run_id: "my_run_id_10"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "running"
+  id: e37d2621-33e7-5381-ad9a-2d170fc49504
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_running
+  run_id: my_run_id_10
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  state: running
+  name: automated_example_running
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "automated_example_running"
-
 automated_example_new:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/automated_example_new"
-  run_id: "my_run_id_12"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  state: "initial"
+  id: e8a5937c-d633-5f19-8b0e-9b3cde17d379
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/automated_example_new
+  run_id: my_run_id_12
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  state: initial
+  name: automated_example_new
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "automated_example_new"
-
 automated_workflow_execution_existing:
-  <<: *DEFAULTS
+  id: b71b91b4-fdd4-55b7-827e-a8138dc3e5b2
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "project_name": "assembly", "random_seed": "1" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+    assembler: stub
+    project_name: assembly
+    random_seed: '1'
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_1
+  submitter_id: 7464c940-2518-5094-af37-06f8f34c69ac
+  name: automated_example_existing
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
-  name: "automated_example_existing"
-
 irida_next_example_end_to_end:
-  <<: *DEFAULTS
+  id: 7508713b-4634-528a-be8b-8198eacafcf3
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  state: "initial"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  state: initial
+  name: irida_next_example_end_to_end
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: false
-  name: "irida_next_example_end_to_end"
-
 irida_next_example_completed_DELETE:
-  <<: *DEFAULTS
+  id: 2473dac8-2ec5-5264-81dc-649f4da392c3
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  run_id: "my_run_id_completed_DELETE"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  blob_run_directory: "not a run dir"
-  state: "completed"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  run_id: my_run_id_completed_DELETE
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_example_completed_DELETE
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: true
-  name: "irida_next_example_completed_DELETE"
-
 irida_next_example_error_DELETE:
-  <<: *DEFAULTS
+  id: d6957a79-8657-555a-92f6-7bbb503c4098
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  run_id: "my_run_id_completed_DELETE"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  blob_run_directory: "not a run dir"
-  state: "error"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  run_id: my_run_id_completed_DELETE
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  blob_run_directory: not a run dir
+  state: error
+  name: irida_next_example_error_DELETE
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: true
-  name: "irida_next_example_error_DELETE"
-
 irida_next_example_canceled_DELETE:
-  <<: *DEFAULTS
+  id: a905a226-ab45-5e99-a01a-e313d0b21287
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  run_id: "my_run_id_completed_DELETE"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  blob_run_directory: "not a run dir"
-  state: "canceled"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  run_id: my_run_id_completed_DELETE
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  blob_run_directory: not a run dir
+  state: canceled
+  name: irida_next_example_canceled_DELETE
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: true
-  name: "irida_next_example_canceled_DELETE"
-
 irida_next_example_completed_unclean_DELETE:
-  <<: *DEFAULTS
+  id: 55f03c42-c743-5c88-970d-1ac27aa0ab7c
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  run_id: "my_run_id_completed_DELETE"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  blob_run_directory: "not a run dir"
-  state: "completed"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  run_id: my_run_id_completed_DELETE
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_example_completed_unclean_DELETE
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: false
-  name: "irida_next_example_completed_unclean_DELETE"
-
 irida_next_example_error_unclean_DELETE:
-  <<: *DEFAULTS
+  id: 7c68a66f-7e57-5666-9637-d5e41f951218
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  run_id: "my_run_id_completed_DELETE"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  blob_run_directory: "not a run dir"
-  state: "error"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  run_id: my_run_id_completed_DELETE
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  blob_run_directory: not a run dir
+  state: error
+  name: irida_next_example_error_unclean_DELETE
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: false
-  name: "irida_next_example_error_unclean_DELETE"
-
 irida_next_example_canceled_unclean_DELETE:
-  <<: *DEFAULTS
+  id: 59c6687c-8642-58fe-a739-f04fee309515
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "random_seed": 1, "project_name": "assembly" }
-  workflow_engine_parameters: { "-r": "1.0.2" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  run_id: "my_run_id_completed_DELETE"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid) %>
-  blob_run_directory: "not a run dir"
-  state: "canceled"
+    assembler: stub
+    random_seed: 1
+    project_name: assembly
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": 1.0.2
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  run_id: my_run_id_completed_DELETE
+  submitter_id: d58b446f-b562-5905-92fe-0eee7781920a
+  blob_run_directory: not a run dir
+  state: canceled
+  name: irida_next_example_canceled_unclean_DELETE
+  namespace_id: a90e5eca-0a5b-539c-8072-af36b010d302
   cleaned: false
-  name: "irida_next_example_canceled_unclean_DELETE"
-
 workflow_execution_valid_on_group:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_group_run_id_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "workflow_execution_valid_on_group"
-
+  id: d330c819-2fcc-5a7e-8013-3b3575f6f891
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_group_run_id_1
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  name: workflow_execution_valid_on_group
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
 workflow_execution_shared1:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_shared_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
+  id: 96e9586a-d8eb-57f4-a64f-4867baa0986b
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_shared_1
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  name: workflow_execution_shared1
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   shared_with_namespace: true
-  name: "workflow_execution_shared1"
-
 workflow_execution_shared2:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_shared_2"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  shared_with_namespace: true
-  state: "completed"
+  id: a5823d01-5df9-59e9-a784-664858852db8
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_shared_2
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: completed
+  name: workflow_execution_shared2
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: true
-  name: "workflow_execution_shared2"
-
+  shared_with_namespace: true
 workflow_execution_shared3:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_shared_3"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
+  id: 77dda0ab-835e-550b-bbba-16f851ba4f69
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_shared_3
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  name: workflow_execution_shared3
+  namespace_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
   shared_with_namespace: true
-  name: "workflow_execution_shared3"
-
 workflow_execution_shared4:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_shared_4"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_execution_shared4"
-  state: "running"
+  id: 37dcfdab-f8a6-558e-a6e8-e7922dbdb54c
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_shared_4
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: running
+  name: workflow_execution_shared4
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_completed_shared1:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
-  run_id: "my_run_id_shared_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  name: "irida_next_user_shared_example_completed_with_output"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+  id: 1d432ac6-873a-5ec7-8ae8-c03de759f1a2
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
+  run_id: my_run_id_shared_1
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_user_shared_example_completed_with_output
+  namespace_id: d795eef8-06e1-52f1-975f-1e77d51aab82
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_completed_shared2:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
-  run_id: "my_run_id_shared_2"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  name: "irida_next_member_shared_example_completed_with_output"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+  id: d308e9e9-3210-5d91-b21f-68691fbf3cdd
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
+  run_id: my_run_id_shared_2
+  submitter_id: 3cbe9429-8b52-560e-8eac-443765d17d38
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_member_shared_example_completed_with_output
+  namespace_id: d795eef8-06e1-52f1-975f-1e77d51aab82
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_group_shared1:
-  <<: *DEFAULTS
+  id: 35657351-499e-5465-b7d3-168810cec330
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "project_name": "assembly", "random_seed": "1" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Example1"
+    assembler: stub
+    project_name: assembly
+    random_seed: '1'
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared_1
+  submitter_id: e47fecab-35da-58d4-b597-38d482363d41
+  name: Group Shared Example1
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   shared_with_namespace: true
-
 workflow_execution_group_shared2:
-  <<: *DEFAULTS
+  id: 89aae81c-0ad1-5748-a627-aee1c85312bb
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
   workflow_params:
-    { "assembler": "stub", "project_name": "assembly", "random_seed": "1" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared_2"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Example2"
+    assembler: stub
+    project_name: assembly
+    random_seed: '1'
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared_2
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  name: Group Shared Example2
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   shared_with_namespace: true
-
 workflow_execution_group_shared3:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared_3"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Example3"
+  id: 98edaf98-5d92-579b-958b-803f54a5099f
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared_3
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  name: Group Shared Example3
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   shared_with_namespace: true
-
 workflow_execution_completed_group_shared1:
-  <<: *DEFAULTS
+  id: 58c6fed1-0614-5012-8f09-fb5c4f080f69
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
-  run_id: "my_run_id_group_shared_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  name: "irida_next_user_group_shared_example_completed_with_output"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.3
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
+  run_id: my_run_id_group_shared_1
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_user_group_shared_example_completed_with_output
+  namespace_id: cdfde8fa-8b68-5492-ae84-e8b05ff2dd55
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_completed_group_shared2:
-  <<: *DEFAULTS
+  id: 454b5622-1c0a-544e-8dc0-50ca769b0127
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/irida_next_shared_example_completed_with_output"
-  run_id: "my_run_id_group_shared_2"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  name: "irida_next_user_group_shared_example_completed_with_output"
-  state: "completed"
-  blob_run_directory: "not a run dir"
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.3
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
+  run_id: my_run_id_group_shared_2
+  submitter_id: 3cbe9429-8b52-560e-8eac-443765d17d38
+  blob_run_directory: not a run dir
+  state: completed
+  name: irida_next_user_group_shared_example_completed_with_output
+  namespace_id: cdfde8fa-8b68-5492-ae84-e8b05ff2dd55
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_group_shared_new:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared New"
-  state: "initial"
+  id: bff50341-2316-5e80-956b-efe0c68362aa
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: initial
+  name: Group Shared New
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_group_shared_prepared:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Prepared"
-  state: "prepared"
+  id: f941361f-9636-513a-a5fd-6ddf5bf38bd6
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: prepared
+  name: Group Shared Prepared
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_group_shared_submitted:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Submitted"
-  state: "submitted"
+  id: ac005dc7-59c5-5bf9-81e8-1cbe50c82c34
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: submitted
+  name: Group Shared Submitted
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_group_shared_completed:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Completed"
-  state: "completed"
+  id: 0ce74f60-ed05-53e4-8cd9-423e305a8b0d
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: completed
+  name: Group Shared Completed
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: true
   shared_with_namespace: true
-
 workflow_execution_group_shared_running:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "wn1", workflow_version: "wv1" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Running"
-  state: "running"
+  id: cc593fe1-e95c-5fdc-856f-aff4ecdae2e2
+  metadata:
+    pipeline_id: wn1
+    workflow_version: wv1
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: running
+  name: Group Shared Running
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: false
   shared_with_namespace: true
-
 workflow_execution_group_shared_error:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/group_workflow_example_error"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  state: "error"
+  id: acf30e1a-5e63-570e-ab82-81bdcff115d5
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/group_workflow_example_error
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: error
+  name: workflow_execution_group_shared_error
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: true
   shared_with_namespace: true
-  name: "workflow_execution_group_shared_error"
-
 workflow_execution_group_shared_canceling:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/workflow_execution_group_shared_canceling"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  state: "canceling"
+  id: 82ea6146-d6fa-5d22-bd6b-cc1f3e4232c5
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/workflow_execution_group_shared_canceling
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: canceling
+  name: workflow_execution_group_shared_canceling
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: false
   shared_with_namespace: true
-  name: "workflow_execution_group_shared_canceling"
-
 workflow_execution_group_shared_canceled:
-  <<: *DEFAULTS
-  workflow_params: { input: "/blah/samplesheet.csv", outdir: "/blah/output" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/group_workflow_example_canceled"
-  run_id: "my_run_id_group_shared"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  name: "Group Shared Canceled"
-  state: "canceled"
+  id: 4f2943b0-68f9-50c3-b754-2de4335cdc8b
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    input: "/blah/samplesheet.csv"
+    outdir: "/blah/output"
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/group_workflow_example_canceled
+  run_id: my_run_id_group_shared
+  submitter_id: 83bf48b8-8aa6-55b9-848f-17a244e7129c
+  state: canceled
+  name: Group Shared Canceled
+  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
   cleaned: true
   shared_with_namespace: true
-
 workflow_execution_missing_namespace:
-  <<: *DEFAULTS
+  id: 15eb0ff2-8139-51bb-8616-a7f3091144fc
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "my_run_id_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
-  namespace_id: "This namespace has been deleted"
-  name: "workflow_execution_valid"
-
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.3
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: my_run_id_1
+  submitter_id: 16156416-35a7-5165-aa73-211da105d110
+  name: workflow_execution_valid
+  namespace_id: This namespace has been deleted
 workflow_execution_missing_run_id:
-  <<: *DEFAULTS
+  id: f0f04b8c-e614-59c5-b68e-380dba7282ba
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.3" }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: Null
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:steve_doe_namespace, :uuid) %>
-  name: "workflow_execution_valid"
-
-# Fixtures for testing metadata date and numeric fields
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.3
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id:
+  submitter_id: 16156416-35a7-5165-aa73-211da105d110
+  name: workflow_execution_valid
+  namespace_id: 7ec4db25-b3dd-55f8-bf63-fd554755e665
 workflow_execution_with_metadata_dates:
-  <<: *DEFAULTS
+  id: cc561178-fabd-51fd-a38b-6e7c1744aa7e
   metadata:
-    {
-      pipeline_id: "phac-nml/iridanextexample",
-      workflow_version: "1.0.3",
-      start_date: "2024-01-15",
-      end_date: "2024-01-20",
-      sample_count: "10",
-      file_size: "1024.5",
-    }
-  workflow_params: { "key_a": "value_a" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "metadata_date_run_1"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_with_metadata_dates"
-  state: "completed"
-
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.3
+    start_date: '2024-01-15'
+    end_date: '2024-01-20'
+    sample_count: '10'
+    file_size: '1024.5'
+  workflow_params:
+    key_a: value_a
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: metadata_date_run_1
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: completed
+  name: workflow_with_metadata_dates
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 workflow_execution_with_metadata_dates2:
-  <<: *DEFAULTS
+  id: ec46e662-fdee-516d-804e-ea9ae1db0e94
   metadata:
-    {
-      pipeline_id: "phac-nml/gasclustering",
-      workflow_version: "0.5.0",
-      start_date: "2024-02-01",
-      end_date: "2024-02-10",
-      sample_count: "25",
-      file_size: "2048.75",
-    }
-  workflow_params: { "key_b": "value_b" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "metadata_date_run_2"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_with_metadata_dates_2"
-  state: "completed"
-
+    pipeline_id: phac-nml/gasclustering
+    workflow_version: 0.5.0
+    start_date: '2024-02-01'
+    end_date: '2024-02-10'
+    sample_count: '25'
+    file_size: '2048.75'
+  workflow_params:
+    key_b: value_b
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: metadata_date_run_2
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: completed
+  name: workflow_with_metadata_dates_2
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 workflow_execution_with_null_metadata:
-  <<: *DEFAULTS
-  metadata: { pipeline_id: "phac-nml/test" }
-  workflow_params: { "key_c": "value_c" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "null_metadata_run"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_with_null_metadata"
-  state: "initial"
-
-workflow_execution_with_special_chars:
-  <<: *DEFAULTS
+  id: 25c25fc2-2df7-5133-b2c9-29e4de7f2a41
   metadata:
-    {
-      pipeline_id: "phac-nml/special-chars",
-      workflow_version: "1.0.0",
-      custom_field: "value_with_%_and_underscore",
-    }
-  workflow_params: { "key_d": "value_d" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "my_workflow_url"
-  run_id: "special_chars_run"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  name: "workflow_with_special_chars"
-  state: "running"
-
+    pipeline_id: phac-nml/test
+  workflow_params:
+    key_c: value_c
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: null_metadata_run
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: initial
+  name: workflow_with_null_metadata
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+workflow_execution_with_special_chars:
+  id: 336a8df3-3666-5124-acec-0948096b78f0
+  metadata:
+    pipeline_id: phac-nml/special-chars
+    workflow_version: 1.0.0
+    custom_field: value_with_%_and_underscore
+  workflow_params:
+    key_d: value_d
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: my_workflow_url
+  run_id: special_chars_run
+  submitter_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  state: running
+  name: workflow_with_special_chars
+  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 irida_next_example_three_samples:
-  <<: *DEFAULTS
-  workflow_params: { "assembler": "stub" }
-  workflow_engine_parameters: { "-r": "dev" }
-  workflow_url: "https://github.com/phac-nml/iridanextexample"
-  submitter_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user32_project1_namespace, :uuid) %>
+  id: 835a1ca4-72cf-5fde-80d7-33dee0c95a6a
+  metadata:
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    assembler: stub
+  workflow_type: NFL
+  workflow_type_version: DSL2
+  workflow_engine: nextflow
+  workflow_engine_version: 24.10.3
+  workflow_engine_parameters:
+    "-r": dev
+  workflow_url: https://github.com/phac-nml/iridanextexample
+  submitter_id: 2ef3fd99-44ce-5fd8-9350-f823a72b7aa7
   email_notification: true
+  name: irida_next_example_three_samples
+  namespace_id: ca723108-c375-588b-b48a-5ac80a99971f
   cleaned: false
-  name: "irida_next_example_three_samples"

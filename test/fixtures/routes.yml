@@ -1,833 +1,1236 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 group_one_route:
-  name: Group 1
+  id: a21462c3-a361-5a01-ab7c-80860421a79a
   path: group-1
-  source: group_one (Namespace)
-
+  name: Group 1
+  source_type: Namespace
+  source_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
 subgroup1_route:
-  name: Group 1 / Subgroup 1
+  id: 630da569-3fb3-5632-a43d-f9eb230c138a
   path: group-1/subgroup-1
-  source: subgroup1 (Namespace)
-
-<% (Namespace::MAX_ANCESTORS-2).times do |n| %>
-subgroup<%= (n+2) %>_route:
-  name: Group 1 / <%= (n+2).times.collect{ |i| "Subgroup #{i+1}" }.join(' / ') %>
-  path: group-1/<%= (n+2).times.collect{ |i| "subgroup-#{i+1}" }.join('/') %>
-  source: subgroup<%= (n+2) %> (Namespace)
-<% end %>
-
+  name: Group 1 / Subgroup 1
+  source_type: Namespace
+  source_id: 58516594-01a1-5197-aa5c-4974e8b51f7e
+subgroup2_route:
+  id: 3183d45f-1de5-5ff1-abef-b1548c0414d1
+  path: group-1/subgroup-1/subgroup-2
+  name: Group 1 / Subgroup 1 / Subgroup 2
+  source_type: Namespace
+  source_id: d85c4cd3-095e-5505-8cc3-664276cf0c47
+subgroup3_route:
+  id: ad2fa0b9-f2cd-5eb1-83f4-7269675b8093
+  path: group-1/subgroup-1/subgroup-2/subgroup-3
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3
+  source_type: Namespace
+  source_id: 54d33c2c-0b41-52e6-b819-e3dd6207b4a3
+subgroup4_route:
+  id: 4b8114f8-f752-52b3-8154-6e2048bd465d
+  path: group-1/subgroup-1/subgroup-2/subgroup-3/subgroup-4
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3 / Subgroup 4
+  source_type: Namespace
+  source_id: 1466a666-4b9e-5281-80e7-d2660b018675
+subgroup5_route:
+  id: 7577c044-e597-58ac-b0fb-6381db3a6688
+  path: group-1/subgroup-1/subgroup-2/subgroup-3/subgroup-4/subgroup-5
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3 / Subgroup 4 / Subgroup 5
+  source_type: Namespace
+  source_id: d150f479-7a60-5f0e-8e1b-371f567b9766
+subgroup6_route:
+  id: 4c19fa1a-4799-55cd-a6f0-5cbfadc8b0f8
+  path: group-1/subgroup-1/subgroup-2/subgroup-3/subgroup-4/subgroup-5/subgroup-6
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3 / Subgroup 4 / Subgroup 5 /
+    Subgroup 6
+  source_type: Namespace
+  source_id: e5ed0fcf-5f6d-5651-a741-cee58708ed9d
+subgroup7_route:
+  id: 7b33151a-bd0c-511b-a70c-6d82737bc00a
+  path: group-1/subgroup-1/subgroup-2/subgroup-3/subgroup-4/subgroup-5/subgroup-6/subgroup-7
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3 / Subgroup 4 / Subgroup 5 /
+    Subgroup 6 / Subgroup 7
+  source_type: Namespace
+  source_id: 37ac327e-3b61-5d3c-9b76-f13baf5805c6
+subgroup8_route:
+  id: 7c348bdc-3c7c-56eb-ba12-34728ab36b0c
+  path: group-1/subgroup-1/subgroup-2/subgroup-3/subgroup-4/subgroup-5/subgroup-6/subgroup-7/subgroup-8
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3 / Subgroup 4 / Subgroup 5 /
+    Subgroup 6 / Subgroup 7 / Subgroup 8
+  source_type: Namespace
+  source_id: db8a4e0a-fa7d-5bcb-bd50-06886b5e82f8
+subgroup9_route:
+  id: c705ca48-946f-5245-b669-b4db2814826f
+  path: group-1/subgroup-1/subgroup-2/subgroup-3/subgroup-4/subgroup-5/subgroup-6/subgroup-7/subgroup-8/subgroup-9
+  name: Group 1 / Subgroup 1 / Subgroup 2 / Subgroup 3 / Subgroup 4 / Subgroup 5 /
+    Subgroup 6 / Subgroup 7 / Subgroup 8 / Subgroup 9
+  source_type: Namespace
+  source_id: 95bc3cd6-2e73-5f10-925b-439ac41c91c5
 john_doe_namespace_route:
-  name: john.doe@localhost
+  id: 6a130658-da53-5b63-a963-30c9805a7ca8
   path: john.doe_at_localhost
-  source: john_doe_namespace (Namespace)
-
+  name: john.doe@localhost
+  source_type: Namespace
+  source_id: f6fba10c-4146-5d0d-a384-2a83d4829200
 jeff_doe_namespace_route:
-  name: jeff.doe@localhost
+  id: a815ec25-a4d0-5c7e-a986-2d424067dd3b
   path: jeff.doe_at_localhost
-  source: jeff_doe_namespace (Namespace)
-
+  name: jeff.doe@localhost
+  source_type: Namespace
+  source_id: eedc45c8-b764-59cf-8a0b-1cec81bfc0b2
 jeff_doe_projectA_namespace_route_namespace_route:
-  name: jeff.doe@localhost / Project A
+  id: c2bfdabe-fc94-5df1-9f03-69c4e0be3157
   path: jeff.doe_at_localhost/project-a
-  source: projectA_namespace (Namespace)
-
+  name: jeff.doe@localhost / Project A
+  source_type: Namespace
+  source_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
 jeff_doe_project_namespace_route_namespace_route:
-  name: jeff.doe@localhost / Project Uncounted
+  id: ad92fefe-7b5f-58c3-af19-6fcad96d1b27
   path: jeff.doe_at_localhost/project-uncounted
-  source: project_jeff_namespace (Namespace)
-
+  name: jeff.doe@localhost / Project Uncounted
+  source_type: Namespace
+  source_id: a685b64d-3ea1-568f-b02e-3286e2103086
 jane_doe_namespace_route:
-  name: jane.doe@localhost
+  id: 606f9952-6042-58de-a7fe-e6084d7a4e34
   path: jane.doe_at_localhost
-  source: jane_doe_namespace (Namespace)
-
+  name: jane.doe@localhost
+  source_type: Namespace
+  source_id: b3ebdd2b-2c2c-500a-8260-ce10bacc3b83
 jean_doe_namespace_route:
-  name: jean.doe@localhost
+  id: 3d29abab-91f4-538c-b7bc-b75f7b0223fb
   path: jean.doe_at_localhost
-  source: jean_doe_namespace (Namespace)
-
+  name: jean.doe@localhost
+  source_type: Namespace
+  source_id: 9f956780-9ceb-5db0-a2bd-bdfee97c445d
 james_doe_namespace_route:
-  name: james.doe@localhost
+  id: 8c09590b-556c-5e4a-86f5-23ceba74b29a
   path: james.doe_at_localhost
-  source: james_doe_namespace (Namespace)
-
+  name: james.doe@localhost
+  source_type: Namespace
+  source_id: 1e708689-221c-5d5f-af3f-c61c041195b7
 user_25_namespace_route:
-  name: user.25@localhost
+  id: 92ef2bf9-198e-513f-b336-c2d65fffafaf
   path: user.25_at_localhost
-  source: user_25_namespace (Namespace)
-
+  name: user.25@localhost
+  source_type: Namespace
+  source_id: 4edd2d08-5b72-592e-9cb8-0eeca9a784ce
 user_26_namespace_route:
-  name: user.26@localhost
+  id: 5d1fb567-096b-5e3f-a3b7-a5f9b94e2300
   path: user.26_at_localhost
-  source: user_26_namespace (Namespace)
-
+  name: user.26@localhost
+  source_type: Namespace
+  source_id: 0cb11fc3-31be-5fb2-bfc0-5dc6b2061b58
 user_27_namespace_route:
-  name: user.27@localhost
+  id: e260a279-1c09-501a-86a9-03a44a7d9fd4
   path: user.27_at_localhost
-  source: user27_namespace (Namespace)
-
+  name: user.27@localhost
+  source_type: Namespace
+  source_id: 50e58130-bdcf-5741-b4ee-d27abca1de71
 user_28_namespace_route:
-  name: user.28@localhost
+  id: ff5ee428-8270-53b7-93db-de9ec30293dc
   path: user.28_at_localhost
-  source: user28_namespace (Namespace)
-
+  name: user.28@localhost
+  source_type: Namespace
+  source_id: 9a8ed308-2035-5a75-9beb-8c9a7fe12e12
 private_joan_namespace_route:
-  name: private.joan@localhost
+  id: d9af6301-8441-5bb2-ae3f-614b18686f30
   path: private.joan_at_localhost
-  source: private_joan_namespace (Namespace)
-
+  name: private.joan@localhost
+  source_type: Namespace
+  source_id: d9d7cc60-9724-5c81-aa6c-4e4baedf24a9
 private_ryan_namespace_route:
-  name: private.ryan@localhost
+  id: b4fc33dd-a363-5da6-b707-4832c5c70922
   path: private.ryan_at_localhost
-  source: private_ryan_namespace (Namespace)
-
+  name: private.ryan@localhost
+  source_type: Namespace
+  source_id: '0822f00c-03b0-5cbc-9564-ce8ca8dabea1'
 private_micha_namespace_route:
-  name: private.micha@localhost
+  id: 0ea0c8bf-38a0-5988-b8e0-7806f0819659
   path: private.micha_at_localhost
-  source: private_micha_namespace (Namespace)
-
+  name: private.micha@localhost
+  source_type: Namespace
+  source_id: 5bb881b2-cf2f-50ce-9b5b-dc73be034b25
 project1_namespace_route:
-  name: Group 1 / Project 1
+  id: 77c350f6-8078-5d53-b561-fbaf6ead0b2c
   path: group-1/project-1
-  source: project1_namespace (Namespace)
-
+  name: Group 1 / Project 1
+  source_type: Namespace
+  source_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
 project2_namespace_route:
-  name: Group 1 / Project 2
+  id: 1e6dbd4b-810c-51f6-89c0-7050f0db39e0
   path: group-1/project-2
-  source: project2_namespace (Namespace)
-
+  name: Group 1 / Project 2
+  source_type: Namespace
+  source_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
 john_doe_project2_namespace_route:
-  name: john.doe@localhost / Project 2
+  id: d15f7e8e-f2a9-5dce-9dc5-72992c3082a9
   path: john.doe_at_localhost/project-2
-  source: john_doe_project2_namespace (Namespace)
-
+  name: john.doe@localhost / Project 2
+  source_type: Namespace
+  source_id: 54c5d9a4-f8c7-5c8e-861d-7a125a3284d3
 project3_namespace_route:
-  name: john.doe@localhost / Project 3
+  id: c13a7580-0d9a-5d2d-9db9-d14e66b2f76d
   path: john.doe_at_localhost/project-3
-  source: john_doe_project3_namespace (Namespace)
-
+  name: john.doe@localhost / Project 3
+  source_type: Namespace
+  source_id: bae7ff4d-97af-50b3-a1c1-1b39f6bb8f6c
 project4_namespace_route:
-  name: Group 3 / Subgroup 1 Group 3 / Project 4
+  id: f6de45f9-40f2-5d14-b0a1-4640e4b89792
   path: group-3/subgroup-1-group-3/project-4
-  source: project4_namespace (Namespace)
-
+  name: Group 3 / Subgroup 1 Group 3 / Project 4
+  source_type: Namespace
+  source_id: 7761de87-276f-5513-943c-914a42c6241b
 project5_namespace_route:
-  name: Group 1 / Project 5
+  id: c2a60af6-ac40-5e6a-89f9-3914713d3fa6
   path: group-1/project-5
-  source: project5_namespace (Namespace)
-
+  name: Group 1 / Project 5
+  source_type: Namespace
+  source_id: 1ca862aa-3d10-5030-b57f-aa6e7911b067
 project6_namespace_route:
-  name: Group 1 / Project 6
+  id: 607c957e-4dcb-5de8-bd9b-2ffdda9e0307
   path: group-1/project-6
-  source: project6_namespace (Namespace)
-
+  name: Group 1 / Project 6
+  source_type: Namespace
+  source_id: 4b4bd978-1367-5abe-b97f-305cbfe993df
 project7_namespace_route:
-  name: Group 1 / Project 7
+  id: ea6f83cb-6121-5e60-adae-685d12ae65a6
   path: group-1/project-7
-  source: project7_namespace (Namespace)
-
+  name: Group 1 / Project 7
+  source_type: Namespace
+  source_id: 75b06a95-4fb6-5f7e-b8f0-da31357bd62a
 project8_namespace_route:
-  name: Group 1 / Project 8
+  id: 284a9fc2-d0c5-5607-9a9d-f7663aae4f9b
   path: group-1/project-8
-  source: project8_namespace (Namespace)
-
+  name: Group 1 / Project 8
+  source_type: Namespace
+  source_id: c510a67f-c72c-5805-8390-b2d3d9512b31
 project9_namespace_route:
-  name: Group 1 / Project 9
+  id: 567171e5-c9b6-53d7-92c6-408990128712
   path: group-1/project-9
-  source: project9_namespace (Namespace)
-
+  name: Group 1 / Project 9
+  source_type: Namespace
+  source_id: 1b181bb5-1d67-5fa9-8be3-41f7250ce071
 project10_namespace_route:
-  name: Group 1 / Project 10
+  id: e8183b02-b376-59e6-b2b5-46d03b9906d8
   path: group-1/project-10
-  source: project10_namespace (Namespace)
-
+  name: Group 1 / Project 10
+  source_type: Namespace
+  source_id: 8d8e01a2-b1c0-5520-a53a-788873b39a89
 project11_namespace_route:
-  name: Group 1 / Project 11
+  id: f069d438-981d-5c9b-a9d2-8bb1630feadb
   path: group-1/project-11
-  source: project11_namespace (Namespace)
-
+  name: Group 1 / Project 11
+  source_type: Namespace
+  source_id: 876bb741-454e-5e5f-b263-b018c080942d
 project12_namespace_route:
-  name: Group 1 / Project 12
+  id: 525012a4-d22c-56ae-afed-41adcb38953a
   path: group-1/project-12
-  source: project12_namespace (Namespace)
-
+  name: Group 1 / Project 12
+  source_type: Namespace
+  source_id: 48bba035-1d60-54c4-a7e6-653d183634ba
 project13_namespace_route:
-  name: Group 1 / Project 13
+  id: a2cb80a2-b277-57c6-9ff4-2460335102ff
   path: group-1/project-13
-  source: project13_namespace (Namespace)
-
+  name: Group 1 / Project 13
+  source_type: Namespace
+  source_id: eb4584b7-202f-56df-aed0-912ce50e044d
 project14_namespace_route:
-  name: Group 1 / Project 14
+  id: f4077aee-9d9a-5cfe-bc09-30093d74d0be
   path: group-1/project-14
-  source: project14_namespace (Namespace)
-
+  name: Group 1 / Project 14
+  source_type: Namespace
+  source_id: a8852271-0e19-59f4-8866-dc2a794f0792
 project15_namespace_route:
-  name: Group 1 / Project 15
+  id: f566befb-3af5-5219-bf70-685f7eb1f399
   path: group-1/project-15
-  source: project15_namespace (Namespace)
-
+  name: Group 1 / Project 15
+  source_type: Namespace
+  source_id: d789b80b-5b45-5a74-91e1-79e1bf8e05e5
 project16_namespace_route:
-  name: Group 1 / Project 16
+  id: 650834a8-e666-5fb7-863e-e56abbe642a0
   path: group-1/project-16
-  source: project16_namespace (Namespace)
-
+  name: Group 1 / Project 16
+  source_type: Namespace
+  source_id: c8c9549b-ed8c-5cf3-9f7f-1a79e4353f39
 project17_namespace_route:
-  name: Group 1 / Project 17
+  id: c64f1a44-154f-51fe-baf5-7ecd2561cd12
   path: group-1/project-17
-  source: project17_namespace (Namespace)
-
+  name: Group 1 / Project 17
+  source_type: Namespace
+  source_id: a2e8e76b-7048-569d-8a8d-aa7d11baee61
 project18_namespace_route:
-  name: Group 1 / Project 18
+  id: c99cc3b6-2475-588c-947a-586a83ded3c6
   path: group-1/project-18
-  source: project18_namespace (Namespace)
-
+  name: Group 1 / Project 18
+  source_type: Namespace
+  source_id: 74d3681c-3ef7-546d-bdb5-662c5c806b99
 project19_namespace_route:
-  name: Group 1 / Project 19
+  id: dc91a3ff-c5b2-52d0-893b-76db786b9661
   path: group-1/project-19
-  source: project19_namespace (Namespace)
-
+  name: Group 1 / Project 19
+  source_type: Namespace
+  source_id: a344036d-f5ca-51f2-984a-68a65f45673f
 group_two_route:
-  name: Group 2
+  id: e7c6a808-6fb6-5d26-ad70-9c072d72a4fb
   path: group-2
-  source: group_two (Namespace)
-
+  name: Group 2
+  source_type: Namespace
+  source_id: 24df2ad2-6c45-578d-9e80-b326f81b7e17
 group_three_route:
-  name: Group 3
+  id: 150b4986-6c82-5536-a259-2f8a3e9fbab8
   path: group-3
-  source: group_three (Namespace)
-
+  name: Group 3
+  source_type: Namespace
+  source_id: ce644a8c-caa1-56ae-858a-d25119a932c2
 subgroup_one_group_three_route:
-  name: Group 3 / Subgroup 1 Group 3
+  id: c1091f5c-901d-51ab-a9b9-98d1dc644818
   path: group-3/subgroup-1-group-3
-  source: subgroup_one_group_three (Namespace)
-
+  name: Group 3 / Subgroup 1 Group 3
+  source_type: Namespace
+  source_id: 9c9caa9a-1c54-5d3f-b36b-149f52587527
 john_doe_project4_namespace_route:
-  name: john.doe@localhost / Project 4
+  id: 1aaf8315-0b4e-5b69-a8d7-e676eca21d51
   path: john.doe_at_localhost/project-4
-  source: john_doe_project4_namespace (Namespace)
-
+  name: john.doe@localhost / Project 4
+  source_type: Namespace
+  source_id: 488daded-f0a1-501f-849f-8789031bf559
 david_doe_namespace_route:
-  name: david.doe@localhost
+  id: 9f01cb1d-d6db-5739-87b9-7d2a27cd66fe
   path: david.doe_at_localhost
-  source: david_doe_namespace (Namespace)
-
+  name: david.doe@localhost
+  source_type: Namespace
+  source_id: 9c67572d-5e4a-52c1-96e5-e62486b44596
 alph_abet_namespace_route:
-  name: alph.abet@localhost
+  id: 92ce925b-ef7a-58c0-98e3-bb32e2e25687
   path: alph.abet_at_localhost
-  source: alph_abet_namespace (Namespace)
-
+  name: alph.abet@localhost
+  source_type: Namespace
+  source_id: '0519c0bf-ae72-5848-9d9b-eebc29c7fdef'
 david_doe_group_four_route:
-  name: Group 4
+  id: 40c13769-ddb0-5028-8e8a-a8578a07d863
   path: group-4
-  source: david_doe_group_four (Namespace)
-
+  name: Group 4
+  source_type: Namespace
+  source_id: 2f468475-0c1a-59c5-8151-d5fc10372bf4
 group_five_route:
-  name: Group 5
+  id: 7396df90-4ea2-56e7-837c-4ccbf0ea5433
   path: group-5
-  source: group_five (Namespace)
-
+  name: Group 5
+  source_type: Namespace
+  source_id: cdfde8fa-8b68-5492-ae84-e8b05ff2dd55
 project22_namespace_route:
-  name: Group 5 / Project 22
+  id: 31601151-705c-50af-8a22-27f95a8731ef
   path: group-5/project-22
-  source: project22_namespace (Namespace)
-
+  name: Group 5 / Project 22
+  source_type: Namespace
+  source_id: d795eef8-06e1-52f1-975f-1e77d51aab82
 subgroup_one_group_five_route:
-  name: Group 5 / Subgroup 1 Group 5
+  id: c6a65ccf-170f-5f20-8a16-0635a80fd5e4
   path: group-5/subgroup-1-group-5
-  source: subgroup_one_group_five (Namespace)
-
+  name: Group 5 / Subgroup 1 Group 5
+  source_type: Namespace
+  source_id: 8310f807-f172-5bcc-8cf7-07a3f25619c3
 group_six_route:
-  name: Group 6
+  id: 35c8b658-59d6-52f3-af95-7a1b8cffd599
   path: group-6
-  source: group_six (Namespace)
-
+  name: Group 6
+  source_type: Namespace
+  source_id: ab33a44e-48f2-5654-94d4-f44c709727c4
 project20_namespace_route:
-  name: Group 1 / Project 20
+  id: 59fe30ec-b624-5105-acb1-8b5b1f264493
   path: group-1/project-20
-  source: project20_namespace (Namespace)
-
+  name: Group 1 / Project 20
+  source_type: Namespace
+  source_id: 4a45f9bc-36ad-5569-9bdd-2525d279df83
 project21_namespace_route:
-  name: Group 1 / Project 21
+  id: 5e4a8c08-9e7a-5f48-9018-59b1e666dd40
   path: group-1/project-21
-  source: project21_namespace (Namespace)
-
-project22_namespace_route:
-  name: Group 5 / Project 22
-  path: group-5/project-22
-  source: project22_namespace (Namespace)
-
+  name: Group 1 / Project 21
+  source_type: Namespace
+  source_id: 17ac75b8-9ce8-5b60-8038-40623148ca9b
 project23_namespace_route:
-  name: Group 6 / Project 23
+  id: 20a2c909-ea2a-53d7-a200-81efe5685f7c
   path: group-6/project-23
-  source: project23_namespace (Namespace)
-
+  name: Group 6 / Project 23
+  source_type: Namespace
+  source_id: b3687c39-467b-5574-b401-2549772e1ec5
 project24_namespace_route:
-  name: Group 1 / Project 24
+  id: 708ca1bd-e3ed-5486-a1bd-83ce4db70c61
   path: group-1/project-24
-  source: project24_namespace (Namespace)
-
+  name: Group 1 / Project 24
+  source_type: Namespace
+  source_id: '084f4ff9-fe98-5d2e-8fa8-5ab320529505'
 project25_namespace_route:
-  name: Group 1 / Subgroup 1 / Project 25
+  id: e800ff01-c436-50e5-99f0-6fad2e79df12
   path: group-1/subgroup-1/project-25
-  source: project25_namespace (Namespace)
-
+  name: Group 1 / Subgroup 1 / Project 25
+  source_type: Namespace
+  source_id: 0574e163-1e32-5a42-bd0c-8e188ea207d7
 group_seven_route:
-  name: Group 7
+  id: 0bcde86c-d2d7-53fa-8992-c27ab2351134
   path: group-7
-  source: group_seven (Namespace)
-
+  name: Group 7
+  source_type: Namespace
+  source_id: 88fc96cc-8d5c-5930-a822-4d1faf2a0c4c
 project26_namespace_route:
-  name: john.doe@localhost / Project 26
+  id: '06780e6a-d005-5bcc-9b9b-8aa3404656f9'
   path: john.doe_at_localhost/project-26
-  source: project26_namespace (Namespace)
-
+  name: john.doe@localhost / Project 26
+  source_type: Namespace
+  source_id: 9ea91937-f155-5415-a166-6169e0d6a797
 project32_namespace_route:
-  name: Group 8 / Project 32
+  id: 46fbaba9-c3e5-5f84-beb9-55043d04c219
   path: group-8/project-32
-  source: project32_namespace (Namespace)
-
-<% [*("a".."z")].each do |letter| %>
-group_<%= letter %>_route:
-  name: <%= "Group #{letter.capitalize}" %>
-  path: <%= "group-#{letter}" %>
-  source: group<%= "_#{letter}" %> (Namespace)
-<% end %>
-
+  name: Group 8 / Project 32
+  source_type: Namespace
+  source_id: fb2892e6-3cb2-5dca-be8a-f062eb9a3d9c
+group_a_route:
+  id: d4176644-93d6-5da2-9b66-3571faa5db93
+  path: group-a
+  name: Group A
+  source_type: Namespace
+  source_id: 6935520c-e7db-5a77-9d7a-a07072479832
+group_b_route:
+  id: 6523003f-79f4-5875-9858-e172e2af4772
+  path: group-b
+  name: Group B
+  source_type: Namespace
+  source_id: 38c01456-e076-5d6d-9573-948cb2d86453
+group_c_route:
+  id: f6da4b1d-9608-5f35-a754-9af764bf1f9a
+  path: group-c
+  name: Group C
+  source_type: Namespace
+  source_id: 700fffb4-4307-5a8b-b4ba-46edeaadf66d
+group_d_route:
+  id: b15838ae-08b7-5a35-8eba-bcd7c2fa778d
+  path: group-d
+  name: Group D
+  source_type: Namespace
+  source_id: 1d32da27-da75-5bd3-97ee-14ded2c8da3f
+group_e_route:
+  id: 1ae8278c-2933-5bc9-9637-97c1767e59e1
+  path: group-e
+  name: Group E
+  source_type: Namespace
+  source_id: 93df8c30-d20a-59d5-9e30-e2fda4851d4d
+group_f_route:
+  id: 9d6e65e9-cc55-509a-b14a-b8172cedfd64
+  path: group-f
+  name: Group F
+  source_type: Namespace
+  source_id: 1fd2bb1b-e57f-5bfb-95d3-01918361bc45
+group_g_route:
+  id: 9441287e-5834-5454-af3d-a227e79fc362
+  path: group-g
+  name: Group G
+  source_type: Namespace
+  source_id: ef2a10fd-3462-5fd8-b526-0bbe39ac6938
+group_h_route:
+  id: 2d03d99a-0f0d-5ac8-9d77-dac26bbe8dc7
+  path: group-h
+  name: Group H
+  source_type: Namespace
+  source_id: f797abe2-8c6f-50b0-aa73-aabea72ef3a9
+group_i_route:
+  id: a68a7fe7-8dd3-55e8-a443-806749960fad
+  path: group-i
+  name: Group I
+  source_type: Namespace
+  source_id: fa76acf3-3c2a-591b-bf2c-b42834ebf970
+group_j_route:
+  id: 2f16b57f-4d28-5b2b-a680-9cd2eb814760
+  path: group-j
+  name: Group J
+  source_type: Namespace
+  source_id: 1a72aa76-8165-5f9d-93ef-6cdfea5a32b8
+group_k_route:
+  id: 254f1139-19e2-5d9a-9a84-52c6e430118b
+  path: group-k
+  name: Group K
+  source_type: Namespace
+  source_id: 3152adf1-4fc7-5904-81cc-99f7136699e8
+group_l_route:
+  id: 77ec6575-5bf9-54aa-b8c3-8e8372e5660e
+  path: group-l
+  name: Group L
+  source_type: Namespace
+  source_id: 7a46c643-5d95-50ae-b909-3d777815d174
+group_m_route:
+  id: f3c4d8f1-1135-5cdf-a996-00012ec5d6a5
+  path: group-m
+  name: Group M
+  source_type: Namespace
+  source_id: 42b6da34-a81d-5bd1-9ee3-d529bf72fc6a
+group_n_route:
+  id: 34bfa6d6-a56b-598a-b62f-f3d72606b078
+  path: group-n
+  name: Group N
+  source_type: Namespace
+  source_id: 8c088063-25de-52f6-b212-bad096af3a84
+group_o_route:
+  id: b0c8e6a0-fe3f-5f66-bda3-08fde52bf4d9
+  path: group-o
+  name: Group O
+  source_type: Namespace
+  source_id: 20ad5c6c-fcba-5efd-b5d5-95666c69f943
+group_p_route:
+  id: ac04c284-dcc1-58a8-a49a-37436178a8ad
+  path: group-p
+  name: Group P
+  source_type: Namespace
+  source_id: 20147a22-cfe8-5b49-abb1-bf0a42872f18
+group_q_route:
+  id: 720489bc-14e1-5612-832d-1d9d4dd00c70
+  path: group-q
+  name: Group Q
+  source_type: Namespace
+  source_id: a6011c33-895a-529c-9d62-8fbaf7cb6a56
+group_r_route:
+  id: 3c06f485-a30e-5f45-bd84-bede116ffff4
+  path: group-r
+  name: Group R
+  source_type: Namespace
+  source_id: f0483be4-2cf4-55f1-a53c-94ce4de74a8c
+group_s_route:
+  id: f75d0932-58c0-558b-b3b4-bdf96f51b618
+  path: group-s
+  name: Group S
+  source_type: Namespace
+  source_id: e7d3997c-ae06-586f-a333-d9851ca4a46e
+group_t_route:
+  id: 4ee684fd-38a3-5e70-8b34-839dd0b8be02
+  path: group-t
+  name: Group T
+  source_type: Namespace
+  source_id: 6ef9bd86-5316-5075-bc9a-d27eca3a9d13
+group_u_route:
+  id: fb5952a3-a029-5532-b971-95f4ff63b958
+  path: group-u
+  name: Group U
+  source_type: Namespace
+  source_id: 9ca1a4a7-6b49-503c-8d42-234cd0c66948
+group_v_route:
+  id: 96a088dc-ab23-5cb6-92e0-d3416bb7a861
+  path: group-v
+  name: Group V
+  source_type: Namespace
+  source_id: 1c40fe37-5909-59ad-963f-37f871058f59
+group_w_route:
+  id: c6d221c7-333b-5f1c-a9ce-7a00ded12e7a
+  path: group-w
+  name: Group W
+  source_type: Namespace
+  source_id: 6a5257af-4f33-5a20-80cb-0def7940520d
+group_x_route:
+  id: 40f2ebac-ec5a-58c1-8e42-d2928193e4da
+  path: group-x
+  name: Group X
+  source_type: Namespace
+  source_id: 1993f6a1-5707-5ad8-bf35-a35a4f9076d6
+group_y_route:
+  id: 986ca0b1-3f03-5184-9cfe-24e85dca6b06
+  path: group-y
+  name: Group Y
+  source_type: Namespace
+  source_id: 1a1bb2a0-348b-5cb5-9439-14d3382f274c
+group_z_route:
+  id: 9e21268a-ce50-550b-a94b-80cb7b8f9d5d
+  path: group-z
+  name: Group Z
+  source_type: Namespace
+  source_id: c9c70272-795d-531c-bffe-dc34d560b6aa
 namespace_group_link_group_one_route:
-  name: Group One
+  id: 1e539a69-9fe3-5f91-b213-296387719b54
   path: group-one
-  source: namespace_group_link_group_one (Namespace)
-
+  name: Group One
+  source_type: Namespace
+  source_id: c4bd0d67-2854-5b90-9795-11c59173d209
 namespace_group_link_group_two_route:
-  name: Group Two
+  id: e651819e-31f1-5daf-946b-7de0135fa810
   path: group-two
-  source: namespace_group_link_group_two (Namespace)
-
+  name: Group Two
+  source_type: Namespace
+  source_id: 072fc770-3d9d-56f4-bd4e-f829303fb0f3
 namespace_group_link_group_three_route:
-  name: Group Three
+  id: b21bf46a-2c2a-5870-8019-870c191d8e9c
   path: group-three
-  source: namespace_group_link_group_three (Namespace)
-
+  name: Group Three
+  source_type: Namespace
+  source_id: eb98362e-ee66-5b89-bfd1-e22159462e19
 namespace_group_link_group_one_project1_namespace_route:
-  name: Group One / Project 1
+  id: 5629adc5-0b73-5cb5-9625-b38fe527ca83
   path: group-one/project-1
-  source: namespace_group_link_group_one_project1_namespace (Namespace)
-
+  name: Group One / Project 1
+  source_type: Namespace
+  source_id: 1213f322-013f-5b97-9710-d4f7e32e6ae7
 namespace_group_link_group_three_project1_namespace_route:
-  name: Group Three / Project 1
+  id: 6140e677-2e98-5133-8e18-7dbc452035b3
   path: group-three/project-1
-  source: namespace_group_link_group_three_project1_namespace (Namespace)
-
+  name: Group Three / Project 1
+  source_type: Namespace
+  source_id: de91f30c-4591-5819-9bab-1bd22413dea0
 group_eight_route:
-  name: Group 8
+  id: 1a3d849b-8e8e-53f1-945b-5348623bafa9
   path: group-8
-  source: group_eight (Namespace)
-
+  name: Group 8
+  source_type: Namespace
+  source_id: ca3be7b6-90d3-5a34-a887-d7249b463b80
 group_nine_route:
-  name: Group 9
+  id: e7ad33f2-bf0f-5775-8496-2db29cd5ddee
   path: group-9
-  source: group_nine (Namespace)
-
+  name: Group 9
+  source_type: Namespace
+  source_id: 26c989e2-75ea-506a-bccf-c2773b7797c6
 subgroup_one_group_nine_route:
-  name: Group 9 / Subgroup 1 Group 9
+  id: 70f32a95-c3d3-517f-8966-ec744dfb6506
   path: group-9/subgroup-1-group-9
-  source: subgroup_one_group_nine (Namespace)
-
+  name: Group 9 / Subgroup 1 Group 9
+  source_type: Namespace
+  source_id: 6c62395a-9842-5fc2-bf98-7314c798c6c0
 group_ten_route:
-  name: Group 10
+  id: 3d78a7d8-5945-52e8-acc5-5b2361ed88a9
   path: group-9/subgroup-1-group-9/group-10
-  source: group_ten (Namespace)
-
+  name: Group 10
+  source_type: Namespace
+  source_id: 314cca0e-8b3f-5e4a-8ae7-83c2f228e4c6
 project28_namespace_route:
-  name: Group 4 / Project 28
+  id: a7f0f307-1e0c-59d5-bed8-809e59cddc5e
   path: group-4/project-28
-  source: project28_namespace (Namespace)
-
+  name: Group 4 / Project 28
+  source_type: Namespace
+  source_id: 6ed978fc-7c95-5293-b626-1e88fc2d2299
 group_alpha_route:
-  name: Group Alpha
+  id: 6da82fa9-a08d-5c92-a1e4-377598e8a45e
   path: group-alpha
-  source: group_alpha (Namespace)
-
+  name: Group Alpha
+  source_type: Namespace
+  source_id: 2507ff65-5e3e-540f-9f05-016b2ed9dc7b
 group_bravo_route:
-  name: Group Bravo
+  id: 043e8f41-0d3f-5b17-9d2f-98da69754acb
   path: group-bravo
-  source: group_bravo (Namespace)
-
+  name: Group Bravo
+  source_type: Namespace
+  source_id: cdb01d9b-0d1f-5a06-bb50-6c19cdb57db5
 group_charlie_route:
-  name: Group Charlie
+  id: a69fe0e3-32b9-577c-9b36-a495f88fc7ce
   path: group-charlie
-  source: group_charlie (Namespace)
-
+  name: Group Charlie
+  source_type: Namespace
+  source_id: a3c80881-341b-50b2-8b0a-4ec8b8926d6c
 group_alpha_namespace_route:
-  name: Group Alpha / Project Alpha
+  id: 308136dc-3935-5e79-a4c3-e58761823242
   path: group-alpha/project-alpha
-  source: projectAlpha_namespace (Namespace)
-
+  name: Group Alpha / Project Alpha
+  source_type: Namespace
+  source_id: 904d5498-5aa1-5769-b12c-723f0c16782e
 group_bravo_namespace_route:
-  name: Group Bravo / Project Bravo
+  id: 27c5dce9-18ff-5cc8-a67b-70d461d03127
   path: group-bravo/project-bravo
-  source: projectBravo_namespace (Namespace)
-
+  name: Group Bravo / Project Bravo
+  source_type: Namespace
+  source_id: 44916476-d152-5529-961e-067c500aab7f
 group_charlie_namespace_route:
-  name: Group Charlie / Project Charlie
+  id: d05c8e5d-6cf3-5c97-a619-2b2d6204f277
   path: group-charlie/project-charlie
-  source: projectCharlie_namespace (Namespace)
-
+  name: Group Charlie / Project Charlie
+  source_type: Namespace
+  source_id: 2e442f3a-945a-52a5-a1c8-12019b125684
 subgroup_one_group_alpha_route:
-  name: Group Alpha / Subgroup 1
+  id: 5306ee95-ed53-5abe-af74-656e25396406
   path: group-alpha/subgroup-1
-  source: group_alpha_subgroup1 (Namespace)
-
+  name: Group Alpha / Subgroup 1
+  source_type: Namespace
+  source_id: 56b2deee-1f33-5b41-b769-4f78fa630ebf
 project_alpha_1_namespace_route:
-  name: Group Alpha / Subgroup 1 / Project Alpha 1
+  id: 0c3af17d-5ae0-5505-9b02-e06605ed0a8b
   path: group-alpha/subgroup-1/project-alpha1
-  source: projectAlpha1_namespace (Namespace)
-
+  name: Group Alpha / Subgroup 1 / Project Alpha 1
+  source_type: Namespace
+  source_id: 8e513e71-98d0-54e6-94af-ec05b30376a6
 group_eleven_route:
-  name: Group 11
+  id: 48d98802-f762-5d7c-b071-095e047416b9
   path: group-11
-  source: group_eleven (Namespace)
-
+  name: Group 11
+  source_type: Namespace
+  source_id: d2d6952e-c010-5fe0-ab5c-4fa1406d571f
 group_twelve_route:
-  name: Group 12
+  id: 58709533-fd91-570e-bf8e-f12d38dfcee1
   path: group-12
-  source: group_twelve (Namespace)
-
+  name: Group 12
+  source_type: Namespace
+  source_id: d0d08657-c27d-5d0f-bf2f-2b7b87d9f0d7
 subgroup_twelve_a_route:
-  name: Group 12 / Subgroup 12 A
+  id: 3321d098-747e-5ae1-afa3-a155993cef85
   path: group-12/subgroup-12-a
-  source: subgroup_twelve_a (Namespace)
-
+  name: Group 12 / Subgroup 12 A
+  source_type: Namespace
+  source_id: 5b45bc26-f903-5baa-b64f-59ebf48f2731
 subgroup_twelve_b_route:
-  name: Group 12 / Subgroup 12 B
+  id: 7777ba79-8967-5a79-9727-e3d3486f6b15
   path: group-12/subgroup-12-b
-  source: subgroup_twelve_b (Namespace)
-
+  name: Group 12 / Subgroup 12 B
+  source_type: Namespace
+  source_id: 7fee7c1d-fe14-5dd0-99f5-1660038f5203
 subgroup_twelve_a_a_route:
-  name: Group 12 / Subgroup 12 A / Subgroup 12 AA
+  id: 2488aac4-f5e6-5a92-9cc7-9b3c317a5e7c
   path: group-12/subgroup-12-a/subgroup-12-a-a
-  source: subgroup_twelve_a_a (Namespace)
-
+  name: Group 12 / Subgroup 12 A / Subgroup 12 AA
+  source_type: Namespace
+  source_id: ed65125b-2269-59c8-b597-e02602d21526
 project29_namespace_route:
-  name: Group 12 / Subgroup 12 A / Project 29
+  id: 85c1fd53-b1af-5e02-b178-d0c1b3873fee
   path: group-12/subgroup-12-a/project-29
-  source: project29_namespace (Namespace)
-
+  name: Group 12 / Subgroup 12 A / Project 29
+  source_type: Namespace
+  source_id: be6bfed5-8a10-5463-b9db-ab5e4944f3e1
 project30_namespace_route:
-  name: Group 12 / Subgroup 12 B / Project 30
+  id: f5661a5e-8187-5a21-9c64-453a8bdebf32
   path: group-12/subgroup-12-b/project-30
-  source: project30_namespace (Namespace)
-
+  name: Group 12 / Subgroup 12 B / Project 30
+  source_type: Namespace
+  source_id: da6ae4f4-5b32-5b9c-9f0f-75c01b944df1
 project31_namespace_route:
-  name: Group 12 / Subgroup 12 A / Subgroup 12 A A / Project 31
+  id: 4f5a5dc4-ae5e-5cec-89b6-62ea11cbd066
   path: group-12/subgroup-12-a/subgroup-12-a-a/project-31
-  source: project31_namespace (Namespace)
-
+  name: Group 12 / Subgroup 12 A / Subgroup 12 A A / Project 31
+  source_type: Namespace
+  source_id: fc824cff-4b5d-58a6-9594-8455f21959d0
 group_delta_route:
-  name: Group Delta
+  id: f7651049-7c8d-536c-b848-4c9bb516dd75
   path: group-delta
-  source: group_delta (Namespace)
-
+  name: Group Delta
+  source_type: Namespace
+  source_id: df851fc0-2faf-570a-8831-b5cb2a04d472
 group_echo_route:
-  name: Group Echo
+  id: dc7e6da4-d6b7-507a-a51e-961f77e53938
   path: group-echo
-  source: group_echo (Namespace)
-
+  name: Group Echo
+  source_type: Namespace
+  source_id: c3fcc11b-7e23-5adc-b681-f73b8ecf3c44
 subgroup_a_group_delta_route:
-  name: Group Delta / Subgroup A
+  id: 0b4af091-e50f-53de-b32d-d01aac3158c5
   path: group-delta/subgroup-a
-  source: group_delta_subgroupA (Namespace)
-
+  name: Group Delta / Subgroup A
+  source_type: Namespace
+  source_id: c838d643-65eb-5f8e-9ed9-646e25d40f49
 subgroup_b_group_echo_route:
-  name: Group Echo / Subgroup B
+  id: b7953edd-ad64-5ff3-8582-19e1185d5370
   path: group-echo/subgroup-b
-  source: group_echo_subgroupB (Namespace)
-
+  name: Group Echo / Subgroup B
+  source_type: Namespace
+  source_id: d76c2a64-7e79-5747-875f-d4f233152235
 project_delta_namespace_route:
-  name: Group Delta / Project Delta
+  id: a5b593f8-4940-5e29-8a40-e597e4ef6465
   path: group-delta/project-delta
-  source: projectDelta_namespace (Namespace)
-
+  name: Group Delta / Project Delta
+  source_type: Namespace
+  source_id: 2df70c63-34ce-5423-a9d7-538e6ba0c797
 project_echo_namespace_route:
-  name: Group Echo / Project Echo
+  id: 0f2afc72-7e62-5f88-a2bc-0425f1e28766
   path: group-echo/project-echo
-  source: projectEcho_namespace (Namespace)
-
+  name: Group Echo / Project Echo
+  source_type: Namespace
+  source_id: 36f140dc-6f95-50d8-81a5-5a62596a7b61
 project_delta_subgroupA_namespace_route:
-  name: Group Delta / Subgroup A / Project Delta
+  id: 7c6f996a-e6c0-5239-9708-a10eb6b4713f
   path: group-delta/subgroup-a/project-delta
-  source: projectDeltaSubgroupA_namespace (Namespace)
-
+  name: Group Delta / Subgroup A / Project Delta
+  source_type: Namespace
+  source_id: ca7fd979-972d-5b2a-879e-e4bbc83f8192
 project_echo_subgroupB_namespace_route:
-  name: Group Echo / Subgroup B / Project Echo
+  id: 7bff3ba3-0464-5d39-81bb-db4ac3a3c4a1
   path: group-echo/subgroup-b/project-echo
-  source: projectEchoSubgroupB_namespace (Namespace)
-
+  name: Group Echo / Subgroup B / Project Echo
+  source_type: Namespace
+  source_id: cc9dbf87-e03d-5233-836e-fda0df257d89
 group_foxtrot_route:
-  name: Group Foxtrot
+  id: d2891ba3-d782-55cb-a87e-aae3df105208
   path: group-foxtrot
-  source: group_foxtrot (Namespace)
-
+  name: Group Foxtrot
+  source_type: Namespace
+  source_id: 6d312902-6b00-545c-899f-250abb8b67f8
 subgroup_a_group_foxtrot_route:
-  name: Group Foxtrot / Subgroup A
+  id: 7fbbf032-fcfd-55c0-85ce-3eee559b4372
   path: group-foxtrot/subgroup-a
-  source: group_foxtrot_subgroupA (Namespace)
-
+  name: Group Foxtrot / Subgroup A
+  source_type: Namespace
+  source_id: 54f96f72-784f-56ff-80f1-3070d2e93ed8
 project_foxtrot_subgroupA_namespace_route:
-  name: Group Foxtrot / Subgroup A / Project Foxtrot
+  id: b529eca8-7c46-5007-8f89-922dd9129d62
   path: group-foxtrot/subgroup-a/project-foxtrot
-  source: projectFoxtrotSubgroupA_namespace (Namespace)
-
+  name: Group Foxtrot / Subgroup A / Project Foxtrot
+  source_type: Namespace
+  source_id: 14c30e33-3e4f-5250-b794-712af42758a3
 group_golf_route:
-  name: Group Golf
+  id: 1e84358b-378a-53be-88e6-c4a605935dea
   path: group-golf
-  source: group_golf (Namespace)
-
+  name: Group Golf
+  source_type: Namespace
+  source_id: d6a5a99a-feed-5eea-ae2a-896bfd7272f6
 user27_project_1_namespace_route:
-  name: user.27@localhost / Project 1
+  id: 4e8a6286-e2b7-5928-9dc2-98dec7e99953
   path: user.27_at_localhost/project-1
-  source: user27_project1_namespace (Namespace)
-
+  name: user.27@localhost / Project 1
+  source_type: Namespace
+  source_id: 68cd607f-6e88-53dc-8b3a-644f3beaa71a
 group_hotel_route:
-  name: Group Hotel
+  id: ac1f70d1-84ca-56d6-9c55-937299fd43bc
   path: group-hotel
-  source: group_hotel (Namespace)
-
+  name: Group Hotel
+  source_type: Namespace
+  source_id: 339335a7-bd42-5918-9aef-f231c670b4df
 project_hotel_namespace_route:
-  name: Group Hotel / Project Hotel
+  id: 9fde70af-b198-51e5-a968-fcb34c620cfe
   path: group-hotel/project-hotel
-  source: projectHotel_namespace (Namespace)
-
+  name: Group Hotel / Project Hotel
+  source_type: Namespace
+  source_id: 6d66e4b5-0bc0-5261-b397-095dbc4d380a
 group_13_route:
-  name: Group 13
+  id: 5f9b3e2c-191a-5e17-8d0c-1d1b2b020572
   path: group-13
-  source: group_thirteen (Namespace)
-
+  name: Group 13
+  source_type: Namespace
+  source_id: 5a93bedb-a0e7-5194-a9d6-419f815f86a4
 project33_namespace_route:
-  name: Group 13 / Project 33
+  id: 510a9c68-d08f-53d3-a517-8a9ac45f9f0f
   path: group-13/project-33
-  source: project33_namespace (Namespace)
-
+  name: Group 13 / Project 33
+  source_type: Namespace
+  source_id: b97fbe8b-39f6-5f57-9020-008a910aab82
 group_14_route:
-  name: Group 14
+  id: a1f21abd-8357-59af-b972-30bf3e9d75cf
   path: group-14
-  source: group_fourteen (Namespace)
-
+  name: Group 14
+  source_type: Namespace
+  source_id: 6d654d67-de72-5360-8ac9-fe802dbd1bc8
 project34_namespace_route:
-  name: Group 14 / Project 34
+  id: 2cf76f32-6bcc-5e95-a67c-51a9d6853d26
   path: group-14/project-34
-  source: project34_namespace (Namespace)
-
+  name: Group 14 / Project 34
+  source_type: Namespace
+  source_id: c412fd07-77df-5c1b-b54c-cecf45fa8a49
 group_15_route:
-  name: Group 15
+  id: 1096f416-7ec7-57e6-b9ec-2d335044ebef
   path: group-15
-  source: group_fifteen (Namespace)
-
+  name: Group 15
+  source_type: Namespace
+  source_id: 2c90c2e8-b329-56ce-8d67-2e50ca766a0a
 project35_namespace_route:
-  name: Group 15 / Project 35
+  id: f1b90a10-985c-5781-96f7-473dd5f7d608
   path: group-15/project-35
-  source: project35_namespace (Namespace)
-
+  name: Group 15 / Project 35
+  source_type: Namespace
+  source_id: e1f53c8f-3257-51ef-b764-41ad23c1334d
 project37_namespace_route:
-  name: Group 16 / Project 37
+  id: 6473bf4d-62e8-5883-9063-427d12a17c29
   path: group-16/project-37
-  source: project37_namespace (Namespace)
-
+  name: Group 16 / Project 37
+  source_type: Namespace
+  source_id: ddda998c-70bc-57a4-a97c-cc03aadb54b2
 group_16_route:
-  name: Group 16
+  id: 65855eec-4ee8-53b6-95ed-8dec14bb706b
   path: group-16
-  source: group_sixteen (Namespace)
-
+  name: Group 16
+  source_type: Namespace
+  source_id: 648c4942-32b9-52b4-96b8-7916441efaa3
 group_17_route:
-  name: Group 17
+  id: 95bb38ef-b647-5342-a76f-4af0ff19640c
   path: group-17
-  source: group_seventeen (Namespace)
-
+  name: Group 17
+  source_type: Namespace
+  source_id: c350b02f-0fdc-51c3-be9a-7bc8c25c51da
 project38_namespace_route:
-  name: Group 17 / Project 38
+  id: 5b7fd5b5-71b5-5977-9381-0399395fdd3e
   path: group-17/project-38
-  source: project38_namespace  (Namespace)
-
+  name: Group 17 / Project 38
+  source_type: Namespace
+  source_id: 5e3367d8-2db9-5621-984c-14384d743596
 user_29_namespace_route:
-  name: user.29@localhost
+  id: e2536d9b-f4e3-57fc-a54c-b5f02cfc8c9c
   path: user.29_at_localhost
-  source: user29_namespace (Namespace)
-
+  name: user.29@localhost
+  source_type: Namespace
+  source_id: 7cd08961-e369-58c0-abed-678e8f67426a
 user_30_namespace_route:
-  name: user.30@localhost
+  id: 421380da-d459-56fe-99b1-394adb6e3b9c
   path: user.30_at_localhost
-  source: user30_namespace (Namespace)
-
+  name: user.30@localhost
+  source_type: Namespace
+  source_id: 8dc12e7e-0632-51dc-886f-8c22ddb51713
 user29_project1_namespace_route:
-  name: user.29@localhost / Project 1
+  id: b9d0b4a4-4458-5b47-b2eb-38aafd99c479
   path: user.29_at_localhost/project-1
-  source: user29_project1_namespace (Namespace)
-
+  name: user.29@localhost / Project 1
+  source_type: Namespace
+  source_id: c08b52df-2ca0-5fa4-a57a-c8e2902b8c5b
 user30_group_one_route:
-  name: User 30 Group 1
+  id: 06f8b9ad-7af0-5b9f-989b-e94ea6bda5ad
   path: user-30-group-1
-  source: user30_group_one (Namespace)
-
+  name: User 30 Group 1
+  source_type: Namespace
+  source_id: 2faf2b0a-8c4c-5bf7-b430-7543467767ee
 empty_group_route:
-  name: Empty Group
+  id: dcebc2da-986f-5de8-9807-b2a1161a7844
   path: empty-group
-  source: empty_group (Namespace)
-
+  name: Empty Group
+  source_type: Namespace
+  source_id: 744c51a8-a6cf-5824-becf-7e9d81f5c6d9
 empty_project_namespace_route:
-  name: Empty Group / Empty Project
+  id: 9092947a-0494-5df2-984d-58848deb5d2b
   path: empty-group/empty-project
-  source: empty_project_namespace (Namespace)
-
+  name: Empty Group / Empty Project
+  source_type: Namespace
+  source_id: 5886b426-5b91-5b9f-9010-2228d8fe447b
 group_india_route:
-  name: Group India
+  id: fc5cd386-7f9a-5881-a11f-0a73a09c34cb
   path: group-india
-  source: group_india (Namespace)
-
+  name: Group India
+  source_type: Namespace
+  source_id: 072e222e-2438-5390-bb27-b5b11c7a78df
 project_india_namespace_route:
-  name: Group India / Project India
+  id: edaf7144-64ab-5a99-b63e-6c0388f3d54b
   path: group-india/project-india
-  source: projectIndia_namespace (Namespace)
-
+  name: Group India / Project India
+  source_type: Namespace
+  source_id: 29213058-523d-548e-8ac3-c207c322363d
 subgroup_one_group_india_route:
-  name: Group India / Subgroup 1
+  id: 8d748989-b910-5bc0-a744-e3c53e2e5995
   path: group-india/subgroup-1
-  source: group_india_subgroup1 (Namespace)
-
+  name: Group India / Subgroup 1
+  source_type: Namespace
+  source_id: aecee3f3-8990-522c-b112-155211a93072
 project_india_1_namespace_route:
-  name: Group India / Subgroup 1 / Project India 1
+  id: f2ac90cf-07e4-5e1a-941c-6517ab87dde9
   path: group-india/subgroup-1/project-india-1
-  source: projectIndia1_namespace (Namespace)
-
+  name: Group India / Subgroup 1 / Project India 1
+  source_type: Namespace
+  source_id: 4f7091b1-42af-54e0-bcb5-d44ab5ead930
 group_juliett_route:
-  name: Group Juliett
+  id: ac5cc7c8-5aa4-5e93-982b-7c21dfcd02ee
   path: group-juliett
-  source: group_juliett (Namespace)
-
+  name: Group Juliett
+  source_type: Namespace
+  source_id: b900430f-f763-5d95-86c5-0e7212c5a1fe
 project_juliett_namespace_route:
-  name: Group Juliett / Project Juliett
+  id: 989ba27e-4b2f-51c5-b274-ef868ae120d5
   path: group-juliett/project-juliett
-  source: projectJuliett_namespace (Namespace)
-
+  name: Group Juliett / Project Juliett
+  source_type: Namespace
+  source_id: cf59bf39-0a2b-5898-8e12-23e1ce23f7c8
 subgroup_one_group_juliett_route:
-  name: Group Juliett / Subgroup 1
+  id: c006acd6-57cb-5c8c-9b20-a327426a51cf
   path: group-juliett/subgroup-1
-  source: group_juliett_subgroup1 (Namespace)
-
+  name: Group Juliett / Subgroup 1
+  source_type: Namespace
+  source_id: 6cbf15be-46ee-5fbc-8741-f6b14fce6919
 project_juliett_1_namespace_route:
-  name: Group Juliett / Subgroup 1 / Project Juliett 1
+  id: 688db6c7-f1d1-544e-b691-11a075c5cc8d
   path: group-juliett/subgroup-1/project-juliett-1
-  source: projectJuliett1_namespace (Namespace)
-
+  name: Group Juliett / Subgroup 1 / Project Juliett 1
+  source_type: Namespace
+  source_id: 6d00e80a-e669-514d-9968-2ed7a0b05ac8
 group_kilo_route:
-  name: Group Kilo
+  id: 8a9bc8a6-0529-5c37-94c9-83bc805d486a
   path: group-kilo
-  source: group_kilo (Namespace)
-
+  name: Group Kilo
+  source_type: Namespace
+  source_id: 1ce57ff2-51c9-5362-97d4-abea71a1ab3c
 group_lima_route:
-  name: Group Lima
+  id: 8e57cea6-8480-5523-9362-fe3019b1693d
   path: group-lima
-  source: group_lima (Namespace)
-
+  name: Group Lima
+  source_type: Namespace
+  source_id: 60599412-d9db-54a6-9869-6a8b8f220318
 group_mike_route:
-  name: Group Mike
+  id: ce49a819-c2b1-5623-88e9-7ebbb0c71100
   path: group-mike
-  source: group_mike (Namespace)
-
+  name: Group Mike
+  source_type: Namespace
+  source_id: bca65d3a-48b6-56c1-9a25-406d163ab692
 projectMike_namespace_route:
-  name: Group Mike / Project Mike
+  id: d3436941-f85a-5b26-99ea-5f827558f853
   path: group-mike/project-mike
-  source: projectMike_namespace (Namespace)
-
+  name: Group Mike / Project Mike
+  source_type: Namespace
+  source_id: 6a29f360-7f6a-5ec1-9a84-0d8ec1322834
 subgroup_mike_a_route:
-  name: Group Mike / Subgroup Mike A
+  id: aff1de96-f933-58c3-8985-36e36326c1ba
   path: group-mike/subgroup-mike-a
-  source: subgroup_mike_a (Namespace)
-
+  name: Group Mike / Subgroup Mike A
+  source_type: Namespace
+  source_id: 1d88aa97-f601-5b8e-8f43-091ea5493342
 projectMikeA_namespace_route:
-  name: Group Mike / Subgroup Mike A / Project Mike A
+  id: 7f88f013-7df7-535f-b221-e9935b047e7f
   path: group-mike/subgroup-mike-a/project-mike-a
-  source: projectMikeA_namespace (Namespace)
-
+  name: Group Mike / Subgroup Mike A / Project Mike A
+  source_type: Namespace
+  source_id: 3d7e9b16-4f59-54b8-97f0-b3d0c1b91727
 subgroup_mike_b_route:
-  name: Group Mike / Subgroup Mike B
+  id: 8e39cce8-2147-5ea5-926f-737b0dbd58dd
   path: group-mike/subgroup-mike-b
-  source: subgroup_mike_b (Namespace)
-
+  name: Group Mike / Subgroup Mike B
+  source_type: Namespace
+  source_id: 15464118-c6ef-53d3-beca-e92d406b729a
 projectMikeB_namespace_route:
-  name: Group Mike / Subgroup Mike B / Project Mike B
+  id: 86f36b8a-8609-5c52-84d9-805f582f5883
   path: group-mike/subgroup-mike-b/project-mike-b
-  source: projectMikeB_namespace (Namespace)
-
+  name: Group Mike / Subgroup Mike B / Project Mike B
+  source_type: Namespace
+  source_id: bf55ca28-7272-529b-977d-f515dd599902
 subgroup_mike_a_a_route:
-  name: Group Mike / Subgroup Mike A / Subgroup Mike AA
+  id: efdbe162-5d27-5321-bb58-b8136917ecd9
   path: group-mike/subgroup-mike-a/subgroup-mike-a-a
-  source: subgroup_mike_a_a (Namespace)
-
+  name: Group Mike / Subgroup Mike A / Subgroup Mike AA
+  source_type: Namespace
+  source_id: fb6a65e7-13c5-5a0b-8dac-b17895094ce2
 group_oscar_route:
-  name: Group Oscar
+  id: 2ab6c4c9-1af6-597c-8024-4b9ea5cb12cb
   path: group-oscar
-  source: group_oscar (Namespace)
-
+  name: Group Oscar
+  source_type: Namespace
+  source_id: 7d4fafe0-9c50-5534-bcac-7385f9d68c8b
 subgroup_oscar_a_route:
-  name: Group Oscar / Subgroup Oscar A
+  id: 347b5dc7-4b95-55d9-af47-fd503e434f06
   path: group-oscar/subgroup-oscar-a
-  source: subgroup_oscar_a (Namespace)
-
+  name: Group Oscar / Subgroup Oscar A
+  source_type: Namespace
+  source_id: e272524d-8b70-5baa-b394-d2fdd9f6e40e
 group_papa_route:
-  name: Group Papa
+  id: da2d19bc-8b43-5743-bfd9-962a168e6e3e
   path: group-papa
-  source: group_papa (Namespace)
-
+  name: Group Papa
+  source_type: Namespace
+  source_id: 58a07447-5893-5cfc-ab79-1ee516a4a397
 subgroup_papa_a_route:
-  name: Group Papa / Subgroup Papa A
+  id: '09311efc-4513-5f57-89de-e0bbe5c40cf1'
   path: group-papa/subgroup-papa-a
-  source: subgroup_papa_a (Namespace)
-
+  name: Group Papa / Subgroup Papa A
+  source_type: Namespace
+  source_id: c2d4a741-e9c4-519f-bae6-d918afea1057
 group_metadata_route:
-  name: Group Metadata
+  id: 7133e458-5b16-5885-877e-93b905ab4a8b
   path: group-metadata
-  source: group_metadata (Namespace)
-
+  name: Group Metadata
+  source_type: Namespace
+  source_id: 6bbe101e-9d6c-5d9b-a825-279ac0eb4afa
 projectMetadata_namespace_route:
-  name: Group Metadata / Project Metadata
+  id: 87f66650-3d6f-58e9-a82c-8a1b73b992fa
   path: group-metadata/project-metadata
-  source: projectMetadata_namespace (Namespace)
-
+  name: Group Metadata / Project Metadata
+  source_type: Namespace
+  source_id: 1e77f0b6-1939-50f9-ae2a-0dd161fa6c74
 metadata_doe_namespace_route:
-  name: metadata.doe@localhost
+  id: c5c34550-f0cd-5d5b-8225-81217e6459c9
   path: metadata.doe_at_localhost
-  source: metadata_doe_namespace (Namespace)
-
+  name: metadata.doe@localhost
+  source_type: Namespace
+  source_id: be698ef5-6a17-5e65-9841-bfa35325c575
 metadata_doe_projectMetadata2_namespace_route:
-  name: metadata.doe@localhost / Project Metadata 2
+  id: a09e719e-260f-5031-9025-afd54c0a8506
   path: metadata.doe_at_localhost/project-metadata-2
-  source: metadata_doe_projectMetadata2_namespace (Namespace)
-
+  name: metadata.doe@localhost / Project Metadata 2
+  source_type: Namespace
+  source_id: bf774263-08cc-54c5-80df-5a6a504ba1a4
 group_sample_transfer_route:
-  name: Group Sample Transfer
+  id: 6528f605-eb6f-5e8d-aa96-9ae861490564
   path: group-sample-transfer
-  source: group_sample_transfer (Namespace)
-
+  name: Group Sample Transfer
+  source_type: Namespace
+  source_id: a27c9dd3-dc5d-5715-b361-bf2a4c28e0ae
 group_sample_transfer_target_route:
-  name: Group Sample Transfer Target
+  id: 627c3e57-261b-5134-a653-ec4a39d54643
   path: group-sample-transfer-target
-  source: group_sample_transfer_target (Namespace)
-
+  name: Group Sample Transfer Target
+  source_type: Namespace
+  source_id: 0ef32842-5f6a-5da1-a18f-f3682ac21d4f
 project_group_sample_transfer_namespace:
-  name: Group Sample Transfer / Project Group Sample Transfer
+  id: cab5a106-25ca-5835-a47e-35a42589cd60
   path: group-sample-transfer/project-group-sample-transfer
-  source: project_group_sample_transfer_namespace (Namespace)
-
+  name: Group Sample Transfer / Project Group Sample Transfer
+  source_type: Namespace
+  source_id: cab5a106-25ca-5835-a47e-35a42589cd60
 project_group_sample_transfer_target_namespace_route:
-  name: Group Sample Transfer Target / Project Group Sample Transfer Target
+  id: 585f1efe-de4a-58f0-9df6-d09217d871b8
   path: group-sample-transfer-target/project-group-sample-transfer-target
-  source: project_group_sample_transfer_target_namespace (Namespace)
-
+  name: Group Sample Transfer Target / Project Group Sample Transfer Target
+  source_type: Namespace
+  source_id: e06d5329-28fe-57e0-b12e-60e1aca78000
 group_sample_actions_route:
-  name: Group Sample Actions
+  id: 9506a9f8-7adb-56ba-bcad-3157d6ec3aae
   path: group-sample-actions
-  source: group_sample_actions (Namespace)
-
+  name: Group Sample Actions
+  source_type: Namespace
+  source_id: ecc4080a-b627-51d4-824e-6aaa10a013ee
 subgroup_sample_actions_route:
-  name: Group Sample Actions / Subgroup Sample Actions
+  id: e8ea7e24-53ad-5d0e-9aad-db13f35837dd
   path: group-sample-actions/subgroup-sample-actions
-  source: subgroup_sample_actions (Namespace)
-
+  name: Group Sample Actions / Subgroup Sample Actions
+  source_type: Namespace
+  source_id: 49548e26-db1a-54fd-bc79-944f653b9771
 project_group_sample_actions_namespace_route:
-  name: Group Sample Actions / Project Group Sample Actions
+  id: 0d1bfc4f-f91f-507e-99bf-63270db69f6e
   path: group-sample-actions/project-group-sample-actions
-  source: project_group_sample_actions_namespace (Namespace)
-
+  name: Group Sample Actions / Project Group Sample Actions
+  source_type: Namespace
+  source_id: 611d16dd-c6c1-5834-876e-bf74bac6b433
 project_subgroup_sample_actions_namespace_route:
-  name: Group Sample Actions / Subgroup Sample Actions / Project Subgroup Sample Actions
+  id: 2c982da5-7be2-5765-939b-61c8c9953b43
   path: group-sample-actions/subgroup-sample-actions/project-subgroup-sample-actions
-  source: project_subgroup_sample_actions_namespace (Namespace)
-
+  name: Group Sample Actions / Subgroup Sample Actions / Project Subgroup Sample Actions
+  source_type: Namespace
+  source_id: 573c50d7-2c8e-5500-9003-83bbee3fff4b
 shared_group_sample_actions_owner_route:
-  name: Shared Group Sample Actions Owner
+  id: a720e7f3-122e-5fda-b9b7-9edd09c5e9ec
   path: shared-group-sample-actions-owner
-  source: shared_group_sample_actions_owner (Namespace)
-
+  name: Shared Group Sample Actions Owner
+  source_type: Namespace
+  source_id: e3a0461b-5caa-50ab-b7eb-d634d684f87e
 shared_group_sample_actions_maintainer_route:
-  name: Shared Group Sample Actions Maintainer
+  id: 60a5c6b3-4069-5709-89ee-5f22ac5357a5
   path: shared-group-sample-actions-maintainer
-  source: shared_group_sample_actions_maintainer (Namespace)
-
+  name: Shared Group Sample Actions Maintainer
+  source_type: Namespace
+  source_id: fe3e780e-ba9b-566d-b190-36d09acc1564
 shared_group_sample_actions_analyst_route:
-  name: Shared Group Sample Actions Analyst
+  id: 81e14ca5-5978-53aa-bc61-cea16ed6c2ed
   path: shared-group-sample-actions-analyst
-  source: shared_group_sample_actions_analyst (Namespace)
-
+  name: Shared Group Sample Actions Analyst
+  source_type: Namespace
+  source_id: e8371f4d-3271-5853-ad1e-42d88dfc9e9b
 shared_group_sample_actions_guest_route:
-  name: Shared Group Sample Actions Guest
+  id: 6d1cdea2-db86-5ae1-95c6-d776907e921c
   path: shared-group-sample-actions-guest
-  source: shared_group_sample_actions_guest (Namespace)
-
+  name: Shared Group Sample Actions Guest
+  source_type: Namespace
+  source_id: 1aa8d917-4c60-592c-acd7-6b22a00ee8a9
 project_shared_group_sample_actions_owner_route:
-  name: Shared Group Sample Actions Owner / Project Shared Group Sample Actions Owner
+  id: ff671f4a-b5f8-581f-aabd-eee0d8c1caee
   path: shared-group-sample-actions-owner/project-shared-group-sample-actions-owner
-  source: project_shared_group_sample_actions_owner_namespace (Namespace)
-
+  name: Shared Group Sample Actions Owner / Project Shared Group Sample Actions Owner
+  source_type: Namespace
+  source_id: 2ed58ee7-4b4d-5fe4-8fe9-e32d0f694e3b
 project_shared_group_sample_actions_maintainer_route:
-  name: Shared Group Sample Actions Maintainer / Project Shared Group Sample Actions Maintainer
+  id: 6142007b-facd-5991-b377-a7be149b2454
   path: shared-group-sample-actions-maintainer/project-shared-group-sample-actions-maintainer
-  source: project_shared_group_sample_actions_maintainer_namespace (Namespace)
-
+  name: Shared Group Sample Actions Maintainer / Project Shared Group Sample Actions
+    Maintainer
+  source_type: Namespace
+  source_id: 5667e655-5b2e-5042-89b3-a11ed1d36897
 project_shared_group_sample_actions_analyst_route:
-  name: Shared Group Sample Actions Analyst / Project Shared Group Sample Actions Analyst
+  id: a1f981e2-bdd4-575e-8065-2589aec62a18
   path: shared-group-sample-actions-analyst/project-shared-group-sample-actions-analyst
-  source: project_shared_group_sample_actions_analyst_namespace (Namespace)
-
+  name: Shared Group Sample Actions Analyst / Project Shared Group Sample Actions
+    Analyst
+  source_type: Namespace
+  source_id: 5e402249-fa93-5db1-9bcf-3a3786c851b7
 project_shared_group_sample_actions_guest_route:
-  name: Shared Group Sample Actions Guest / Project Shared Group Sample Actions Guest
+  id: 754f73c9-741b-53e5-8aa1-3613acd42c1c
   path: shared-group-sample-actions-guest/project-shared-group-sample-actions-guest
-  source: project_shared_group_sample_actions_guest_namespace (Namespace)
-
+  name: Shared Group Sample Actions Guest / Project Shared Group Sample Actions Guest
+  source_type: Namespace
+  source_id: db2cd954-51b6-5d56-907e-1f7a2345d8ce
 user31_namespace_route:
-  name: user.31@localhost
+  id: 00760b1c-b2a3-518d-815c-2b64d724034e
   path: user.31_at_localhost
-  source: user31_namespace (Namespace)
-
+  name: user.31@localhost
+  source_type: Namespace
+  source_id: 9b91d01d-40b1-5a87-944c-8b611023f09a
 user31_project1_namespace_route:
-  name: user.31@localhost / Project 1
+  id: b498d49c-3cff-5337-be36-78879b46ad31
   path: user.31_at_localhost/project-1
-  source: projectUser31_namespace (Namespace)
-
+  name: user.31@localhost / Project 1
+  source_type: Namespace
+  source_id: 18202ba4-fa57-5171-a16c-1838f3806851
 chunked_samples_doe_namespace_route:
-  name: chunked_samples_doe@localhost
+  id: b842bb5c-30d7-5971-9336-f4db9ea5faae
   path: chunked-samples-doe-at-localhost
-  source: chunked_samples_doe_namespace (Namespace)
-
+  name: chunked_samples_doe@localhost
+  source_type: Namespace
+  source_id: dffdc9e1-3f2b-52dc-8788-27e8c607151e
+public_group_1_route:
+  id: b0330f41-4375-5a91-be25-6e8b782e89d3
+  path: public-group-1
+  name: Public Group 1
+  source_type: Namespace
+  source_id: d2e42ec9-55eb-5836-bdc7-405cde9e246a
+public_group_2_route:
+  id: 414fd4ce-8f1b-5d09-8150-45630f85f94c
+  path: public-group-2
+  name: Public Group 2
+  source_type: Namespace
+  source_id: c099402c-8f36-56c0-a141-0012e6dcad0a
+public_group_3_route:
+  id: 8a00ba51-9b0e-52ec-803f-46a2599ed996
+  path: public-group-3
+  name: Public Group 3
+  source_type: Namespace
+  source_id: 725ceb46-8b81-5b3f-b747-3d5d2586ea46
+public_group_4_route:
+  id: 65022302-e8be-5823-915b-55e2edba39e0
+  path: public-group-4
+  name: Public Group 4
+  source_type: Namespace
+  source_id: 3671083b-1731-5936-8e13-aa740c255504
+public_group_5_route:
+  id: bbcfee44-eb40-5091-8a24-21e444325eab
+  path: public-group-5
+  name: Public Group 5
+  source_type: Namespace
+  source_id: 4e790cec-39cf-544d-9023-5b32b914c88a
+public_group_6_route:
+  id: 8396ecab-363d-50a0-b974-142cef4da8c6
+  path: public-group-6
+  name: Public Group 6
+  source_type: Namespace
+  source_id: 959b954a-fc44-5ccd-94c7-5dfbed8ea7b3
+public_group_7_route:
+  id: 78f9a161-929a-50b3-85b8-7a3e2b1a66d4
+  path: public-group-7
+  name: Public Group 7
+  source_type: Namespace
+  source_id: 931f0328-9ffb-5404-9bad-ac0ff894e1e9
+public_group_8_route:
+  id: a48458d2-34d0-51ed-8e30-36215f5d07a7
+  path: public-group-8
+  name: Public Group 8
+  source_type: Namespace
+  source_id: fa6821e6-0542-539f-af46-3eaf2bcd62c9
+public_group_9_route:
+  id: 77c83dea-0808-558d-9ab8-a189b9c247b2
+  path: public-group-9
+  name: Public Group 9
+  source_type: Namespace
+  source_id: 437c1506-3e98-5b8d-af01-92f8ec21129e
+public_group_10_route:
+  id: 1563e282-350a-5b58-9c33-258ab0ad5be3
+  path: public-group-10
+  name: Public Group 10
+  source_type: Namespace
+  source_id: ba2a31af-3f18-56f3-9e1a-f18fd70bf9a3
 project_chunked_samples_namespace_route:
-  name: chunked_samples_doe@localhost / Project Chunked Samples
+  id: 4540535f-ad3f-508c-be91-237bfec7f3df
   path: chunked-samples-doe-at-localhost/project-chunked-samples
-  source: project_chunked_samples_namespace (Namespace)
-
-
-<% (1..10).each do |n| %>
-public_group_<%= n %>_route:
-  name: Public Group <%= n %>
-  path: public-group-<%= n %>
-  source: public_group<%= n %> (Namespace)
-<% end %>
-
+  name: chunked_samples_doe@localhost / Project Chunked Samples
+  source_type: Namespace
+  source_id: 0db6d7ab-1590-5bca-aea9-d76cc2fe0dc4
 public_group1_subgroup1_route:
-  name: Public Group 1 Subgroup 1
+  id: 9ab3591d-7d77-527a-b900-0dfad62a7d93
   path: public-group-1/subgroup-1
-  source: public_group1_subgroup1 (Namespace)
-
+  name: Public Group 1 Subgroup 1
+  source_type: Namespace
+  source_id: d963e71f-692b-5323-91f6-43b72f12b525
 public_group1_subgroup1_project1_route:
-  name: Public Group 1 Subgroup 1 Project 1
+  id: 3571a968-f382-5d3f-85b9-f67ee9b01826
   path: public-group-1/subgroup-1/project-1
-  source: public_subgroup1_project1_namespace (Namespace)
-
+  name: Public Group 1 Subgroup 1 Project 1
+  source_type: Namespace
+  source_id: e67f514d-7e3f-59ca-b914-d6a81b825a9e
 snvphyl_group_route:
-  name: SNVPhyl Group
+  id: 93d53c84-1919-571b-b880-31d5802f29be
   path: snvphyl-group
-  source: snvphyl_group (Namespace)
-
+  name: SNVPhyl Group
+  source_type: Namespace
+  source_id: 0b188f38-a1ed-5124-910b-cb6ade75be1e
 snvphyl_project_route:
-  name: SNVPhyl Group / SNVPhyl Project
+  id: aef1a26d-03e3-53c5-822a-d77a6f8a8c66
   path: snvphyl-group/snvphyl-project
-  source: snvphyl_project_namespace (Namespace)
+  name: SNVPhyl Group / SNVPhyl Project
+  source_type: Namespace
+  source_id: 15abffe8-9c04-5264-ada1-e69cae96c1f2

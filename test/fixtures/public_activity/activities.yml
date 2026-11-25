@@ -1,404 +1,295 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 project1_namespace_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.create"
+  id: ae082b65-a736-5816-b481-d6adebb3a7e3
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.create
   parameters: {}
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project2_namespace_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  key: "namespaces_project_namespace.create"
+  id: 607a0385-a046-5608-a841-ab4a82a70bc7
+  trackable_type: Namespace
+  trackable_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
+  key: namespaces_project_namespace.create
   parameters: {}
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project1_namespace_member_james_doe_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.member.create"
-  parameters: { member_email: 'james.doe@localhost', action: 'member_create' }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 60648d0e-950f-5e92-a7ac-aab1b89a7d12
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.member.create
+  parameters:
+    member_email: james.doe@localhost
+    action: member_create
 project1_namespace_member_ryan_doe_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.member.create"
-  parameters: { member_email: 'ryan.doe@localhost', action: 'member_create' }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 2189120b-b6d5-59d7-ab3c-f48e0a2b1a99
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.member.create
+  parameters:
+    member_email: ryan.doe@localhost
+    action: member_create
 project1_namespace_sample_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.create"
+  id: 173f4d4f-4ee5-5f7c-8b8a-7ccf37585b32
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.samples.create
   parameters:
-    {
-      sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1,
-      :uuid) %>,
-      sample_puid: INXT_SAM_AAAAAAAAAA,
-      action: "sample_create",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
+    sample_puid: INXT_SAM_AAAAAAAAAA
+    action: sample_create
 project1_namespace_sample_clone:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.clone"
+  id: 329e05f2-9eec-5843-879a-3e317700bad4
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.samples.clone
   parameters:
-    {
-      target_project_puid: INXT_PRJ_AAAAAAAAAB,
-      target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
-      :uuid) %>,
-      cloned_samples_count: 1,
-      action: "sample_clone",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    target_project_puid: INXT_PRJ_AAAAAAAAAB
+    target_project: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+    cloned_samples_count: 1
+    action: sample_clone
 project1_namespace_metadata_template_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.metadata_template.create"
+  id: 4afcd91c-89af-5b36-8867-e18a666528c2
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.metadata_template.create
   parameters:
-    {
-      template_id: <%= ActiveRecord::FixtureSet.identify(:valid_metadata_template, :uuid) %>,
-      template_name: "Valid Template",
-      namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>,
-      action: "metadata_template_create",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    template_id: 9c89f069-07dd-5696-a6dc-ea19eca00825
+    template_name: Valid Template
+    namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+    action: metadata_template_create
 project2_namespace_sample_cloned_from_project1:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.cloned_from"
+  id: d7bf3a82-e7f7-5824-a76a-c6babb21c273
+  trackable_type: Namespace
+  trackable_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
+  key: namespaces_project_namespace.samples.cloned_from
   parameters:
-    {
-      source_project_puid: INXT_PRJ_AAAAAAAAAA,
-      source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
-      :uuid) %>,
-      cloned_samples_count: 1,
-      action: "sample_clone",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    source_project_puid: INXT_PRJ_AAAAAAAAAA
+    source_project: 15438e41-f27c-5010-b021-fe991c68bb04
+    cloned_samples_count: 1
+    action: sample_clone
 project1_namespace_sample_transfer:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.transfer"
+  id: 4d8c8575-262a-553c-ba5d-95914779e5b1
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.samples.transfer
   parameters:
-    {
-      target_project_puid: INXT_PRJ_AAAAAAAAAB,
-      target_project: <%= ActiveRecord::FixtureSet.identify(:project2,
-      :uuid) %>,
-      transferred_samples_count: 1,
-      action: "sample_transfer",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    target_project_puid: INXT_PRJ_AAAAAAAAAB
+    target_project: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+    transferred_samples_count: 1
+    action: sample_transfer
 project2_namespace_sample_transferred_from_project1:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.transferred_from"
+  id: 78972f52-af02-5019-90b2-4c95f177551d
+  trackable_type: Namespace
+  trackable_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
+  key: namespaces_project_namespace.samples.transferred_from
   parameters:
-    {
-      source_project_puid: INXT_PRJ_AAAAAAAAAA,
-      source_project: <%= ActiveRecord::FixtureSet.identify(:project1,
-      :uuid) %>,
-      transferred_samples_count: 1,
-      action: "sample_transfer",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    source_project_puid: INXT_PRJ_AAAAAAAAAA
+    source_project: 15438e41-f27c-5010-b021-fe991c68bb04
+    transferred_samples_count: 1
+    action: sample_transfer
 project1_namespace_automated_workflow_execution_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.automated_pipeline.create"
+  id: c390cf11-b5c9-5ba1-bb4c-dab7441d7dc0
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.automated_pipeline.create
   parameters:
-    {
-      automated_pipeline_id: <%= ActiveRecord::FixtureSet.identify(:valid_automated_workflow_execution,
-      :uuid) %>,
-      action: 'automated_pipeline_create'
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    automated_pipeline_id: 21417130-2d4f-512f-83b4-e76375d6328d
+    action: automated_pipeline_create
 project1_namespace_automated_workflow_execution_launch:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "workflow_execution.automated_workflow.launch"
+  id: b8cc17c6-d22b-5be7-bda8-b55d36d384ee
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: workflow_execution.automated_workflow.launch
   parameters:
-    {
-      workflow_id: <%= ActiveRecord::FixtureSet.identify(:workflow_execution_valid,
-      :uuid) %>,
-      workflow_name: "",
-      sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>,
-      sample_puid: "INXT_SAM_AAAAAAAAAA"
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    workflow_id: 0b885298-237a-5556-8524-9d448a2099a2
+    workflow_name: ''
+    sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
+    sample_puid: INXT_SAM_AAAAAAAAAA
 project1_namespace_sample_attachment_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.attachment.create"
+  id: 14776b21-42f8-5fb5-a558-7e2ebb64c8de
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.samples.attachment.create
   parameters:
-    {
-      sample_puid: 'INXT_SAM_AAAAAAAAAA',
-      sample_id: <%= ActiveRecord::FixtureSet.identify(:sample1,
-      :uuid) %>,
-      action: 'attachment_create'
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    sample_puid: INXT_SAM_AAAAAAAAAA
+    sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
+    action: attachment_create
 project1_shared_w_group_charlie:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.namespace_group_link.create"
-  parameters: {
-    group_name: 'Group Charlie',
-    group_puid: 'INXT_GRP_AAAAAAAAAU',
-    namespace_name: 'Project 1',
-    namespace_puid: 'INXT_PRJ_AAAAAAAAAA',
-    namespace_type: project',
-    action: 'group_link_create'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 38cfd378-b78b-581f-ae33-f21dcfeb6da0
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.namespace_group_link.create
+  parameters:
+    group_name: Group Charlie
+    group_puid: INXT_GRP_AAAAAAAAAU
+    namespace_name: Project 1
+    namespace_puid: INXT_PRJ_AAAAAAAAAA
+    namespace_type: project'
+    action: group_link_create
 group_charlie_shared_by_project1:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
-  key: "group.namespace_group_link.created"
-  parameters: {
-    group_name: 'Group Charlie',
-    group_puid: 'INXT_GRP_AAAAAAAAAU',
-    namespace_name: 'Project 1',
-    namespace_puid: 'INXT_PRJ_AAAAAAAAAA',
-    namespace_type: project,
-    action: 'group_link_created'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 4f761d6c-8988-5872-8042-2cdb879d48d6
+  trackable_type: Namespace
+  trackable_id: a3c80881-341b-50b2-8b0a-4ec8b8926d6c
+  key: group.namespace_group_link.created
+  parameters:
+    group_name: Group Charlie
+    group_puid: INXT_GRP_AAAAAAAAAU
+    namespace_name: Project 1
+    namespace_puid: INXT_PRJ_AAAAAAAAAA
+    namespace_type: project
+    action: group_link_created
 project1_namespace_transfer:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.transfer"
-  parameters: {
-    project_name: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :name) %>,
-    old_namespace: <%= ActiveRecord::FixtureSet.identify(:group_one, :name) %>,
-    new_namespace: <%= ActiveRecord::FixtureSet.identify(:group_two, :name) %>,
-    action: 'project_namespace_transfer'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 0620d1c4-8c4c-5c28-9933-cb894db921c3
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.transfer
+  parameters:
+    project_name: 611912776
+    old_namespace: 972975755
+    new_namespace: 307782177
+    action: project_namespace_transfer
 group1_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.create"
+  id: 1b96f6b6-d1a1-55b9-ac66-0155308c049d
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.create
   parameters: {}
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 group1_subgroup_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.subgroups.create"
-  parameters: {
-    created_group_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>,
-    created_group_puid: INXT_GRP_AAAAAAAAAB,
-    action: 'group_subgroup_create'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 01a1227a-fdab-57f2-985d-ad2ef60487a0
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.subgroups.create
+  parameters:
+    created_group_id: 58516594-01a1-5197-aa5c-4974e8b51f7e
+    created_group_puid: INXT_GRP_AAAAAAAAAB
+    action: group_subgroup_create
 group1_project_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.projects.create"
-  parameters: {
-    project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
-    project_puid: INXT_PRJ_AAAAAAAAAA,
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 3e9c5a2a-8918-5e64-8efe-be6fc16bc0d1
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.projects.create
+  parameters:
+    project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+    project_puid: INXT_PRJ_AAAAAAAAAA
 group1_project_transfer_out:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.projects.transfer_out"
-  parameters: {
-    project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
-    project_puid: INXT_PRJ_AAAAAAAAAA,
-    old_namespace: INXT_GRP_AAAAAAAAAA,
-    new_namespace: INXT_GRP_AAAAAAAAAC,
-    action: 'project_namespace_transfer'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 0345abf4-4675-502b-b989-f34506a5b585
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.projects.transfer_out
+  parameters:
+    project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+    project_puid: INXT_PRJ_AAAAAAAAAA
+    old_namespace: INXT_GRP_AAAAAAAAAA
+    new_namespace: INXT_GRP_AAAAAAAAAC
+    action: project_namespace_transfer
 group1_project_transfer_in:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.projects.transfer_in"
-  parameters: {
-    project_id: <%= ActiveRecord::FixtureSet.identify(:project1, :uuid) %>,
-    project_puid: INXT_PRJ_AAAAAAAAAA,
-    old_namespace: INXT_GRP_AAAAAAAAAC,
-    new_namespace: INXT_GRP_AAAAAAAAAA,
-    action: 'project_namespace_transfer'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: b17077d3-e303-5fae-b0fe-b82316d6a9ba
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.projects.transfer_in
+  parameters:
+    project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+    project_puid: INXT_PRJ_AAAAAAAAAA
+    old_namespace: INXT_GRP_AAAAAAAAAC
+    new_namespace: INXT_GRP_AAAAAAAAAA
+    action: project_namespace_transfer
 group1_member_james_doe_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.member.create"
-  parameters: { member_email: 'james.doe@localhost', action: 'member_create' }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: a38bdf3b-247e-538a-8e3e-137e658f6567
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.member.create
+  parameters:
+    member_email: james.doe@localhost
+    action: member_create
 group_one_metadata_template_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.metadata_template.create"
-  parameters: {
-    template_id: <%= ActiveRecord::FixtureSet.identify(:valid_group_metadata_template, :uuid) %>,
-    template_name: "Valid Group Template",
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>,
-    action: "metadata_template_create"
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 118eef50-c6dc-5af2-99c0-c23e23a30f31
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.metadata_template.create
+  parameters:
+    template_id: 82698ff2-759b-5647-9cce-58952d022f98
+    template_name: Valid Group Template
+    namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+    action: metadata_template_create
 group1_shared_w_david_doe_group_four:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.namespace_group_link.create"
-  parameters: {
-    group_name: 'Group 4',
-    group_puid: 'INXT_GRP_AAAAAAAAAF',
-    namespace_name: 'Group 1',
-    namespace_puid: 'INXT_GRP_AAAAAAAAAA',
-    namespace_type: group',
-    action: 'group_link_create'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: c6783da5-b69e-5aad-9b30-e8b61a533704
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.namespace_group_link.create
+  parameters:
+    group_name: Group 4
+    group_puid: INXT_GRP_AAAAAAAAAF
+    namespace_name: Group 1
+    namespace_puid: INXT_GRP_AAAAAAAAAA
+    namespace_type: group'
+    action: group_link_create
 david_doe_group_four_shared_by_group1:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
-  key: "group.namespace_group_link.created"
-  parameters: {
-    group_name: 'Group 4',
-    group_puid: 'INXT_GRP_AAAAAAAAAF',
-    namespace_name: 'Group 1',
-    namespace_puid: 'INXT_GRP_AAAAAAAAAA',
-    namespace_type: 'group',
-    action: 'group_link_created'
-  }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+  id: 2a40c19c-a2e4-5a65-9df5-f9ab29d84819
+  trackable_type: Namespace
+  trackable_id: 2f468475-0c1a-59c5-8151-d5fc10372bf4
+  key: group.namespace_group_link.created
+  parameters:
+    group_name: Group 4
+    group_puid: INXT_GRP_AAAAAAAAAF
+    namespace_name: Group 1
+    namespace_puid: INXT_GRP_AAAAAAAAAA
+    namespace_type: group
+    action: group_link_created
 project1_namespace_sample_import_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.import_samples.create"
+  id: 9afb5ad5-2f81-5b26-90ec-eb8a596b0047
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.import_samples.create
   parameters:
-    {
-      imported_samples_count: 1,
-      action: "project_import_samples",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    imported_samples_count: 1
+    action: project_import_samples
 group1_sample_import_create:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.import_samples.create"
+  id: bb192453-a59e-51fe-b3ad-994d83e94a2b
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.import_samples.create
   parameters:
-    {
-      imported_samples_count: 2,
-      action: "group_import_samples",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    imported_samples_count: 2
+    action: group_import_samples
 project1_namespace_workflow_execution_destroy:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  key: "namespaces_project_namespace.workflow_executions.destroy"
+  id: 85f316ee-33b5-53aa-b593-158fc7534485
+  trackable_type: Namespace
+  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  key: namespaces_project_namespace.workflow_executions.destroy
   parameters:
-    {
-      workflow_executions_deleted_count: 3,
-      action: "workflow_execution_destroy",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    workflow_executions_deleted_count: 3
+    action: workflow_execution_destroy
 group_sample_transfer_sample_transfer:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
-  key: "group.samples.transfer"
+  id: b49d1e6d-2c32-5760-bc9b-0cd83e50defa
+  trackable_type: Namespace
+  trackable_id: a27c9dd3-dc5d-5715-b361-bf2a4c28e0ae
+  key: group.samples.transfer
   parameters:
-    {
-      transferred_samples_count: 3,
-      action: "group_sample_transfer",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    transferred_samples_count: 3
+    action: group_sample_transfer
 project_group_sample_transfer_sample_transfer:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid) %>
-  key: "namespaces_project_namespace.samples.transfer"
+  id: e993a3b0-4ab8-5759-ab2f-4e1dcd1153b6
+  trackable_type: Namespace
+  trackable_id: cab5a106-25ca-5835-a47e-35a42589cd60
+  key: namespaces_project_namespace.samples.transfer
   parameters:
-    {
-      transferred_samples_count: 3,
-      target_project_puid: INXT_PRJ_AAAAAAAACD,
-      target_project: "<%= ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid) %>",
-      action: "sample_transfer",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    transferred_samples_count: 3
+    target_project_puid: INXT_PRJ_AAAAAAAACD
+    target_project: de6abd66-a6f0-5142-8f32-f4a39c722577
+    action: sample_transfer
 project_group_sample_transfer_target_sample_transfer:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid) %>
-  key: "namespaces_project_namespace.import_samples.create"
+  id: cff360fa-d6ac-59dd-8413-7db7fd58d0d2
+  trackable_type: Namespace
+  trackable_id: e06d5329-28fe-57e0-b12e-60e1aca78000
+  key: namespaces_project_namespace.import_samples.create
   parameters:
-    {
-      transferred_samples_count: 3,
-      source_project_puid: INXT_PRJ_AAAAAAAACC,
-      source_project: "<%= ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid) %>",
-      action: "sample_transfer",
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
+    transferred_samples_count: 3
+    source_project_puid: INXT_PRJ_AAAAAAAACC
+    source_project: cab5a106-25ca-5835-a47e-35a42589cd60
+    action: sample_transfer
 group1_sample_destroy:
-  trackable_type: "Namespace"
-  trackable_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  key: "group.samples.destroy"
+  id: deafcfc4-c604-57f0-87e5-557291bc387d
+  trackable_type: Namespace
+  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  key: group.samples.destroy
   parameters:
-    {
-      samples_deleted_count: 2,
-       action: 'group_samples_destroy'
-    }
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
+    samples_deleted_count: 2
+    action: group_samples_destroy

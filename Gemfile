@@ -225,6 +225,9 @@ group :test do
   gem 'capybara-playwright-driver'
   gem 'playwright-ruby-client', '1.64.1'
 
+  # Compiles Ruby DSL fixture definitions into Rails fixture YAML files [https://github.com/rubymonolith/fixturebot]
+  gem 'fixturebot-rails'
+
   gem 'minitest-retry', require: false
   gem 'mocha', require: false
 
