@@ -1,8 +1,8 @@
 <%# locals: (sample:) %>
 
 <div class="py-2">
-  <p class="font-normal text-slate-800 dark:text-slate-100">
+  <div class="font-normal text-slate-800 dark:text-slate-100">
     <%= sample.name %>
     <%= render Pathogen::CopyableValue.new(value: sample.puid) %>
-  </p>
+  </div>
 </div>

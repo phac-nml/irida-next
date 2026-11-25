@@ -40,10 +40,10 @@ data: {
                       value: namespace.id,
                       label: namespace.name,
                     ) do %>
-            <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
+            <div class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
               <%= namespace.name %>
               <%= render Pathogen::CopyableValue.new(value: namespace.puid) %>
-            </span>
+            </div>
 
             <span class="pointer-events-none block text-slate-600 dark:text-white"><%= namespace.full_path %></span>
           <% end %>

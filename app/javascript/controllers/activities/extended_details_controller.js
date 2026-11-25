@@ -193,11 +193,14 @@ export default class extends Controller {
     );
     if (!copyableContainer) return;
 
-    const tooltipMessage =
-      copyableContainer.dataset.pathogenCopyableValueCopyTooltipMessageValue;
+    const tooltipMessage = copyableContainer.getAttribute(
+      "data-pathogen--copyable-value-copy-tooltip-message-value",
+    );
     if (tooltipMessage?.includes(this.#copyablePuidPlaceholder)) {
-      copyableContainer.dataset.pathogenCopyableValueCopyTooltipMessageValue =
-        tooltipMessage.replace(this.#copyablePuidPlaceholder, puid);
+      copyableContainer.setAttribute(
+        "data-pathogen--copyable-value-copy-tooltip-message-value",
+        tooltipMessage.replace(this.#copyablePuidPlaceholder, puid),
+      );
     }
 
     const tooltipText = copyableContainer.querySelector(
