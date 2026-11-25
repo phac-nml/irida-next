@@ -112,6 +112,14 @@ input[type="search"] {
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  :root {
+    --pvc-color-accent-strong: var(--color-primary-800);
+  }
+
+  .dark {
+    --pvc-color-accent-strong: var(--color-primary-300);
+  }
+
   *,
   ::after,
   ::before,
