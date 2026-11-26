@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  workflow_execution.metadata { { 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' } }
+  workflow_execution.workflow_params { { 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' } }
+  workflow_execution.workflow_engine_parameters { { '-r' => 'dev' } }
+
   workflow_execution.workflow_type { 'NFL' }
   workflow_execution.workflow_type_version { 'DSL2' }
   workflow_execution.workflow_engine { 'nextflow' }
@@ -12,7 +16,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_valid do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_1'
     name 'workflow_execution_valid'
     created_at '<%= 1.hour.ago %>'
@@ -28,9 +31,7 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     email_notification true
     cleaned false
@@ -40,7 +41,6 @@ FixtureBot.define do
   workflow_execution :irida_next_example_non_executable do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.0' })
     workflow_params({ 'assembler' => 'stub' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     email_notification true
     cleaned false
@@ -49,8 +49,6 @@ FixtureBot.define do
 
   workflow_execution :irida_next_example_prepared do
     metadata({ 'pipeline_id' => 'irida_next_example_prepared', 'workflow_version' => '1.0dev' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_prepared'
     state 'prepared'
     email_notification true
@@ -59,9 +57,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_submitted do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_prepared'
     run_id 'my_run_id_5'
     state 'submitted'
@@ -70,9 +65,7 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/nextflow/samplesheet_schema.json', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_6'
     state 'completed'
@@ -82,9 +75,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_2_files do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_6'
     state 'completed'
@@ -94,9 +84,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_unclean do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_unclean'
     run_id 'my_run_id_6a'
     state 'completed'
@@ -106,9 +93,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_error'
     run_id 'my_run_id_7'
     state 'error'
@@ -117,9 +101,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error_unclean do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_error_unclean'
     run_id 'my_run_id_7a'
     state 'error'
@@ -128,9 +109,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_canceling do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceling'
     run_id 'my_run_id_8'
     state 'canceling'
@@ -140,8 +118,6 @@ FixtureBot.define do
 
   workflow_execution :irida_next_example_canceled do
     metadata({ 'pipeline_id' => 'irida_next_example_canceled', 'workflow_version' => '1.0dev' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceled'
     run_id 'my_run_id_9'
     state 'canceled'
@@ -150,9 +126,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_canceled_unclean do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceled_unclean'
     run_id 'my_run_id_9a'
     state 'canceled'
@@ -161,9 +134,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_running do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_running'
     run_id 'my_run_id_10'
     state 'running'
@@ -172,9 +142,7 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_new do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({})
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_new'
     run_id 'my_run_id_12'
     state 'initial'
@@ -183,9 +151,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_a do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_a'
     submitter :jeff_doe
@@ -198,9 +163,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_b do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_b'
     submitter :jeff_doe
@@ -212,9 +174,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_c do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_c'
     submitter :jeff_doe
@@ -227,9 +186,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_d do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_d'
     submitter :jeff_doe
@@ -241,9 +197,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_e do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_e'
     submitter :jeff_doe
@@ -255,9 +208,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_f do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_f'
     submitter :jeff_doe
@@ -271,9 +221,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_g do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_g'
     submitter :projectA_automation_bot
@@ -287,9 +234,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_h do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_h'
     submitter :jeff_doe
@@ -302,9 +246,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_with_output do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_with_output'
     run_id 'my_run_id_13'
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project37_namespace)
@@ -315,9 +256,7 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_workflow_execution do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_with_output'
     run_id 'my_run_id_13'
     submitter :project1_automation_bot
@@ -329,9 +268,7 @@ FixtureBot.define do
 
   (1..25).each do |n|
     workflow_execution(:"workflow_execution#{n}") do
-      metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
       workflow_params({})
-      workflow_engine_parameters({ '-r' => 'dev' })
       workflow_url 'https://github.com/phac-nml/irida_next_example_new'
       run_id "my_run_id_#{n}"
       submitter :jane_doe
@@ -343,17 +280,12 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_existing do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_1'
     name 'workflow_execution_existing'
   end
 
   workflow_execution :automated_example_prepared do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_prepared'
     run_id 'my_run_id_4'
     submitter :project1_automation_bot
@@ -364,9 +296,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_submitted do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_submitted'
     run_id 'my_run_id_5'
     submitter :project1_automation_bot
@@ -376,9 +305,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_completed do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_completed'
     run_id 'my_run_id_6'
     submitter :project1_automation_bot
@@ -389,9 +315,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_error do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_error'
     run_id 'my_run_id_7'
     submitter :project1_automation_bot
@@ -401,9 +324,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_canceling do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_canceling'
     run_id 'my_run_id_8'
     submitter :project1_automation_bot
@@ -413,9 +333,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_canceled do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_canceled'
     run_id 'my_run_id_9'
     submitter :project1_automation_bot
@@ -425,9 +342,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_running do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_running'
     run_id 'my_run_id_10'
     submitter :project1_automation_bot
@@ -437,9 +351,6 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_new do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_new'
     run_id 'my_run_id_12'
     submitter :project1_automation_bot
@@ -449,9 +360,7 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_workflow_execution_existing do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_1'
     submitter :project1_automation_bot
     cleaned false
@@ -459,7 +368,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_end_to_end do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -471,7 +379,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_DELETE do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -485,7 +392,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error_DELETE do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -499,7 +405,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_canceled_DELETE do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -513,7 +418,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_unclean_DELETE do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -527,7 +431,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error_unclean_DELETE do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -541,7 +444,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_canceled_unclean_DELETE do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
@@ -557,7 +459,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_valid_on_group do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_group_run_id_1'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -567,7 +468,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_shared1 do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_shared_1'
     shared_with_namespace true
     name 'workflow_execution_shared1'
@@ -577,7 +477,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_shared2 do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_shared_2'
     submitter :james_doe
     state 'completed'
@@ -589,7 +488,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_shared3 do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_shared_3'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
@@ -600,7 +498,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_shared4 do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_shared_4'
     submitter :james_doe
     state 'running'
@@ -610,9 +507,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_completed_shared1 do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_shared_1'
     submitter :james_doe
@@ -625,9 +519,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_completed_shared2 do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_shared_2'
     submitter :micha_doe
@@ -640,9 +531,7 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared1 do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared_1'
     submitter :joan_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -651,9 +540,7 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared2 do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared_2'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -664,7 +551,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_group_shared3 do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared_3'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -674,8 +560,6 @@ FixtureBot.define do
 
   workflow_execution :workflow_execution_completed_group_shared1 do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_group_shared_1'
     submitter :james_doe
@@ -689,8 +573,6 @@ FixtureBot.define do
 
   workflow_execution :workflow_execution_completed_group_shared2 do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_group_shared_2'
     submitter :micha_doe
@@ -705,7 +587,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_group_shared_new do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -718,7 +599,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_group_shared_prepared do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -731,7 +611,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_group_shared_submitted do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -744,7 +623,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_group_shared_completed do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -757,7 +635,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_group_shared_running do
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -768,9 +645,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_error do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/group_workflow_example_error'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
@@ -782,9 +656,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_canceling do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/workflow_execution_group_shared_canceling'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
@@ -796,9 +667,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_canceled do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
-    workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/group_workflow_example_canceled'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
@@ -812,7 +680,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_missing_namespace do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'my_run_id_1'
     submitter :steve_doe
     namespace_id 'This namespace has been deleted'
@@ -822,7 +689,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_missing_run_id do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id nil
     submitter :steve_doe
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :steve_doe_namespace)
@@ -839,7 +705,6 @@ FixtureBot.define do
                'file_size' => '1024.5'
              })
     workflow_params({ 'key_a' => 'value_a' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'metadata_date_run_1'
     state 'completed'
     name 'workflow_with_metadata_dates'
@@ -849,7 +714,6 @@ FixtureBot.define do
     metadata({ 'pipeline_id' => 'phac-nml/gasclustering', 'workflow_version' => '0.5.0', 'start_date' => '2024-02-01',
                'end_date' => '2024-02-10', 'sample_count' => '25', 'file_size' => '2048.75' })
     workflow_params({ 'key_b' => 'value_b' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'metadata_date_run_2'
     state 'completed'
     name 'workflow_with_metadata_dates_2'
@@ -858,7 +722,6 @@ FixtureBot.define do
   workflow_execution :workflow_execution_with_null_metadata do
     metadata({ 'pipeline_id' => 'phac-nml/test' })
     workflow_params({ 'key_c' => 'value_c' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'null_metadata_run'
     state 'initial'
     name 'workflow_with_null_metadata'
@@ -868,16 +731,13 @@ FixtureBot.define do
     metadata({ 'pipeline_id' => 'phac-nml/special-chars', 'workflow_version' => '1.0.0',
                'custom_field' => 'value_with_%_and_underscore' })
     workflow_params({ 'key_d' => 'value_d' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     run_id 'special_chars_run'
     state 'running'
     name 'workflow_with_special_chars'
   end
 
   workflow_execution :irida_next_example_three_samples do
-    metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub' })
-    workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     submitter :user32
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :user32_project1_namespace)
