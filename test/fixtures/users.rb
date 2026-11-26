@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  user.last_name { 'Doe' }
+
   # Mirrors the original YAML's `DEFAULTS: &DEFAULTS` anchor/merge-key, applied to every
   # record below unless explicitly overridden. `encrypted_password` is kept as a literal
   # ERB tag (rather than computed here) because BCrypt salts the hash randomly on every
@@ -21,69 +23,58 @@ FixtureBot.define do
   user :john_doe do
     email 'john.doe@localhost'
     first_name 'John'
-    last_name 'Doe'
   end
 
   user :jane_doe do
     email 'jane.doe@localhost'
     first_name 'Jane'
-    last_name 'Doe'
   end
 
   user :jean_doe do
     email 'jean.doe@localhost'
     first_name 'Jean'
-    last_name 'Doe'
   end
 
   user :james_doe do
     email 'james.doe@localhost'
     first_name 'James'
-    last_name 'Doe'
     locale 'fr'
   end
 
   user :joan_doe do
     email 'joan.doe@localhost'
     first_name 'Joan'
-    last_name 'Doe'
     locale 'fr'
   end
 
   user :steve_doe do
     email 'steve.doe@localhost'
     first_name 'Steve'
-    last_name 'Doe'
   end
 
   user :michelle_doe do
     email 'michelle.doe@localhost'
     first_name 'Michelle'
-    last_name 'Doe'
   end
 
   user :micha_doe do
     email 'micha.doe@localhost'
     first_name 'Micha'
-    last_name 'Doe'
   end
 
   user :ryan_doe do
     email 'ryan.doe@localhost'
     first_name 'Ryan'
-    last_name 'Doe'
   end
 
   user :david_doe do
     email 'david.doe@localhost'
     first_name 'David'
-    last_name 'Doe'
   end
 
   user :jeff_doe do
     email 'jeff.doe@localhost'
     first_name 'Jeff'
-    last_name 'Doe'
     provider 'developer'
     uid 'jeff.doe@localhost'
   end
@@ -236,43 +227,36 @@ FixtureBot.define do
   user :empty_doe do
     email 'empty_doe@localhost'
     first_name 'Empty'
-    last_name 'Doe'
   end
 
   user :metadata_doe do
     email 'metadata_doe@localhost'
     first_name 'Metadata'
-    last_name 'Doe'
   end
 
   user :mary_doe do
     email 'mary.doe@localhost'
     first_name 'Mary'
-    last_name 'Doe'
   end
 
   user :sample_actions_doe do
     email 'sample.actions.doe@localhost'
     first_name 'SampleActions'
-    last_name 'Doe'
   end
 
   user :shared_sample_actions_doe do
     email 'shared.sample.actions.doe@localhost'
     first_name 'SharedSampleActions'
-    last_name 'Doe'
   end
 
   user :subgroup_sample_actions_doe do
     email 'subgroup.sample.actions.doe@localhost'
     first_name 'SubgroupSampleActions'
-    last_name 'Doe'
   end
 
   user :chunked_samples_doe do
     email 'chunked.samples.doe@localhost'
     first_name 'ChunkedSamples'
-    last_name 'Doe'
   end
 
   user :snvphyl_user do
