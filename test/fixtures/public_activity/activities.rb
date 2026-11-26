@@ -1,36 +1,33 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  activity.trackable_type { 'Namespace' }
+
   activity :project1_namespace_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.create'
     parameters({})
   end
 
   activity :project2_namespace_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     key 'namespaces_project_namespace.create'
     parameters({})
   end
 
   activity :project1_namespace_member_james_doe_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.member.create'
     parameters({ 'member_email' => 'james.doe@localhost', 'action' => 'member_create' })
   end
 
   activity :project1_namespace_member_ryan_doe_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.member.create'
     parameters({ 'member_email' => 'ryan.doe@localhost', 'action' => 'member_create' })
   end
 
   activity :project1_namespace_sample_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.create'
     parameters({
@@ -41,7 +38,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_sample_clone do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.clone'
     parameters({
@@ -53,7 +49,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_metadata_template_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.metadata_template.create'
     parameters({
@@ -66,7 +61,6 @@ FixtureBot.define do
   end
 
   activity :project2_namespace_sample_cloned_from_project1 do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     key 'namespaces_project_namespace.samples.cloned_from'
     parameters({
@@ -78,7 +72,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_sample_transfer do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.transfer'
     parameters({
@@ -90,7 +83,6 @@ FixtureBot.define do
   end
 
   activity :project2_namespace_sample_transferred_from_project1 do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     key 'namespaces_project_namespace.samples.transferred_from'
     parameters({
@@ -102,7 +94,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_automated_workflow_execution_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.automated_pipeline.create'
     parameters({
@@ -113,7 +104,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_automated_workflow_execution_launch do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'workflow_execution.automated_workflow.launch'
     parameters({
@@ -125,7 +115,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_sample_attachment_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.attachment.create'
     parameters({
@@ -136,7 +125,6 @@ FixtureBot.define do
   end
 
   activity :project1_shared_w_group_charlie do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.namespace_group_link.create'
     parameters({
@@ -153,7 +141,6 @@ FixtureBot.define do
   end
 
   activity :group_charlie_shared_by_project1 do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_charlie)
     key 'group.namespace_group_link.created'
     parameters({
@@ -167,7 +154,6 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_transfer do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.transfer'
     parameters({
@@ -184,14 +170,12 @@ FixtureBot.define do
   end
 
   activity :group1_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.create'
     parameters({})
   end
 
   activity :group1_subgroup_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.subgroups.create'
     parameters({
@@ -202,7 +186,6 @@ FixtureBot.define do
   end
 
   activity :group1_project_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.projects.create'
     parameters({
@@ -212,7 +195,6 @@ FixtureBot.define do
   end
 
   activity :group1_project_transfer_out do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.projects.transfer_out'
     parameters({
@@ -225,7 +207,6 @@ FixtureBot.define do
   end
 
   activity :group1_project_transfer_in do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.projects.transfer_in'
     parameters({
@@ -238,14 +219,12 @@ FixtureBot.define do
   end
 
   activity :group1_member_james_doe_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.member.create'
     parameters({ 'member_email' => 'james.doe@localhost', 'action' => 'member_create' })
   end
 
   activity :group_one_metadata_template_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.metadata_template.create'
     parameters({
@@ -257,7 +236,6 @@ FixtureBot.define do
   end
 
   activity :group1_shared_w_david_doe_group_four do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.namespace_group_link.create'
     parameters({
@@ -274,7 +252,6 @@ FixtureBot.define do
   end
 
   activity :david_doe_group_four_shared_by_group1 do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :david_doe_group_four)
     key 'group.namespace_group_link.created'
     parameters({
@@ -288,35 +265,30 @@ FixtureBot.define do
   end
 
   activity :project1_namespace_sample_import_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.import_samples.create'
     parameters({ 'imported_samples_count' => 1, 'action' => 'project_import_samples' })
   end
 
   activity :group1_sample_import_create do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.import_samples.create'
     parameters({ 'imported_samples_count' => 2, 'action' => 'group_import_samples' })
   end
 
   activity :project1_namespace_workflow_execution_destroy do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.workflow_executions.destroy'
     parameters({ 'workflow_executions_deleted_count' => 3, 'action' => 'workflow_execution_destroy' })
   end
 
   activity :group_sample_transfer_sample_transfer do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_transfer)
     key 'group.samples.transfer'
     parameters({ 'transferred_samples_count' => 3, 'action' => 'group_sample_transfer' })
   end
 
   activity :project_group_sample_transfer_sample_transfer do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
                                                 :project_group_sample_transfer_namespace)
     key 'namespaces_project_namespace.samples.transfer'
@@ -329,7 +301,6 @@ FixtureBot.define do
   end
 
   activity :project_group_sample_transfer_target_sample_transfer do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
                                                 :project_group_sample_transfer_target_namespace)
     key 'namespaces_project_namespace.import_samples.create'
@@ -343,7 +314,6 @@ FixtureBot.define do
   end
 
   activity :group1_sample_destroy do
-    trackable_type 'Namespace'
     trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.samples.destroy'
     parameters({ 'samples_deleted_count' => 2, 'action' => 'group_samples_destroy' })

@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  data_export.export_type { 'sample' }
+  data_export.status { 'ready' }
+  data_export.created_at { '<%= 1.week.ago %>' }
+  data_export.updated_at { '<%= 1.day.ago %>' }
+  data_export.user_id { FixtureBot::Key::Uuid.generate(:users, :john_doe) }
+
   data_export :data_export_one do
     name 'Data Export 1'
     basename 'data-export-1'
-    export_type 'sample'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample1),
                                   FixtureBot::Key::Uuid.generate(:samples, :sample2)],
@@ -14,9 +18,6 @@ FixtureBot.define do
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     expires_at '<%= 3.days.from_now %>'
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
     manifest '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAA",' \
              '"type":"folder","irida-next-type":"project","irida-next-name":"Project 1","children":[{"name":' \
              '"INXT_SAM_AAAAAAAAAA","type":"folder","irida-next-type":"sample","irida-next-name":' \
@@ -28,7 +29,6 @@ FixtureBot.define do
   end
 
   data_export :data_export_two do
-    export_type 'sample'
     status 'processing'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample1),
@@ -38,15 +38,11 @@ FixtureBot.define do
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
   end
 
   data_export :data_export_three do
     name 'Data Export 3'
     basename 'data-export-3'
-    export_type 'sample'
     status 'processing'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sampleB)],
@@ -54,16 +50,12 @@ FixtureBot.define do
                                                                          :projectA_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
     user :jeff_doe
   end
 
   data_export :data_export_four do
     name 'Data Export 4'
     basename 'data-export-4'
-    export_type 'sample'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sampleA),
                                   FixtureBot::Key::Uuid.generate(:samples, :sampleB)],
@@ -71,15 +63,11 @@ FixtureBot.define do
                                                                          :projectA_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
     expires_at '<%= 5.days.from_now %>'
     user :jeff_doe
   end
 
   data_export :data_export_five do
-    export_type 'sample'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sampleA),
                                   FixtureBot::Key::Uuid.generate(:samples, :sampleB)],
@@ -88,8 +76,6 @@ FixtureBot.define do
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
     expires_at '<%= 5.days.from_now %>'
     user :jeff_doe
   end
@@ -105,25 +91,18 @@ FixtureBot.define do
                         'analysis_type' => 'user'
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
   end
 
   data_export :data_export_seven do
     name 'Data Export 7'
     basename 'data-export-7'
     export_type 'analysis'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
                                                                  :irida_next_example_completed_with_output)],
                         'analysis_type' => 'user'
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
              "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions,
@@ -140,7 +119,6 @@ FixtureBot.define do
     name 'Data Export 8'
     basename 'data-export-8'
     export_type 'linelist'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample32)],
                         'linelist_format' => 'csv',
@@ -149,9 +127,6 @@ FixtureBot.define do
                         'metadata_fields' => %w[metadatafield1 metadatafield2]
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
     expires_at '<%= 5.days.from_now %>'
   end
 
@@ -159,7 +134,6 @@ FixtureBot.define do
     name 'Data Export 9'
     basename 'data-export-9'
     export_type 'linelist'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample32),
                                   FixtureBot::Key::Uuid.generate(:samples, :sample33),
@@ -169,16 +143,12 @@ FixtureBot.define do
                         'metadata_fields' => %w[metadatafield1 non_existant_field metadatafield2]
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
     expires_at '<%= 5.days.from_now %>'
   end
 
   data_export :data_export_ten do
     name 'Data Export 10'
     basename 'data-export-10'
-    export_type 'sample'
     status 'processing'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample22)],
@@ -187,9 +157,6 @@ FixtureBot.define do
                         'attachment_formats' => %w[text fasta]
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
-    user :john_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB",' \
              '"type":"folder","irida-next-type":"project","irida-next-name":"Project 2","children":[{"name":' \
@@ -204,15 +171,12 @@ FixtureBot.define do
     name 'Data Export 11'
     basename 'data-export-11'
     export_type 'analysis'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
                                                                  :workflow_execution_completed_shared2)],
                         'analysis_type' => 'user'
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
     user :micha_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
@@ -228,15 +192,12 @@ FixtureBot.define do
     name 'Data Export 12'
     basename 'data-export-12'
     export_type 'analysis'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
                                                                  :workflow_execution_completed_shared2)],
                         'analysis_type' => 'user'
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
     user :james_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
@@ -252,15 +213,12 @@ FixtureBot.define do
     name 'Data Export 13'
     basename 'data-export-13'
     export_type 'analysis'
-    status 'ready'
     export_parameters({
                         'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
                                                                  :workflow_execution_completed_group_shared2)],
                         'analysis_type' => 'user'
                       })
     email_notification true
-    created_at '<%= 1.week.ago %>'
-    updated_at '<%= 1.day.ago %>'
     user :james_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
