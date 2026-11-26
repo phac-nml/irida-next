@@ -2330,6 +2330,7 @@ en:
     create:
       error_message: 'The following errors prevented the Workflow Execution from being created:'
       required_workflow_param_blank: Workflow parameter '%{property}' is required and cannot be blank
+      unauthorized_samples: 'You do not have permission to use the following samples with sample ids: %{sample_ids}'
     edit_dialog:
       description: You are editing workflow execution '%{workflow_execution_id}'
       name_placeholder: Enter workflow execution name

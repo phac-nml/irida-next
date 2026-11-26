@@ -158,6 +158,45 @@ class WorkflowExecutionsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select '#workflow_execution_error_dialog'
   end
 
+  test 'should render an error dialog when a selected sample is moved to a different ' \
+       'project before the request is processed' do
+    # Simulates a race condition: the user selected @sample1 through the UI while it was still
+    # accessible within project1, but it was moved to a different (inaccessible) project before
+    # this request reached CreateService.
+    foreign_project = samples(:sample45).project
+    @sample1.update!(project: foreign_project)
+
+    assert_no_difference [-> { WorkflowExecution.count }, -> { SamplesWorkflowExecution.count }] do
+      post workflow_executions_path, as: :turbo_stream,
+                                     params: {
+                                       workflow_execution: {
+                                         metadata: {
+                                           pipeline_id: 'phac-nml/iridanextexample',
+                                           workflow_version: '1.0.2'
+                                         },
+                                         namespace_id: projects(:project1).namespace.id,
+                                         samples_workflow_executions_attributes: [
+                                           {
+                                             sample_id: @sample1.id,
+                                             samplesheet_params: {
+                                               sample: @sample1.puid,
+                                               'fastq_1' => @attachment1.to_global_id
+                                             }
+                                           }
+                                         ],
+                                         name: 'Workflow Execution With Moved Sample'
+                                       }
+                                     }
+    end
+
+    assert_response :unprocessable_content
+    assert_select '#workflow_execution_error_dialog'
+    # The error_dialog partial splits each message on its first ':', rendering the sample ids in a
+    # nested list, so assert on the message prefix and the (now foreign) sample id separately.
+    assert_match 'You do not have permission to use the following samples with sample ids', response.body
+    assert_match @sample1.id, response.body
+  end
+
   test 'should apply advanced search groups' do
     get workflow_executions_path, params: workflow_advanced_search_params(state: 'completed').merge(limit: 100)
 

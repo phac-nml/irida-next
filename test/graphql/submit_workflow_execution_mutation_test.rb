@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
+  include ActionDispatch::TestProcess::FixtureFile
+
   SUBMIT_WORKFLOW_EXECUTION_MUTATION = <<~GRAPHQL
     mutation(
       $name: String!,
@@ -45,6 +47,14 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
     @sample = samples(:sample1)
     @attachment1 = attachments(:attachment1)
     @attachment2 = attachments(:attachment2)
+  end
+
+  def create_test_attachment(sample)
+    Attachment.create!(
+      attachable: sample,
+      file: fixture_file_upload('test_file.fastq', 'text/plain'),
+      metadata: { 'format' => 'fastq', 'compression' => 'none' }
+    )
   end
 
   test 'submit workflow execution mutation should work' do
@@ -281,5 +291,59 @@ class SubmitWorkflowExecutionMutationTest < ActiveSupport::TestCase
 
     assert_not_empty result['errors'], 'should have errors.'
     assert_equal "#{@project.to_global_id} is not a valid ID for Sample", result['errors'][0]['message']
+  end
+
+  test 'submit workflow execution mutation should reject a sample from an inaccessible project' do
+    user = users(:jeff_doe)
+    project = projects(:projectA)
+    accessible_sample = samples(:sampleA)
+    accessible_attachment = attachments(:attachmentA)
+
+    # sample45 belongs to user29_project1, a project `user` (jeff_doe) is not a member of and has
+    # no access to. An authenticated user must not be able to pull another project's sample (and its
+    # attachment) into a workflow execution submitted against a project they *do* have access to.
+    foreign_sample = samples(:sample45)
+    foreign_attachment = create_test_attachment(foreign_sample)
+    assert_not_predicate Member.effective_access_level(foreign_sample.project.namespace, user), :positive?
+
+    samples_workflow_executions_attributes = [
+      {
+        sample_id: accessible_sample.to_global_id.to_s,
+        samplesheet_params: {
+          sample: accessible_sample.puid,
+          fastq_1: accessible_attachment.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      },
+      {
+        sample_id: foreign_sample.to_global_id.to_s,
+        samplesheet_params: {
+          sample: foreign_sample.puid,
+          fastq_1: foreign_attachment.to_global_id.to_s # rubocop:disable Naming/VariableNumber
+        }
+      }
+    ]
+
+    result = IridaSchema.execute(SUBMIT_WORKFLOW_EXECUTION_MUTATION,
+                                 context: { current_user: user },
+                                 variables: {
+                                   name: 'my_new_workflow_submission',
+                                   project_id: project.to_global_id.to_s,
+                                   samples_workflow_executions_attributes:
+                                 })
+
+    assert_nil result['errors'], 'should not have top level graphql errors.'
+
+    data = result['data']['submitWorkflowExecution']
+    workflow_execution = data['workflowExecution']
+
+    assert_nil workflow_execution, 'workflow execution should not be created when a foreign sample is referenced.'
+    assert_empty SamplesWorkflowExecution.where(sample_id: foreign_sample.id),
+                 'the foreign sample must never be attached to a workflow execution via this mutation.'
+
+    errors = data['errors']
+    assert_not_empty errors, 'should have errors explaining why the foreign sample was rejected.'
+    assert(errors.any? do |e|
+      e['message'] == I18n.t('workflow_executions.create.unauthorized_samples', sample_ids: foreign_sample.id)
+    end)
   end
 end
