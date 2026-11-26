@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 
-# Without `config/master.key` (e.g. in CI), Rails generates a random `secret_key_base` on
-# every boot, which `Devise.token_generator.digest` derives its HMAC key from. Fixture rows
-# that bake a `token_digest` computed from this at FixtureBot compile time would then never
-# match the previously committed compiled YAML, since the value changes every run. Fixing
-# `SECRET_KEY_BASE` here, before Rails boots, makes that digest deterministic across runs
-# and machines.
-ENV['SECRET_KEY_BASE'] ||= 'ab1318c766f6a53827b9db327708bd86e37fe9614016d13e299378328c619792a2ffe27a4a7244ef' \
-                           'de09a7bc68ae03f3851123ab67d435113d2803a5e4350320'
-
 require 'simplecov'
 require 'public_activity/testing'
 
