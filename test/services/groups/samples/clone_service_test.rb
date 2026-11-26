@@ -236,9 +236,7 @@ module Groups
           sample70_clone_puid = Sample.find(cloned_ids[sample70.id]).puid
 
           # verify group activity
-          activity = PublicActivity::Activity.where(
-            key: 'group.samples.clone'
-          ).order(created_at: :desc).first
+          activity = group.activities.find_by!(key: 'group.samples.clone')
 
           assert_equal 'group.samples.clone', activity.key
           assert_equal user, activity.owner
@@ -261,10 +259,10 @@ module Groups
           assert_equal 'group_sample_clone',
                        activity.parameters[:action]
 
-          # verify old project activity 1
-          activity = PublicActivity::Activity.where(
+          # verify old project activity for sample70's source project
+          activity = sample70.project.namespace.activities.find_by!(
             key: 'namespaces_project_namespace.samples.clone'
-          ).order(created_at: :desc).first
+          )
 
           assert_equal 'namespaces_project_namespace.samples.clone', activity.key
           assert_equal user, activity.owner
@@ -276,10 +274,10 @@ module Groups
           assert_equal 'sample_clone', activity.parameters[:action]
           assert_equal target_project.puid, activity.parameters[:target_project_puid]
 
-          # verify old project activity 2
-          activity = PublicActivity::Activity.where(
+          # verify old project activity for sample69's source project
+          activity = sample69.project.namespace.activities.find_by!(
             key: 'namespaces_project_namespace.samples.clone'
-          ).order(created_at: :desc).second
+          )
 
           assert_equal 'namespaces_project_namespace.samples.clone', activity.key
           assert_equal user, activity.owner
@@ -291,10 +289,8 @@ module Groups
           assert_equal 'sample_clone', activity.parameters[:action]
           assert_equal target_project.puid, activity.parameters[:target_project_puid]
 
-          # verify target project activity 1
-          activity = PublicActivity::Activity.where(
-            key: 'namespaces_project_namespace.samples.cloned_from'
-          ).order(created_at: :desc).first
+          # verify target project activity for sample70's source project
+          activity = activity_for_sample(target_project.namespace, sample70)
 
           assert_equal 'namespaces_project_namespace.samples.cloned_from', activity.key
           assert_equal user, activity.owner
@@ -307,10 +303,8 @@ module Groups
           assert_equal projects(:projectSharedGroupSampleActionsMaintainer).puid,
                        activity.parameters[:source_project_puid]
 
-          # verify target project activity 2
-          activity = PublicActivity::Activity.where(
-            key: 'namespaces_project_namespace.samples.cloned_from'
-          ).order(created_at: :desc).second
+          # verify target project activity for sample69's source project
+          activity = activity_for_sample(target_project.namespace, sample69)
 
           assert_equal 'namespaces_project_namespace.samples.cloned_from', activity.key
           assert_equal user, activity.owner
@@ -381,6 +375,19 @@ module Groups
                           -> { target_project.reload.samples_count } => 0,
                           -> { group.reload.samples_count } => 0 do
           Groups::Samples::CloneService.new(group, user).execute(target_project.id, [sample.id])
+        end
+      end
+
+      private
+
+      # Finds the "cloned_from" activity recorded on the target project namespace for a specific
+      # source sample. Scoping to the target namespace excludes unrelated activities (including
+      # fixture-seeded ones), but both samples' activities share that same trackable, so the match
+      # is narrowed further by content. Activities created within the same request can share an
+      # identical created_at timestamp, so this avoids relying on order-dependent lookups.
+      def activity_for_sample(target_namespace, sample)
+        target_namespace.activities.where(key: 'namespaces_project_namespace.samples.cloned_from').detect do |activity|
+          activity.extended_details.details['cloned_samples_data'].any? { |data| data['sample_puid'] == sample.puid }
         end
       end
     end
