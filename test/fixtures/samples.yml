@@ -346,6 +346,8 @@ sample34:
   id: 85e69b26-3238-57e5-9dda-36e3a6efa890
   name: Sample 34
   description: Sample 34 description.
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
   metadata:
     metadatafield1: value1
     metadatafield2: value2
@@ -364,6 +366,8 @@ sample35:
   id: 60e9c43d-d676-5c68-aac6-e0d4fc0b452e
   name: Sample 35
   description: Sample 35 description.
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   puid: INXT_SAM_AAAAAAAABF
   project_id: cc8fa6d9-92f4-5c94-8468-c78f1d744f8a
 sampleAlpha:

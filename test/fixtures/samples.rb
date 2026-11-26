@@ -226,12 +226,19 @@ FixtureBot.define do
                           'metadatafield2' => { 'id' => 1, 'source' => 'analysis',
                                                 'updated_at' => '<%= Time.local(2000,1,1).utc.as_json %>' }
                         })
+    # sample34/sample35 share an auto-filled `updated_at`; some tests sort project31's samples by
+    # last_updated and expect sample34 (analysis-sourced metadata) to sort first. Pin explicit,
+    # ordered timestamps so this is deterministic regardless of fixture id generation scheme.
+    created_at '<%= 2.hours.ago %>'
+    updated_at '<%= 2.hours.ago %>'
   end
 
   sample :sample35 do
     name 'Sample 35'
     description 'Sample 35 description.'
     project :project31
+    created_at '<%= 1.hour.ago %>'
+    updated_at '<%= 1.hour.ago %>'
     puid 'INXT_SAM_AAAAAAAABF'
   end
 

@@ -145,6 +145,8 @@ attachmentPEFWD4:
     compression: none
     associated_attachment_id: d15def17-496b-5b24-9e64-65b376ac6328
   attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
   attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAI
 attachmentPEREV4:
@@ -156,6 +158,8 @@ attachmentPEREV4:
     compression: none
     associated_attachment_id: 660fe3f1-c991-53e9-a431-af20b26a1c6d
   attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
   attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAI
 attachmentPEFWD5:
@@ -167,6 +171,8 @@ attachmentPEFWD5:
     compression: none
     associated_attachment_id: 488e7fb3-c2ff-5e27-94de-1b15edd0d8e3
   attachable_type: Sample
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAJ
 attachmentPEREV5:
@@ -178,6 +184,8 @@ attachmentPEREV5:
     compression: none
     associated_attachment_id: 9b259d54-2db3-5b13-9313-d73e9b683617
   attachable_type: Sample
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAJ
 attachmentE:
@@ -257,6 +265,8 @@ attachmentPEFWD7:
     compression: none
     associated_attachment_id: aa17c1ce-ce5b-560f-b822-a6f9bb723a2c
   attachable_type: Sample
+  created_at: "<%= 30.minutes.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
   attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAQ
 attachmentPEREV7:
@@ -268,6 +278,8 @@ attachmentPEREV7:
     compression: none
     associated_attachment_id: a03552e3-c6d7-5a6f-9cbd-6433ea7b936b
   attachable_type: Sample
+  created_at: "<%= 30.minutes.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
   attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAQ
 attachmentI:

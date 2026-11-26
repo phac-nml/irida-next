@@ -13,7 +13,8 @@ workflow_execution_valid:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_1
-  created_at: "<%= 1.hour.ago %>"
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: workflow_execution_valid
   namespace_id: e38c793a-8939-5946-b08b-d4b460067164
@@ -32,6 +33,8 @@ workflow_execution_gasclustering:
     "-r": 0.4.2
   workflow_url: my_workflow_url
   run_id: my_run_id_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   name: workflow_execution_gasclustering
   namespace_id: e38c793a-8939-5946-b08b-d4b460067164
@@ -49,6 +52,8 @@ irida_next_example:
   workflow_engine_parameters:
     "-r": dev
   workflow_url: https://github.com/phac-nml/iridanextexample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   email_notification: true
   name: irida_next_example
@@ -68,6 +73,8 @@ irida_next_example_non_executable:
   workflow_engine_parameters:
     "-r": dev
   workflow_url: https://github.com/phac-nml/iridanextexample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   email_notification: true
   name: irida_next_example_non_executable
@@ -88,6 +95,8 @@ irida_next_example_prepared:
   workflow_engine_parameters:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_prepared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   email_notification: true
   state: prepared
@@ -110,6 +119,8 @@ irida_next_example_submitted:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_prepared
   run_id: my_run_id_5
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: submitted
   name: irida_next_example_submitted
@@ -131,6 +142,8 @@ irida_next_example_completed:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_6
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   blob_run_directory: not a run dir
   state: completed
@@ -153,6 +166,8 @@ irida_next_example_completed_2_files:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_6
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   blob_run_directory: not a run dir
   state: completed
@@ -175,6 +190,8 @@ irida_next_example_completed_unclean:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed_unclean
   run_id: my_run_id_6a
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   blob_run_directory: not a run dir
   state: completed
@@ -197,6 +214,8 @@ irida_next_example_error:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_error
   run_id: my_run_id_7
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: error
   name: irida_next_example_error
@@ -218,6 +237,8 @@ irida_next_example_error_unclean:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_error_unclean
   run_id: my_run_id_7a
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: error
   name: irida_next_example_error_unclean
@@ -239,6 +260,8 @@ irida_next_example_canceling:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_canceling
   run_id: my_run_id_8
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: canceling
   name: irida_next_example_canceling
@@ -260,6 +283,8 @@ irida_next_example_canceled:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_canceled
   run_id: my_run_id_9
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: canceled
   name: irida_next_example_canceled
@@ -281,6 +306,8 @@ irida_next_example_canceled_unclean:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_canceled_unclean
   run_id: my_run_id_9a
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: canceled
   name: irida_next_example_canceled_unclean
@@ -302,6 +329,8 @@ irida_next_example_running:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_running
   run_id: my_run_id_10
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: running
   name: irida_next_example_running
@@ -321,6 +350,8 @@ irida_next_example_new:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_12
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: initial
   name: irida_next_example_new
@@ -342,6 +373,8 @@ irida_next_example_completing_a:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_a
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   email_notification: true
@@ -365,6 +398,8 @@ irida_next_example_completing_b:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_b
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   state: completing
@@ -387,6 +422,8 @@ irida_next_example_completing_c:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_c
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   update_samples: true
@@ -410,6 +447,8 @@ irida_next_example_completing_d:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_d
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   state: completing
@@ -432,6 +471,8 @@ irida_next_example_completing_e:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_e
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   state: completing
@@ -454,6 +495,8 @@ irida_next_example_completing_f:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_f
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   email_notification: true
@@ -478,6 +521,8 @@ irida_next_example_completing_g:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_g
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 60f88d78-4cbd-55a6-8f02-6b3328b5a30a
   blob_run_directory: not a run dir
   email_notification: true
@@ -502,6 +547,8 @@ irida_next_example_completing_h:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed
   run_id: my_run_id_h
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   blob_run_directory: not a run dir
   update_samples: true
@@ -525,6 +572,8 @@ irida_next_example_completed_with_output:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed_with_output
   run_id: my_run_id_13
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   blob_run_directory: not a run dir
   state: completed
@@ -548,6 +597,8 @@ automated_workflow_execution:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_completed_with_output
   run_id: my_run_id_13
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   blob_run_directory: not a run dir
   state: completed
@@ -568,6 +619,8 @@ workflow_execution1:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution1
@@ -587,6 +640,8 @@ workflow_execution2:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_2
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution2
@@ -606,6 +661,8 @@ workflow_execution3:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_3
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution3
@@ -625,6 +682,8 @@ workflow_execution4:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_4
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution4
@@ -644,6 +703,8 @@ workflow_execution5:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_5
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution5
@@ -663,6 +724,8 @@ workflow_execution6:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_6
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution6
@@ -682,6 +745,8 @@ workflow_execution7:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_7
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution7
@@ -701,6 +766,8 @@ workflow_execution8:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_8
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution8
@@ -720,6 +787,8 @@ workflow_execution9:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_9
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution9
@@ -739,6 +808,8 @@ workflow_execution10:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_10
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution10
@@ -758,6 +829,8 @@ workflow_execution11:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_11
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution11
@@ -777,6 +850,8 @@ workflow_execution12:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_12
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution12
@@ -796,6 +871,8 @@ workflow_execution13:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_13
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution13
@@ -815,6 +892,8 @@ workflow_execution14:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_14
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution14
@@ -834,6 +913,8 @@ workflow_execution15:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_15
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution15
@@ -853,6 +934,8 @@ workflow_execution16:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_16
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution16
@@ -872,6 +955,8 @@ workflow_execution17:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_17
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution17
@@ -891,6 +976,8 @@ workflow_execution18:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_18
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution18
@@ -910,6 +997,8 @@ workflow_execution19:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_19
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution19
@@ -929,6 +1018,8 @@ workflow_execution20:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_20
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution20
@@ -948,6 +1039,8 @@ workflow_execution21:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_21
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution21
@@ -967,6 +1060,8 @@ workflow_execution22:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_22
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution22
@@ -986,6 +1081,8 @@ workflow_execution23:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_23
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution23
@@ -1005,6 +1102,8 @@ workflow_execution24:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_24
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution24
@@ -1024,6 +1123,8 @@ workflow_execution25:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_example_new
   run_id: my_run_id_25
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 5f309ff5-f33e-5873-8603-a19231835c5a
   state: initial
   name: workflow_execution25
@@ -1046,6 +1147,8 @@ workflow_execution_existing:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: workflow_execution_existing
   namespace_id: e38c793a-8939-5946-b08b-d4b460067164
@@ -1065,6 +1168,8 @@ automated_example_prepared:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_prepared
   run_id: my_run_id_4
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   email_notification: true
   state: prepared
@@ -1087,6 +1192,8 @@ automated_example_submitted:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_submitted
   run_id: my_run_id_5
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   state: submitted
   name: automated_example_submitted
@@ -1108,6 +1215,8 @@ automated_example_completed:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_completed
   run_id: my_run_id_6
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   blob_run_directory: not a run dir
   state: completed
@@ -1130,6 +1239,8 @@ automated_example_error:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_error
   run_id: my_run_id_7
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   state: error
   name: automated_example_error
@@ -1151,6 +1262,8 @@ automated_example_canceling:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_canceling
   run_id: my_run_id_8
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   state: canceling
   name: automated_example_canceling
@@ -1172,6 +1285,8 @@ automated_example_canceled:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_canceled
   run_id: my_run_id_9
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   state: canceled
   name: automated_example_canceled
@@ -1193,6 +1308,8 @@ automated_example_running:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_running
   run_id: my_run_id_10
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   state: running
   name: automated_example_running
@@ -1214,6 +1331,8 @@ automated_example_new:
     "-r": dev
   workflow_url: https://github.com/phac-nml/automated_example_new
   run_id: my_run_id_12
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   state: initial
   name: automated_example_new
@@ -1236,6 +1355,8 @@ automated_workflow_execution_existing:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
   name: automated_example_existing
   namespace_id: e38c793a-8939-5946-b08b-d4b460067164
@@ -1256,6 +1377,8 @@ irida_next_example_end_to_end:
   workflow_engine_parameters:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   state: initial
   name: irida_next_example_end_to_end
@@ -1278,6 +1401,8 @@ irida_next_example_completed_DELETE:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
   run_id: my_run_id_completed_DELETE
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   blob_run_directory: not a run dir
   state: completed
@@ -1301,6 +1426,8 @@ irida_next_example_error_DELETE:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
   run_id: my_run_id_completed_DELETE
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   blob_run_directory: not a run dir
   state: error
@@ -1324,6 +1451,8 @@ irida_next_example_canceled_DELETE:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
   run_id: my_run_id_completed_DELETE
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   blob_run_directory: not a run dir
   state: canceled
@@ -1347,6 +1476,8 @@ irida_next_example_completed_unclean_DELETE:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
   run_id: my_run_id_completed_DELETE
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   blob_run_directory: not a run dir
   state: completed
@@ -1370,6 +1501,8 @@ irida_next_example_error_unclean_DELETE:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
   run_id: my_run_id_completed_DELETE
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   blob_run_directory: not a run dir
   state: error
@@ -1393,6 +1526,8 @@ irida_next_example_canceled_unclean_DELETE:
     "-r": 1.0.2
   workflow_url: https://github.com/phac-nml/iridanextexample
   run_id: my_run_id_completed_DELETE
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
   blob_run_directory: not a run dir
   state: canceled
@@ -1414,6 +1549,8 @@ workflow_execution_valid_on_group:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_group_run_id_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   name: workflow_execution_valid_on_group
   namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
@@ -1432,7 +1569,8 @@ workflow_execution_shared1:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_shared_1
-  updated_at: "<%= 1.hour.from_now %>"
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: workflow_execution_shared1
   namespace_id: e38c793a-8939-5946-b08b-d4b460067164
@@ -1452,6 +1590,8 @@ workflow_execution_shared2:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_shared_2
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: completed
   name: workflow_execution_shared2
@@ -1473,6 +1613,8 @@ workflow_execution_shared3:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_shared_3
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   name: workflow_execution_shared3
   namespace_id: 5e3395a4-3379-52fb-905c-b202c16085ab
@@ -1492,6 +1634,8 @@ workflow_execution_shared4:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_shared_4
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: running
   name: workflow_execution_shared4
@@ -1514,6 +1658,8 @@ workflow_execution_completed_shared1:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
   run_id: my_run_id_shared_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   blob_run_directory: not a run dir
   state: completed
@@ -1537,6 +1683,8 @@ workflow_execution_completed_shared2:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
   run_id: my_run_id_shared_2
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
   blob_run_directory: not a run dir
   state: completed
@@ -1561,6 +1709,8 @@ workflow_execution_group_shared1:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: Group Shared Example1
   namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
@@ -1582,6 +1732,8 @@ workflow_execution_group_shared2:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared_2
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   name: Group Shared Example2
   namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
@@ -1601,6 +1753,8 @@ workflow_execution_group_shared3:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared_3
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   name: Group Shared Example3
   namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
@@ -1621,6 +1775,8 @@ workflow_execution_completed_group_shared1:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
   run_id: my_run_id_group_shared_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   blob_run_directory: not a run dir
   state: completed
@@ -1644,6 +1800,8 @@ workflow_execution_completed_group_shared2:
     "-r": dev
   workflow_url: https://github.com/phac-nml/irida_next_shared_example_completed_with_output
   run_id: my_run_id_group_shared_2
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
   blob_run_directory: not a run dir
   state: completed
@@ -1666,6 +1824,8 @@ workflow_execution_group_shared_new:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: initial
   name: Group Shared New
@@ -1687,6 +1847,8 @@ workflow_execution_group_shared_prepared:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: prepared
   name: Group Shared Prepared
@@ -1708,6 +1870,8 @@ workflow_execution_group_shared_submitted:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: submitted
   name: Group Shared Submitted
@@ -1729,6 +1893,8 @@ workflow_execution_group_shared_completed:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: completed
   name: Group Shared Completed
@@ -1750,6 +1916,8 @@ workflow_execution_group_shared_running:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: running
   name: Group Shared Running
@@ -1772,6 +1940,8 @@ workflow_execution_group_shared_error:
     "-r": dev
   workflow_url: https://github.com/phac-nml/group_workflow_example_error
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: error
   name: workflow_execution_group_shared_error
@@ -1794,6 +1964,8 @@ workflow_execution_group_shared_canceling:
     "-r": dev
   workflow_url: https://github.com/phac-nml/workflow_execution_group_shared_canceling
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: canceling
   name: workflow_execution_group_shared_canceling
@@ -1816,6 +1988,8 @@ workflow_execution_group_shared_canceled:
     "-r": dev
   workflow_url: https://github.com/phac-nml/group_workflow_example_canceled
   run_id: my_run_id_group_shared
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   state: canceled
   name: Group Shared Canceled
@@ -1837,6 +2011,8 @@ workflow_execution_missing_namespace:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: my_run_id_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6fc61c66-e593-5750-bde1-23dcaf871cdd
   name: workflow_execution_valid
   namespace_id: This namespace has been deleted
@@ -1855,6 +2031,8 @@ workflow_execution_missing_run_id:
     "-r": dev
   workflow_url: my_workflow_url
   run_id:
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6fc61c66-e593-5750-bde1-23dcaf871cdd
   name: workflow_execution_valid
   namespace_id: 4742b198-0efa-5716-a8b3-605da0df90b8
@@ -1877,6 +2055,8 @@ workflow_execution_with_metadata_dates:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: metadata_date_run_1
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: completed
   name: workflow_with_metadata_dates
@@ -1900,6 +2080,8 @@ workflow_execution_with_metadata_dates2:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: metadata_date_run_2
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: completed
   name: workflow_with_metadata_dates_2
@@ -1918,6 +2100,8 @@ workflow_execution_with_null_metadata:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: null_metadata_run
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: initial
   name: workflow_with_null_metadata
@@ -1938,6 +2122,8 @@ workflow_execution_with_special_chars:
     "-r": dev
   workflow_url: my_workflow_url
   run_id: special_chars_run
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   state: running
   name: workflow_with_special_chars
@@ -1956,6 +2142,8 @@ irida_next_example_three_samples:
   workflow_engine_parameters:
     "-r": dev
   workflow_url: https://github.com/phac-nml/iridanextexample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
   submitter_id: 56b465f0-318a-57fe-9d9c-da95a48c2ba9
   email_notification: true
   name: irida_next_example_three_samples

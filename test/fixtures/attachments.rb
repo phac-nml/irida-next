@@ -143,6 +143,12 @@ FixtureBot.define do
              })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAI'
+    # sampleC has several fastq pairs (4, 5, 6) that share an auto-filled `created_at`;
+    # `Attachment.recent` (used to pick the default samplesheet fastq selection) then falls back
+    # to an id-based tie-break, which is unstable across fixture regeneration. Stagger them so
+    # attachmentPEFWD6 deterministically remains the most recent/default selection.
+    created_at '<%= 2.hours.ago %>'
+    updated_at '<%= 2.hours.ago %>'
   end
 
   attachment :attachmentPEREV4 do
@@ -155,6 +161,8 @@ FixtureBot.define do
              })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAI'
+    created_at '<%= 2.hours.ago %>'
+    updated_at '<%= 2.hours.ago %>'
   end
 
   attachment :attachmentPEFWD5 do
@@ -167,6 +175,8 @@ FixtureBot.define do
              })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAJ'
+    created_at '<%= 1.hour.ago %>'
+    updated_at '<%= 1.hour.ago %>'
   end
 
   attachment :attachmentPEREV5 do
@@ -179,6 +189,8 @@ FixtureBot.define do
              })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAJ'
+    created_at '<%= 1.hour.ago %>'
+    updated_at '<%= 1.hour.ago %>'
   end
 
   attachment :attachmentE do
@@ -254,6 +266,10 @@ FixtureBot.define do
              })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAQ'
+    # see attachmentPEFWD4/5 comment: stagger sampleC's fastq pairs so attachmentPEFWD6 remains
+    # the deterministic default samplesheet fastq selection
+    created_at '<%= 30.minutes.ago %>'
+    updated_at '<%= 30.minutes.ago %>'
   end
 
   attachment :attachmentPEREV7 do
@@ -266,6 +282,8 @@ FixtureBot.define do
              })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAQ'
+    created_at '<%= 30.minutes.ago %>'
+    updated_at '<%= 30.minutes.ago %>'
   end
 
   attachment :attachmentI do

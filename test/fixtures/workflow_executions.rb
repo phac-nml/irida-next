@@ -12,13 +12,23 @@ FixtureBot.define do
   workflow_execution.namespace_id { FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace) }
   workflow_execution.submitter_id { FixtureBot::Key::Uuid.generate(:users, :john_doe) }
   workflow_execution.workflow_url { 'my_workflow_url' }
+  # Anchor the default `created_at`/`updated_at` to a fixed point in the past, relative to whenever
+  # fixtures are loaded (rather than relying on Rails' fixture-loader auto-fill, which stamps every
+  # un-overridden row with the SAME `Time.now` snapshot). This keeps the default `updated_at desc`
+  # index sort deterministic without racing against `Time.current`-stamped rows created during
+  # system tests (e.g. freshly submitted workflow executions), which must always sort above
+  # fixture data.
+  workflow_execution.created_at { '<%= 2.hours.ago %>' }
+  workflow_execution.updated_at { '<%= 1.hour.ago %>' }
 
   workflow_execution :workflow_execution_valid do
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
     run_id 'my_run_id_1'
     name 'workflow_execution_valid'
-    created_at '<%= 1.hour.ago %>'
+    # Must sort earlier than the default-anchored `created_at` (2.hours.ago) so it remains
+    # john_doe's earliest workflow execution for the default `created_at asc` listing.
+    created_at '<%= 3.hours.ago %>'
   end
 
   workflow_execution :workflow_execution_gasclustering do
@@ -139,6 +149,10 @@ FixtureBot.define do
     state 'running'
     cleaned false
     name 'irida_next_example_running'
+    # Ensures this row sorts above the default-anchored bulk of fixtures so it reliably
+    # appears within the first page of john_doe's default `updated_at desc` listing.
+    created_at '<%= 1.hour.ago %>'
+    updated_at '<%= 30.minutes.ago %>'
   end
 
   workflow_execution :irida_next_example_new do
@@ -148,6 +162,10 @@ FixtureBot.define do
     state 'initial'
     cleaned false
     name 'irida_next_example_new'
+    # Ensures this row sorts above the default-anchored bulk of fixtures so it reliably
+    # appears within the first page of john_doe's default `updated_at desc` listing.
+    created_at '<%= 1.hour.ago %>'
+    updated_at '<%= 30.minutes.ago %>'
   end
 
   workflow_execution :irida_next_example_completing_a do
@@ -471,7 +489,14 @@ FixtureBot.define do
     run_id 'my_run_id_shared_1'
     shared_with_namespace true
     name 'workflow_execution_shared1'
-    updated_at '<%= 1.hour.from_now %>'
+    # Ensures this row sorts above the default-anchored bulk of fixtures so it reliably appears
+    # within the first page of the default `updated_at desc` listing. A fixed-offset relative
+    # anchor (rather than a `Time.current`-relative offset such as `1.hour.from_now`) avoids racing
+    # the fixture loader's auto-fill snapshot, and - critically - never outranks workflow
+    # executions that are genuinely created during a test (e.g. freshly submitted via the UI),
+    # since those always get a real `Time.current` `updated_at` which is later than any past offset.
+    created_at '<%= 1.hour.ago %>'
+    updated_at '<%= 30.minutes.ago %>'
   end
 
   workflow_execution :workflow_execution_shared2 do
