@@ -160,15 +160,43 @@ if defined?(FixtureBot)
     # Reopened so FixtureBot can write a compiled file to a nested directory (e.g.
     # `namespaces/project_namespaces.yml`), matching the original fixture file layout.
     class Compiler
+      # Raised in CI when a compiled fixture YAML file would change, meaning the
+      # committed file no longer matches its FixtureBot `.rb` source (e.g. it was
+      # hand-edited, or the `.rb` source changed without recompiling/committing the
+      # regenerated YAML).
+      class StaleFixturesError < StandardError
+        def initialize(paths)
+          super(<<~MESSAGE)
+            The following compiled fixture files don't match their FixtureBot `.rb` source:
+            #{paths.map { |path| "  #{path}" }.join("\n")}
+
+            All fixture changes must be made in the `.rb` files under `test/fixtures/`, not
+            by hand-editing the compiled YAML. Run `bin/rails fixturebot:compile` (or the
+            test suite, which recompiles automatically) and commit the regenerated YAML.
+          MESSAGE
+        end
+      end
+
       def compile(output_dir)
         FileUtils.mkdir_p(output_dir)
+        stale_paths = []
+
         @fixture_set.tables.each do |table_name, records|
           next if records.empty?
 
           path = File.join(output_dir, "#{table_name}.yml")
+          compiled = compile_table(table_name)
+
+          if ENV['CI'] == 'true' && File.exist?(path) && File.read(path) != compiled
+            stale_paths << path
+            next
+          end
+
           FileUtils.mkdir_p(File.dirname(path))
-          File.write(path, compile_table(table_name))
+          File.write(path, compiled)
         end
+
+        raise StaleFixturesError, stale_paths if stale_paths.any?
       end
     end
   end
