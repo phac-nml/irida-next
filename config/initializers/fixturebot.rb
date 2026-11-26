@@ -46,10 +46,18 @@ if defined?(FixtureBot)
         # auto-detect an association for them), but this application's models only ever point
         # them at one specific table, so it's safe to wire them up manually and use the native
         # association DSL (e.g. `created_by :john_doe`) instead of a literal UUID.
+        # `groups.parent_id` has no enforced DB foreign key either (it points at the
+        # pre-split "namespaces" table, which can't have one FK target), but per the same
+        # model validations a Group's parent can only ever be another Group (never a project
+        # or user namespace), so it's unambiguous and safe to wire up here too - unlike
+        # `parent` on the other two split namespace tables, which genuinely can point at
+        # either a group or a user namespace and must keep being set manually (see
+        # `rename_split_tables` above).
         MANUAL_ASSOCIATIONS = {
           members: [%i[created_by_id created_by users]],
           namespace_bots: [%i[user_id user users]],
-          namespace_group_links: [%i[group_id group groups]]
+          namespace_group_links: [%i[group_id group groups]],
+          groups: [%i[parent_id parent groups]]
         }.freeze
 
         # FK columns whose real DB-level target table ("namespaces") is ambiguous, since it's
@@ -81,8 +89,11 @@ if defined?(FixtureBot)
 
           # The `owner` association (always a `User`, never a `Namespace`) survives the split
           # unambiguously and is kept as-is; `parent` has no enforced DB foreign key (so no
-          # association was auto-detected for it in the first place) and must keep being set
-          # manually, since it can point at any of the three split tables below.
+          # association was auto-detected for it in the first place). It's wired up manually
+          # for the `groups` table below (see `MANUAL_ASSOCIATIONS`), since a group's parent
+          # can only ever be another group, but must keep being set via a raw UUID lookup for
+          # the other two split tables, since their parent can be either a group or a user
+          # namespace.
           NAMESPACE_SPLIT_TABLES.each do |name, singular_name|
             schema.add_table(namespaces_table.with(name: name, singular_name: singular_name))
           end

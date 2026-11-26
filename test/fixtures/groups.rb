@@ -20,7 +20,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'subgroup-1'
     description 'Subgroup 1 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    parent :group_one
     puid 'INXT_GRP_AAAAAAAAAB'
     samples_count 2
   end
@@ -32,7 +32,7 @@ FixtureBot.define do
       name "Subgroup #{n + 2}"
       path "subgroup-#{n + 2}"
       description "Subgroup #{n + 2} description"
-      parent_id FixtureBot::Key::Uuid.generate(:groups, "subgroup#{n + 1}")
+      parent :"subgroup#{n + 1}"
       puid "INXT_GRP_AAAAAA#{((n / 26).round + 66).chr}AA#{((n % 26) + 65).chr}"
       samples_count 0
     end
@@ -64,7 +64,7 @@ FixtureBot.define do
     name 'Subgroup 1 Group 3'
     path 'subgroup-1-group-3'
     description 'Subgroup 1 Group 3'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_three)
+    parent :group_three
     puid 'INXT_GRP_AAAAAAAAAE'
     samples_count 2
   end
@@ -96,7 +96,7 @@ FixtureBot.define do
     name 'Subgroup 1 Group 5'
     path 'subgroup-1-group-5'
     description 'Subgroup 1 Group 5'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
+    parent :group_five
     puid 'INXT_GRP_AAAAAAAAAH'
     samples_count 0
   end
@@ -117,7 +117,7 @@ FixtureBot.define do
     name 'Group 6'
     path 'group-6'
     description 'Subgroup 1 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_six)
+    parent :group_six
     puid 'INXT_GRP_AAAAAAAAAJ'
     samples_count 0
   end
@@ -202,7 +202,7 @@ FixtureBot.define do
     name 'Subgroup 1 Group 9'
     path 'subgroup-1-group-9'
     description 'Subgroup 1 Group 9 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_nine)
+    parent :group_nine
     puid 'INXT_GRP_AAAAAAAAAQ'
     samples_count 0
   end
@@ -213,7 +213,7 @@ FixtureBot.define do
     name 'Group 10'
     path 'group-10-subgroup-1-group-9'
     description 'Group 10 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_nine)
+    parent :subgroup_one_group_nine
     puid 'INXT_GRP_AAAAAAAAAR'
     samples_count 0
   end
@@ -254,7 +254,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'group-alpha/subgroup-1'
     description 'Subgroup 1 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_alpha)
+    parent :group_alpha
     puid 'INXT_GRP_AAAAAAAAAV'
     samples_count 1
   end
@@ -288,7 +288,7 @@ FixtureBot.define do
     path 'subgroup-12-a'
     description 'Subgroup 12 A description'
     owner :john_doe
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
+    parent :group_twelve
     metadata_summary({ 'metadatafield1' => 2, 'metadatafield2' => 2 })
     puid 'INXT_GRP_AAAAAAAAAY'
     samples_count 3
@@ -301,7 +301,7 @@ FixtureBot.define do
     path 'subgroup-12-b'
     description 'Subgroup 12 B description'
     owner :john_doe
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
+    parent :group_twelve
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_GRP_AAAAAAAAAZ'
     samples_count 1
@@ -314,7 +314,7 @@ FixtureBot.define do
     path 'subgroup-12-a-a'
     description 'Subgroup 12 A A description'
     owner :john_doe
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_a)
+    parent :subgroup_twelve_a
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_GRP_AAAAAAAAA2'
     samples_count 2
@@ -336,7 +336,7 @@ FixtureBot.define do
     name 'Subgroup A'
     path 'group-delta/subgroup-a'
     description 'Subgroup A description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_delta)
+    parent :group_delta
     puid 'INXT_GRP_AAAAAAAAA4'
     samples_count 0
   end
@@ -357,7 +357,7 @@ FixtureBot.define do
     name 'Subgroup B'
     path 'group-echo/subgroup-b'
     description 'Subgroup B description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_echo)
+    parent :group_echo
     puid 'INXT_GRP_AAAAAAAAA6'
     samples_count 0
   end
@@ -378,7 +378,7 @@ FixtureBot.define do
     name 'Subgroup A'
     path 'group-foxtrot/subgroup-a'
     description 'Subgroup A description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_foxtrot)
+    parent :group_foxtrot
     puid 'INXT_GRP_AAAAAAAABA'
     samples_count 0
   end
@@ -516,7 +516,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'group-india/subgroup-1'
     description 'Subgroup 1 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_india)
+    parent :group_india
     puid 'INXT_GRP_AAAAAAAACB'
     samples_count 1
   end
@@ -537,7 +537,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'group-juliett/subgroup-1'
     description 'Subgroup 1 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_juliett)
+    parent :group_juliett
     puid 'INXT_GRP_AAAAAAAACD'
     samples_count 1
   end
@@ -578,7 +578,7 @@ FixtureBot.define do
     name 'Subgroup Mike A'
     path 'subgroup-mike-a'
     description 'Subgroup Mike A description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
+    parent :group_mike
     puid 'INXT_GRP_AAAAAAAACH'
     samples_count 2
   end
@@ -589,7 +589,7 @@ FixtureBot.define do
     name 'Subgroup Mike B'
     path 'subgroup-mike-b'
     description 'Subgroup Mike B description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
+    parent :group_mike
     puid 'INXT_GRP_AAAAAAAACI'
     samples_count 2
   end
@@ -600,7 +600,7 @@ FixtureBot.define do
     name 'Subgroup Mike A A'
     path 'subgroup-mike-a-a'
     description 'Subgroup Mike A A description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_mike_a)
+    parent :subgroup_mike_a
     puid 'INXT_GRP_AAAAAAAACJ'
     samples_count 0
   end
@@ -621,7 +621,7 @@ FixtureBot.define do
     name 'Subgroup Oscar A'
     path 'subgroup-oscar-a'
     description 'Subgroup Oscar A description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_oscar)
+    parent :group_oscar
     puid 'INXT_GRP_AAAAAAAACL'
     samples_count 0
   end
@@ -642,7 +642,7 @@ FixtureBot.define do
     name 'Subgroup Papa A'
     path 'subgroup-papa-a'
     description 'Subgroup Papa A description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_papa)
+    parent :group_papa
     puid 'INXT_GRP_AAAAAAAACN'
     samples_count 0
   end
@@ -699,7 +699,7 @@ FixtureBot.define do
     name 'Subgroup Sample Actions'
     path 'subgroup-sample-actions'
     description 'Subgroup Sample Actions description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_actions)
+    parent :group_sample_actions
     puid 'INXT_GRP_AAAAAAAACS'
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     samples_count 1
@@ -776,7 +776,7 @@ FixtureBot.define do
     path 'public-group-1-subgroup-1'
     description 'Public Subgroup 1 description'
     puid 'INXT_GRP_AXATAABAAL'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :public_group1)
+    parent :public_group1
     samples_count 0
     created_at '<%= 1.days.ago %>'
     updated_at '<%= 1.days.ago %>'
