@@ -90,7 +90,7 @@ gem 'activerecord_cursor_paginate', '~> 0.4.1'
 gem 'pagy', '~> 43.6.1'
 
 # Ransack
-gem 'ransack', '~> 6.1.1'
+gem 'ransack', '~> 6.1.2'
 
 # Search Syntax
 gem 'search_syntax'
