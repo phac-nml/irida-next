@@ -3,38 +3,38 @@
 FixtureBot.define do
   activity :project1_namespace_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.create'
     parameters({})
   end
 
   activity :project2_namespace_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     key 'namespaces_project_namespace.create'
     parameters({})
   end
 
   activity :project1_namespace_member_james_doe_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.member.create'
     parameters({ 'member_email' => 'james.doe@localhost', 'action' => 'member_create' })
   end
 
   activity :project1_namespace_member_ryan_doe_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.member.create'
     parameters({ 'member_email' => 'ryan.doe@localhost', 'action' => 'member_create' })
   end
 
   activity :project1_namespace_sample_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.create'
     parameters({
-                 'sample_id' => ActiveRecord::FixtureSet.identify(:sample1, :uuid),
+                 'sample_id' => FixtureBot::Key::Uuid.generate(:samples, :sample1),
                  'sample_puid' => 'INXT_SAM_AAAAAAAAAA',
                  'action' => 'sample_create'
                })
@@ -42,11 +42,11 @@ FixtureBot.define do
 
   activity :project1_namespace_sample_clone do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.clone'
     parameters({
                  'target_project_puid' => 'INXT_PRJ_AAAAAAAAAB',
-                 'target_project' => ActiveRecord::FixtureSet.identify(:project2, :uuid),
+                 'target_project' => FixtureBot::Key::Uuid.generate(:projects, :project2),
                  'cloned_samples_count' => 1,
                  'action' => 'sample_clone'
                })
@@ -54,23 +54,24 @@ FixtureBot.define do
 
   activity :project1_namespace_metadata_template_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.metadata_template.create'
     parameters({
-                 'template_id' => ActiveRecord::FixtureSet.identify(:valid_metadata_template, :uuid),
+                 'template_id' => FixtureBot::Key::Uuid.generate(:metadata_templates, :valid_metadata_template),
                  'template_name' => 'Valid Template',
-                 'namespace_id' => ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid),
+                 'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                  :project1_namespace),
                  'action' => 'metadata_template_create'
                })
   end
 
   activity :project2_namespace_sample_cloned_from_project1 do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     key 'namespaces_project_namespace.samples.cloned_from'
     parameters({
                  'source_project_puid' => 'INXT_PRJ_AAAAAAAAAA',
-                 'source_project' => ActiveRecord::FixtureSet.identify(:project1, :uuid),
+                 'source_project' => FixtureBot::Key::Uuid.generate(:projects, :project1),
                  'cloned_samples_count' => 1,
                  'action' => 'sample_clone'
                })
@@ -78,11 +79,11 @@ FixtureBot.define do
 
   activity :project1_namespace_sample_transfer do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.transfer'
     parameters({
                  'target_project_puid' => 'INXT_PRJ_AAAAAAAAAB',
-                 'target_project' => ActiveRecord::FixtureSet.identify(:project2, :uuid),
+                 'target_project' => FixtureBot::Key::Uuid.generate(:projects, :project2),
                  'transferred_samples_count' => 1,
                  'action' => 'sample_transfer'
                })
@@ -90,11 +91,11 @@ FixtureBot.define do
 
   activity :project2_namespace_sample_transferred_from_project1 do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     key 'namespaces_project_namespace.samples.transferred_from'
     parameters({
                  'source_project_puid' => 'INXT_PRJ_AAAAAAAAAA',
-                 'source_project' => ActiveRecord::FixtureSet.identify(:project1, :uuid),
+                 'source_project' => FixtureBot::Key::Uuid.generate(:projects, :project1),
                  'transferred_samples_count' => 1,
                  'action' => 'sample_transfer'
                })
@@ -102,41 +103,41 @@ FixtureBot.define do
 
   activity :project1_namespace_automated_workflow_execution_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.automated_pipeline.create'
     parameters({
-                 'automated_pipeline_id' => ActiveRecord::FixtureSet.identify(:valid_automated_workflow_execution,
-                                                                              :uuid),
+                 'automated_pipeline_id' => FixtureBot::Key::Uuid.generate(:automated_workflow_executions,
+                                                                           :valid_automated_workflow_execution),
                  'action' => 'automated_pipeline_create'
                })
   end
 
   activity :project1_namespace_automated_workflow_execution_launch do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'workflow_execution.automated_workflow.launch'
     parameters({
-                 'workflow_id' => ActiveRecord::FixtureSet.identify(:workflow_execution_valid, :uuid),
+                 'workflow_id' => FixtureBot::Key::Uuid.generate(:workflow_executions, :workflow_execution_valid),
                  'workflow_name' => '',
-                 'sample_id' => ActiveRecord::FixtureSet.identify(:sample1, :uuid),
+                 'sample_id' => FixtureBot::Key::Uuid.generate(:samples, :sample1),
                  'sample_puid' => 'INXT_SAM_AAAAAAAAAA'
                })
   end
 
   activity :project1_namespace_sample_attachment_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.samples.attachment.create'
     parameters({
                  'sample_puid' => 'INXT_SAM_AAAAAAAAAA',
-                 'sample_id' => ActiveRecord::FixtureSet.identify(:sample1, :uuid),
+                 'sample_id' => FixtureBot::Key::Uuid.generate(:samples, :sample1),
                  'action' => 'attachment_create'
                })
   end
 
   activity :project1_shared_w_group_charlie do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.namespace_group_link.create'
     parameters({
                  'group_name' => 'Group Charlie',
@@ -153,7 +154,7 @@ FixtureBot.define do
 
   activity :group_charlie_shared_by_project1 do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_charlie, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_charlie)
     key 'group.namespace_group_link.created'
     parameters({
                  'group_name' => 'Group Charlie',
@@ -167,7 +168,7 @@ FixtureBot.define do
 
   activity :project1_namespace_transfer do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.transfer'
     parameters({
                  # NOTE: faithfully reproduces a pre-existing bug in the original fixture:
@@ -184,17 +185,17 @@ FixtureBot.define do
 
   activity :group1_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.create'
     parameters({})
   end
 
   activity :group1_subgroup_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.subgroups.create'
     parameters({
-                 'created_group_id' => ActiveRecord::FixtureSet.identify(:subgroup1, :uuid),
+                 'created_group_id' => FixtureBot::Key::Uuid.generate(:groups, :subgroup1),
                  'created_group_puid' => 'INXT_GRP_AAAAAAAAAB',
                  'action' => 'group_subgroup_create'
                })
@@ -202,20 +203,20 @@ FixtureBot.define do
 
   activity :group1_project_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.projects.create'
     parameters({
-                 'project_id' => ActiveRecord::FixtureSet.identify(:project1, :uuid),
+                 'project_id' => FixtureBot::Key::Uuid.generate(:projects, :project1),
                  'project_puid' => 'INXT_PRJ_AAAAAAAAAA'
                })
   end
 
   activity :group1_project_transfer_out do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.projects.transfer_out'
     parameters({
-                 'project_id' => ActiveRecord::FixtureSet.identify(:project1, :uuid),
+                 'project_id' => FixtureBot::Key::Uuid.generate(:projects, :project1),
                  'project_puid' => 'INXT_PRJ_AAAAAAAAAA',
                  'old_namespace' => 'INXT_GRP_AAAAAAAAAA',
                  'new_namespace' => 'INXT_GRP_AAAAAAAAAC',
@@ -225,10 +226,10 @@ FixtureBot.define do
 
   activity :group1_project_transfer_in do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.projects.transfer_in'
     parameters({
-                 'project_id' => ActiveRecord::FixtureSet.identify(:project1, :uuid),
+                 'project_id' => FixtureBot::Key::Uuid.generate(:projects, :project1),
                  'project_puid' => 'INXT_PRJ_AAAAAAAAAA',
                  'old_namespace' => 'INXT_GRP_AAAAAAAAAC',
                  'new_namespace' => 'INXT_GRP_AAAAAAAAAA',
@@ -238,26 +239,26 @@ FixtureBot.define do
 
   activity :group1_member_james_doe_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.member.create'
     parameters({ 'member_email' => 'james.doe@localhost', 'action' => 'member_create' })
   end
 
   activity :group_one_metadata_template_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.metadata_template.create'
     parameters({
-                 'template_id' => ActiveRecord::FixtureSet.identify(:valid_group_metadata_template, :uuid),
+                 'template_id' => FixtureBot::Key::Uuid.generate(:metadata_templates, :valid_group_metadata_template),
                  'template_name' => 'Valid Group Template',
-                 'namespace_id' => ActiveRecord::FixtureSet.identify(:group_one, :uuid),
+                 'namespace_id' => FixtureBot::Key::Uuid.generate(:groups, :group_one),
                  'action' => 'metadata_template_create'
                })
   end
 
   activity :group1_shared_w_david_doe_group_four do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.namespace_group_link.create'
     parameters({
                  'group_name' => 'Group 4',
@@ -274,7 +275,7 @@ FixtureBot.define do
 
   activity :david_doe_group_four_shared_by_group1 do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :david_doe_group_four)
     key 'group.namespace_group_link.created'
     parameters({
                  'group_name' => 'Group 4',
@@ -288,59 +289,62 @@ FixtureBot.define do
 
   activity :project1_namespace_sample_import_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.import_samples.create'
     parameters({ 'imported_samples_count' => 1, 'action' => 'project_import_samples' })
   end
 
   activity :group1_sample_import_create do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.import_samples.create'
     parameters({ 'imported_samples_count' => 2, 'action' => 'group_import_samples' })
   end
 
   activity :project1_namespace_workflow_execution_destroy do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     key 'namespaces_project_namespace.workflow_executions.destroy'
     parameters({ 'workflow_executions_deleted_count' => 3, 'action' => 'workflow_execution_destroy' })
   end
 
   activity :group_sample_transfer_sample_transfer do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_transfer)
     key 'group.samples.transfer'
     parameters({ 'transferred_samples_count' => 3, 'action' => 'group_sample_transfer' })
   end
 
   activity :project_group_sample_transfer_sample_transfer do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :project_group_sample_transfer_namespace)
     key 'namespaces_project_namespace.samples.transfer'
     parameters({
                  'transferred_samples_count' => 3,
                  'target_project_puid' => 'INXT_PRJ_AAAAAAAACD',
-                 'target_project' => ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid),
+                 'target_project' => FixtureBot::Key::Uuid.generate(:projects, :projectGroupSampleTransferTarget),
                  'action' => 'sample_transfer'
                })
   end
 
   activity :project_group_sample_transfer_target_sample_transfer do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_target_namespace, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :project_group_sample_transfer_target_namespace)
     key 'namespaces_project_namespace.import_samples.create'
     parameters({
                  'transferred_samples_count' => 3,
                  'source_project_puid' => 'INXT_PRJ_AAAAAAAACC',
-                 'source_project' => ActiveRecord::FixtureSet.identify(:project_group_sample_transfer_namespace, :uuid),
+                 'source_project' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                    :project_group_sample_transfer_namespace),
                  'action' => 'sample_transfer'
                })
   end
 
   activity :group1_sample_destroy do
     trackable_type 'Namespace'
-    trackable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    trackable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     key 'group.samples.destroy'
     parameters({ 'samples_deleted_count' => 2, 'action' => 'group_samples_destroy' })
   end

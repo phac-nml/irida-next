@@ -131,7 +131,7 @@ module DataExports
         Date.current.strftime('%Y-%m-%d').to_s,
         '',
         'contents:',
-        '9eb3e2b7-6e20-5324-b6a3-49f44dc33fd8/',
+        "#{@data_export2.id}/",
         '└─ INXT_PRJ_AAAAAAAAAA/ (Project 1)',
         '   └─ INXT_SAM_AAAAAAAAAA/ (Project 1 Sample 1)',
         '      ├─ INXT_ATT_AAAAAAAAAA/',

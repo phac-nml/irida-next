@@ -7,7 +7,7 @@ FixtureBot.define do
     name 'Group 1'
     path 'group-1'
     description 'Group 1 description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 633, 'metadatafield2' => 106 })
     puid 'INXT_GRP_AAAAAAAAAA'
     attachments_updated_at '<%= 2.hours.ago %>'
@@ -20,7 +20,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'subgroup-1'
     description 'Subgroup 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     puid 'INXT_GRP_AAAAAAAAAB'
     samples_count 2
   end
@@ -32,7 +32,7 @@ FixtureBot.define do
       name "Subgroup #{n + 2}"
       path "subgroup-#{n + 2}"
       description "Subgroup #{n + 2} description"
-      parent_id ActiveRecord::FixtureSet.identify("subgroup#{n + 1}", :uuid)
+      parent_id FixtureBot::Key::Uuid.generate(:groups, "subgroup#{n + 1}")
       puid "INXT_GRP_AAAAAA#{((n / 26).round + 66).chr}AA#{((n % 26) + 65).chr}"
       samples_count 0
     end
@@ -64,7 +64,7 @@ FixtureBot.define do
     name 'Subgroup 1 Group 3'
     path 'subgroup-1-group-3'
     description 'Subgroup 1 Group 3'
-    parent_id ActiveRecord::FixtureSet.identify(:group_three, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_three)
     puid 'INXT_GRP_AAAAAAAAAE'
     samples_count 2
   end
@@ -96,7 +96,7 @@ FixtureBot.define do
     name 'Subgroup 1 Group 5'
     path 'subgroup-1-group-5'
     description 'Subgroup 1 Group 5'
-    parent_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     puid 'INXT_GRP_AAAAAAAAAH'
     samples_count 0
   end
@@ -117,7 +117,7 @@ FixtureBot.define do
     name 'Group 6'
     path 'group-6'
     description 'Subgroup 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_six, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_six)
     puid 'INXT_GRP_AAAAAAAAAJ'
     samples_count 0
   end
@@ -202,7 +202,7 @@ FixtureBot.define do
     name 'Subgroup 1 Group 9'
     path 'subgroup-1-group-9'
     description 'Subgroup 1 Group 9 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_nine, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_nine)
     puid 'INXT_GRP_AAAAAAAAAQ'
     samples_count 0
   end
@@ -213,7 +213,7 @@ FixtureBot.define do
     name 'Group 10'
     path 'group-10-subgroup-1-group-9'
     description 'Group 10 description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_nine)
     puid 'INXT_GRP_AAAAAAAAAR'
     samples_count 0
   end
@@ -254,7 +254,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'group-alpha/subgroup-1'
     description 'Subgroup 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_alpha, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_alpha)
     puid 'INXT_GRP_AAAAAAAAAV'
     samples_count 1
   end
@@ -275,7 +275,7 @@ FixtureBot.define do
     name 'Group 12'
     path 'group-12'
     description 'Group 12 description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 3, 'metadatafield2' => 3 })
     puid 'INXT_GRP_AAAAAAAAAX'
     samples_count 4
@@ -287,8 +287,8 @@ FixtureBot.define do
     name 'Subgroup 12 A'
     path 'subgroup-12-a'
     description 'Subgroup 12 A description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    parent_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    owner :john_doe
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     metadata_summary({ 'metadatafield1' => 2, 'metadatafield2' => 2 })
     puid 'INXT_GRP_AAAAAAAAAY'
     samples_count 3
@@ -300,8 +300,8 @@ FixtureBot.define do
     name 'Subgroup 12 B'
     path 'subgroup-12-b'
     description 'Subgroup 12 B description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    parent_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    owner :john_doe
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_GRP_AAAAAAAAAZ'
     samples_count 1
@@ -313,8 +313,8 @@ FixtureBot.define do
     name 'Subgroup 12 A A'
     path 'subgroup-12-a-a'
     description 'Subgroup 12 A A description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid)
+    owner :john_doe
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_a)
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_GRP_AAAAAAAAA2'
     samples_count 2
@@ -336,7 +336,7 @@ FixtureBot.define do
     name 'Subgroup A'
     path 'group-delta/subgroup-a'
     description 'Subgroup A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_delta, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_delta)
     puid 'INXT_GRP_AAAAAAAAA4'
     samples_count 0
   end
@@ -357,7 +357,7 @@ FixtureBot.define do
     name 'Subgroup B'
     path 'group-echo/subgroup-b'
     description 'Subgroup B description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_echo, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_echo)
     puid 'INXT_GRP_AAAAAAAAA6'
     samples_count 0
   end
@@ -378,7 +378,7 @@ FixtureBot.define do
     name 'Subgroup A'
     path 'group-foxtrot/subgroup-a'
     description 'Subgroup A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_foxtrot, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_foxtrot)
     puid 'INXT_GRP_AAAAAAAABA'
     samples_count 0
   end
@@ -399,7 +399,7 @@ FixtureBot.define do
     name 'Group Hotel'
     path 'group-hotel'
     description 'Group Hotel description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    owner :john_doe
     puid 'INXT_GRP_AAAAAAAABC'
     samples_count 1
   end
@@ -440,7 +440,7 @@ FixtureBot.define do
     name 'Group 16'
     path 'group-16'
     description 'Group 16 description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    owner :john_doe
     puid 'INXT_GRP_AAAAAAAABG'
     samples_count 3
   end
@@ -451,7 +451,7 @@ FixtureBot.define do
     name 'Group 17'
     path 'group-17'
     description 'Group 17 description'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    owner :john_doe
     puid 'INXT_GRP_AAAAAAAABI'
     samples_count 200
   end
@@ -462,7 +462,7 @@ FixtureBot.define do
     name 'User 30 Group 1'
     path 'user-30-group-1'
     description 'Group 1 description'
-    owner_id ActiveRecord::FixtureSet.identify(:user30, :uuid)
+    owner :user30
     puid 'INXT_GRP_AAAAAAAABH'
     samples_count 0
   end
@@ -473,7 +473,7 @@ FixtureBot.define do
     name 'Group EndToEnd'
     path 'group-end_to_end'
     description 'Group 1 description'
-    owner_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
+    owner :janitor_doe
     puid 'INXT_GRP_ABAAAAAAAA'
     samples_count 0
   end
@@ -484,7 +484,7 @@ FixtureBot.define do
     name 'Empty Group'
     path 'empty-group'
     description 'Group without any Samples'
-    owner_id ActiveRecord::FixtureSet.identify(:empty_doe, :uuid)
+    owner :empty_doe
     puid 'INXT_GRP_AAAAAAAABHI'
     samples_count 0
   end
@@ -495,7 +495,7 @@ FixtureBot.define do
     name 'Group Jeff'
     path 'group-jeff'
     description 'Group Jeff description'
-    owner_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    owner :jeff_doe
     puid 'INXT_GRP_AAAAAAJEFF'
     samples_count 0
   end
@@ -516,7 +516,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'group-india/subgroup-1'
     description 'Subgroup 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_india, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_india)
     puid 'INXT_GRP_AAAAAAAACB'
     samples_count 1
   end
@@ -537,7 +537,7 @@ FixtureBot.define do
     name 'Subgroup 1'
     path 'group-juliett/subgroup-1'
     description 'Subgroup 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_juliett, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_juliett)
     puid 'INXT_GRP_AAAAAAAACD'
     samples_count 1
   end
@@ -578,7 +578,7 @@ FixtureBot.define do
     name 'Subgroup Mike A'
     path 'subgroup-mike-a'
     description 'Subgroup Mike A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_mike, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
     puid 'INXT_GRP_AAAAAAAACH'
     samples_count 2
   end
@@ -589,7 +589,7 @@ FixtureBot.define do
     name 'Subgroup Mike B'
     path 'subgroup-mike-b'
     description 'Subgroup Mike B description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_mike, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
     puid 'INXT_GRP_AAAAAAAACI'
     samples_count 2
   end
@@ -600,7 +600,7 @@ FixtureBot.define do
     name 'Subgroup Mike A A'
     path 'subgroup-mike-a-a'
     description 'Subgroup Mike A A description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_mike_a)
     puid 'INXT_GRP_AAAAAAAACJ'
     samples_count 0
   end
@@ -621,7 +621,7 @@ FixtureBot.define do
     name 'Subgroup Oscar A'
     path 'subgroup-oscar-a'
     description 'Subgroup Oscar A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_oscar, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_oscar)
     puid 'INXT_GRP_AAAAAAAACL'
     samples_count 0
   end
@@ -642,7 +642,7 @@ FixtureBot.define do
     name 'Subgroup Papa A'
     path 'subgroup-papa-a'
     description 'Subgroup Papa A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_papa, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_papa)
     puid 'INXT_GRP_AAAAAAAACN'
     samples_count 0
   end
@@ -653,7 +653,7 @@ FixtureBot.define do
     name 'Group Metadata'
     path 'group-metadata'
     description 'Group Metadata description'
-    owner_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
+    owner :metadata_doe
     metadata_summary({ 'example_date' => 3, 'example_float' => 3, 'example_integer' => 3 })
     puid 'INXT_GRP_AAAAAAAACO'
     samples_count 3
@@ -665,7 +665,7 @@ FixtureBot.define do
     name 'Group Sample Transfer'
     path 'group-sample-transfer'
     description 'Group Sample Transfer description'
-    owner_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
+    owner :mary_doe
     puid 'INXT_GRP_AAAAAAAACP'
     samples_count 3
   end
@@ -676,7 +676,7 @@ FixtureBot.define do
     name 'Group Sample Transfer Target'
     path 'group-sample-transfer-target'
     description 'Group Sample Transfer Target description'
-    owner_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
+    owner :mary_doe
     puid 'INXT_GRP_AAAAAAAACQ'
     samples_count 0
   end
@@ -687,7 +687,7 @@ FixtureBot.define do
     name 'Group Sample Actions'
     path 'group-sample-actions'
     description 'Group Sample Actions description'
-    owner_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
+    owner :sample_actions_doe
     puid 'INXT_GRP_AAAAAAAACR'
     metadata_summary({ 'metadatafield1' => 2, 'metadatafield2' => 2 })
     samples_count 2
@@ -699,7 +699,7 @@ FixtureBot.define do
     name 'Subgroup Sample Actions'
     path 'subgroup-sample-actions'
     description 'Subgroup Sample Actions description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_actions)
     puid 'INXT_GRP_AAAAAAAACS'
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     samples_count 1
@@ -711,7 +711,7 @@ FixtureBot.define do
     name 'Shared Group Sample Actions Owner'
     path 'shared-group-sample-actions-owner'
     description 'Shared Group Sample Actions Owner description'
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    owner :shared_sample_actions_doe
     puid 'INXT_GRP_AAAAAAAACT'
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     samples_count 1
@@ -723,7 +723,7 @@ FixtureBot.define do
     name 'Shared Group Sample Actions Maintainer'
     path 'shared-group-sample-actions-maintainer'
     description 'Shared Group Sample Actions Maintainer description'
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    owner :shared_sample_actions_doe
     puid 'INXT_GRP_AAAAAAAACU'
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     samples_count 1
@@ -735,7 +735,7 @@ FixtureBot.define do
     name 'Shared Group Sample Actions Analyst'
     path 'shared-group-sample-actions-analyst'
     description 'Shared Group Sample Actions Analyst description'
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    owner :shared_sample_actions_doe
     puid 'INXT_GRP_AAAAAAAACV'
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     samples_count 1
@@ -747,7 +747,7 @@ FixtureBot.define do
     name 'Shared Group Sample Actions Guest'
     path 'shared-group-sample-actions-guest'
     description 'Shared Group Sample Actions Guest description'
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    owner :shared_sample_actions_doe
     puid 'INXT_GRP_AAAAAAAACW'
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     samples_count 1
@@ -776,7 +776,7 @@ FixtureBot.define do
     path 'public-group-1-subgroup-1'
     description 'Public Subgroup 1 description'
     puid 'INXT_GRP_AXATAABAAL'
-    parent_id ActiveRecord::FixtureSet.identify(:public_group1, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :public_group1)
     samples_count 0
     created_at '<%= 1.days.ago %>'
     updated_at '<%= 1.days.ago %>'
@@ -788,7 +788,7 @@ FixtureBot.define do
     name 'SNVPhyl Group'
     path 'snvphyl-group'
     description 'SNVPhyl Group description'
-    owner_id ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid)
+    owner :snvphyl_user
     metadata_summary({ 'metadata_1' => 2, 'metadata_2' => 2, 'metadata_3' => 2, 'metadata_4' => 2, 'metadata_5' => 2,
                        'metadata_6' => 2, 'metadata_7' => 2, 'metadata_8' => 2 })
     puid 'INXT_GRP_AAAAAAAACX'
@@ -802,7 +802,7 @@ FixtureBot.define do
     name 'Clone Test Group One'
     path 'clone-test-group-one'
     description 'Group for testing clone with no available projects'
-    owner_id ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid)
+    owner :clone_test_maintainer_one
     puid 'INXT_GRP_AAAAAAAACY'
     samples_count 0
   end
@@ -813,7 +813,7 @@ FixtureBot.define do
     name 'Clone Test Group Two'
     path 'clone-test-group-two'
     description 'Group for testing clone with no available destination groups'
-    owner_id ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid)
+    owner :clone_test_maintainer_two
     puid 'INXT_GRP_AAAAAAAACZ'
     samples_count 0
   end

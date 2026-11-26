@@ -1,7 +1,7 @@
 valid_automated_workflow_execution:
-  id: 21417130-2d4f-512f-83b4-e76375d6328d
-  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
-  created_by_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  id: 4959c715-9329-5e3c-842b-243ee025860e
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   metadata:
     pipeline_id: phac-nml/iridanextexample
     workflow_version: 1.0.2
@@ -11,9 +11,9 @@ valid_automated_workflow_execution:
   update_samples: false
   name: Valid Automated Workflow Execution
 disabled_automated_workflow_execution:
-  id: f74422cd-b156-571c-a8eb-4f0142e41717
-  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
-  created_by_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  id: 80c56b16-3c8c-5f7f-b0b5-9a09d6db8395
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   metadata:
     pipeline_id: phac-nml/iridanextexample
     workflow_version: 1.0.2
@@ -24,9 +24,9 @@ disabled_automated_workflow_execution:
   name: Disabled Automated Workflow Execution
   disabled: true
 projectA_automated_workflow_execution_one:
-  id: 0463cffb-ab20-5d80-8853-4f34654d8bca
-  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
-  created_by_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  id: 3a781f39-ef28-55d2-81fe-1d30e04d3f5d
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
     pipeline_id: phac-nml/iridanextexample
     workflow_version: 1.0.2
@@ -35,9 +35,9 @@ projectA_automated_workflow_execution_one:
   email_notification: false
   update_samples: false
 projectA_automated_workflow_execution_two:
-  id: 58385c24-ac10-502b-8c4a-ca6a6c6be29b
-  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
-  created_by_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  id: 1ecbec7a-fd76-5c55-82f9-88177f206414
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
     pipeline_id: phac-nml/iridanextexample
     workflow_version: 1.0.1
@@ -46,9 +46,9 @@ projectA_automated_workflow_execution_two:
   email_notification: false
   update_samples: false
 projectA_automated_workflow_execution_three:
-  id: f58ee53e-2595-522e-8ee3-8bc1c7c3cba7
-  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
-  created_by_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  id: 6fcc8552-e976-5cff-be39-64f90dc9f3bf
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
     pipeline_id: phac-nml/iridanextexample
     workflow_version: 1.0.0
@@ -57,9 +57,9 @@ projectA_automated_workflow_execution_three:
   email_notification: false
   update_samples: false
 projectA_automated_workflow_execution_four:
-  id: 450335a2-e490-57e4-a64b-3e64e6f38c41
-  namespace_id: 3590b01e-92be-57ba-9be5-d12ed109acf2
-  created_by_id: 2d30501d-12d5-5664-a8c7-8eec51398f01
+  id: d5836e18-f551-504f-9111-6f88f9027d8e
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
     pipeline_id: phac-nml/iridanextexample
     workflow_version: 1.0.4

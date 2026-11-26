@@ -7,8 +7,8 @@ FixtureBot.define do
     name 'Project 1'
     path 'project-1'
     description 'Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 10, 'metadatafield2' => 35 })
     puid 'INXT_PRJ_AAAAAAAAAA'
     attachments_updated_at '<%= 2.hours.ago %>'
@@ -20,8 +20,8 @@ FixtureBot.define do
     name 'Project 2'
     path 'project-2'
     description 'Project 2 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAB'
   end
 
@@ -31,8 +31,8 @@ FixtureBot.define do
     name 'Project 2'
     path 'project-2'
     description 'Project 2 description'
-    parent_id ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :john_doe_namespace)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAC'
   end
 
@@ -42,8 +42,8 @@ FixtureBot.define do
     name 'Project 3'
     path 'project-3'
     description 'Project 3 description'
-    parent_id ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :john_doe_namespace)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAD'
   end
 
@@ -53,8 +53,8 @@ FixtureBot.define do
     name 'Project 4'
     path 'project-4'
     description 'Project 4 description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_three)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAE'
   end
 
@@ -64,8 +64,8 @@ FixtureBot.define do
     name 'Project 5'
     path 'project-5'
     description 'Project 5 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 623, 'metadatafield2' => 71 })
     puid 'INXT_PRJ_AAAAAAAAAF'
   end
@@ -76,8 +76,8 @@ FixtureBot.define do
     name 'Project 6'
     path 'project-6'
     description 'Project 6 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAG'
   end
 
@@ -87,8 +87,8 @@ FixtureBot.define do
     name 'Project 7'
     path 'project-7'
     description 'Project 7 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAH'
   end
 
@@ -98,8 +98,8 @@ FixtureBot.define do
     name 'Project 8'
     path 'project-8'
     description 'Project 8 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAI'
   end
 
@@ -109,8 +109,8 @@ FixtureBot.define do
     name 'Project 9'
     path 'project-9'
     description 'Project 9 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAJ'
   end
 
@@ -120,8 +120,8 @@ FixtureBot.define do
     name 'Project 10'
     path 'project-10'
     description 'Project 10 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAK'
   end
 
@@ -131,8 +131,8 @@ FixtureBot.define do
     name 'Project 11'
     path 'project-11'
     description 'Project 11 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAL'
   end
 
@@ -142,8 +142,8 @@ FixtureBot.define do
     name 'Project 12'
     path 'project-12'
     description 'Project 12 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAM'
   end
 
@@ -153,8 +153,8 @@ FixtureBot.define do
     name 'Project 13'
     path 'project-13'
     description 'Project 13 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAN'
   end
 
@@ -164,8 +164,8 @@ FixtureBot.define do
     name 'Project 14'
     path 'project-14'
     description 'Project 14 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAO'
   end
 
@@ -175,8 +175,8 @@ FixtureBot.define do
     name 'Project 15'
     path 'project-15'
     description 'Project 15 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAP'
   end
 
@@ -186,8 +186,8 @@ FixtureBot.define do
     name 'Project 16'
     path 'project-16'
     description 'Project 16 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAQ'
   end
 
@@ -197,8 +197,8 @@ FixtureBot.define do
     name 'Project 17'
     path 'project-17'
     description 'Project 17 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAR'
   end
 
@@ -208,8 +208,8 @@ FixtureBot.define do
     name 'Project 18'
     path 'project-18'
     description 'Project 18 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAS'
   end
 
@@ -219,8 +219,8 @@ FixtureBot.define do
     name 'Project 19'
     path 'project-19'
     description 'Project 19 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAT'
   end
 
@@ -230,8 +230,8 @@ FixtureBot.define do
     name 'Project 20'
     path 'project-20'
     description 'Project 20 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAU'
   end
 
@@ -241,8 +241,8 @@ FixtureBot.define do
     name 'Project 21'
     path 'project-21'
     description 'Project 21 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAV'
   end
 
@@ -252,8 +252,8 @@ FixtureBot.define do
     name 'Project 22'
     path 'project-22'
     description 'Project 22 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAW'
   end
 
@@ -263,8 +263,8 @@ FixtureBot.define do
     name 'Project 23'
     path 'project-23'
     description 'Project 23 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_six, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_six)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAX'
   end
 
@@ -274,8 +274,8 @@ FixtureBot.define do
     name 'Project 24'
     path 'project-24'
     description 'Project 24 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAY'
   end
 
@@ -285,8 +285,8 @@ FixtureBot.define do
     name 'Project 4'
     path 'project-4'
     description 'Project 4 description'
-    parent_id ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :john_doe_namespace)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAZ'
   end
 
@@ -296,8 +296,8 @@ FixtureBot.define do
     name 'Project 25'
     path 'project-25'
     description 'Project 25 description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup1, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup1)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAA2'
   end
 
@@ -307,8 +307,8 @@ FixtureBot.define do
     name 'Project 26'
     path 'project-26'
     description 'Project 26 description'
-    parent_id ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :john_doe_namespace)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAA3'
   end
 
@@ -318,8 +318,8 @@ FixtureBot.define do
     name 'Project 32'
     path 'project-32'
     description 'Project 32 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_eight, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_eight)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAA4'
   end
 
@@ -329,8 +329,8 @@ FixtureBot.define do
     name 'Project A'
     path 'project-a'
     description 'Project A description'
-    parent_id ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :jeff_doe_namespace)
+    owner :jeff_doe
     puid 'INXT_PRJ_AAAAAAAAA5'
   end
 
@@ -340,8 +340,8 @@ FixtureBot.define do
     name 'Group One Project 1'
     path 'project-1'
     description 'Group One Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:user24, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_one)
+    owner :user24
     puid 'INXT_PRJ_AAAAAAAAA6'
   end
 
@@ -351,8 +351,8 @@ FixtureBot.define do
     name 'Group Three Project 1'
     path 'project-1'
     description 'Group Three Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:user24, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_three)
+    owner :user24
     puid 'INXT_PRJ_AAAAAAAAA7'
   end
 
@@ -362,8 +362,8 @@ FixtureBot.define do
     name 'Project 28'
     path 'project-28'
     description 'Project 28 description'
-    parent_id ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:david_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :david_doe_group_four)
+    owner :david_doe
     metadata_summary({ 'unique.metadata.field' => 1, 'metadata field with spaces' => 1 })
     puid 'INXT_PRJ_AAAAAAAABA'
   end
@@ -374,8 +374,8 @@ FixtureBot.define do
     name 'Project 29'
     path 'project-29'
     description 'Project 29 description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_a)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAABB'
   end
@@ -386,8 +386,8 @@ FixtureBot.define do
     name 'Project 30'
     path 'project-30'
     description 'Project 30 description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_twelve_b, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_b)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAABC'
   end
@@ -398,8 +398,8 @@ FixtureBot.define do
     name 'Project 31'
     path 'project-31'
     description 'Project 31 description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_a_a)
+    owner :john_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAABD'
   end
@@ -410,8 +410,8 @@ FixtureBot.define do
     name 'Personal Project 1'
     path 'personal-project-1'
     description 'Personal Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:user32_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:user32, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :user32_namespace)
+    owner :user32
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAZBD'
   end
@@ -422,7 +422,7 @@ FixtureBot.define do
     name 'Project Alpha'
     path 'project-alpha'
     description 'Project Alpha description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_alpha, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_alpha)
     puid 'INXT_PRJ_AAAAAAAABE'
   end
 
@@ -433,7 +433,7 @@ FixtureBot.define do
     path 'project-bravo'
     description 'Project Bravo description'
     type 'Project'
-    parent_id ActiveRecord::FixtureSet.identify(:group_bravo, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_bravo)
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAABF'
   end
@@ -444,7 +444,7 @@ FixtureBot.define do
     name 'Project Charlie'
     path 'project-charlie'
     description 'Project Charlie description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_charlie, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_charlie)
     puid 'INXT_PRJ_AAAAAAAABG'
   end
 
@@ -454,8 +454,8 @@ FixtureBot.define do
     name 'Project Alpha 1'
     path 'project-alpha-1'
     description 'Project Alpha 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_alpha_subgroup1)
+    owner :private_ryan
     puid 'INXT_PRJ_AAAAAAAABH'
   end
 
@@ -465,7 +465,7 @@ FixtureBot.define do
     name 'Project Delta'
     path 'project-delta'
     description 'Project Delta description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_delta, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_delta)
     puid 'INXT_PRJ_AAAAAAAABI'
   end
 
@@ -475,7 +475,7 @@ FixtureBot.define do
     name 'Project Delta Subgroup A'
     path 'project-delta-subgroup-a'
     description 'Project Delta Subgroup A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_delta_subgroupA)
     puid 'INXT_PRJ_AAAAAAAABJ'
   end
 
@@ -485,7 +485,7 @@ FixtureBot.define do
     name 'Project Echo'
     path 'project-echo'
     description 'Project Echo description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_echo, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_echo)
     puid 'INXT_PRJ_AAAAAAAABK'
   end
 
@@ -495,7 +495,7 @@ FixtureBot.define do
     name 'Project Echo Subgroup B'
     path 'project-echo-subgroup-b'
     description 'Project Echo Subgroup B description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_echo_subgroupB, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_echo_subgroupB)
     puid 'INXT_PRJ_AAAAAAAABL'
   end
 
@@ -505,7 +505,7 @@ FixtureBot.define do
     name 'Project Foxtrot Subgroup A'
     path 'project-foxtrot-subgroup-a'
     description 'Project Foxtrot Subgroup A description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_foxtrot_subgroupA, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_foxtrot_subgroupA)
     puid 'INXT_PRJ_AAAAAAAABM'
   end
 
@@ -515,8 +515,8 @@ FixtureBot.define do
     name 'Personal Project 1'
     path 'personal-project-1'
     description 'Personal Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:user27_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:user27, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :user27_namespace)
+    owner :user27
     puid 'INXT_PRJ_AAAAAAAABN'
   end
 
@@ -526,7 +526,7 @@ FixtureBot.define do
     name 'Project Hotel'
     path 'project-hotel'
     description 'Project Hotel description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_hotel, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_hotel)
     puid 'INXT_PRJ_AAAAAAAABO'
   end
 
@@ -536,8 +536,8 @@ FixtureBot.define do
     name 'Project Uncounted'
     path 'project-uncounted'
     description 'Project Uncounted description'
-    parent_id ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :jeff_doe_namespace)
+    owner :jeff_doe
     puid 'INXT_PRJ_AAAAAAAABP'
   end
 
@@ -547,8 +547,8 @@ FixtureBot.define do
     name 'Project 33'
     path 'project-33'
     description 'Project 33 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_thirteen)
+    owner :jane_doe
     puid 'INXT_PRJ_AAAAAAAABQ'
   end
 
@@ -558,8 +558,8 @@ FixtureBot.define do
     name 'Project 34'
     path 'project-34'
     description 'Project 34 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_fourteen)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAABR'
   end
 
@@ -569,8 +569,8 @@ FixtureBot.define do
     name 'Project 35'
     path 'project-35'
     description 'Project 35 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_fifteen)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAABS'
   end
 
@@ -580,7 +580,7 @@ FixtureBot.define do
     name 'Project 37'
     path 'project-37'
     description 'Project 37 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_sixteen)
     puid 'INXT_PRJ_AAAAAAACBC'
   end
 
@@ -590,8 +590,8 @@ FixtureBot.define do
     name 'Project 38'
     path 'project-38'
     description 'Project 38 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_seventeen, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_seventeen)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAACBF'
   end
 
@@ -601,7 +601,7 @@ FixtureBot.define do
     name 'User 29 Project 1'
     path 'project-1'
     description 'Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:user29_namespace, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :user29_namespace)
     puid 'INXT_PRJ_AAAAAAACBD'
   end
 
@@ -611,8 +611,8 @@ FixtureBot.define do
     name 'Project EndToEnd'
     path 'project-end_to_end'
     description 'Project EndToEnd description'
-    parent_id ActiveRecord::FixtureSet.identify(:janitor_doe_group, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :janitor_doe_group)
+    owner :janitor_doe
     puid 'INXT_PRJ_ABAAAAAAAA'
   end
 
@@ -622,7 +622,7 @@ FixtureBot.define do
     name 'Empty Project'
     path 'empty-project'
     description 'Project that does not contain any samples'
-    parent_id ActiveRecord::FixtureSet.identify(:empty_group, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :empty_group)
     puid 'INXT_PRJ_AAAAAAACBE'
   end
 
@@ -632,7 +632,7 @@ FixtureBot.define do
     name 'Project India'
     path 'project-india'
     description 'Project India description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_india, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_india)
     puid 'INXT_PRJ_AAAAAAAABT'
   end
 
@@ -642,8 +642,8 @@ FixtureBot.define do
     name 'Project India 1'
     path 'project-india-1'
     description 'Project India 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_india_subgroup1, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_india_subgroup1)
+    owner :private_ryan
     puid 'INXT_PRJ_AAAAAAAABU'
   end
 
@@ -653,7 +653,7 @@ FixtureBot.define do
     name 'Project Juliett'
     path 'project-juliett'
     description 'Project Juliett description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_juliett, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_juliett)
     puid 'INXT_PRJ_AAAAAAAABV'
   end
 
@@ -663,8 +663,8 @@ FixtureBot.define do
     name 'Project Juliett 1'
     path 'project-juliett-1'
     description 'Project Juliett 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_juliett_subgroup1, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_juliett_subgroup1)
+    owner :private_ryan
     puid 'INXT_PRJ_AAAAAAAABW'
   end
 
@@ -674,7 +674,7 @@ FixtureBot.define do
     name 'Project Mike'
     path 'project-mike'
     description 'Project Mike description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_mike, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
     puid 'INXT_PRJ_AAAAAAAABX'
   end
 
@@ -684,7 +684,7 @@ FixtureBot.define do
     name 'Project Mike A'
     path 'project-mike-a'
     description 'Project Mike A description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_mike_a)
     puid 'INXT_PRJ_AAAAAAAABY'
   end
 
@@ -694,7 +694,7 @@ FixtureBot.define do
     name 'Project Mike B'
     path 'project-mike-b'
     description 'Project Mike B description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_mike_b)
     puid 'INXT_PRJ_AAAAAAAABZ'
   end
 
@@ -704,8 +704,8 @@ FixtureBot.define do
     name 'Project Metadata'
     path 'project-metadata'
     description 'Project Metadata description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_metadata, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_metadata)
+    owner :metadata_doe
     metadata_summary({ 'example_date' => 3, 'example_float' => 3, 'example_integer' => 3 })
     puid 'INXT_PRJ_AAAAAAAACA'
   end
@@ -716,8 +716,8 @@ FixtureBot.define do
     name 'Project Metadata 2'
     path 'project-metadata-2'
     description 'Project Metadata 2 description'
-    parent_id ActiveRecord::FixtureSet.identify(:metadata_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :metadata_doe_namespace)
+    owner :metadata_doe
     metadata_summary({ 'example_date' => 3, 'example_float' => 3, 'example_integer' => 3 })
     puid 'INXT_PRJ_AAAAAAAACB'
   end
@@ -728,8 +728,8 @@ FixtureBot.define do
     name 'Project Group Sample Transfer'
     path 'project-group-sample-transfer'
     description 'Project Group Sample Transfer description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_transfer)
+    owner :mary_doe
     puid 'INXT_PRJ_AAAAAAAACC'
   end
 
@@ -739,8 +739,8 @@ FixtureBot.define do
     name 'Project Group Sample Transfer Target'
     path 'project-group-sample-transfer-target'
     description 'Project Group Sample Transfer Target description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_transfer_target)
+    owner :mary_doe
     puid 'INXT_PRJ_AAAAAAAACD'
   end
 
@@ -750,8 +750,8 @@ FixtureBot.define do
     name 'Project Group Sample Actions'
     path 'project-group-sample-actions'
     description 'Project Group Sample Actions description'
-    parent_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_actions)
+    owner :sample_actions_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAACE'
   end
@@ -762,8 +762,8 @@ FixtureBot.define do
     name 'Project Subgroup Sample Actions'
     path 'project-subgroup-sample-actions'
     description 'Subgroup Sample Actions description'
-    parent_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_sample_actions)
+    owner :sample_actions_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAACF'
   end
@@ -774,8 +774,8 @@ FixtureBot.define do
     name 'Project Shared Group Sample Actions Owner'
     path 'project-shared-group-sample-actions-owner'
     description 'Project Shared Group Sample Actions Owner description'
-    parent_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_owner)
+    owner :shared_sample_actions_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAACG'
   end
@@ -786,8 +786,8 @@ FixtureBot.define do
     name 'Project Shared Group Sample Actions Maintainer'
     path 'project-shared-group-sample-actions-maintainer'
     description 'Project Shared Group Sample Actions Maintainer description'
-    parent_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_maintainer)
+    owner :shared_sample_actions_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAACH'
   end
@@ -798,8 +798,8 @@ FixtureBot.define do
     name 'Project Shared Group Sample Actions Analyst'
     path 'project-shared-group-sample-actions-analyst'
     description 'Project Shared Group Sample Actions Analyst description'
-    parent_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_analyst)
+    owner :shared_sample_actions_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAACI'
   end
@@ -810,8 +810,8 @@ FixtureBot.define do
     name 'Project Shared Group Sample Actions Guest'
     path 'project-shared-group-sample-actions-guest'
     description 'Project Shared Group Sample Actions Guest description'
-    parent_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_guest)
+    owner :shared_sample_actions_doe
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAACJ'
   end
@@ -822,8 +822,8 @@ FixtureBot.define do
     name 'Project 1'
     path 'project-1'
     description 'Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:user31_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:user31, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :user31_namespace)
+    owner :user31
     puid 'INXT_PRJ_AAAAAAAACK'
   end
 
@@ -833,8 +833,8 @@ FixtureBot.define do
     name 'Project Chunked Samples'
     path 'project-chunked-samples'
     description 'Project Chunked Samples description'
-    parent_id ActiveRecord::FixtureSet.identify(:chunked_samples_doe_namespace, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :chunked_samples_doe_namespace)
+    owner :chunked_samples_doe
     puid 'INXT_PRJ_AAAAAAAACL'
   end
 
@@ -844,8 +844,8 @@ FixtureBot.define do
     name 'Public Group 1 Subgroup 1 Project 1'
     path 'public-subgroup-1-project-1'
     description 'Project Subgroup 1 Project 1 description'
-    parent_id ActiveRecord::FixtureSet.identify(:public_group1, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :public_group1)
+    owner :john_doe
     puid 'INXT_PRJ_AAAAAAAACY'
     send(:public, true) # `public` column name collides with Ruby's `public` keyword
   end
@@ -856,8 +856,8 @@ FixtureBot.define do
     name 'SNVPhyl Project'
     path 'snvphyl-project'
     description 'SNVPhyl Project description'
-    parent_id ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid)
-    owner_id ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid)
+    parent_id FixtureBot::Key::Uuid.generate(:groups, :snvphyl_group)
+    owner :snvphyl_user
     metadata_summary({ 'metadata_1' => 2, 'metadata_2' => 2, 'metadata_3' => 2, 'metadata_4' => 2, 'metadata_5' => 2,
                        'metadata_6' => 2, 'metadata_7' => 2, 'metadata_8' => 2 })
     puid 'INXT_PRJ_AAAAAAAACZ'

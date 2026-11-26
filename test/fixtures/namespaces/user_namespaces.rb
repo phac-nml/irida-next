@@ -5,7 +5,7 @@ FixtureBot.define do
     name 'john.doe@localhost'
     path 'john.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    owner :john_doe
     puid 'INXT_USR_AAAAAAAAAA'
   end
 
@@ -13,7 +13,7 @@ FixtureBot.define do
     name 'jane.doe@localhost'
     path 'jane.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
+    owner :jane_doe
     puid 'INXT_USR_AAAAAAAAAB'
   end
 
@@ -21,7 +21,7 @@ FixtureBot.define do
     name 'jean.doe@localhost'
     path 'jean.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:jean_doe, :uuid)
+    owner :jean_doe
     puid 'INXT_USR_AAAAAAAAAC'
   end
 
@@ -29,7 +29,7 @@ FixtureBot.define do
     name 'james.doe@localhost'
     path 'james.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
+    owner :james_doe
     puid 'INXT_USR_AAAAAAAAAD'
   end
 
@@ -37,7 +37,7 @@ FixtureBot.define do
     name 'david.doe@localhost'
     path 'david.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:david_doe, :uuid)
+    owner :david_doe
     puid 'INXT_USR_AAAAAAAAAE'
   end
 
@@ -45,7 +45,7 @@ FixtureBot.define do
     name 'jeff.doe@localhost'
     path 'jeff.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    owner :jeff_doe
     puid 'INXT_USR_AAAAAAAAAF'
   end
 
@@ -53,7 +53,7 @@ FixtureBot.define do
     name 'private.ryan@localhost'
     path 'private.ryan_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
+    owner :private_ryan
     puid 'INXT_USR_AAAAAAAAAG'
   end
 
@@ -61,7 +61,7 @@ FixtureBot.define do
     name 'joan.doe@localhost'
     path 'joan.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
+    owner :joan_doe
     puid 'INXT_USR_AAAAAAAAAH'
   end
 
@@ -69,7 +69,7 @@ FixtureBot.define do
     name 'micha.doe@localhost'
     path 'micha.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
+    owner :micha_doe
     puid 'INXT_USR_AAAAAAAAAI'
   end
 
@@ -77,7 +77,7 @@ FixtureBot.define do
     name 'ryan.doe@localhost'
     path 'ryan.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
+    owner :ryan_doe
     puid 'INXT_USR_AAAAAAAAAJ'
   end
 
@@ -85,7 +85,7 @@ FixtureBot.define do
     name 'user.25@localhost'
     path 'user.25_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user25, :uuid)
+    owner :user25
     puid 'INXT_USR_AAAAAAAAZK'
   end
 
@@ -93,7 +93,7 @@ FixtureBot.define do
     name 'user.26@localhost'
     path 'user.26_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user26, :uuid)
+    owner :user26
     puid 'INXT_USR_AAAAAAAAAK'
   end
 
@@ -101,7 +101,7 @@ FixtureBot.define do
     name 'alph.abet@localhost'
     path 'alph.abet_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:alph_abet, :uuid)
+    owner :alph_abet
     puid 'INXT_USR_AAAAAAAAAL'
   end
 
@@ -109,7 +109,7 @@ FixtureBot.define do
     name 'private.joan@localhost'
     path 'private.joan_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:private_joan, :uuid)
+    owner :private_joan
     puid 'INXT_USR_AAAAAAAAAM'
   end
 
@@ -117,7 +117,7 @@ FixtureBot.define do
     name 'private.micha@localhost'
     path 'private.micha_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:private_micha, :uuid)
+    owner :private_micha
     puid 'INXT_USR_AAAAAAAAAN'
   end
 
@@ -125,7 +125,7 @@ FixtureBot.define do
     name 'user.27@localhost'
     path 'user.27_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user27, :uuid)
+    owner :user27
     puid 'INXT_USR_AAAAAAAAAO'
   end
 
@@ -133,7 +133,7 @@ FixtureBot.define do
     name 'user.28@localhost'
     path 'user.28_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user28, :uuid)
+    owner :user28
     puid 'INXT_USR_AAAAAAAAAP'
   end
 
@@ -141,7 +141,7 @@ FixtureBot.define do
     name 'user.29@localhost'
     path 'user.29_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user29, :uuid)
+    owner :user29
     puid 'INXT_USR_AAAAAAAAAQ'
   end
 
@@ -149,7 +149,7 @@ FixtureBot.define do
     name 'user.30@localhost'
     path 'user.30_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user30, :uuid)
+    owner :user30
     puid 'INXT_USR_AAAAAAAAAR'
   end
 
@@ -157,7 +157,7 @@ FixtureBot.define do
     name 'user.32@localhost'
     path 'user.32_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user32, :uuid)
+    owner :user32
     puid 'INXT_USR_AAAAAAAZZR'
   end
 
@@ -165,7 +165,7 @@ FixtureBot.define do
     name 'metadata.doe@localhost'
     path 'metadata.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
+    owner :metadata_doe
     puid 'INXT_USR_AAAAAAAAAS'
   end
 
@@ -173,7 +173,7 @@ FixtureBot.define do
     name 'mary.doe@localhost'
     path 'mary.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
+    owner :mary_doe
     puid 'INXT_USR_AAAAAAAAAT'
   end
 
@@ -181,7 +181,7 @@ FixtureBot.define do
     name 'sample.actions.doe@localhost'
     path 'sample.actions.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
+    owner :sample_actions_doe
     puid 'INXT_USR_AAAAAAAAAU'
   end
 
@@ -189,7 +189,7 @@ FixtureBot.define do
     name 'shared.sample.actions.doe@localhost'
     path 'shared.sample.actions.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
+    owner :shared_sample_actions_doe
     puid 'INXT_USR_AAAAAAAAAV'
   end
 
@@ -197,7 +197,7 @@ FixtureBot.define do
     name 'subgroup.sample.actions.doe@localhost'
     path 'subgroup.sample.actions.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid)
+    owner :subgroup_sample_actions_doe
     puid 'INXT_USR_AAAAAAAAAW'
   end
 
@@ -205,7 +205,7 @@ FixtureBot.define do
     name 'steve.doe@localhost'
     path 'steve.doe_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:steve_doe, :uuid)
+    owner :steve_doe
     puid 'INXT_USR_AAAAAAAAAX'
   end
 
@@ -213,7 +213,7 @@ FixtureBot.define do
     name 'user.31@localhost'
     path 'user.31_at_localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:user31, :uuid)
+    owner :user31
     puid 'INXT_USR_AAAAAAAAAY'
   end
 
@@ -221,7 +221,7 @@ FixtureBot.define do
     name 'chunked_samples_doe@localhost'
     path 'chunked-samples-doe-at-localhost'
     type 'User'
-    owner_id ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid)
+    owner :chunked_samples_doe
     puid 'INXT_USR_AAAAAAAAAZ'
   end
 end

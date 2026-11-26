@@ -15,6 +15,7 @@ module Groups
         @sample2 = samples(:sample2)
         @sample28 = samples(:sample28)
         @sample29 = samples(:sample29)
+        @sample30 = samples(:sample30)
         @broadcast_target = "samples_transfer_test_#{SecureRandom.uuid}"
       end
 
@@ -150,6 +151,12 @@ module Groups
         test "transfer samples with and without same name in destination project for #{job_class.name}" do
           Flipper.enable(:v2_sample_transfer) if v2
 
+          # TransferJob processes source projects in natural query order, while TransferJobV2
+          # processes them sorted by project id, so whichever of the two same-named samples
+          # (sample29/sample30) is processed first (and therefore transfers successfully) differs
+          # between the two job implementations; the other remains due to the name conflict.
+          remaining_duplicate_sample = v2 ? @sample30 : @sample29
+
           assert_samples_page(@group, 26)
           assert_project_samples_page(@project4, 2)
           get new_samples_transfer_path(namespace_id: @group.id, format: :turbo_stream)
@@ -165,7 +172,7 @@ module Groups
           assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 0
           assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 0
           assert_select "tbody#samples-table-body tr##{dom_id(@sample28)}", count: 1
-          assert_select "tbody#samples-table-body tr##{dom_id(@sample29)}", count: 1
+          assert_select "tbody#samples-table-body tr##{dom_id(remaining_duplicate_sample)}", count: 1
           assert_project_samples_page(@project4, 26, sort: 'puid asc')
           assert_select "tbody#samples-table-body tr##{dom_id(@sample1)}", count: 1
           assert_select "tbody#samples-table-body tr##{dom_id(@sample2)}", count: 1

@@ -2,881 +2,881 @@
 
 FixtureBot.define do
   member :group_one_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_one_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     access_level Member::AccessLevel::OWNER
     expires_at '<%= 10.days.from_now %>'
   end
 
   member :group_one_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    user :joan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     access_level Member::AccessLevel::MAINTAINER
     expires_at '<%= 8.days.from_now %>'
   end
 
   member :group_one_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     access_level Member::AccessLevel::ANALYST
     expires_at '<%= 12.days.from_now %>'
   end
 
   member :group_one_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     access_level Member::AccessLevel::GUEST
     expires_at '<%= 12.days.from_now %>'
   end
 
   (Namespace::MAX_ANCESTORS - 2).times do |n|
     member(:"subgroup#{n + 1}_member_ryan_doe") do
-      user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-      created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-      namespace_id ActiveRecord::FixtureSet.identify(:"subgroup#{n + 1}", :uuid)
+      user :ryan_doe
+      created_by :john_doe
+      namespace_id FixtureBot::Key::Uuid.generate(:groups, :"subgroup#{n + 1}")
       access_level Member::AccessLevel::GUEST
     end
   end
 
   member :subgroup_six_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup6, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup6)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_two_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_two, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_two)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_two_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_two, :uuid)
+    user :joan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_two)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_three_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_three, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_three)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_three_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_three, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_three)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_three_member_micha_doe do
-    user_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_three, :uuid)
+    user :micha_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_three)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_three_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_three, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_three)
     access_level Member::AccessLevel::GUEST
   end
 
   member :subgroup_one_group_three_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_three)
     access_level Member::AccessLevel::OWNER
   end
 
   member :subgroup_one_group_three_member_micha_doe do
-    user_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid)
+    user :micha_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_three)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :project_one_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_one_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :project_one_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_one_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :project_one_member_user_bot_account do
-    user_id ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    user :user_bot_account0
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     access_level Member::AccessLevel::UPLOADER
   end
 
   member :project1_member_project_automation_bot do
-    user_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    user :project1_automation_bot
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :project_two_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_two_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
     access_level Member::AccessLevel::OWNER
     expires_at '<%= 15.days.from_now %>'
   end
 
   member :project_two_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
+    user :joan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
     access_level Member::AccessLevel::MAINTAINER
     expires_at '<%= 8.days.from_now %>'
   end
 
   member :project_two_member_jean_doe do
-    user_id ActiveRecord::FixtureSet.identify(:jean_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
+    user :jean_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
     access_level Member::AccessLevel::MAINTAINER
     expires_at '<%= 12.days.from_now %>'
   end
 
   member :project_two_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
     access_level Member::AccessLevel::GUEST
     expires_at '<%= 10.days.from_now %>'
   end
 
   member :project_two_member_james_doe_wo_john_doe_namespace do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_two_member_john_doe_wo_john_doe_namespace do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_two_member_michelle_doe_wo_john_doe_namespace do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :project_two_member_ryan_doe_wo_john_doe_namespace do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_three_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project3_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project3_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_four_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace, :uuid)
+    user :joan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project4_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_four_member_david_doe do
-    user_id ActiveRecord::FixtureSet.identify(:david_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:david_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid)
+    user :david_doe
+    created_by :david_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :david_doe_group_four)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_five_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_five_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_five_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     access_level Member::AccessLevel::GUEST
   end
 
   member :group_five_member_micha_doe do
-    user_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    user :micha_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :project_twenty_two_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_twenty_two_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_twenty_two_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_twenty_two_member_micha_doe do
-    user_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    user :micha_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :subgroup_one_group_five_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_five, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_five)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_six_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_six, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_six)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_six_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_six, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_six)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_twenty_three_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project23_namespace, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project23_namespace)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_twenty_four_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project24_namespace)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_twenty_four_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project24_namespace)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :group_seven_group_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_seven, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_seven)
     access_level Member::AccessLevel::OWNER
   end
 
   25.times do |n|
     member(:"group_seven_group_member#{n}") do
-      user_id ActiveRecord::FixtureSet.identify(:"user#{n}", :uuid)
-      created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-      namespace_id ActiveRecord::FixtureSet.identify(:group_seven, :uuid)
+      user :"user#{n}"
+      created_by :john_doe
+      namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_seven)
       access_level Member::AccessLevel::ANALYST
     end
   end
 
   25.times do |n|
     member(:"project_twenty_six_group_member#{n}") do
-      user_id ActiveRecord::FixtureSet.identify(:"user#{n}", :uuid)
-      created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-      namespace_id ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid)
+      user :"user#{n}"
+      created_by :john_doe
+      namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project26_namespace)
       access_level Member::AccessLevel::ANALYST
     end
   end
 
   member :project_twenty_six_group_member25 do
-    user_id ActiveRecord::FixtureSet.identify(:user25, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid)
+    user :user25
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project26_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   [*('a'..'z')].each do |letter|
     member(:"group_#{letter}_member_alpha_bet") do
-      user_id ActiveRecord::FixtureSet.identify(:alph_abet, :uuid)
-      created_by_id ActiveRecord::FixtureSet.identify(:alph_abet, :uuid)
-      namespace_id ActiveRecord::FixtureSet.identify(:"group_#{letter}", :uuid)
+      user :alph_abet
+      created_by :alph_abet
+      namespace_id FixtureBot::Key::Uuid.generate(:groups, :"group_#{letter}")
       access_level Member::AccessLevel::OWNER
     end
   end
 
   member :namespace_group_link8_member1 do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_one)
     access_level Member::AccessLevel::OWNER
   end
 
   member :namespace_group_link_group_two_member1 do
-    user_id ActiveRecord::FixtureSet.identify(:user24, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid)
+    user :user24
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_two)
     access_level Member::AccessLevel::OWNER
   end
 
   member :namespace_group_link9_member1 do
-    user_id ActiveRecord::FixtureSet.identify(:user25, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid)
+    user :user25
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_three)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_eight_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_eight, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_eight)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_eight_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_eight, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_eight)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_eight_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_eight, :uuid)
+    user :joan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_eight)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_eight_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_eight, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_eight)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_nine_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_nine, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_nine)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_nine_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_nine, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_nine)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :subgroup_one_group_nine_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_nine)
     access_level Member::AccessLevel::OWNER
   end
 
   member :subgroup_one_group_nine_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_one_group_nine)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_ten_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_ten, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_ten)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_ten_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_ten, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_ten)
     access_level Member::AccessLevel::GUEST
   end
 
   member :group_alpha_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_alpha, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_alpha)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_india_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_india, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_india)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_juliett_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_juliett, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_juliett)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_kilo_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_kilo, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_kilo)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_lima_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_lima, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_lima)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_mike_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_mike, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_oscar_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_oscar, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_oscar)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_papa_member_private_ryan do
-    user_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_ryan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_papa, :uuid)
+    user :private_ryan
+    created_by :private_ryan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_papa)
     access_level Member::AccessLevel::OWNER
   end
 
   member 'group_eleven_member_user_26' do
-    user_id ActiveRecord::FixtureSet.identify(:user26, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:user26, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_eleven, :uuid)
+    user :user26
+    created_by :user26
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_eleven)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_twelve_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_twelve_member_jane_doe do
-    user_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    user :jane_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     access_level Member::AccessLevel::GUEST
   end
 
   member :project_twenty_nine_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project29_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_twenty_nine_member_jane_doe do
-    user_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid)
+    user :jane_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project29_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :project_twenty_nine_member_michelle_doe do
-    user_id ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid)
+    user :michelle_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project29_namespace)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :project_thirty_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project30_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_thirty_one_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project31_namespace, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project31_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_delta_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:private_joan, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:private_joan, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_delta, :uuid)
+    user :private_joan
+    created_by :private_joan
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_delta)
     access_level Member::AccessLevel::OWNER
   end
 
   member 'group_golf_member_user_27' do
-    user_id ActiveRecord::FixtureSet.identify(:user27, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:user27, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_golf, :uuid)
+    user :user27
+    created_by :user27
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_golf)
     access_level Member::AccessLevel::GUEST
   end
 
   member :group_hotel_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_hotel, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_hotel)
     access_level Member::AccessLevel::OWNER
   end
 
   member 'group_hotel_project_one_member_user_28' do
-    user_id ActiveRecord::FixtureSet.identify(:user28, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:user28, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_hotel, :uuid)
+    user :user28
+    created_by :user28
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_hotel)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_thirteen_member_jane_doe do
-    user_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid)
+    user :jane_doe
+    created_by :jane_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_thirteen)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_thirteen_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid)
+    user :james_doe
+    created_by :jane_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_thirteen)
     access_level Member::AccessLevel::GUEST
   end
 
   member :group_fourteen_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_fourteen)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_fifteen_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_fifteen)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_fifteen_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid)
+    user :joan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_fifteen)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_fifteen_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid)
+    user :james_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_fifteen)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :group_fifteen_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid)
+    user :ryan_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_fifteen)
     access_level Member::AccessLevel::GUEST
   end
 
   member :group_sixteen_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sixteen)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_sixteen_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid)
+    user :joan_doe
+    created_by :joan_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sixteen)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :group_sixteen_member_james_doe do
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid)
+    user :james_doe
+    created_by :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sixteen)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :group_sixteen_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid)
+    user :ryan_doe
+    created_by :ryan_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sixteen)
     access_level Member::AccessLevel::GUEST
   end
 
   member :group_seventeen_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_seventeen, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_seventeen)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_one_member_user30 do
-    user_id ActiveRecord::FixtureSet.identify(:user30, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:user30, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid)
+    user :user30
+    created_by :user30
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :user30_group_one)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_one_member_user_bot_account do
-    user_id ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    user :user_group_bot_account0
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     access_level Member::AccessLevel::UPLOADER
     expires_at '<%= 20.days.from_now %>'
   end
 
   member :projectA_member_project_automation_bot do
-    user_id ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    user :projectA_automation_bot
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :projectA_member_jane_doe do
-    user_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    user :jane_doe
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :projectA_member_joan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    user :joan_doe
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :projectA_member_ryan_doe do
-    user_id ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    user :ryan_doe
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     access_level Member::AccessLevel::ANALYST
   end
 
   member :project_jeff_member_user_bot_account do
-    user_id ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid)
+    user :projectJeff_bot
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_jeff_namespace)
     access_level Member::AccessLevel::UPLOADER
   end
 
   member :empty_group_member_empty_doe do
-    user_id ActiveRecord::FixtureSet.identify(:empty_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:empty_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:empty_group, :uuid)
+    user :empty_doe
+    created_by :empty_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :empty_group)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_jeff_member_jeff_doe do
-    user_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_jeff, :uuid)
+    user :jeff_doe
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_jeff)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_jeff_member_user_bot_account do
-    user_id ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_jeff, :uuid)
+    user :groupJeff_bot
+    created_by :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_jeff)
     access_level Member::AccessLevel::UPLOADER
     expires_at '<%= 20.days.from_now %>'
   end
 
   member :group_metadata_member_metadata_doe do
-    user_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_metadata, :uuid)
+    user :metadata_doe
+    created_by :metadata_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_metadata)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_metadata_member_metadata_doe do
-    user_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectMetadata_namespace, :uuid)
+    user :metadata_doe
+    created_by :metadata_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectMetadata_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_sample_transfer_member_mary_doe do
-    user_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid)
+    user :mary_doe
+    created_by :mary_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_transfer)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_sample_transfer_target_member_mary_doe do
-    user_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:mary_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid)
+    user :mary_doe
+    created_by :mary_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_transfer_target)
     access_level Member::AccessLevel::OWNER
   end
 
   member :group_sample_actions_member_sample_actions_doe do
-    user_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
+    user :sample_actions_doe
+    created_by :sample_actions_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_sample_actions)
     access_level Member::AccessLevel::OWNER
   end
 
   member :shared_group_sample_actions_owner_member_shared_sample_actions_doe do
-    user_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid)
+    user :shared_sample_actions_doe
+    created_by :shared_sample_actions_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_owner)
     access_level Member::AccessLevel::OWNER
   end
 
   member :shared_group_sample_actions_maintainer_member_shared_sample_actions_doe do
-    user_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid)
+    user :shared_sample_actions_doe
+    created_by :shared_sample_actions_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_maintainer)
     access_level Member::AccessLevel::OWNER
   end
 
   member :shared_group_sample_actions_analyst_member_shared_sample_actions_doe do
-    user_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid)
+    user :shared_sample_actions_doe
+    created_by :shared_sample_actions_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_analyst)
     access_level Member::AccessLevel::OWNER
   end
 
   member :shared_group_sample_actions_guest_member_shared_sample_actions_doe do
-    user_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid)
+    user :shared_sample_actions_doe
+    created_by :shared_sample_actions_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_guest)
     access_level Member::AccessLevel::OWNER
   end
 
   member :subgroup_sample_actions_group_member_subgroup_sample_actions_doe do
-    user_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid)
+    user :subgroup_sample_actions_doe
+    created_by :sample_actions_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_sample_actions)
     access_level Member::AccessLevel::OWNER
   end
 
   member :project_1_user_31_member_micha_doe do
-    user_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:user31, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectUser31_namespace, :uuid)
+    user :micha_doe
+    created_by :user31
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectUser31_namespace)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :project_chunked_samples_member_chunked_samples_doe do
-    user_id ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_chunked_samples_namespace, :uuid)
+    user :chunked_samples_doe
+    created_by :chunked_samples_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_chunked_samples_namespace)
     access_level Member::AccessLevel::OWNER
   end
 
   member :public_group_one_member_john_doe do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:public_group1, :uuid)
+    user :john_doe
+    created_by :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :public_group1)
     access_level Member::AccessLevel::OWNER
   end
 
   member :snvphyl_group_member_snvphyl_user do
-    user_id ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid)
+    user :snvphyl_user
+    created_by :snvphyl_user
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :snvphyl_group)
     access_level Member::AccessLevel::OWNER
   end
 
   member :clone_test_group_one_member_clone_test_maintainer_one do
-    user_id ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:clone_test_group_one, :uuid)
+    user :clone_test_maintainer_one
+    created_by :clone_test_maintainer_one
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :clone_test_group_one)
     access_level Member::AccessLevel::MAINTAINER
   end
 
   member :clone_test_group_two_member_clone_test_maintainer_two do
-    user_id ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:clone_test_group_two, :uuid)
+    user :clone_test_maintainer_two
+    created_by :clone_test_maintainer_two
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :clone_test_group_two)
     access_level Member::AccessLevel::MAINTAINER
   end
 end

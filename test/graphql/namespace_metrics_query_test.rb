@@ -11,6 +11,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     query(
       $namespaceType: [String!],
       $first: Int,
+      $puid: ID,
       $projFirst: Int,
       $projAfter: String,
       $grpFirst: Int,
@@ -19,6 +20,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       namespaceMetrics(
         namespaceType: $namespaceType,
         first: $first,
+        puid: $puid,
       ) {
         nodes {
           id
@@ -286,10 +288,13 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   end
 
   test 'system user can iterate through namespace metrics and view project/group metrics' do
+    # Scope to our specific test group by puid: the full group fixture set can exceed the
+    # schema's default_max_page_size, so requesting all groups via `first` alone is not a
+    # reliable way to locate a single namespace (it's not guaranteed to land on the page).
     result = IridaSchema.execute(
       NAMESPACE_METRICS_QUERY,
       context: { current_user: @sys_user },
-      variables: { namespaceType: ['Group'], first: 1_000 },
+      variables: { namespaceType: ['Group'], first: 1_000, puid: @group.puid },
       max_complexity: nil
     )
 

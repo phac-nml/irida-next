@@ -2,7 +2,7 @@
 
 FixtureBot.define do
   personal_access_token :john_doe_expired_pat do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     scopes %w[api]
     name 'Expired PAT'
     revoked false
@@ -12,7 +12,7 @@ FixtureBot.define do
   end
 
   personal_access_token :john_doe_revoked_pat do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     scopes %w[api]
     name 'Revoked PAT'
     revoked true
@@ -23,7 +23,7 @@ FixtureBot.define do
   end
 
   personal_access_token :john_doe_valid_pat do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     scopes %w[api]
     name 'Valid PAT'
     revoked false
@@ -33,7 +33,7 @@ FixtureBot.define do
   end
 
   personal_access_token :john_doe_valid_read_pat do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     scopes %w[read_api]
     name 'Valid PAT'
     revoked false
@@ -43,7 +43,7 @@ FixtureBot.define do
   end
 
   personal_access_token :john_doe_non_expirable_pat do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     scopes %w[api]
     name 'Non Expirable PAT'
     revoked false
@@ -53,7 +53,7 @@ FixtureBot.define do
   end
 
   personal_access_token :john_doe_valid_pat_used do
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     scopes %w[api]
     name 'Valid PAT'
     revoked false
@@ -64,7 +64,7 @@ FixtureBot.define do
   end
 
   personal_access_token :jane_doe_valid_pat do
-    user_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
+    user :jane_doe
     scopes %w[api]
     name 'Valid PAT'
     revoked false
@@ -74,7 +74,7 @@ FixtureBot.define do
   end
 
   personal_access_token :jeff_doe_valid_pat do
-    user_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    user :jeff_doe
     scopes %w[api]
     name 'Valid PAT'
     revoked false
@@ -84,7 +84,7 @@ FixtureBot.define do
   end
 
   personal_access_token :jeff_doe_valid_read_pat do
-    user_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    user :jeff_doe
     scopes %w[read_api]
     name 'Valid PAT'
     revoked false
@@ -95,7 +95,7 @@ FixtureBot.define do
 
   22.times do |n|
     personal_access_token :"user_bot_account#{n}_valid_pat" do
-      user_id ActiveRecord::FixtureSet.identify(:"user_bot_account#{n}", :uuid)
+      user :"user_bot_account#{n}"
       scopes %w[read_api api]
       name "Valid PAT#{n}"
       revoked false
@@ -107,7 +107,7 @@ FixtureBot.define do
 
   21.times do |n|
     personal_access_token :"user_group_bot_account#{n}_valid_pat" do
-      user_id ActiveRecord::FixtureSet.identify(:"user_group_bot_account#{n}", :uuid)
+      user :"user_group_bot_account#{n}"
       scopes %w[read_api api]
       name "Valid PAT#{n}"
       revoked false
@@ -118,7 +118,7 @@ FixtureBot.define do
   end
 
   personal_access_token :projectJeff_bot_account_valid_pat do
-    user_id ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid)
+    user :projectJeff_bot
     scopes %w[read_api api]
     # NOTE: reproduces a pre-existing typo in the original fixture, where a stray
     # "1 %>" (leftover from an unclosed ERB tag) ends up as part of the literal name.
@@ -130,7 +130,7 @@ FixtureBot.define do
   end
 
   personal_access_token :groupJeff_bot_account_valid_pat do
-    user_id ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid)
+    user :groupJeff_bot
     scopes %w[read_api api]
     name 'Valid PAT1 %>'
     revoked false
@@ -140,7 +140,7 @@ FixtureBot.define do
   end
 
   personal_access_token :user_bot_account0_expired_pat do
-    user_id ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid)
+    user :user_bot_account0
     scopes %w[read_api api]
     name 'Expired Valid PAT0'
     revoked false
@@ -150,7 +150,7 @@ FixtureBot.define do
   end
 
   personal_access_token :user_group_bot_account0_expired_pat do
-    user_id ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid)
+    user :user_group_bot_account0
     scopes %w[read_api api]
     name 'Expired PAT 0'
     revoked false
@@ -160,7 +160,7 @@ FixtureBot.define do
   end
 
   personal_access_token :user_bot_account0_revoked_pat do
-    user_id ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid)
+    user :user_bot_account0
     scopes %w[read_api api]
     name 'Revoked Valid PAT0'
     revoked true
@@ -171,7 +171,7 @@ FixtureBot.define do
   end
 
   personal_access_token :user_group_bot_account0_revoked_pat do
-    user_id ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid)
+    user :user_group_bot_account0
     scopes %w[read_api api]
     name 'Revoked PAT 0'
     revoked true
@@ -182,7 +182,7 @@ FixtureBot.define do
   end
 
   personal_access_token :sample_actions_doe_valid_pat do
-    user_id ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid)
+    user :sample_actions_doe
     scopes %w[api]
     name 'Valid PAT'
     revoked false

@@ -6,8 +6,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample1, :uuid)
+    attachable sample(:sample1)
     puid 'INXT_ATT_AAAAAAAAAA'
     created_at '<%= 3.hours.ago %>'
     updated_at '<%= 3.hours.ago %>'
@@ -18,8 +17,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample1, :uuid)
+    attachable sample(:sample1)
     puid 'INXT_ATT_AAAAAAAAAB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -30,8 +28,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fasta'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample3, :uuid)
+    attachable sample(:sample3)
     puid 'INXT_ATT_BAAAAAAAAB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -42,8 +39,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleA, :uuid)
+    attachable sample(:sampleA)
     puid 'INXT_ATT_AAAAAAAAAC'
     created_at '<%= 3.hours.ago %>'
     updated_at '<%= 3.hours.ago %>'
@@ -54,8 +50,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleA, :uuid)
+    attachable sample(:sampleA)
     puid 'INXT_ATT_AAAAAAAAAD'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -66,8 +61,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleA, :uuid)
+    attachable sample(:sampleA)
     puid 'INXT_ATT_AAAAAAAAAE'
     created_at '<%= 1.hour.ago %>'
     updated_at '<%= 1.hour.ago %>'
@@ -79,10 +73,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV1, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV1)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAF'
     created_at '<%= 4.hour.ago %>'
     updated_at '<%= 4.hour.ago %>'
@@ -94,10 +87,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD1, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD1)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAF'
     created_at '<%= 4.hour.ago %>'
     updated_at '<%= 4.hour.ago %>'
@@ -109,10 +101,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV2, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV2)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAG'
     created_at '<%= 3.hour.ago %>'
     updated_at '<%= 3.hour.ago %>'
@@ -124,10 +115,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD2, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD2)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAG'
     created_at '<%= 3.hour.ago %>'
     updated_at '<%= 3.hour.ago %>'
@@ -139,10 +129,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV3, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV3)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAH'
     created_at '<%= 2.hour.ago %>'
     updated_at '<%= 2.hour.ago %>'
@@ -154,10 +143,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD3, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD3)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAH'
     created_at '<%= 2.hour.ago %>'
     updated_at '<%= 2.hour.ago %>'
@@ -169,10 +157,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV4, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV4)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAI'
   end
 
@@ -182,10 +169,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD4, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD4)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAI'
   end
 
@@ -195,10 +181,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV5, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV5)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAJ'
   end
 
@@ -208,10 +193,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD5, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD5)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAJ'
   end
 
@@ -220,8 +204,7 @@ FixtureBot.define do
                'compression' => 'gzip',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAL'
     created_at '<%= 2.hour.ago %>'
     updated_at '<%= 2.hour.ago %>'
@@ -232,8 +215,7 @@ FixtureBot.define do
                'compression' => 'gzip',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAM'
     created_at '<%= 1.hour.ago %>'
     updated_at '<%= 1.hour.ago %>'
@@ -244,8 +226,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleB, :uuid)
+    attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAK'
     created_at '<%= 3.hour.ago %>'
     updated_at '<%= 3.hour.ago %>'
@@ -256,8 +237,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAN'
   end
 
@@ -266,8 +246,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAO'
   end
 
@@ -277,10 +256,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV6, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV6)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAP'
   end
 
@@ -290,10 +268,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD6, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD6)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAP'
   end
 
@@ -303,10 +280,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV7, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV7)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAQ'
   end
 
@@ -316,10 +292,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD7, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD7)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAQ'
   end
 
@@ -328,8 +303,7 @@ FixtureBot.define do
                'compression' => 'gzip',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAR'
   end
 
@@ -338,8 +312,7 @@ FixtureBot.define do
                'compression' => 'gzip',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleC, :uuid)
+    attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAS'
   end
 
@@ -348,8 +321,7 @@ FixtureBot.define do
                'compression' => 'gzip',
                'format' => 'text'
              })
-    attachable_type 'WorkflowExecution'
-    attachable_id ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid)
+    attachable workflow_execution(:irida_next_example_completed_with_output)
     puid 'INXT_ATT_AAAAAAAAAT'
   end
 
@@ -359,8 +331,7 @@ FixtureBot.define do
                'format' => 'fasta',
                'compression' => 'none'
              })
-    attachable_type 'SamplesWorkflowExecution'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample46_irida_next_example_completed_with_output, :uuid)
+    attachable samples_workflow_execution(:sample46_irida_next_example_completed_with_output)
     puid 'INXT_ATT_AAAAAAAAAU'
   end
 
@@ -370,8 +341,7 @@ FixtureBot.define do
                'format' => 'fasta',
                'compression' => 'gzip'
              })
-    attachable_type 'SamplesWorkflowExecution'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample47_workflow_execution_completed_shared2, :uuid)
+    attachable samples_workflow_execution(:sample47_workflow_execution_completed_shared2)
     puid 'INXT_ATT_AAAAAAAAAV'
   end
 
@@ -381,8 +351,7 @@ FixtureBot.define do
                'format' => 'fasta',
                'compression' => 'gzip'
              })
-    attachable_type 'SamplesWorkflowExecution'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample47_workflow_execution_completed_group_shared2, :uuid)
+    attachable samples_workflow_execution(:sample47_workflow_execution_completed_group_shared2)
     puid 'INXT_ATT_AAAAAAAAAW'
   end
 
@@ -392,10 +361,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentEndToEndREV)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleEndToEnd, :uuid)
+    attachable sample(:sampleEndToEnd)
     puid 'INXT_ATT_ABAAAAAAAA'
   end
 
@@ -405,10 +373,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentEndToEndFWD)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleEndToEnd, :uuid)
+    attachable sample(:sampleEndToEnd)
     puid 'INXT_ATT_ABAAAAAAAB'
   end
 
@@ -417,8 +384,7 @@ FixtureBot.define do
                'format' => 'fastq',
                'compression' => 'none'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sampleDELETE, :uuid)
+    attachable sample(:sampleDELETE)
     puid 'INXT_ATT_ABAAAAAAAC'
   end
 
@@ -427,8 +393,7 @@ FixtureBot.define do
                'format' => 'fastq',
                'compression' => 'none'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample_completed_unclean_DELETE, :uuid)
+    attachable sample(:sample_completed_unclean_DELETE)
     puid 'INXT_ATT_ABAAAAAAAD'
   end
 
@@ -437,8 +402,7 @@ FixtureBot.define do
                'format' => 'fastq',
                'compression' => 'none'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample_error_unclean_DELETE, :uuid)
+    attachable sample(:sample_error_unclean_DELETE)
     puid 'INXT_ATT_ABAAAAAAAE'
   end
 
@@ -447,8 +411,7 @@ FixtureBot.define do
                'format' => 'fastq',
                'compression' => 'none'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample_canceled_unclean_DELETE, :uuid)
+    attachable sample(:sample_canceled_unclean_DELETE)
     puid 'INXT_ATT_ABAAAAAAAF'
   end
 
@@ -458,10 +421,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEFWD43, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEFWD43)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample43, :uuid)
+    attachable sample(:sample43)
     puid 'INXT_ATT_AXDGAAAAAF'
   end
 
@@ -471,10 +433,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:attachmentPEREV43, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :attachmentPEREV43)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample43, :uuid)
+    attachable sample(:sample43)
     puid 'INXT_ATT_AXDGAAAAAF'
   end
 
@@ -484,10 +445,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqREV, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :sample22AttachmentFastqREV)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample22, :uuid)
+    attachable sample(:sample22)
     puid 'INXT_ATT_ABAAAAAAAG'
   end
 
@@ -497,10 +457,9 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'none',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqFWD, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments, :sample22AttachmentFastqFWD)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample22, :uuid)
+    attachable sample(:sample22)
     puid 'INXT_ATT_ABAAAAAAAG'
   end
 
@@ -510,8 +469,7 @@ FixtureBot.define do
                'format' => 'fasta',
                'compression' => 'none'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample22, :uuid)
+    attachable sample(:sample22)
     puid 'INXT_ATT_ABAAAAAAAH'
   end
 
@@ -520,8 +478,7 @@ FixtureBot.define do
                'format' => 'text',
                'compression' => 'none'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample22, :uuid)
+    attachable sample(:sample22)
     puid 'INXT_ATT_ABAAAAAAAI'
   end
 
@@ -531,7 +488,7 @@ FixtureBot.define do
                'format' => 'fastq'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     puid 'INXT_ATT_ABAAAAAAAJ'
     created_at '<%= 3.hours.ago %>'
     updated_at '<%= 3.hours.ago %>'
@@ -543,7 +500,7 @@ FixtureBot.define do
                'format' => 'csv'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     puid 'INXT_ATT_ABAAAAAAAK'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -555,7 +512,7 @@ FixtureBot.define do
                'format' => 'fastq'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     puid 'INXT_ATT_ABAAAAAAAL'
     created_at '<%= 3.hours.ago %>'
     updated_at '<%= 3.hours.ago %>'
@@ -567,7 +524,7 @@ FixtureBot.define do
                'format' => 'csv'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     puid 'INXT_ATT_ABAAAAAAAM'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -578,8 +535,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'json'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample32, :uuid)
+    attachable sample(:sample32)
     puid 'INXT_ATT_ABAAAAAAAN'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -590,8 +546,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'json'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:sample32, :uuid)
+    attachable sample(:sample32)
     puid 'INXT_ATT_ABAAAAAAAO'
     created_at '<%= 1.hours.ago %>'
     updated_at '<%= 1.hours.ago %>'
@@ -603,7 +558,7 @@ FixtureBot.define do
                'format' => 'csv'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     puid 'INXT_ATT_ABAAAAAABA'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -615,7 +570,7 @@ FixtureBot.define do
                'format' => 'text'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     puid 'INXT_ATT_ABAAAAAABB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -627,7 +582,7 @@ FixtureBot.define do
                'format' => 'json'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     puid 'INXT_ATT_ABAAAAAABC'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -639,7 +594,7 @@ FixtureBot.define do
                'format' => 'spreadsheet'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     puid 'INXT_ATT_ABAAAAAABD'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -651,7 +606,7 @@ FixtureBot.define do
                'format' => 'image'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     puid 'INXT_ATT_ABAAAAAABE'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -663,7 +618,7 @@ FixtureBot.define do
                'format' => 'tsv'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     puid 'INXT_ATT_ABAAAAAABF'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -674,8 +629,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'json'
              })
-    attachable_type 'WorkflowExecution'
-    attachable_id ActiveRecord::FixtureSet.identify(:workflow_execution_group_shared1, :uuid)
+    attachable workflow_execution(:workflow_execution_group_shared1)
     puid 'INXT_ATT_ABAAAAAABG'
   end
 
@@ -684,8 +638,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'json'
              })
-    attachable_type 'WorkflowExecution'
-    attachable_id ActiveRecord::FixtureSet.identify(:workflow_execution_shared2, :uuid)
+    attachable workflow_execution(:workflow_execution_shared2)
     puid 'INXT_ATT_ABAAAAAABH'
   end
 
@@ -694,8 +647,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify('sample_preparation_test_1', :uuid)
+    attachable sample('sample_preparation_test_1')
     puid 'INXT_ATT_AAAAAAAAZA'
     created_at '<%= 3.hours.ago %>'
     updated_at '<%= 3.hours.ago %>'
@@ -706,8 +658,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify('sample_preparation_test_1', :uuid)
+    attachable sample('sample_preparation_test_1')
     puid 'INXT_ATT_AAAAAAAZZA'
     created_at '<%= 3.hours.ago %>'
     updated_at '<%= 3.hours.ago %>'
@@ -718,8 +669,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify('sample_preparation_test_2', :uuid)
+    attachable sample('sample_preparation_test_2')
     puid 'INXT_ATT_AAAAAAAAZB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -730,8 +680,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify('sample_preparation_test_2', :uuid)
+    attachable sample('sample_preparation_test_2')
     puid 'INXT_ATT_AAAAAAAZZB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -742,8 +691,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify('sample_preparation_test_3', :uuid)
+    attachable sample('sample_preparation_test_3')
     puid 'INXT_ATT_BAAAAAAAZB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -754,8 +702,7 @@ FixtureBot.define do
                'compression' => 'none',
                'format' => 'fastq'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify('sample_preparation_test_3', :uuid)
+    attachable sample('sample_preparation_test_3')
     puid 'INXT_ATT_BAAAAAAZZB'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -767,7 +714,7 @@ FixtureBot.define do
                'format' => 'csv'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:groups, :group_sixteen)
     puid 'INXT_ATT_ABAAAAAABI'
     created_at '<%= 2.hours.ago %>'
     updated_at '<%= 2.hours.ago %>'
@@ -779,10 +726,10 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'gzip',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:snvphyl_sample1_attachment_rev, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments,
+                                                                            :snvphyl_sample1_attachment_rev)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_sample1, :uuid)
+    attachable sample(:snvphyl_sample1)
     puid 'INXT_ATT_ABAAAAAABJ'
   end
 
@@ -792,10 +739,10 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'gzip',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:snvphyl_sample1_attachment_fwd, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments,
+                                                                            :snvphyl_sample1_attachment_fwd)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_sample1, :uuid)
+    attachable sample(:snvphyl_sample1)
     puid 'INXT_ATT_ABAAAAAABK'
   end
 
@@ -805,8 +752,7 @@ FixtureBot.define do
                'format' => 'fasta',
                'compression' => 'gzip'
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_sample1, :uuid)
+    attachable sample(:snvphyl_sample1)
     puid 'INXT_ATT_ABAAAAAABL'
   end
 
@@ -816,10 +762,10 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'forward',
                'compression' => 'gzip',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:snvphyl_sample2_attachment_rev, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments,
+                                                                            :snvphyl_sample2_attachment_rev)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_sample2, :uuid)
+    attachable sample(:snvphyl_sample2)
     puid 'INXT_ATT_ABAAAAAABM'
   end
 
@@ -829,10 +775,10 @@ FixtureBot.define do
                'format' => 'fastq',
                'direction' => 'reverse',
                'compression' => 'gzip',
-               'associated_attachment_id' => ActiveRecord::FixtureSet.identify(:snvphyl_sample2_attachment_fwd, :uuid)
+               'associated_attachment_id' => FixtureBot::Key::Uuid.generate(:attachments,
+                                                                            :snvphyl_sample2_attachment_fwd)
              })
-    attachable_type 'Sample'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_sample2, :uuid)
+    attachable sample(:snvphyl_sample2)
     puid 'INXT_ATT_ABAAAAAABN'
   end
 
@@ -843,7 +789,7 @@ FixtureBot.define do
                'compression' => 'gzip'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_project_namespace, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :snvphyl_project_namespace)
     puid 'INXT_ATT_ABAAAAAABO'
   end
 
@@ -854,7 +800,7 @@ FixtureBot.define do
                'compression' => 'gzip'
              })
     attachable_type 'Namespace'
-    attachable_id ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid)
+    attachable_id FixtureBot::Key::Uuid.generate(:groups, :snvphyl_group)
     puid 'INXT_ATT_ABAAAAAABP'
   end
 end

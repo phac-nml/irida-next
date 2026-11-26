@@ -11,9 +11,10 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     name 'workflow_execution_valid'
+    created_at '<%= 1.hour.ago %>'
   end
 
   workflow_execution :workflow_execution_gasclustering do
@@ -26,8 +27,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '0.4.2' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     name 'workflow_execution_gasclustering'
   end
 
@@ -40,8 +41,8 @@ FixtureBot.define do
     workflow_params({ 'assembler' => 'stub' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     email_notification true
     cleaned false
     name 'irida_next_example'
@@ -56,8 +57,8 @@ FixtureBot.define do
     workflow_params({ 'assembler' => 'stub' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     email_notification true
     cleaned false
     name 'irida_next_example_non_executable'
@@ -72,8 +73,8 @@ FixtureBot.define do
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_prepared'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'prepared'
     email_notification true
     cleaned false
@@ -90,8 +91,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_prepared'
     run_id 'my_run_id_5'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'submitted'
     cleaned false
     name 'irida_next_example_submitted'
@@ -107,8 +108,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_6'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -125,8 +126,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_6'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -143,8 +144,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_unclean'
     run_id 'my_run_id_6a'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -161,8 +162,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_error'
     run_id 'my_run_id_7'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'error'
     cleaned true
     name 'irida_next_example_error'
@@ -178,8 +179,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_error_unclean'
     run_id 'my_run_id_7a'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'error'
     cleaned false
     name 'irida_next_example_error_unclean'
@@ -195,8 +196,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceling'
     run_id 'my_run_id_8'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceling'
     cleaned false
     name 'irida_next_example_canceling'
@@ -212,8 +213,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceled'
     run_id 'my_run_id_9'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceled'
     cleaned true
     name 'irida_next_example_canceled'
@@ -229,8 +230,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceled_unclean'
     run_id 'my_run_id_9a'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceled'
     cleaned false
     name 'irida_next_example_canceled_unclean'
@@ -246,8 +247,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_running'
     run_id 'my_run_id_10'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     cleaned false
     name 'irida_next_example_running'
@@ -263,8 +264,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_new'
     run_id 'my_run_id_12'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'initial'
     cleaned false
     name 'irida_next_example_new'
@@ -280,8 +281,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_a'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     email_notification true
@@ -299,8 +300,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_b'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -317,8 +318,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_c'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -336,8 +337,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_d'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -354,8 +355,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_e'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -372,8 +373,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_f'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     email_notification true
@@ -392,8 +393,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_g'
-    submitter_id ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :projectA_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     email_notification true
@@ -412,8 +413,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_h'
-    submitter_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid)
+    submitter :jeff_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectA_namespace)
     state 'completing'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -431,8 +432,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_with_output'
     run_id 'my_run_id_13'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project37_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project37_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -449,8 +450,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_with_output'
     run_id 'my_run_id_13'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -468,8 +469,8 @@ FixtureBot.define do
       workflow_engine_parameters({ '-r' => 'dev' })
       workflow_url 'https://github.com/phac-nml/irida_next_example_new'
       run_id "my_run_id_#{n}"
-      submitter_id ActiveRecord::FixtureSet.identify(:jane_doe, :uuid)
-      namespace_id ActiveRecord::FixtureSet.identify(:project33_namespace, :uuid)
+      submitter :jane_doe
+      namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project33_namespace)
       state 'initial'
       cleaned false
       name "workflow_execution#{n}"
@@ -486,8 +487,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     name 'workflow_execution_existing'
   end
 
@@ -501,8 +502,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_prepared'
     run_id 'my_run_id_4'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'prepared'
     email_notification true
     cleaned false
@@ -519,8 +520,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_submitted'
     run_id 'my_run_id_5'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'submitted'
     cleaned false
     name 'automated_example_submitted'
@@ -536,8 +537,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_completed'
     run_id 'my_run_id_6'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -554,8 +555,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_error'
     run_id 'my_run_id_7'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'error'
     cleaned true
     name 'automated_example_error'
@@ -571,8 +572,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_canceling'
     run_id 'my_run_id_8'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceling'
     cleaned false
     name 'automated_example_canceling'
@@ -588,8 +589,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_canceled'
     run_id 'my_run_id_9'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceled'
     cleaned true
     name 'automated_example_canceled'
@@ -605,8 +606,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_running'
     run_id 'my_run_id_10'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     cleaned false
     name 'automated_example_running'
@@ -622,8 +623,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_new'
     run_id 'my_run_id_12'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'initial'
     cleaned false
     name 'automated_example_new'
@@ -639,8 +640,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :project1_automation_bot
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     cleaned false
     name 'automated_example_existing'
   end
@@ -654,8 +655,8 @@ FixtureBot.define do
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'initial'
     cleaned false
     name 'irida_next_example_end_to_end'
@@ -671,8 +672,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     run_id 'my_run_id_completed_DELETE'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -689,8 +690,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     run_id 'my_run_id_completed_DELETE'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'error'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -707,8 +708,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     run_id 'my_run_id_completed_DELETE'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'canceled'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -725,8 +726,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     run_id 'my_run_id_completed_DELETE'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -743,8 +744,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     run_id 'my_run_id_completed_DELETE'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'error'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -761,8 +762,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => '1.0.2' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
     run_id 'my_run_id_completed_DELETE'
-    submitter_id ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_janitor_namespace, :uuid)
+    submitter :janitor_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project_janitor_namespace)
     state 'canceled'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -779,8 +780,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_group_run_id_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     name 'workflow_execution_valid_on_group'
   end
 
@@ -794,10 +795,11 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     shared_with_namespace true
     name 'workflow_execution_shared1'
+    updated_at '<%= 1.hour.from_now %>'
   end
 
   workflow_execution :workflow_execution_shared2 do
@@ -810,8 +812,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_2'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     cleaned true
     shared_with_namespace true
@@ -828,8 +830,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_3'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
     shared_with_namespace true
     name 'workflow_execution_shared3'
   end
@@ -844,8 +846,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_4'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     cleaned false
     shared_with_namespace true
@@ -862,8 +864,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_shared_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -881,8 +883,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_shared_2'
-    submitter_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    submitter :micha_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -900,8 +902,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :joan_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     shared_with_namespace true
     name 'Group Shared Example1'
   end
@@ -916,8 +918,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared_2'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     shared_with_namespace true
     name 'Group Shared Example2'
   end
@@ -932,8 +934,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared_3'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     shared_with_namespace true
     name 'Group Shared Example3'
   end
@@ -948,8 +950,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_group_shared_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -967,8 +969,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_shared_example_completed_with_output'
     run_id 'my_run_id_group_shared_2'
-    submitter_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
+    submitter :micha_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_five)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -986,8 +988,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'initial'
     cleaned false
     shared_with_namespace true
@@ -1004,8 +1006,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'prepared'
     cleaned false
     shared_with_namespace true
@@ -1022,8 +1024,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'submitted'
     cleaned false
     shared_with_namespace true
@@ -1040,8 +1042,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'completed'
     cleaned true
     shared_with_namespace true
@@ -1058,8 +1060,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'running'
     cleaned false
     shared_with_namespace true
@@ -1076,8 +1078,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/group_workflow_example_error'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'error'
     cleaned true
     shared_with_namespace true
@@ -1094,8 +1096,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/workflow_execution_group_shared_canceling'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'canceling'
     cleaned false
     shared_with_namespace true
@@ -1112,8 +1114,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/group_workflow_example_canceled'
     run_id 'my_run_id_group_shared'
-    submitter_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    submitter :james_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     state 'canceled'
     cleaned true
     shared_with_namespace true
@@ -1130,7 +1132,7 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:steve_doe, :uuid)
+    submitter :steve_doe
     namespace_id 'This namespace has been deleted'
     name 'workflow_execution_valid'
   end
@@ -1145,8 +1147,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id nil
-    submitter_id ActiveRecord::FixtureSet.identify(:steve_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:steve_doe_namespace, :uuid)
+    submitter :steve_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :steve_doe_namespace)
     name 'workflow_execution_valid'
   end
 
@@ -1167,8 +1169,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'metadata_date_run_1'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     name 'workflow_with_metadata_dates'
   end
@@ -1184,8 +1186,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'metadata_date_run_2'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     name 'workflow_with_metadata_dates_2'
   end
@@ -1200,8 +1202,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'null_metadata_run'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'initial'
     name 'workflow_with_null_metadata'
   end
@@ -1217,8 +1219,8 @@ FixtureBot.define do
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'my_workflow_url'
     run_id 'special_chars_run'
-    submitter_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    submitter :john_doe
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     name 'workflow_with_special_chars'
   end
@@ -1232,8 +1234,8 @@ FixtureBot.define do
     workflow_params({ 'assembler' => 'stub' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
-    submitter_id ActiveRecord::FixtureSet.identify(:user32, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:user32_project1_namespace, :uuid)
+    submitter :user32
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :user32_project1_namespace)
     email_notification true
     cleaned false
     name 'irida_next_example_three_samples'

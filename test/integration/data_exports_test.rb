@@ -670,12 +670,12 @@ class DataExportsTest < ActionDispatch::IntegrationTest
     get data_exports_path, params: { q: { s: 'id asc' } }
     assert_response :success
     assert_sort_state(1, 'ascending')
-    assert_first_rows_include(@data_export9.id, @data_export8.id)
+    assert_first_rows_include(@data_export6.id, @data_export7.id)
 
     get data_exports_path, params: { q: { s: 'id desc' } }
     assert_response :success
     assert_sort_state(1, 'descending')
-    assert_first_rows_include(@data_export7.id, @data_export2.id)
+    assert_first_rows_include(@data_export8.id, @data_export1.id)
 
     get data_exports_path, params: { q: { s: 'name asc' } }
     assert_response :success

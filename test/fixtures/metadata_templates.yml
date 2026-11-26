@@ -1,7 +1,7 @@
 valid_metadata_template:
-  id: 9c89f069-07dd-5696-a6dc-ea19eca00825
-  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
-  created_by_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  id: 1cc27c96-4749-5a5c-ae50-071d1b1c1144
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: Valid Template
   description: This is a valid template.
   fields:
@@ -9,9 +9,9 @@ valid_metadata_template:
   - metadatafield1
   created_at: "<%= 3.hours.ago %>"
 valid_group_metadata_template:
-  id: 82698ff2-759b-5647-9cce-58952d022f98
-  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
-  created_by_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  id: 5e2eba16-e5bb-55a9-9df0-cb1876092164
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: Valid Group Template
   description: This is a valid group template.
   fields:
@@ -19,45 +19,45 @@ valid_group_metadata_template:
   - metadatafield2
   created_at: "<%= 3.hours.ago %>"
 project1_metadata_template0:
-  id: 0b6b5127-386c-5e73-b3b2-34c4b568b7e4
-  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
-  created_by_id: e47fecab-35da-58d4-b597-38d482363d41
+  id: ff2c6aef-7768-5dc2-9ffd-6894c7d9b39a
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: Project Template0
   description: This is template 0 for the project
   fields:
   - metadatafield1
   created_at: "<%= 3.hours.ago %>"
 project1_metadata_template1:
-  id: c20b8859-6079-58e8-ad8b-75995c76c138
-  namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
-  created_by_id: e47fecab-35da-58d4-b597-38d482363d41
+  id: e29b28ab-1e35-5cf1-922c-f60f7bd0d100
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: Project Template1
   description: This is template 1 for the project
   fields:
   - metadatafield2
   created_at: "<%= 4.hours.ago %>"
 group_one_metadata_template0:
-  id: ddb4e6a4-73bc-5a3c-98b1-1f7d5d29ae41
-  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
-  created_by_id: e47fecab-35da-58d4-b597-38d482363d41
+  id: 25d0d061-985a-5273-bc5e-02d1e6a7e5cc
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: Group Template0
   description: This is template 0 for the group
   fields:
   - metadatafield1
   created_at: "<%= 3.hours.ago %>"
 group_one_metadata_template1:
-  id: d1514064-730e-5088-ac09-329a6580f9e7
-  namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
-  created_by_id: e47fecab-35da-58d4-b597-38d482363d41
+  id: 69f5658d-1fe5-53ad-a176-09dea909a576
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: Group Template1
   description: This is template 1 for the group
   fields:
   - metadatafield2
   created_at: "<%= 4.hours.ago %>"
 project2_metadata_template1:
-  id: f28cc4ba-4cd0-55cd-8036-f03e0fe89a34
-  namespace_id: 54c5d9a4-f8c7-5c8e-861d-7a125a3284d3
-  created_by_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  id: 7915e67d-c828-5adb-bad5-c0fc6e10f89c
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: First Project Template
   description: This is template 1 for the project"
   fields:
@@ -66,9 +66,9 @@ project2_metadata_template1:
   - field_a3
   created_at: "<%= 2.hours.ago %>"
 project2_metadata_template2:
-  id: 2094a7c4-11b3-5b98-bcb3-a4fbe9488981
-  namespace_id: 54c5d9a4-f8c7-5c8e-861d-7a125a3284d3
-  created_by_id: e47fecab-35da-58d4-b597-38d482363d41
+  id: 5ee53432-1c0c-59a9-bcdc-04e33bd67772
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: Second Project Template
   description: This is template 2 for the project"
   fields:
@@ -77,9 +77,9 @@ project2_metadata_template2:
   - field_b3
   created_at: "<%= 4.hours.ago %>"
 group_two_metadata_template1:
-  id: 1edb4338-cd87-54f7-a1a2-133655c0c1ee
-  namespace_id: 24df2ad2-6c45-578d-9e80-b326f81b7e17
-  created_by_id: e47fecab-35da-58d4-b597-38d482363d41
+  id: 72fff026-130a-58ba-89da-81f5e8a41e85
+  namespace_id: 75d4c535-69ed-58e2-8cbc-b89e36031106
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
   name: First Group Template
   description: This is template 1 for the group
   fields:
@@ -88,9 +88,9 @@ group_two_metadata_template1:
   - field_c3
   created_at: "<%= 2.hours.ago %>"
 group_two_metadata_template2:
-  id: 30c62245-ae1d-54ba-a597-a96584a11458
-  namespace_id: 24df2ad2-6c45-578d-9e80-b326f81b7e17
-  created_by_id: e1e65eee-135a-55a5-b2ce-921c6186b762
+  id: 111d1bfc-33d1-59fa-ae14-661b7f0d3834
+  namespace_id: 75d4c535-69ed-58e2-8cbc-b89e36031106
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   name: Second Group Template
   description: This is template 2 for the group
   fields:

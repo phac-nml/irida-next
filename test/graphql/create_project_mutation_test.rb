@@ -284,6 +284,6 @@ class CreateProjectMutationTest < ActiveSupport::TestCase
 
     error = result['errors'][0]['message']
 
-    assert_equal 'INVALIDc104036c-0ab5-5f7e-9e56-e1c13819e96d is not a valid IRIDA Next ID.', error
+    assert_equal "INVALID#{group.id} is not a valid IRIDA Next ID.", error
   end
 end

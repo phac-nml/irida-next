@@ -1,121 +1,121 @@
 project1_namespace_create:
-  id: ae082b65-a736-5816-b481-d6adebb3a7e3
+  id: 69873471-6440-59c4-89dc-a46f04a8d000
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.create
   parameters: {}
 project2_namespace_create:
-  id: 607a0385-a046-5608-a841-ab4a82a70bc7
+  id: 95b0a1d7-e0e0-5c41-b1f1-f132422693e6
   trackable_type: Namespace
-  trackable_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
+  trackable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   key: namespaces_project_namespace.create
   parameters: {}
 project1_namespace_member_james_doe_create:
-  id: 60648d0e-950f-5e92-a7ac-aab1b89a7d12
+  id: 6ad4cfe7-1efe-577e-b610-bf0b0bb041c7
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.member.create
   parameters:
     member_email: james.doe@localhost
     action: member_create
 project1_namespace_member_ryan_doe_create:
-  id: 2189120b-b6d5-59d7-ab3c-f48e0a2b1a99
+  id: ab11d951-ba35-544d-b59d-d75e2068cc87
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.member.create
   parameters:
     member_email: ryan.doe@localhost
     action: member_create
 project1_namespace_sample_create:
-  id: 173f4d4f-4ee5-5f7c-8b8a-7ccf37585b32
+  id: '079bc651-9097-5d7b-b03c-fde96f8f0150'
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.samples.create
   parameters:
-    sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
+    sample_id: a97358ee-cfe4-577c-9a32-7fe348bbea93
     sample_puid: INXT_SAM_AAAAAAAAAA
     action: sample_create
 project1_namespace_sample_clone:
-  id: 329e05f2-9eec-5843-879a-3e317700bad4
+  id: 55fb1a94-687c-550b-855b-e551aeee6c13
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.samples.clone
   parameters:
     target_project_puid: INXT_PRJ_AAAAAAAAAB
-    target_project: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+    target_project: 3a8a597e-2cfd-5504-84bf-e1d1ce23d8fd
     cloned_samples_count: 1
     action: sample_clone
 project1_namespace_metadata_template_create:
-  id: 4afcd91c-89af-5b36-8867-e18a666528c2
+  id: 7436a885-1528-5141-8703-9021a0c8828a
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.metadata_template.create
   parameters:
-    template_id: 9c89f069-07dd-5696-a6dc-ea19eca00825
+    template_id: 1cc27c96-4749-5a5c-ae50-071d1b1c1144
     template_name: Valid Template
-    namespace_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+    namespace_id: e38c793a-8939-5946-b08b-d4b460067164
     action: metadata_template_create
 project2_namespace_sample_cloned_from_project1:
-  id: d7bf3a82-e7f7-5824-a76a-c6babb21c273
+  id: ebe3a7ec-d193-5e55-bd42-e58651f8f51e
   trackable_type: Namespace
-  trackable_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
+  trackable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   key: namespaces_project_namespace.samples.cloned_from
   parameters:
     source_project_puid: INXT_PRJ_AAAAAAAAAA
-    source_project: 15438e41-f27c-5010-b021-fe991c68bb04
+    source_project: abd01d69-eebe-5ac4-a046-9ae20f21126b
     cloned_samples_count: 1
     action: sample_clone
 project1_namespace_sample_transfer:
-  id: 4d8c8575-262a-553c-ba5d-95914779e5b1
+  id: cc7fad4b-4188-5d3c-ada2-5446e46874b2
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.samples.transfer
   parameters:
     target_project_puid: INXT_PRJ_AAAAAAAAAB
-    target_project: 38e9e7c5-ea82-532a-89a2-09054f02cf25
+    target_project: 3a8a597e-2cfd-5504-84bf-e1d1ce23d8fd
     transferred_samples_count: 1
     action: sample_transfer
 project2_namespace_sample_transferred_from_project1:
-  id: 78972f52-af02-5019-90b2-4c95f177551d
+  id: 80d8601b-f0c7-5829-a767-5bfb1f2b8380
   trackable_type: Namespace
-  trackable_id: 0d91a8f2-dcd5-56a9-bdae-964bafc275b1
+  trackable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   key: namespaces_project_namespace.samples.transferred_from
   parameters:
     source_project_puid: INXT_PRJ_AAAAAAAAAA
-    source_project: 15438e41-f27c-5010-b021-fe991c68bb04
+    source_project: abd01d69-eebe-5ac4-a046-9ae20f21126b
     transferred_samples_count: 1
     action: sample_transfer
 project1_namespace_automated_workflow_execution_create:
-  id: c390cf11-b5c9-5ba1-bb4c-dab7441d7dc0
+  id: 6cbbe61d-5940-5061-a237-b68996a657ff
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.automated_pipeline.create
   parameters:
-    automated_pipeline_id: 21417130-2d4f-512f-83b4-e76375d6328d
+    automated_pipeline_id: 4959c715-9329-5e3c-842b-243ee025860e
     action: automated_pipeline_create
 project1_namespace_automated_workflow_execution_launch:
-  id: b8cc17c6-d22b-5be7-bda8-b55d36d384ee
+  id: f30c2885-92e7-5dc6-af1f-a61078bbb4dc
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: workflow_execution.automated_workflow.launch
   parameters:
-    workflow_id: 0b885298-237a-5556-8524-9d448a2099a2
+    workflow_id: edda163e-6d0b-5307-a203-58daf7e6e925
     workflow_name: ''
-    sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
+    sample_id: a97358ee-cfe4-577c-9a32-7fe348bbea93
     sample_puid: INXT_SAM_AAAAAAAAAA
 project1_namespace_sample_attachment_create:
-  id: 14776b21-42f8-5fb5-a558-7e2ebb64c8de
+  id: 9508b8d2-0050-5e43-a03e-2dc65f6f9610
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.samples.attachment.create
   parameters:
     sample_puid: INXT_SAM_AAAAAAAAAA
-    sample_id: 98553bca-13ed-56fd-8954-9f91d55d2271
+    sample_id: a97358ee-cfe4-577c-9a32-7fe348bbea93
     action: attachment_create
 project1_shared_w_group_charlie:
-  id: 38cfd378-b78b-581f-ae33-f21dcfeb6da0
+  id: f475d59b-03e7-59e9-bc30-237a8c00f2db
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.namespace_group_link.create
   parameters:
     group_name: Group Charlie
@@ -125,9 +125,9 @@ project1_shared_w_group_charlie:
     namespace_type: project'
     action: group_link_create
 group_charlie_shared_by_project1:
-  id: 4f761d6c-8988-5872-8042-2cdb879d48d6
+  id: f9655781-cd16-534b-a37e-c0e9c65f68df
   trackable_type: Namespace
-  trackable_id: a3c80881-341b-50b2-8b0a-4ec8b8926d6c
+  trackable_id: 1d0afc1d-8d20-5178-9b6f-9d380718a0e0
   key: group.namespace_group_link.created
   parameters:
     group_name: Group Charlie
@@ -137,9 +137,9 @@ group_charlie_shared_by_project1:
     namespace_type: project
     action: group_link_created
 project1_namespace_transfer:
-  id: 0620d1c4-8c4c-5c28-9933-cb894db921c3
+  id: b627408f-df91-539c-9dab-38829152e0f3
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.transfer
   parameters:
     project_name: 611912776
@@ -147,72 +147,72 @@ project1_namespace_transfer:
     new_namespace: 307782177
     action: project_namespace_transfer
 group1_create:
-  id: 1b96f6b6-d1a1-55b9-ac66-0155308c049d
+  id: 304b9d05-ccea-5a0a-8402-7c8df503f536
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.create
   parameters: {}
 group1_subgroup_create:
-  id: 01a1227a-fdab-57f2-985d-ad2ef60487a0
+  id: e7907a2c-ea2b-5885-bfd5-c89253d39136
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.subgroups.create
   parameters:
-    created_group_id: 58516594-01a1-5197-aa5c-4974e8b51f7e
+    created_group_id: '0780fc0c-4a35-592c-8b08-7d4e7ce25c96'
     created_group_puid: INXT_GRP_AAAAAAAAAB
     action: group_subgroup_create
 group1_project_create:
-  id: 3e9c5a2a-8918-5e64-8efe-be6fc16bc0d1
+  id: 20a0d770-5187-5196-8a73-a9e448559ec3
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.projects.create
   parameters:
-    project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+    project_id: abd01d69-eebe-5ac4-a046-9ae20f21126b
     project_puid: INXT_PRJ_AAAAAAAAAA
 group1_project_transfer_out:
-  id: 0345abf4-4675-502b-b989-f34506a5b585
+  id: eb7761dd-a95f-5bb6-af45-bc7dcdc85cb7
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.projects.transfer_out
   parameters:
-    project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+    project_id: abd01d69-eebe-5ac4-a046-9ae20f21126b
     project_puid: INXT_PRJ_AAAAAAAAAA
     old_namespace: INXT_GRP_AAAAAAAAAA
     new_namespace: INXT_GRP_AAAAAAAAAC
     action: project_namespace_transfer
 group1_project_transfer_in:
-  id: b17077d3-e303-5fae-b0fe-b82316d6a9ba
+  id: 677656de-1982-5792-9bc7-494af30da949
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.projects.transfer_in
   parameters:
-    project_id: 15438e41-f27c-5010-b021-fe991c68bb04
+    project_id: abd01d69-eebe-5ac4-a046-9ae20f21126b
     project_puid: INXT_PRJ_AAAAAAAAAA
     old_namespace: INXT_GRP_AAAAAAAAAC
     new_namespace: INXT_GRP_AAAAAAAAAA
     action: project_namespace_transfer
 group1_member_james_doe_create:
-  id: a38bdf3b-247e-538a-8e3e-137e658f6567
+  id: 2fd3a3d2-feee-50a4-91b0-39e9d707ed7f
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.member.create
   parameters:
     member_email: james.doe@localhost
     action: member_create
 group_one_metadata_template_create:
-  id: 118eef50-c6dc-5af2-99c0-c23e23a30f31
+  id: d8dd9cb1-6d2c-5e47-a5c0-fc146c820647
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.metadata_template.create
   parameters:
-    template_id: 82698ff2-759b-5647-9cce-58952d022f98
+    template_id: 5e2eba16-e5bb-55a9-9df0-cb1876092164
     template_name: Valid Group Template
-    namespace_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+    namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
     action: metadata_template_create
 group1_shared_w_david_doe_group_four:
-  id: c6783da5-b69e-5aad-9b30-e8b61a533704
+  id: bac1f95d-0c32-5c85-ac6e-e1d5a3667720
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.namespace_group_link.create
   parameters:
     group_name: Group 4
@@ -222,9 +222,9 @@ group1_shared_w_david_doe_group_four:
     namespace_type: group'
     action: group_link_create
 david_doe_group_four_shared_by_group1:
-  id: 2a40c19c-a2e4-5a65-9df5-f9ab29d84819
+  id: aa7b92c8-14e8-5053-911b-5526c7fb8ad5
   trackable_type: Namespace
-  trackable_id: 2f468475-0c1a-59c5-8151-d5fc10372bf4
+  trackable_id: bf438587-fc62-50e6-acb4-53557e1e86ef
   key: group.namespace_group_link.created
   parameters:
     group_name: Group 4
@@ -234,61 +234,61 @@ david_doe_group_four_shared_by_group1:
     namespace_type: group
     action: group_link_created
 project1_namespace_sample_import_create:
-  id: 9afb5ad5-2f81-5b26-90ec-eb8a596b0047
+  id: 9ab5716c-5c3c-573b-9927-49e601512966
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.import_samples.create
   parameters:
     imported_samples_count: 1
     action: project_import_samples
 group1_sample_import_create:
-  id: bb192453-a59e-51fe-b3ad-994d83e94a2b
+  id: 07a40937-c984-5ef7-afb8-81a63b699d35
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.import_samples.create
   parameters:
     imported_samples_count: 2
     action: group_import_samples
 project1_namespace_workflow_execution_destroy:
-  id: 85f316ee-33b5-53aa-b593-158fc7534485
+  id: 3d8bc33d-73c3-5cc1-a6de-2af7825aecff
   trackable_type: Namespace
-  trackable_id: 91ac5e13-08f3-57cc-9806-c7301c4910e3
+  trackable_id: e38c793a-8939-5946-b08b-d4b460067164
   key: namespaces_project_namespace.workflow_executions.destroy
   parameters:
     workflow_executions_deleted_count: 3
     action: workflow_execution_destroy
 group_sample_transfer_sample_transfer:
-  id: b49d1e6d-2c32-5760-bc9b-0cd83e50defa
+  id: b774a6b7-6776-5182-8091-98b8a0452992
   trackable_type: Namespace
-  trackable_id: a27c9dd3-dc5d-5715-b361-bf2a4c28e0ae
+  trackable_id: ec69e7b1-ac43-57e0-b3c7-036ab0dfb32e
   key: group.samples.transfer
   parameters:
     transferred_samples_count: 3
     action: group_sample_transfer
 project_group_sample_transfer_sample_transfer:
-  id: e993a3b0-4ab8-5759-ab2f-4e1dcd1153b6
+  id: 229b13a9-b4d5-5771-b079-ab1394a39326
   trackable_type: Namespace
-  trackable_id: cab5a106-25ca-5835-a47e-35a42589cd60
+  trackable_id: 93aa146a-f2d2-5ad2-b1f5-e811e6fad2ca
   key: namespaces_project_namespace.samples.transfer
   parameters:
     transferred_samples_count: 3
     target_project_puid: INXT_PRJ_AAAAAAAACD
-    target_project: de6abd66-a6f0-5142-8f32-f4a39c722577
+    target_project: a0726fdf-4edb-54e1-84f7-c10fc858e29a
     action: sample_transfer
 project_group_sample_transfer_target_sample_transfer:
-  id: cff360fa-d6ac-59dd-8413-7db7fd58d0d2
+  id: a6693d55-1495-5230-ae2f-60c60d0e4cf9
   trackable_type: Namespace
-  trackable_id: e06d5329-28fe-57e0-b12e-60e1aca78000
+  trackable_id: 9f9eee7f-c5c6-56b4-8b28-dd5dd864a702
   key: namespaces_project_namespace.import_samples.create
   parameters:
     transferred_samples_count: 3
     source_project_puid: INXT_PRJ_AAAAAAAACC
-    source_project: cab5a106-25ca-5835-a47e-35a42589cd60
+    source_project: 93aa146a-f2d2-5ad2-b1f5-e811e6fad2ca
     action: sample_transfer
 group1_sample_destroy:
-  id: deafcfc4-c604-57f0-87e5-557291bc387d
+  id: c53f2f12-2656-5a77-abcf-d0519b9be5a7
   trackable_type: Namespace
-  trackable_id: c104036c-0ab5-5f7e-9e56-e1c13819e96d
+  trackable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   key: group.samples.destroy
   parameters:
     samples_deleted_count: 2

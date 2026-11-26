@@ -59,8 +59,8 @@ FixtureBot.define do
     }
   }.each do |record_name, attrs|
     activity_extended_detail(record_name) do
-      activity_id ActiveRecord::FixtureSet.identify(attrs[:activity], :uuid)
-      extended_detail_id ActiveRecord::FixtureSet.identify(attrs[:extended_detail], :uuid)
+      activity attrs[:activity]
+      extended_detail attrs[:extended_detail]
       activity_type attrs[:activity_type]
     end
   end

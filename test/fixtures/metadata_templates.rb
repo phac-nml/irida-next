@@ -6,8 +6,8 @@ FixtureBot.define do
     description 'This is a valid template.'
     fields(%w[metadatafield2 metadatafield1])
     created_at '<%= 3.hours.ago %>'
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
+    created_by :john_doe
   end
 
   metadata_template :valid_group_metadata_template do
@@ -15,8 +15,8 @@ FixtureBot.define do
     description 'This is a valid group template.'
     fields(%w[metadatafield1 metadatafield2])
     created_at '<%= 3.hours.ago %>'
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+    created_by :john_doe
   end
 
   2.times do |n|
@@ -25,8 +25,8 @@ FixtureBot.define do
       description "This is template #{n} for the project"
       fields(["metadatafield#{n + 1}"])
       created_at "<%= #{n + 3}.hours.ago %>"
-      namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
-      created_by_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
+      namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
+      created_by :joan_doe
     end
   end
 
@@ -36,8 +36,8 @@ FixtureBot.define do
       description "This is template #{n} for the group"
       fields(["metadatafield#{n + 1}"])
       created_at "<%= #{n + 3}.hours.ago %>"
-      namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-      created_by_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
+      namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
+      created_by :joan_doe
     end
   end
 
@@ -46,8 +46,8 @@ FixtureBot.define do
     description 'This is template 1 for the project"'
     fields(%w[field_a1 field_a2 field_a3])
     created_at '<%= 2.hours.ago %>'
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
+    created_by :john_doe
   end
 
   metadata_template :project2_metadata_template2 do
@@ -55,8 +55,8 @@ FixtureBot.define do
     description 'This is template 2 for the project"'
     fields(%w[field_b1 field_b2 field_b3])
     created_at '<%= 4.hours.ago %>'
-    namespace_id ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :john_doe_project2_namespace)
+    created_by :joan_doe
   end
 
   metadata_template :group_two_metadata_template1 do
@@ -64,8 +64,8 @@ FixtureBot.define do
     description 'This is template 1 for the group'
     fields(%w[field_c1 field_c2 field_c3])
     created_at '<%= 2.hours.ago %>'
-    namespace_id ActiveRecord::FixtureSet.identify(:group_two, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:joan_doe, :uuid)
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_two)
+    created_by :joan_doe
   end
 
   metadata_template :group_two_metadata_template2 do
@@ -76,7 +76,7 @@ FixtureBot.define do
     # (leftover from an unclosed ERB tag) precedes the ERB tag. Rails' timestamp type
     # casting tolerates/ignores the leading "(", so the effective value is unaffected.
     created_at '(<%= 3.hours.ago %>'
-    namespace_id ActiveRecord::FixtureSet.identify(:group_two, :uuid)
-    created_by_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_two)
+    created_by :john_doe
   end
 end

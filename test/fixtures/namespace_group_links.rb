@@ -2,275 +2,281 @@
 
 FixtureBot.define do
   namespace_group_link :namespace_group_link1 do
-    group_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project20_namespace, :uuid)
+    group :group_one
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project20_namespace)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link2 do
-    group_id ActiveRecord::FixtureSet.identify(:group_three, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup1, :uuid)
+    group :group_three
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup1)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link3 do
-    group_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project25_namespace, :uuid)
+    group :group_five
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project25_namespace)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link4 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup1, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid)
+    group :subgroup1
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :david_doe_group_four)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link5 do
-    group_id ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    group :david_doe_group_four
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link6 do
-    group_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup1, :uuid)
+    group :group_five
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup1)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link7 do
-    group_id ActiveRecord::FixtureSet.identify(:group_six, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup2, :uuid)
+    group :group_six
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup2)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link8 do
-    group_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid)
+    group :namespace_group_link_group_two
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_one)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link9 do
-    group_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid)
+    group :namespace_group_link_group_three
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :namespace_group_link_group_two)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link10 do
-    group_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one_project1_namespace, :uuid)
+    group :namespace_group_link_group_two
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :namespace_group_link_group_one_project1_namespace)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link11 do
-    group_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three_project1_namespace, :uuid)
+    group :namespace_group_link_group_three
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :namespace_group_link_group_three_project1_namespace)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link12 do
-    group_id ActiveRecord::FixtureSet.identify(:group_alpha, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectBravo_namespace, :uuid)
+    group :group_alpha
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectBravo_namespace)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link13 do
-    group_id ActiveRecord::FixtureSet.identify(:group_alpha, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_charlie, :uuid)
+    group :group_alpha
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_charlie)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link14 do
-    group_id ActiveRecord::FixtureSet.identify(:group_eleven, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_one, :uuid)
+    group :group_eleven
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link15 do
-    group_id ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_echo, :uuid)
+    group :group_delta_subgroupA
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_echo)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link16 do
-    group_id ActiveRecord::FixtureSet.identify(:group_golf, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectFoxtrotSubgroupA_namespace, :uuid)
+    group :group_golf
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectFoxtrotSubgroupA_namespace)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link17 do
-    group_id ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:user29_project1_namespace, :uuid)
+    group :user30_group_one
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :user29_project1_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link18 do
-    group_id ActiveRecord::FixtureSet.identify(:group_charlie, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid)
+    group :group_charlie
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link19 do
-    group_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    group :group_five
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link20 do
-    group_id ActiveRecord::FixtureSet.identify(:group_five, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid)
+    group :group_five
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project22_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link21 do
-    group_id ActiveRecord::FixtureSet.identify(:group_india, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectIndia1_namespace, :uuid)
+    group :group_india
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectIndia1_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link22 do
-    group_id ActiveRecord::FixtureSet.identify(:group_juliett, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_juliett_subgroup1, :uuid)
+    group :group_juliett
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_juliett_subgroup1)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link23 do
-    group_id ActiveRecord::FixtureSet.identify(:group_kilo, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    group :group_kilo
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link24 do
-    group_id ActiveRecord::FixtureSet.identify(:group_lima, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    group :group_lima
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link25 do
-    group_id ActiveRecord::FixtureSet.identify(:group_lima, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid)
+    group :group_lima
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_a)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link26 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_mike, :uuid)
+    group :subgroup_mike_a
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_mike)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link27 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_mike_a_a, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:projectMike_namespace, :uuid)
+    group :subgroup_mike_a_a
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :projectMike_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link28 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_twelve, :uuid)
+    group :subgroup_mike_b
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_twelve)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
     expires_at '2025-01-01'
   end
 
   namespace_group_link :namespace_group_link29 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_oscar_a, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid)
+    group :subgroup_oscar_a
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :subgroup_twelve_a_a)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link30 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_oscar_a, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid)
+    group :subgroup_oscar_a
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project30_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link31 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_papa_a, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:group_lima, :uuid)
+    group :subgroup_papa_a
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_lima)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link32 do
-    group_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid)
+    group :group_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_owner)
     group_access_level Member::AccessLevel::OWNER
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link33 do
-    group_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid)
+    group :group_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_maintainer)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link34 do
-    group_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid)
+    group :group_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_analyst)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link35 do
-    group_id ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid)
+    group :group_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:groups, :shared_group_sample_actions_guest)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Group'
   end
 
   namespace_group_link :namespace_group_link36 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_owner_namespace, :uuid)
+    group :subgroup_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :project_shared_group_sample_actions_owner_namespace)
     group_access_level Member::AccessLevel::OWNER
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link37 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_maintainer_namespace, :uuid)
+    group :subgroup_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :project_shared_group_sample_actions_maintainer_namespace)
     group_access_level Member::AccessLevel::MAINTAINER
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link38 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_analyst_namespace, :uuid)
+    group :subgroup_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :project_shared_group_sample_actions_analyst_namespace)
     group_access_level Member::AccessLevel::ANALYST
     namespace_type 'Project'
   end
 
   namespace_group_link :namespace_group_link39 do
-    group_id ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid)
-    namespace_id ActiveRecord::FixtureSet.identify(:project_shared_group_sample_actions_guest_namespace, :uuid)
+    group :subgroup_sample_actions
+    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                :project_shared_group_sample_actions_guest_namespace)
     group_access_level Member::AccessLevel::GUEST
     namespace_type 'Project'
   end

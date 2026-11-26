@@ -1,5 +1,5 @@
 project1_namespace_sample_clone_extended_details:
-  id: 6bab3d39-f680-5281-8eff-ad8b9379017e
+  id: 3aaa58ba-d8a1-5bb1-94b3-8c99de40a08c
   details:
     cloned_samples_data:
     - sample_name: Project 1 Sample 1
@@ -7,14 +7,14 @@ project1_namespace_sample_clone_extended_details:
       clone_puid: INXT_SAM_XAAAATAAAA
     cloned_samples_count: 1
 project1_namespace_sample_transfer_extended_details:
-  id: 9d93e94a-3a5e-5882-91b3-a70029a18ca6
+  id: b0669ae1-2b16-5433-a3ad-fb9324345ac9
   details:
     transferred_samples_data:
     - sample_name: Project 1 Sample 1
       sample_puid: INXT_SAM_AAAAAAAAAA
     transferred_samples_count: 1
 project1_namespace_workflow_execution_destroy_extended_details:
-  id: d33a6d83-2c51-5ebb-a9ca-9916c6f558fe
+  id: 6dca8e9c-a932-52c5-be0c-d4c4a1a873e2
   details:
     deleted_workflow_executions_data:
     - workflow_id: first_workflow_id
@@ -25,14 +25,14 @@ project1_namespace_workflow_execution_destroy_extended_details:
       workflow_name: third_workflow_name
     workflow_exeuctions_deleted_count: 3
 project1_namespace_import_sample_create_extended_details:
-  id: dc81448f-1a7d-5e53-85e6-d198c2b726d4
+  id: bf642259-ee0d-54ef-8e5d-5a245e050b94
   details:
     imported_samples_data:
     - sample_name: sample name
       sample_puid: sample puid
     imported_samples_count: 1
 group1_namespace_import_sample_create_extended_details:
-  id: e55edf18-5655-54ea-aa01-e2fafe00ed76
+  id: 86064486-b3cd-514d-b91d-99aa89ebc83a
   details:
     imported_samples_data:
     - sample_name: sample 1 name
@@ -43,7 +43,7 @@ group1_namespace_import_sample_create_extended_details:
       project_puid: INXT_PRJ_AAAAAAAAAB
     imported_samples_count: 2
 project_group_sample_transfer_sample_transfer_extended_details:
-  id: 33d2bbab-a836-5d0e-89e1-280054ce9cce
+  id: b2d98ef3-d44d-5e7d-b9f7-53abeefdcc08
   details:
     transferred_samples_data:
     - sample_name: Group Sample Transfer 1
@@ -54,36 +54,36 @@ project_group_sample_transfer_sample_transfer_extended_details:
       sample_puid: INXT_SAM_AAAAAAAADS
     transferred_samples_count: 3
 group_sample_transfer_sample_transfer_extended_details:
-  id: b6276213-76dc-553e-a02e-85d7767f781a
+  id: a97619a9-89e3-5cf9-b375-f85bccf60ef1
   details:
     transferred_samples_data:
     - sample_name: Group Sample Transfer 1
       sample_puid: INXT_SAM_AAAAAAAADQ
-      source_project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
+      source_project_id: 77f9c7eb-84b2-5775-98f7-2a7dae7c34ce
       source_project_name: Project Group Sample Transfer
       source_project_puid: INXT_PRJ_AAAAAAAACC
-      target_project_id: de6abd66-a6f0-5142-8f32-f4a39c722577
+      target_project_id: a0726fdf-4edb-54e1-84f7-c10fc858e29a
       target_project_name: Project Group Sample Transfer Target
       target_project_puid: INXT_PRJ_AAAAAAAACD
     - sample_name: Group Sample Transfer 2
       sample_puid: INXT_SAM_AAAAAAAADR
-      source_project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
+      source_project_id: 77f9c7eb-84b2-5775-98f7-2a7dae7c34ce
       source_project_name: Project Group Sample Transfer
       source_project_puid: INXT_PRJ_AAAAAAAACC
-      target_project_id: de6abd66-a6f0-5142-8f32-f4a39c722577
+      target_project_id: a0726fdf-4edb-54e1-84f7-c10fc858e29a
       target_project_name: Project Group Sample Transfer Target
       target_project_puid: INXT_PRJ_AAAAAAAACD
     - sample_name: Group Sample Transfer 3
       sample_puid: INXT_SAM_AAAAAAAADS
-      source_project_id: c92a1500-7c25-5f0e-bb3d-1741f53383ab
+      source_project_id: 77f9c7eb-84b2-5775-98f7-2a7dae7c34ce
       source_project_name: Project Group Sample Transfer
       source_project_puid: INXT_PRJ_AAAAAAAACC
-      target_project_id: de6abd66-a6f0-5142-8f32-f4a39c722577
+      target_project_id: a0726fdf-4edb-54e1-84f7-c10fc858e29a
       target_project_name: Project Group Sample Transfer Target
       target_project_puid: INXT_PRJ_AAAAAAAACD
     transferred_samples_count: 3
 group1_namespace_sample_destroy_extended_details:
-  id: cefe7050-c342-56ee-bedc-ef6322557388
+  id: 0a4637ce-c33a-5c56-a7ac-bb67f7cda5ec
   details:
     deleted_samples_data:
     - sample_name: sample 1 name

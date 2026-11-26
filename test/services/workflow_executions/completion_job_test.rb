@@ -957,8 +957,10 @@ module WorkflowExecutions
 
       assert_equal 'my_run_id_d', workflow_execution.run_id
 
-      swe1 = workflow_execution.samples_workflow_executions.min_by(&:id)
-      swe2 = workflow_execution.samples_workflow_executions.sort_by(&:id)[1]
+      # Look up by sample rather than id order, since the samplesheet-based matching in
+      # iridanext.output.json is keyed on sample (not on the samples_workflow_executions id).
+      swe1 = workflow_execution.samples_workflow_executions.find_by(sample: @sample41)
+      swe2 = workflow_execution.samples_workflow_executions.find_by(sample: @sample42)
 
       assert_equal 0, swe1.outputs.count
 

@@ -7,15 +7,16 @@ FixtureBot.define do
     export_type 'sample'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sample1, :uuid),
-                                  ActiveRecord::FixtureSet.identify(:sample2, :uuid)],
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid),
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample1),
+                                  FixtureBot::Key::Uuid.generate(:samples, :sample2)],
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :project1_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     expires_at '<%= 3.days.from_now %>'
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     manifest '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAA",' \
              '"type":"folder","irida-next-type":"project","irida-next-name":"Project 1","children":[{"name":' \
              '"INXT_SAM_AAAAAAAAAA","type":"folder","irida-next-type":"sample","irida-next-name":' \
@@ -30,15 +31,16 @@ FixtureBot.define do
     export_type 'sample'
     status 'processing'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sample1, :uuid),
-                                  ActiveRecord::FixtureSet.identify(:sample2, :uuid)],
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid),
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample1),
+                                  FixtureBot::Key::Uuid.generate(:samples, :sample2)],
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :project1_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
   end
 
   data_export :data_export_three do
@@ -47,13 +49,14 @@ FixtureBot.define do
     export_type 'sample'
     status 'processing'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sampleB, :uuid)],
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid),
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sampleB)],
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :projectA_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    user :jeff_doe
   end
 
   data_export :data_export_four do
@@ -62,31 +65,33 @@ FixtureBot.define do
     export_type 'sample'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sampleA, :uuid),
-                                  ActiveRecord::FixtureSet.identify(:sampleB, :uuid)],
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid),
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sampleA),
+                                  FixtureBot::Key::Uuid.generate(:samples, :sampleB)],
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :projectA_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
     expires_at '<%= 5.days.from_now %>'
-    user_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    user :jeff_doe
   end
 
   data_export :data_export_five do
     export_type 'sample'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sampleA, :uuid),
-                                  ActiveRecord::FixtureSet.identify(:sampleB, :uuid)],
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid),
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sampleA),
+                                  FixtureBot::Key::Uuid.generate(:samples, :sampleB)],
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :projectA_namespace),
                         'attachment_formats' => %w[fasta fastq text csv tsv spreadsheet json genbank unknown]
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
     expires_at '<%= 5.days.from_now %>'
-    user_id ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid)
+    user :jeff_doe
   end
 
   data_export :data_export_six do
@@ -95,13 +100,14 @@ FixtureBot.define do
     export_type 'analysis'
     status 'processing'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                                 :irida_next_example_completed_with_output)],
                         'analysis_type' => 'user'
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
   end
 
   data_export :data_export_seven do
@@ -110,18 +116,21 @@ FixtureBot.define do
     export_type 'analysis'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                                 :irida_next_example_completed_with_output)],
                         'analysis_type' => 'user'
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid)}\", " \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                 :irida_next_example_completed_with_output)}\", " \
              '"type":"folder","irida-next-type":"workflow_execution","irida-next-name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid)}\"," \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                 :irida_next_example_completed_with_output)}\"," \
              '"children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABV","type":"folder",' \
              '"irida-next-type":"sample","irida-next-name":"Sample 44","children":[{"name":"test_file_7.fa",' \
              '"type":"file"}]}]}]}'
@@ -133,15 +142,16 @@ FixtureBot.define do
     export_type 'linelist'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sample32, :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample32)],
                         'linelist_format' => 'csv',
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid),
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :project29_namespace),
                         'metadata_fields' => %w[metadatafield1 metadatafield2]
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     expires_at '<%= 5.days.from_now %>'
   end
 
@@ -151,17 +161,17 @@ FixtureBot.define do
     export_type 'linelist'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sample32, :uuid),
-                                  ActiveRecord::FixtureSet.identify(:sample33, :uuid),
-                                  ActiveRecord::FixtureSet.identify(:sample34, :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample32),
+                                  FixtureBot::Key::Uuid.generate(:samples, :sample33),
+                                  FixtureBot::Key::Uuid.generate(:samples, :sample34)],
                         'linelist_format' => 'xlsx',
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:group_twelve, :uuid),
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:groups, :group_twelve),
                         'metadata_fields' => %w[metadatafield1 non_existant_field metadatafield2]
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     expires_at '<%= 5.days.from_now %>'
   end
 
@@ -171,14 +181,15 @@ FixtureBot.define do
     export_type 'sample'
     status 'processing'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:sample22, :uuid)],
-                        'namespace_id' => ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid),
+                        'ids' => [FixtureBot::Key::Uuid.generate(:samples, :sample22)],
+                        'namespace_id' => FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces',
+                                                                         :project2_namespace),
                         'attachment_formats' => %w[text fasta]
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:john_doe, :uuid)
+    user :john_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB",' \
              '"type":"folder","irida-next-type":"project","irida-next-name":"Project 2","children":[{"name":' \
@@ -195,18 +206,19 @@ FixtureBot.define do
     export_type 'analysis'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                                 :workflow_execution_completed_shared2)],
                         'analysis_type' => 'user'
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:micha_doe, :uuid)
+    user :micha_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid)}\", " \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions, :workflow_execution_completed_shared2)}\", " \
              '"type":"folder","irida-next-type":"workflow_execution","irida-next-name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid)}\"," \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions, :workflow_execution_completed_shared2)}\"," \
              '"children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder",' \
              '"irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":' \
              '"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
@@ -218,18 +230,19 @@ FixtureBot.define do
     export_type 'analysis'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                                 :workflow_execution_completed_shared2)],
                         'analysis_type' => 'user'
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
+    user :james_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid)}\", " \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions, :workflow_execution_completed_shared2)}\", " \
              '"type":"folder","irida-next-type":"workflow_execution","irida-next-name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid)}\"," \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions, :workflow_execution_completed_shared2)}\"," \
              '"children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder",' \
              '"irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":' \
              '"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
@@ -241,19 +254,21 @@ FixtureBot.define do
     export_type 'analysis'
     status 'ready'
     export_parameters({
-                        'ids' => [ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2,
-                                                                    :uuid)],
+                        'ids' => [FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                                 :workflow_execution_completed_group_shared2)],
                         'analysis_type' => 'user'
                       })
     email_notification true
     created_at '<%= 1.week.ago %>'
     updated_at '<%= 1.day.ago %>'
-    user_id ActiveRecord::FixtureSet.identify(:james_doe, :uuid)
+    user :james_doe
     expires_at '<%= 5.days.from_now %>'
     manifest '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid)}\", " \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                 :workflow_execution_completed_group_shared2)}\", " \
              '"type":"folder","irida-next-type":"workflow_execution","irida-next-name":' \
-             "\"#{ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid)}\"," \
+             "\"#{FixtureBot::Key::Uuid.generate(:workflow_executions,
+                                                 :workflow_execution_completed_group_shared2)}\"," \
              '"children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder",' \
              '"irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":' \
              '"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'

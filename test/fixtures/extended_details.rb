@@ -70,8 +70,8 @@ FixtureBot.define do
   end
 
   extended_detail :group_sample_transfer_sample_transfer_extended_details do
-    source_project_id = ActiveRecord::FixtureSet.identify(:projectGroupSampleTransfer, :uuid)
-    target_project_id = ActiveRecord::FixtureSet.identify(:projectGroupSampleTransferTarget, :uuid)
+    source_project_id = FixtureBot::Key::Uuid.generate(:projects, :projectGroupSampleTransfer)
+    target_project_id = FixtureBot::Key::Uuid.generate(:projects, :projectGroupSampleTransferTarget)
 
     details({
               'transferred_samples_data' => [

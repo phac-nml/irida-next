@@ -4,19 +4,6 @@
 # `test` group, so this initializer is a no-op outside of the test environment.
 if defined?(FixtureBot)
   module FixtureBot
-    module Key
-      # Overridden so IDs generated for FixtureBot-defined records are identical to the
-      # ones Rails' own `ActiveRecord::FixtureSet.identify` would assign. This keeps
-      # fixture files that have been migrated to FixtureBot interoperable with ones that
-      # haven't been migrated yet (and vice versa), since both resolve the same label to
-      # the same UUID, allowing fixtures to be migrated to FixtureBot incrementally.
-      module Uuid
-        def self.generate(_table_name, record_name)
-          ActiveRecord::FixtureSet.identify(record_name, :uuid)
-        end
-      end
-    end
-
     module Rails
       # Reopened to override #timestamp_column? and #build_schema below.
       class SchemaLoader
@@ -39,14 +26,39 @@ if defined?(FixtureBot)
         # model namespace; `public_activity/activities.yml` for the `activities` table).
         # FixtureBot's compiled output path always mirrors the table name, so these
         # tables are renamed here to keep the original nested file layout/accessor
-        # names unchanged. Associations are dropped for the same reason as the
-        # namespaces split above: any FK must be set with a literal
-        # `ActiveRecord::FixtureSet.identify(:label, :uuid)` call instead of FixtureBot's
-        # association shorthand, since the renamed table name no longer matches what the
-        # association metadata resolves against.
+        # names unchanged.
         TABLE_PATH_RENAMES = {
           active_storage_attachments: ['active_storage/attachments', :active_storage_attachment],
           activities: ['public_activity/activities', :activity]
+        }.freeze
+
+        # `active_storage_attachments.blob_id` points at `active_storage_blobs`, which isn't
+        # migrated to FixtureBot (see `test/fixtures/active_storage/blobs.yml`, still plain
+        # ERB/YAML), so FixtureBot's key registry never has rows for it. That association must
+        # keep being set manually with `ActiveRecord::FixtureSet.identify(:label, :uuid)`
+        # instead of the native association DSL, so it's dropped here rather than left to blow
+        # up with a `KeyError` if ever called.
+        TABLE_PATH_RENAME_DROPPED_ASSOCIATIONS = {
+          active_storage_attachments: [:blob]
+        }.freeze
+
+        # Some FK columns have no enforced DB-level foreign key (so FixtureBot can't
+        # auto-detect an association for them), but this application's models only ever point
+        # them at one specific table, so it's safe to wire them up manually and use the native
+        # association DSL (e.g. `created_by :john_doe`) instead of a literal UUID.
+        MANUAL_ASSOCIATIONS = {
+          members: [%i[created_by_id created_by users]],
+          namespace_bots: [%i[user_id user users]],
+          namespace_group_links: [%i[group_id group groups]]
+        }.freeze
+
+        # FK columns whose real DB-level target table ("namespaces") is ambiguous, since it's
+        # split into three synthetic tables below, but that - per this application's model-level
+        # validations - only ever reference one specific split table in practice, so it's safe
+        # to repoint the auto-detected association there and use the native association DSL.
+        NAMESPACE_ASSOCIATION_OVERRIDES = {
+          projects: { namespace_id: :'namespaces/project_namespaces' },
+          automated_workflow_executions: { namespace_id: :'namespaces/project_namespaces' }
         }.freeze
 
         alias build_schema_without_namespace_split build_schema
@@ -56,6 +68,8 @@ if defined?(FixtureBot)
           schema = build_schema_without_namespace_split
           rename_split_tables(schema)
           rename_path_tables(schema)
+          add_manual_associations(schema)
+          repoint_namespace_associations(schema)
           schema
         end
 
@@ -65,22 +79,74 @@ if defined?(FixtureBot)
           namespaces_table = schema.tables.delete(:namespaces)
           return unless namespaces_table
 
-          # Associations are dropped: any foreign key pointing at `namespaces` (e.g.
-          # `owner_id`, `parent_id`) must be set with a literal
-          # `ActiveRecord::FixtureSet.identify(:label, :uuid)` call instead of FixtureBot's
-          # association shorthand, since the split tables no longer match the real table
-          # name the association metadata resolves against.
+          # The `owner` association (always a `User`, never a `Namespace`) survives the split
+          # unambiguously and is kept as-is; `parent` has no enforced DB foreign key (so no
+          # association was auto-detected for it in the first place) and must keep being set
+          # manually, since it can point at any of the three split tables below.
           NAMESPACE_SPLIT_TABLES.each do |name, singular_name|
-            schema.add_table(namespaces_table.with(name: name, singular_name: singular_name, associations: []))
+            schema.add_table(namespaces_table.with(name: name, singular_name: singular_name))
           end
         end
 
         def rename_path_tables(schema)
+          renames = {}
           TABLE_PATH_RENAMES.each do |original_name, (new_name, singular_name)|
             table = schema.tables.delete(original_name)
             next unless table
 
-            schema.add_table(table.with(name: new_name.to_sym, singular_name: singular_name, associations: []))
+            dropped = TABLE_PATH_RENAME_DROPPED_ASSOCIATIONS[original_name] || []
+            associations = table.associations.reject { |a| dropped.include?(a.name) }
+            schema.add_table(table.with(name: new_name.to_sym, singular_name: singular_name,
+                                        associations: associations))
+            renames[original_name] = new_name.to_sym
+          end
+          remap_renamed_table_references(schema, renames) if renames.any?
+        end
+
+        # Other tables' associations that point at a renamed table (e.g.
+        # `activity_extended_details.activity_id -> activities`) need their `table:` updated to
+        # match the new name, or FixtureBot's key registry won't find the referenced rows.
+        def remap_renamed_table_references(schema, renames)
+          schema.tables.each do |table_name, table|
+            next if table.associations.none? { |a| renamed_association?(a, renames) }
+
+            associations = table.associations.map { |a| remap_association(a, renames) }
+            schema.tables[table_name] = table.with(associations: associations)
+          end
+        end
+
+        def renamed_association?(association, renames)
+          association.respond_to?(:table) && renames.key?(association.table)
+        end
+
+        def remap_association(association, renames)
+          return association unless renamed_association?(association, renames)
+
+          association.with(table: renames[association.table])
+        end
+
+        def add_manual_associations(schema)
+          MANUAL_ASSOCIATIONS.each do |table_name, specs|
+            table = schema.tables[table_name]
+            next unless table
+
+            new_associations = specs.map do |column, name, target_table|
+              Schema::BelongsTo.new(name: name, table: target_table, foreign_key: column)
+            end
+            schema.tables[table_name] = table.with(associations: table.associations + new_associations)
+          end
+        end
+
+        def repoint_namespace_associations(schema)
+          NAMESPACE_ASSOCIATION_OVERRIDES.each do |table_name, columns|
+            table = schema.tables[table_name]
+            next unless table
+
+            associations = table.associations.map do |assoc|
+              target_table = columns[assoc.foreign_key]
+              target_table ? assoc.with(table: target_table) : assoc
+            end
+            schema.tables[table_name] = table.with(associations: associations)
           end
         end
 
