@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  attachment.metadata { { 'compression' => 'none', 'format' => 'fastq' } }
+
   attachment :attachment1 do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sample1)
     puid 'INXT_ATT_AAAAAAAAAA'
     created_at '<%= 3.hours.ago %>'
@@ -13,10 +11,6 @@ FixtureBot.define do
   end
 
   attachment :attachment2 do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sample1)
     puid 'INXT_ATT_AAAAAAAAAB'
     created_at '<%= 2.hours.ago %>'
@@ -35,10 +29,6 @@ FixtureBot.define do
   end
 
   attachment :attachmentA do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sampleA)
     puid 'INXT_ATT_AAAAAAAAAC'
     created_at '<%= 3.hours.ago %>'
@@ -46,10 +36,6 @@ FixtureBot.define do
   end
 
   attachment :attachmentB do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sampleA)
     puid 'INXT_ATT_AAAAAAAAAD'
     created_at '<%= 2.hours.ago %>'
@@ -57,10 +43,6 @@ FixtureBot.define do
   end
 
   attachment :attachmentC do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sampleA)
     puid 'INXT_ATT_AAAAAAAAAE'
     created_at '<%= 1.hour.ago %>'
@@ -222,10 +204,6 @@ FixtureBot.define do
   end
 
   attachment :attachmentD do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sampleB)
     puid 'INXT_ATT_AAAAAAAAAK'
     created_at '<%= 3.hour.ago %>'
@@ -233,19 +211,11 @@ FixtureBot.define do
   end
 
   attachment :attachmentG do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAN'
   end
 
   attachment :attachmentH do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample(:sampleC)
     puid 'INXT_ATT_AAAAAAAAAO'
   end
@@ -483,10 +453,6 @@ FixtureBot.define do
   end
 
   attachment :project1Attachment1 do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable_type 'Namespace'
     attachable_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     puid 'INXT_ATT_ABAAAAAAAJ'
@@ -507,10 +473,6 @@ FixtureBot.define do
   end
 
   attachment :group1Attachment1 do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable_type 'Namespace'
     attachable_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     puid 'INXT_ATT_ABAAAAAAAL'
@@ -643,10 +605,6 @@ FixtureBot.define do
   end
 
   attachment 'sample_preparation_test_attachment_1' do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample('sample_preparation_test_1')
     puid 'INXT_ATT_AAAAAAAAZA'
     created_at '<%= 3.hours.ago %>'
@@ -654,10 +612,6 @@ FixtureBot.define do
   end
 
   attachment 'sample_preparation_test_attachment_1B' do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample('sample_preparation_test_1')
     puid 'INXT_ATT_AAAAAAAZZA'
     created_at '<%= 3.hours.ago %>'
@@ -665,10 +619,6 @@ FixtureBot.define do
   end
 
   attachment 'sample_preparation_test_attachment_2' do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample('sample_preparation_test_2')
     puid 'INXT_ATT_AAAAAAAAZB'
     created_at '<%= 2.hours.ago %>'
@@ -676,10 +626,6 @@ FixtureBot.define do
   end
 
   attachment 'sample_preparation_test_attachment_2B' do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample('sample_preparation_test_2')
     puid 'INXT_ATT_AAAAAAAZZB'
     created_at '<%= 2.hours.ago %>'
@@ -687,10 +633,6 @@ FixtureBot.define do
   end
 
   attachment 'sample_preparation_test_attachment_3' do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample('sample_preparation_test_3')
     puid 'INXT_ATT_BAAAAAAAZB'
     created_at '<%= 2.hours.ago %>'
@@ -698,10 +640,6 @@ FixtureBot.define do
   end
 
   attachment 'sample_preparation_test_attachment_3B' do
-    metadata({
-               'compression' => 'none',
-               'format' => 'fastq'
-             })
     attachable sample('sample_preparation_test_3')
     puid 'INXT_ATT_BAAAAAAZZB'
     created_at '<%= 2.hours.ago %>'

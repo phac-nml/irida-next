@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  samples_workflow_execution.samplesheet_params do
+    {
+      'sample' => 'INXT_SAM_AAAAAAAAAA',
+      'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments, :attachment1)}",
+      'fastq_2' => ''
+    }
+  end
+
   samples_workflow_execution :samples_workflow_executions_valid do
     sample :sample1
     workflow_execution :workflow_execution_valid
@@ -35,34 +43,16 @@ FixtureBot.define do
   samples_workflow_execution :sample1_irida_next_example_prepared do
     sample :sample1
     workflow_execution :irida_next_example_prepared
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_submitted do
     sample :sample1
     workflow_execution :irida_next_example_submitted
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_completed do
     sample :sample1
     workflow_execution :irida_next_example_completed
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_completed_2_files do
@@ -80,56 +70,26 @@ FixtureBot.define do
   samples_workflow_execution :sample1_irida_next_example_error do
     sample :sample1
     workflow_execution :irida_next_example_error
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_canceling do
     sample :sample1
     workflow_execution :irida_next_example_canceling
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_canceled do
     sample :sample1
     workflow_execution :irida_next_example_canceled
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_running do
     sample :sample1
     workflow_execution :irida_next_example_running
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_irida_next_example_new do
     sample :sample1
     workflow_execution :irida_next_example_new
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample41_irida_next_example_completing_c do
@@ -244,166 +204,76 @@ FixtureBot.define do
   samples_workflow_execution :sample1_workflow_execution_group_shared_canceled do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_canceled
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_prepared do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_prepared
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_submitted do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_submitted
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_completed do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_completed
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_error do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_error
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_canceling do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_canceling
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_running do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_running
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_workflow_execution_group_shared_new do
     sample :sample1
     workflow_execution :workflow_execution_group_shared_new
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_submitted do
     sample :sample1
     workflow_execution :automated_example_submitted
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_completed do
     sample :sample1
     workflow_execution :automated_example_completed
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_error do
     sample :sample1
     workflow_execution :automated_example_error
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_canceling do
     sample :sample1
     workflow_execution :automated_example_canceling
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_canceled do
     sample :sample1
     workflow_execution :automated_example_canceled
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_running do
     sample :sample1
     workflow_execution :automated_example_running
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :sample1_automated_example_new do
     sample :sample1
     workflow_execution :automated_example_new
-    samplesheet_params({
-                         'sample' => 'INXT_SAM_AAAAAAAAAA',
-                         'fastq_1' => "gid://irida/Attachment/#{FixtureBot::Key::Uuid.generate(:attachments,
-                                                                                               :attachment1)}",
-                         'fastq_2' => ''
-                       })
   end
 
   samples_workflow_execution :end_to_end_example do
