@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  namespaces_project_namespace.type { 'Project' }
+  namespaces_project_namespace.metadata_summary { {} }
+  namespaces_project_namespace.parent_id { FixtureBot::Key::Uuid.generate(:groups, :group_one) }
+
   namespaces_project_namespace :project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 1'
     path 'project-1'
     description 'Project 1 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     metadata_summary({ 'metadatafield1' => 10, 'metadatafield2' => 35 })
     puid 'INXT_PRJ_AAAAAAAAAA'
@@ -15,19 +16,14 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project2_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 2'
     path 'project-2'
     description 'Project 2 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAB'
   end
 
   namespaces_project_namespace :john_doe_project2_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 2'
     path 'project-2'
     description 'Project 2 description'
@@ -37,8 +33,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :john_doe_project3_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 3'
     path 'project-3'
     description 'Project 3 description'
@@ -48,8 +42,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project4_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 4'
     path 'project-4'
     description 'Project 4 description'
@@ -59,196 +51,143 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project5_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 5'
     path 'project-5'
     description 'Project 5 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     metadata_summary({ 'metadatafield1' => 623, 'metadatafield2' => 71 })
     puid 'INXT_PRJ_AAAAAAAAAF'
   end
 
   namespaces_project_namespace :project6_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 6'
     path 'project-6'
     description 'Project 6 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAG'
   end
 
   namespaces_project_namespace :project7_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 7'
     path 'project-7'
     description 'Project 7 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAH'
   end
 
   namespaces_project_namespace :project8_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 8'
     path 'project-8'
     description 'Project 8 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAI'
   end
 
   namespaces_project_namespace :project9_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 9'
     path 'project-9'
     description 'Project 9 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAJ'
   end
 
   namespaces_project_namespace :project10_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 10'
     path 'project-10'
     description 'Project 10 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAK'
   end
 
   namespaces_project_namespace :project11_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 11'
     path 'project-11'
     description 'Project 11 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAL'
   end
 
   namespaces_project_namespace :project12_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 12'
     path 'project-12'
     description 'Project 12 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAM'
   end
 
   namespaces_project_namespace :project13_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 13'
     path 'project-13'
     description 'Project 13 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAN'
   end
 
   namespaces_project_namespace :project14_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 14'
     path 'project-14'
     description 'Project 14 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAO'
   end
 
   namespaces_project_namespace :project15_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 15'
     path 'project-15'
     description 'Project 15 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAP'
   end
 
   namespaces_project_namespace :project16_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 16'
     path 'project-16'
     description 'Project 16 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAQ'
   end
 
   namespaces_project_namespace :project17_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 17'
     path 'project-17'
     description 'Project 17 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAR'
   end
 
   namespaces_project_namespace :project18_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 18'
     path 'project-18'
     description 'Project 18 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAS'
   end
 
   namespaces_project_namespace :project19_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 19'
     path 'project-19'
     description 'Project 19 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAT'
   end
 
   namespaces_project_namespace :project20_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 20'
     path 'project-20'
     description 'Project 20 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAU'
   end
 
   namespaces_project_namespace :project21_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 21'
     path 'project-21'
     description 'Project 21 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAV'
   end
 
   namespaces_project_namespace :project22_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 22'
     path 'project-22'
     description 'Project 22 description'
@@ -258,8 +197,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project23_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 23'
     path 'project-23'
     description 'Project 23 description'
@@ -269,19 +206,14 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project24_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 24'
     path 'project-24'
     description 'Project 24 description'
-    parent_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
     owner :john_doe
     puid 'INXT_PRJ_AAAAAAAAAY'
   end
 
   namespaces_project_namespace :john_doe_project4_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 4'
     path 'project-4'
     description 'Project 4 description'
@@ -291,8 +223,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project25_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 25'
     path 'project-25'
     description 'Project 25 description'
@@ -302,8 +232,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project26_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 26'
     path 'project-26'
     description 'Project 26 description'
@@ -313,8 +241,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project32_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 32'
     path 'project-32'
     description 'Project 32 description'
@@ -324,8 +250,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectA_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project A'
     path 'project-a'
     description 'Project A description'
@@ -335,8 +259,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :namespace_group_link_group_one_project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Group One Project 1'
     path 'project-1'
     description 'Group One Project 1 description'
@@ -346,8 +268,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :namespace_group_link_group_three_project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Group Three Project 1'
     path 'project-1'
     description 'Group Three Project 1 description'
@@ -357,8 +277,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project28_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 28'
     path 'project-28'
     description 'Project 28 description'
@@ -369,8 +287,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project29_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 29'
     path 'project-29'
     description 'Project 29 description'
@@ -381,8 +297,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project30_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 30'
     path 'project-30'
     description 'Project 30 description'
@@ -393,8 +307,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project31_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 31'
     path 'project-31'
     description 'Project 31 description'
@@ -405,8 +317,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :user32_project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Personal Project 1'
     path 'personal-project-1'
     description 'Personal Project 1 description'
@@ -417,8 +327,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectAlpha_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Alpha'
     path 'project-alpha'
     description 'Project Alpha description'
@@ -427,20 +335,15 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectBravo_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Bravo'
     path 'project-bravo'
     description 'Project Bravo description'
-    type 'Project'
     parent_id FixtureBot::Key::Uuid.generate(:groups, :group_bravo)
     metadata_summary({ 'metadatafield1' => 1, 'metadatafield2' => 1 })
     puid 'INXT_PRJ_AAAAAAAABF'
   end
 
   namespaces_project_namespace :projectCharlie_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Charlie'
     path 'project-charlie'
     description 'Project Charlie description'
@@ -449,8 +352,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectAlpha1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Alpha 1'
     path 'project-alpha-1'
     description 'Project Alpha 1 description'
@@ -460,8 +361,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectDelta_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Delta'
     path 'project-delta'
     description 'Project Delta description'
@@ -470,8 +369,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectDeltaSubgroupA_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Delta Subgroup A'
     path 'project-delta-subgroup-a'
     description 'Project Delta Subgroup A description'
@@ -480,8 +377,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectEcho_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Echo'
     path 'project-echo'
     description 'Project Echo description'
@@ -490,8 +385,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectEchoSubgroupB_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Echo Subgroup B'
     path 'project-echo-subgroup-b'
     description 'Project Echo Subgroup B description'
@@ -500,8 +393,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectFoxtrotSubgroupA_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Foxtrot Subgroup A'
     path 'project-foxtrot-subgroup-a'
     description 'Project Foxtrot Subgroup A description'
@@ -510,8 +401,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :user27_project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Personal Project 1'
     path 'personal-project-1'
     description 'Personal Project 1 description'
@@ -521,8 +410,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectHotel_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Hotel'
     path 'project-hotel'
     description 'Project Hotel description'
@@ -531,8 +418,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_jeff_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Uncounted'
     path 'project-uncounted'
     description 'Project Uncounted description'
@@ -542,8 +427,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project33_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 33'
     path 'project-33'
     description 'Project 33 description'
@@ -553,8 +436,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project34_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 34'
     path 'project-34'
     description 'Project 34 description'
@@ -564,8 +445,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project35_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 35'
     path 'project-35'
     description 'Project 35 description'
@@ -575,8 +454,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project37_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 37'
     path 'project-37'
     description 'Project 37 description'
@@ -585,8 +462,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project38_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 38'
     path 'project-38'
     description 'Project 38 description'
@@ -596,8 +471,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :user29_project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'User 29 Project 1'
     path 'project-1'
     description 'Project 1 description'
@@ -606,8 +479,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_janitor_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project EndToEnd'
     path 'project-end_to_end'
     description 'Project EndToEnd description'
@@ -617,8 +488,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :empty_project_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Empty Project'
     path 'empty-project'
     description 'Project that does not contain any samples'
@@ -627,8 +496,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectIndia_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project India'
     path 'project-india'
     description 'Project India description'
@@ -637,8 +504,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectIndia1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project India 1'
     path 'project-india-1'
     description 'Project India 1 description'
@@ -648,8 +513,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectJuliett_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Juliett'
     path 'project-juliett'
     description 'Project Juliett description'
@@ -658,8 +521,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectJuliett1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Juliett 1'
     path 'project-juliett-1'
     description 'Project Juliett 1 description'
@@ -669,8 +530,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectMike_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Mike'
     path 'project-mike'
     description 'Project Mike description'
@@ -679,8 +538,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectMikeA_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Mike A'
     path 'project-mike-a'
     description 'Project Mike A description'
@@ -689,8 +546,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectMikeB_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Mike B'
     path 'project-mike-b'
     description 'Project Mike B description'
@@ -699,8 +554,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectMetadata_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Metadata'
     path 'project-metadata'
     description 'Project Metadata description'
@@ -711,8 +564,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :metadata_doe_projectMetadata2_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Metadata 2'
     path 'project-metadata-2'
     description 'Project Metadata 2 description'
@@ -723,8 +574,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_group_sample_transfer_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Group Sample Transfer'
     path 'project-group-sample-transfer'
     description 'Project Group Sample Transfer description'
@@ -734,8 +583,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_group_sample_transfer_target_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Group Sample Transfer Target'
     path 'project-group-sample-transfer-target'
     description 'Project Group Sample Transfer Target description'
@@ -745,8 +592,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_group_sample_actions_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Group Sample Actions'
     path 'project-group-sample-actions'
     description 'Project Group Sample Actions description'
@@ -757,8 +602,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_subgroup_sample_actions_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Subgroup Sample Actions'
     path 'project-subgroup-sample-actions'
     description 'Subgroup Sample Actions description'
@@ -769,8 +612,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_shared_group_sample_actions_owner_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Shared Group Sample Actions Owner'
     path 'project-shared-group-sample-actions-owner'
     description 'Project Shared Group Sample Actions Owner description'
@@ -781,8 +622,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_shared_group_sample_actions_maintainer_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Shared Group Sample Actions Maintainer'
     path 'project-shared-group-sample-actions-maintainer'
     description 'Project Shared Group Sample Actions Maintainer description'
@@ -793,8 +632,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_shared_group_sample_actions_analyst_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Shared Group Sample Actions Analyst'
     path 'project-shared-group-sample-actions-analyst'
     description 'Project Shared Group Sample Actions Analyst description'
@@ -805,8 +642,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_shared_group_sample_actions_guest_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Shared Group Sample Actions Guest'
     path 'project-shared-group-sample-actions-guest'
     description 'Project Shared Group Sample Actions Guest description'
@@ -817,8 +652,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :projectUser31_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project 1'
     path 'project-1'
     description 'Project 1 description'
@@ -828,8 +661,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :project_chunked_samples_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Project Chunked Samples'
     path 'project-chunked-samples'
     description 'Project Chunked Samples description'
@@ -839,8 +670,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :public_subgroup1_project1_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'Public Group 1 Subgroup 1 Project 1'
     path 'public-subgroup-1-project-1'
     description 'Project Subgroup 1 Project 1 description'
@@ -851,8 +680,6 @@ FixtureBot.define do
   end
 
   namespaces_project_namespace :snvphyl_project_namespace do
-    type 'Project'
-    metadata_summary({})
     name 'SNVPhyl Project'
     path 'snvphyl-project'
     description 'SNVPhyl Project description'

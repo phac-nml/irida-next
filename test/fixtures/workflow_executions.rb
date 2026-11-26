@@ -1,80 +1,57 @@
 # frozen_string_literal: true
 
 FixtureBot.define do
+  workflow_execution.workflow_type { 'NFL' }
+  workflow_execution.workflow_type_version { 'DSL2' }
+  workflow_execution.workflow_engine { 'nextflow' }
+  workflow_execution.workflow_engine_version { '24.10.3' }
+  workflow_execution.namespace_id { FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace) }
+  workflow_execution.submitter_id { FixtureBot::Key::Uuid.generate(:users, :john_doe) }
+  workflow_execution.workflow_url { 'my_workflow_url' }
+
   workflow_execution :workflow_execution_valid do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     name 'workflow_execution_valid'
     created_at '<%= 1.hour.ago %>'
   end
 
   workflow_execution :workflow_execution_gasclustering do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/gasclustering', 'workflow_version' => '0.4.2' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => '0.4.2' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
     submitter :james_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     name 'workflow_execution_gasclustering'
   end
 
   workflow_execution :irida_next_example do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     email_notification true
     cleaned false
     name 'irida_next_example'
   end
 
   workflow_execution :irida_next_example_non_executable do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.0' })
     workflow_params({ 'assembler' => 'stub' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/iridanextexample'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     email_notification true
     cleaned false
     name 'irida_next_example_non_executable'
   end
 
   workflow_execution :irida_next_example_prepared do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'irida_next_example_prepared', 'workflow_version' => '1.0dev' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_prepared'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'prepared'
     email_notification true
     cleaned false
@@ -82,34 +59,22 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_submitted do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_prepared'
     run_id 'my_run_id_5'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'submitted'
     cleaned false
     name 'irida_next_example_submitted'
   end
 
   workflow_execution :irida_next_example_completed do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/nextflow/samplesheet_schema.json', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_6'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -117,17 +82,11 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_2_files do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed'
     run_id 'my_run_id_6'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -135,17 +94,11 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_unclean do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_unclean'
     run_id 'my_run_id_6a'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned false
@@ -153,129 +106,83 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_error'
     run_id 'my_run_id_7'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'error'
     cleaned true
     name 'irida_next_example_error'
   end
 
   workflow_execution :irida_next_example_error_unclean do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_error_unclean'
     run_id 'my_run_id_7a'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'error'
     cleaned false
     name 'irida_next_example_error_unclean'
   end
 
   workflow_execution :irida_next_example_canceling do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceling'
     run_id 'my_run_id_8'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceling'
     cleaned false
     name 'irida_next_example_canceling'
   end
 
   workflow_execution :irida_next_example_canceled do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'irida_next_example_canceled', 'workflow_version' => '1.0dev' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceled'
     run_id 'my_run_id_9'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceled'
     cleaned true
     name 'irida_next_example_canceled'
   end
 
   workflow_execution :irida_next_example_canceled_unclean do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_canceled_unclean'
     run_id 'my_run_id_9a'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceled'
     cleaned false
     name 'irida_next_example_canceled_unclean'
   end
 
   workflow_execution :irida_next_example_running do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_running'
     run_id 'my_run_id_10'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     cleaned false
     name 'irida_next_example_running'
   end
 
   workflow_execution :irida_next_example_new do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({})
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_new'
     run_id 'my_run_id_12'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'initial'
     cleaned false
     name 'irida_next_example_new'
   end
 
   workflow_execution :irida_next_example_completing_a do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -291,10 +198,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_b do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -309,10 +212,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_c do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -328,10 +227,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_d do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -346,10 +241,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_e do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -364,10 +255,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_f do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -384,10 +271,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_g do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -404,10 +287,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completing_h do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -423,16 +302,11 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_with_output do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_with_output'
     run_id 'my_run_id_13'
-    submitter :john_doe
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project37_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
@@ -441,17 +315,12 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_workflow_execution do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/irida_next_example_completed_with_output'
     run_id 'my_run_id_13'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -460,10 +329,6 @@ FixtureBot.define do
 
   (1..25).each do |n|
     workflow_execution(:"workflow_execution#{n}") do
-      workflow_type 'NFL'
-      workflow_type_version 'DSL2'
-      workflow_engine 'nextflow'
-      workflow_engine_version '24.10.3'
       metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
       workflow_params({})
       workflow_engine_parameters({ '-r' => 'dev' })
@@ -478,32 +343,20 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_existing do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     name 'workflow_execution_existing'
   end
 
   workflow_execution :automated_example_prepared do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_prepared'
     run_id 'my_run_id_4'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'prepared'
     email_notification true
     cleaned false
@@ -511,34 +364,24 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_submitted do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_submitted'
     run_id 'my_run_id_5'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'submitted'
     cleaned false
     name 'automated_example_submitted'
   end
 
   workflow_execution :automated_example_completed do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_completed'
     run_id 'my_run_id_6'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     blob_run_directory 'not a run dir'
     cleaned true
@@ -546,111 +389,76 @@ FixtureBot.define do
   end
 
   workflow_execution :automated_example_error do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_error'
     run_id 'my_run_id_7'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'error'
     cleaned true
     name 'automated_example_error'
   end
 
   workflow_execution :automated_example_canceling do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_canceling'
     run_id 'my_run_id_8'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceling'
     cleaned false
     name 'automated_example_canceling'
   end
 
   workflow_execution :automated_example_canceled do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_canceled'
     run_id 'my_run_id_9'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'canceled'
     cleaned true
     name 'automated_example_canceled'
   end
 
   workflow_execution :automated_example_running do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_running'
     run_id 'my_run_id_10'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     cleaned false
     name 'automated_example_running'
   end
 
   workflow_execution :automated_example_new do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
     workflow_url 'https://github.com/phac-nml/automated_example_new'
     run_id 'my_run_id_12'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'initial'
     cleaned false
     name 'automated_example_new'
   end
 
   workflow_execution :automated_workflow_execution_existing do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
     submitter :project1_automation_bot
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     cleaned false
     name 'automated_example_existing'
   end
 
   workflow_execution :irida_next_example_end_to_end do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -663,10 +471,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_DELETE do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -681,10 +485,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error_DELETE do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -699,10 +499,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_canceled_DELETE do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -717,10 +513,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_completed_unclean_DELETE do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -735,10 +527,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_error_unclean_DELETE do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -753,10 +541,6 @@ FixtureBot.define do
   end
 
   workflow_execution :irida_next_example_canceled_unclean_DELETE do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'random_seed' => 1, 'project_name' => 'assembly' })
     workflow_engine_parameters({ '-r' => '1.0.2' })
@@ -771,14 +555,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_valid_on_group do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_group_run_id_1'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -786,34 +565,21 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_shared1 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_1'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     shared_with_namespace true
     name 'workflow_execution_shared1'
     updated_at '<%= 1.hour.from_now %>'
   end
 
   workflow_execution :workflow_execution_shared2 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_2'
     submitter :james_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     cleaned true
     shared_with_namespace true
@@ -821,14 +587,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_shared3 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_3'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project2_namespace)
@@ -837,17 +598,11 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_shared4 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_shared_4'
     submitter :james_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     cleaned false
     shared_with_namespace true
@@ -855,10 +610,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_completed_shared1 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -874,10 +625,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_completed_shared2 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -893,14 +640,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared1 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared_1'
     submitter :joan_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -909,14 +651,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared2 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub', 'project_name' => 'assembly', 'random_seed' => '1' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared_2'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -925,14 +662,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared3 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared_3'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -941,10 +673,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_completed_group_shared1 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -960,10 +688,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_completed_group_shared2 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -979,14 +703,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_new do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -997,14 +716,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_prepared do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -1015,14 +729,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_submitted do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -1033,14 +742,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_completed do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -1051,14 +755,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_running do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'wn1', 'workflow_version' => 'wv1' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_group_shared'
     submitter :james_doe
     namespace_id FixtureBot::Key::Uuid.generate(:groups, :group_one)
@@ -1069,10 +768,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_error do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -1087,10 +782,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_canceling do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -1105,10 +796,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_group_shared_canceled do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'input' => '/blah/samplesheet.csv', 'outdir' => '/blah/output' })
     workflow_engine_parameters({ '-r' => 'dev' })
@@ -1123,14 +810,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_missing_namespace do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'my_run_id_1'
     submitter :steve_doe
     namespace_id 'This namespace has been deleted'
@@ -1138,14 +820,9 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_missing_run_id do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.3' })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id nil
     submitter :steve_doe
     namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/user_namespaces', :steve_doe_namespace)
@@ -1153,10 +830,6 @@ FixtureBot.define do
   end
 
   workflow_execution :workflow_execution_with_metadata_dates do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({
                'pipeline_id' => 'phac-nml/iridanextexample',
                'workflow_version' => '1.0.3',
@@ -1167,69 +840,41 @@ FixtureBot.define do
              })
     workflow_params({ 'key_a' => 'value_a' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'metadata_date_run_1'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     name 'workflow_with_metadata_dates'
   end
 
   workflow_execution :workflow_execution_with_metadata_dates2 do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/gasclustering', 'workflow_version' => '0.5.0', 'start_date' => '2024-02-01',
                'end_date' => '2024-02-10', 'sample_count' => '25', 'file_size' => '2048.75' })
     workflow_params({ 'key_b' => 'value_b' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'metadata_date_run_2'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'completed'
     name 'workflow_with_metadata_dates_2'
   end
 
   workflow_execution :workflow_execution_with_null_metadata do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/test' })
     workflow_params({ 'key_c' => 'value_c' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'null_metadata_run'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'initial'
     name 'workflow_with_null_metadata'
   end
 
   workflow_execution :workflow_execution_with_special_chars do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/special-chars', 'workflow_version' => '1.0.0',
                'custom_field' => 'value_with_%_and_underscore' })
     workflow_params({ 'key_d' => 'value_d' })
     workflow_engine_parameters({ '-r' => 'dev' })
-    workflow_url 'my_workflow_url'
     run_id 'special_chars_run'
-    submitter :john_doe
-    namespace_id FixtureBot::Key::Uuid.generate(:'namespaces/project_namespaces', :project1_namespace)
     state 'running'
     name 'workflow_with_special_chars'
   end
 
   workflow_execution :irida_next_example_three_samples do
-    workflow_type 'NFL'
-    workflow_type_version 'DSL2'
-    workflow_engine 'nextflow'
-    workflow_engine_version '24.10.3'
     metadata({ 'pipeline_id' => 'phac-nml/iridanextexample', 'workflow_version' => '1.0.2' })
     workflow_params({ 'assembler' => 'stub' })
     workflow_engine_parameters({ '-r' => 'dev' })
