@@ -31,12 +31,12 @@ applyTo: "**/*.rb"
 - Use content_for to define regions of content in layouts
 - Use Rails helpers appropriately (form_with, link_to, etc.)
 
-## Import Maps
-- Use Import Maps for JavaScript dependencies
-- Keep import map entries in `config/importmap.rb`
+## JavaScript Bundling
+- This project bundles JavaScript with esbuild (`esbuild.config.mjs`), not Rails Import Maps — there is no `config/importmap.rb`
+- Add new entry points in `esbuild.config.mjs`'s `entryPoints` map
 - Import JavaScript modules using ESM imports
-- Pin external dependencies with specific versions
-- Organize JavaScript code in modular files under app/javascript
+- Pin external dependencies with specific versions in `package.json` (managed via `pnpm`)
+- Organize JavaScript code in modular files under `app/javascript`
 
 ## ActiveJob and GoodJob
 - Create dedicated job classes that inherit from ApplicationJob

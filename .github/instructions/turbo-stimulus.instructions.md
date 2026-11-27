@@ -62,7 +62,7 @@ applyTo: "**/*.js,**/*.erb,**/*.html.erb"
 - Leverage Stimulus lifecycle methods appropriately (connect, disconnect)
 - Use values API for dynamic properties that can change
 - Document controllers with clear comments describing their purpose
-- Import controllers properly using Import Maps
+- Import controllers properly using esbuild entry points under `app/javascript`
 - You do not need to import each Stimulus controller individually in the `index.js` file.
 
 ## Stimulus Actions

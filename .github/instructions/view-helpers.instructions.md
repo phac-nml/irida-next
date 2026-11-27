@@ -171,12 +171,12 @@ end
 ## JavaScript Helpers and Security
 - Use standard Rails helpers for JavaScript integration
 - Implement CSP nonces for all inline scripts
-- Leverage ES6 module patterns with Import Maps
+- Leverage ES6 module patterns with esbuild-bundled entry points (see `.github/instructions/esbuild.instructions.md`)
 - Follow security best practices to prevent XSS
 - Properly escape dynamic JavaScript content
 
 ### JavaScript Tag Helpers
-- Use `javascript_include_tag` with import maps for external scripts
+- Use `javascript_include_tag` to reference esbuild-built assets under `app/assets/builds`
 - Use `javascript_tag` with nonces for inline JavaScript
 - Use `javascript_path` to generate paths to script assets
 - Use `javascript_csp_nonce` to access the current CSP nonce
