@@ -35,6 +35,8 @@ const replaceChildrenWithFragment = (element, items) => {
 export default class AdvancedSearchBuilderController extends Controller {
   static targets = [
     "emptySearchTemplate",
+    "andTemplate",
+    "orTemplate",
     "conditionsContainer",
     "conditionTemplate",
     "groupsContainer",
@@ -100,6 +102,7 @@ export default class AdvancedSearchBuilderController extends Controller {
         ),
       );
     });
+    this.#refreshPresentation();
   }
 
   clear() {
@@ -147,6 +150,7 @@ export default class AdvancedSearchBuilderController extends Controller {
       this.#addConditionToGroup(group);
     } else {
       this.#updateConditionLegends(group);
+      this.#refreshPresentation();
       const focusIndex = Math.min(removedIndex, remainingConditions.length - 1);
       focusCondition(remainingConditions[focusIndex]);
     }
@@ -188,6 +192,7 @@ export default class AdvancedSearchBuilderController extends Controller {
       this.#updateLegend(remainingGroup, index + 1);
     });
     this.#toggleRemoveGroupButtons();
+    this.#refreshPresentation();
 
     const remainingGroups = this.#groupElements();
     const focusGroup =
@@ -312,7 +317,30 @@ export default class AdvancedSearchBuilderController extends Controller {
       group.insertAdjacentHTML("beforeend", newCondition);
     }
 
+    this.#refreshPresentation();
     focusConditionField(this.#conditionElements(group).at(-1));
+  }
+
+  // Only decorative nodes are replaced. Live controls retain their identity and keys.
+  #refreshPresentation() {
+    this.searchGroupsContainerTarget
+      .querySelectorAll("[data-advanced-search-connective]")
+      .forEach((divider) => divider.remove());
+
+    const groups = this.#groupElements();
+    this.#insertConnectives(groups, this.orTemplateTarget);
+    groups.forEach((group) => {
+      this.#insertConnectives(
+        this.#conditionElements(group),
+        this.andTemplateTarget,
+      );
+    });
+  }
+
+  #insertConnectives(siblings, template) {
+    siblings.slice(1).forEach((sibling) => {
+      sibling.before(template.content.cloneNode(true));
+    });
   }
 
   #groupActionsContainer(group) {
@@ -455,7 +483,7 @@ export default class AdvancedSearchBuilderController extends Controller {
         return;
       }
 
-      removeButton.classList.toggle("hidden", !showRemoveButton);
+      removeButton.classList.toggle("hidden!", !showRemoveButton);
     });
   }
 

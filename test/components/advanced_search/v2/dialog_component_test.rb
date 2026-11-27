@@ -15,36 +15,7 @@ module AdvancedSearch
 
         # Trigger opens via the dialog controller, not the builder
         assert_selector "button[data-action='advanced-search--v2--dialog#renderSearch viral--dialog#open']",
-                        text: I18n.t('components.advanced_search_component.v1.title')
-      end
-
-      %i[en fr].each do |locale|
-        [false, true].each do |metadata_operators|
-          test "dialog owns the original help in #{locale} with metadata operators #{metadata_operators}" do
-            Flipper.enable(:advanced_search_metadata_operators) if metadata_operators
-            Flipper.disable(:advanced_search_metadata_operators) unless metadata_operators
-
-            I18n.with_locale(locale) do
-              # ViewComponent's preview dispatch wraps rendering in its own
-              # `I18n.with_locale(params[:locale] || I18n.default_locale)`, so the
-              # ambient locale above is only honoured if it's also passed as a param.
-              render_preview(:v2_empty, from: AdvancedSearchComponentPreview, params: { locale: locale })
-
-              description = I18n.t('components.advanced_search_component.v1.description')
-              rule = metadata_operators ? 'metadata_operators' : 'standard_operators'
-              other_rule = metadata_operators ? 'standard_operators' : 'metadata_operators'
-              rules = I18n.t("components.advanced_search_component.v1.rules.#{rule}")
-
-              assert_selector 'dialog p', text: description, visible: :all
-              assert_selector 'dialog p', text: rules, visible: :all
-              assert_no_selector 'dialog p',
-                                 text: I18n.t("components.advanced_search_component.v1.rules.#{other_rule}"),
-                                 visible: :all
-              assert_no_selector '#advanced-search-builder p', text: description, visible: :all
-              assert_no_selector '#advanced-search-builder p', text: rules, visible: :all
-            end
-          end
-        end
+                        text: I18n.t('components.advanced_search_component.title')
       end
 
       %i[default empty workflow].each do |preview|
@@ -59,14 +30,19 @@ module AdvancedSearch
         end
       end
 
-      test 'standalone builder preview has no dialog or dialog help' do
+      test 'standalone builder renders without a dialog' do
         render_preview(:v2_builder, from: AdvancedSearchComponentPreview)
 
         assert_selector "form #advanced-search-builder[data-controller='advanced-search--v2--builder']"
         assert_no_selector 'dialog', visible: :all
-        assert_no_selector 'p', text: I18n.t('components.advanced_search_component.v1.description'), visible: :all
-        %w[standard_operators metadata_operators].each do |rule|
-          assert_no_selector 'p', text: I18n.t("components.advanced_search_component.v1.rules.#{rule}"), visible: :all
+      end
+
+      %i[v2_builder_empty v2_builder_multiple].each do |preview|
+        test "#{preview} renders the standalone builder" do
+          render_preview(preview, from: AdvancedSearchComponentPreview)
+
+          assert_selector '#advanced-search-builder'
+          assert_no_selector 'dialog', visible: :all
         end
       end
 
@@ -76,7 +52,7 @@ module AdvancedSearch
         %w[
           searchGroupsTemplate conditionTemplate groupTemplate valueTemplate
           betweenValueTemplate selectValueTemplate listValueTemplate
-          listSelectValueTemplate emptySearchTemplate
+          listSelectValueTemplate emptySearchTemplate andTemplate orTemplate
         ].each do |target|
           assert_selector "template[data-advanced-search--v2--builder-target='#{target}']", visible: :all
         end
@@ -88,7 +64,7 @@ module AdvancedSearch
         builder = page.find('#advanced-search-builder', visible: :all)
         state = builder['data-advanced-search--v2--builder-initial-state-value']
 
-        assert_equal [[{ 'field' => 'metadata.country', 'operator' => 'in', 'values' => %w[Canada Mexico] }]],
+        assert_equal [[{ 'field' => 'metadata.country', 'operator' => 'text_in', 'values' => %w[Canada Mexico] }]],
                      JSON.parse(state)
       end
 
@@ -111,8 +87,8 @@ module AdvancedSearch
         html = ApplicationController.render(
           AdvancedSearch::V2::BuilderComponent.new(form:, search:, fields:), layout: false
         )
-        assert_includes html, I18n.t('components.advanced_search_component.v1.group', index: 1)
-        assert_includes html, I18n.t('components.advanced_search_component.v1.group', index: 2)
+        assert_includes html, I18n.t('components.advanced_search_component.group', index: 1)
+        assert_includes html, I18n.t('components.advanced_search_component.group', index: 2)
       end
     end
   end

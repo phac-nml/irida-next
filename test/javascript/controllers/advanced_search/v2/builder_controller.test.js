@@ -54,7 +54,7 @@ function groupTemplateInner() {
       <legend>Group GROUP_LEGEND_INDEX_PLACEHOLDER</legend>
       <div>
         <button type="button" data-action="advanced-search--v2--builder#addCondition">Add condition</button>
-        <button type="button" class="hidden" data-action="advanced-search--v2--builder#removeGroup">Remove group</button>
+        <button type="button" class="hidden!" data-action="advanced-search--v2--builder#removeGroup">Remove group</button>
       </div>
     </fieldset>
   `;
@@ -89,6 +89,8 @@ function renderFixture({ existingGroups = "", initialState = [] } = {}) {
       data-advanced-search--v2--builder-operations-value='{"standard":{"Equals":"="}}'
     >
       <div data-advanced-search--v2--builder-target="searchGroupsContainer"></div>
+      <template data-advanced-search--v2--builder-target="andTemplate"><div data-advanced-search-connective="and" aria-hidden="true">AND</div></template>
+      <template data-advanced-search--v2--builder-target="orTemplate"><div data-advanced-search-connective="or" aria-hidden="true">OR</div></template>
       <template data-advanced-search--v2--builder-target="searchGroupsTemplate">${existingGroups}</template>
       <template data-advanced-search--v2--builder-target="groupTemplate">${groupTemplateInner()}</template>
       <template data-advanced-search--v2--builder-target="conditionTemplate">${conditionTemplateInner()}</template>
@@ -183,6 +185,73 @@ describe("advanced-search--v2--builder", () => {
     expect(fieldNames()).toEqual([
       "q[groups_attributes][0][conditions_attributes][0][field]",
     ]);
+  });
+
+  it("places connectives only between siblings without changing surviving controls", async () => {
+    application = await startController();
+    const controller = controllerInstance(application);
+    controller.render();
+    controller.addGroup();
+    controller.addGroup();
+    const group = groups()[1];
+    const add = group.querySelector("[data-action$='#addCondition']");
+    controller.addCondition({ currentTarget: add });
+    controller.addCondition({ currentTarget: add });
+    const survivor = conditions(group)[2];
+    const controls = Array.from(survivor.querySelectorAll("[name]"));
+    const identities = controls.map((node) => [node.id, node.name]);
+    const container = controller.searchGroupsContainerTarget;
+    const structure = (parent) =>
+      Array.from(parent.children)
+        .filter(
+          (node) =>
+            node.tagName === "FIELDSET" ||
+            node.dataset.advancedSearchConnective,
+        )
+        .map((node) => node.dataset.advancedSearchConnective || "fieldset");
+
+    expect(structure(container)).toEqual([
+      "fieldset",
+      "or",
+      "fieldset",
+      "or",
+      "fieldset",
+    ]);
+    expect(structure(group)).toEqual([
+      "fieldset",
+      "and",
+      "fieldset",
+      "and",
+      "fieldset",
+    ]);
+    controller.removeCondition({
+      currentTarget: conditions(group)[1].querySelector("button"),
+    });
+    controller.removeGroup({
+      currentTarget: groups()[0].querySelector("[data-action$='#removeGroup']"),
+    });
+    expect(structure(container)).toEqual(["fieldset", "or", "fieldset"]);
+    expect(structure(group)).toEqual(["fieldset", "and", "fieldset"]);
+    expect(Array.from(survivor.querySelectorAll("[name]"))).toEqual(controls);
+    expect(controls.map((node) => [node.id, node.name])).toEqual(identities);
+    expect(
+      container.querySelectorAll("[data-advanced-search-connective] [name]"),
+    ).toHaveLength(0);
+
+    controller.searchGroupsTemplateTarget.innerHTML = container.innerHTML;
+    controller.renderExisting();
+    controller.renderExisting();
+    expect(
+      container.querySelectorAll('[data-advanced-search-connective="or"]'),
+    ).toHaveLength(1);
+    expect(
+      container.querySelectorAll('[data-advanced-search-connective="and"]'),
+    ).toHaveLength(1);
+    controller.clearForm();
+    expect(
+      container.querySelectorAll("[data-advanced-search-connective]"),
+    ).toHaveLength(0);
+    expect(container.querySelector("input").name).toBe("q[groups_attributes]");
   });
 
   it("addCondition appends conditions with incrementing indices", async () => {
