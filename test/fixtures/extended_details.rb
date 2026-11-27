@@ -1,0 +1,132 @@
+# frozen_string_literal: true
+
+FixtureBot.define do
+  extended_detail :project1_namespace_sample_clone_extended_details do
+    details({
+              'cloned_samples_data' => [
+                {
+                  'sample_name' => 'Project 1 Sample 1',
+                  'sample_puid' => 'INXT_SAM_AAAAAAAAAA',
+                  'clone_puid' => 'INXT_SAM_XAAAATAAAA'
+                }
+              ],
+              'cloned_samples_count' => 1
+            })
+  end
+
+  extended_detail :project1_namespace_sample_transfer_extended_details do
+    details({
+              'transferred_samples_data' => [
+                {
+                  'sample_name' => 'Project 1 Sample 1',
+                  'sample_puid' => 'INXT_SAM_AAAAAAAAAA'
+                }
+              ],
+              'transferred_samples_count' => 1
+            })
+  end
+
+  extended_detail :project1_namespace_workflow_execution_destroy_extended_details do
+    details({
+              'deleted_workflow_executions_data' => [
+                { 'workflow_id' => 'first_workflow_id', 'workflow_name' => 'first_workflow_name' },
+                { 'workflow_id' => 'second_workflow_id', 'workflow_name' => 'second_workflow_name' },
+                { 'workflow_id' => 'third_workflow_id', 'workflow_name' => 'third_workflow_name' }
+              ],
+              'workflow_exeuctions_deleted_count' => 3
+            })
+  end
+
+  extended_detail :project1_namespace_import_sample_create_extended_details do
+    details({
+              'imported_samples_data' => [
+                { 'sample_name' => 'sample name', 'sample_puid' => 'sample puid' }
+              ],
+              'imported_samples_count' => 1
+            })
+  end
+
+  extended_detail :group1_namespace_import_sample_create_extended_details do
+    details({
+              'imported_samples_data' => [
+                { 'sample_name' => 'sample 1 name', 'sample_puid' => 'sample 1 puid',
+                  'project_puid' => 'INXT_PRJ_AAAAAAAAAA' },
+                { 'sample_name' => 'sample 2 name', 'sample_puid' => 'sample 2 puid',
+                  'project_puid' => 'INXT_PRJ_AAAAAAAAAB' }
+              ],
+              'imported_samples_count' => 2
+            })
+  end
+
+  extended_detail :project_group_sample_transfer_sample_transfer_extended_details do
+    details({
+              'transferred_samples_data' => [
+                { 'sample_name' => 'Group Sample Transfer 1', 'sample_puid' => 'INXT_SAM_AAAAAAAADQ' },
+                { 'sample_name' => 'Group Sample Transfer 2', 'sample_puid' => 'INXT_SAM_AAAAAAAADR' },
+                { 'sample_name' => 'Group Sample Transfer 3', 'sample_puid' => 'INXT_SAM_AAAAAAAADS' }
+              ],
+              'transferred_samples_count' => 3
+            })
+  end
+
+  extended_detail :group_sample_transfer_sample_transfer_extended_details do
+    source_project_id = FixtureBot::Key::Uuid.generate(:projects, :projectGroupSampleTransfer)
+    target_project_id = FixtureBot::Key::Uuid.generate(:projects, :projectGroupSampleTransferTarget)
+
+    details({
+              'transferred_samples_data' => [
+                {
+                  'sample_name' => 'Group Sample Transfer 1',
+                  'sample_puid' => 'INXT_SAM_AAAAAAAADQ',
+                  'source_project_id' => source_project_id,
+                  'source_project_name' => 'Project Group Sample Transfer',
+                  'source_project_puid' => 'INXT_PRJ_AAAAAAAACC',
+                  'target_project_id' => target_project_id,
+                  'target_project_name' => 'Project Group Sample Transfer Target',
+                  'target_project_puid' => 'INXT_PRJ_AAAAAAAACD'
+                },
+                {
+                  'sample_name' => 'Group Sample Transfer 2',
+                  'sample_puid' => 'INXT_SAM_AAAAAAAADR',
+                  'source_project_id' => source_project_id,
+                  'source_project_name' => 'Project Group Sample Transfer',
+                  'source_project_puid' => 'INXT_PRJ_AAAAAAAACC',
+                  'target_project_id' => target_project_id,
+                  'target_project_name' => 'Project Group Sample Transfer Target',
+                  'target_project_puid' => 'INXT_PRJ_AAAAAAAACD'
+                },
+                {
+                  'sample_name' => 'Group Sample Transfer 3',
+                  'sample_puid' => 'INXT_SAM_AAAAAAAADS',
+                  'source_project_id' => source_project_id,
+                  'source_project_name' => 'Project Group Sample Transfer',
+                  'source_project_puid' => 'INXT_PRJ_AAAAAAAACC',
+                  'target_project_id' => target_project_id,
+                  'target_project_name' => 'Project Group Sample Transfer Target',
+                  'target_project_puid' => 'INXT_PRJ_AAAAAAAACD'
+                }
+              ],
+              'transferred_samples_count' => 3
+            })
+  end
+
+  extended_detail :group1_namespace_sample_destroy_extended_details do
+    details({
+              'deleted_samples_data' => [
+                {
+                  'sample_name' => 'sample 1 name',
+                  'sample_puid' => 'sample 1 puid',
+                  'project_puid' => 'INXT_PRJ_AAAAAAAAAA',
+                  'project_name' => 'Project 1'
+                },
+                {
+                  'sample_name' => 'sample 2 name',
+                  'sample_puid' => 'sample 2 puid',
+                  'project_puid' => 'INXT_PRJ_AAAAAAAAAB',
+                  'project_name' => 'Project 2'
+                }
+              ],
+              'samples_deleted_count' => 2
+            })
+  end
+end

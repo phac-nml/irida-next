@@ -1,76 +1,55 @@
 project1_namespace_sample_transfer_activity_extended_details:
-  activity: project1_namespace_sample_transfer
-  extended_detail: project1_namespace_sample_transfer_extended_details
+  id: 329a07f8-d0ba-5732-8816-e32ea6af3a98
+  activity_id: cc7fad4b-4188-5d3c-ada2-5446e46874b2
+  extended_detail_id: b0669ae1-2b16-5433-a3ad-fb9324345ac9
   activity_type: sample_transfer
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project2_namespace_sample_transferred_from_project1_activity_extended_details:
-  activity: project2_namespace_sample_transferred_from_project1
-  extended_detail: project1_namespace_sample_transfer_extended_details
+  id: 37d2e563-ba60-5760-8e60-56393602d426
+  activity_id: 80d8601b-f0c7-5829-a767-5bfb1f2b8380
+  extended_detail_id: b0669ae1-2b16-5433-a3ad-fb9324345ac9
   activity_type: sample_transfer
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project1_namespace_sample_clone_activity_extended_details:
-  activity: project1_namespace_sample_clone
-  extended_detail: project1_namespace_sample_clone_extended_details
+  id: a9136879-f8ba-5a46-a657-f628bbdb1c62
+  activity_id: 55fb1a94-687c-550b-855b-e551aeee6c13
+  extended_detail_id: 3aaa58ba-d8a1-5bb1-94b3-8c99de40a08c
   activity_type: sample_clone
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project2_namespace_sample_cloned_from_project1_activity_extended_details:
-  activity: project2_namespace_sample_cloned_from_project1
-  extended_detail: project1_namespace_sample_clone_extended_details
+  id: 2a62b5ee-78f9-5129-ac8f-dd8323b3b382
+  activity_id: ebe3a7ec-d193-5e55-bd42-e58651f8f51e
+  extended_detail_id: 3aaa58ba-d8a1-5bb1-94b3-8c99de40a08c
   activity_type: sample_clone
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project1_namespace_workflow_execution_destroy_activity_extended_details:
-  activity: project1_namespace_workflow_execution_destroy
-  extended_detail: project1_namespace_workflow_execution_destroy_extended_details
+  id: 350c2123-40ae-5c60-bfa9-94a3dc7715d8
+  activity_id: 3d8bc33d-73c3-5cc1-a6de-2af7825aecff
+  extended_detail_id: 6dca8e9c-a932-52c5-be0c-d4c4a1a873e2
   activity_type: workflow_execution_destroy
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project1_namespace_import_sample_activity_extended_details:
-  activity: project1_namespace_sample_import_create
-  extended_detail: project1_namespace_import_sample_create_extended_details
+  id: bf55755a-f8c9-563f-92f2-58ce95e6e7c6
+  activity_id: 9ab5716c-5c3c-573b-9927-49e601512966
+  extended_detail_id: bf642259-ee0d-54ef-8e5d-5a245e050b94
   activity_type: project_import_samples
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 group1_namespace_import_sample_activity_extended_details:
-  activity: group1_sample_import_create
-  extended_detail: group1_namespace_import_sample_create_extended_details
+  id: 5df468b8-2141-56c2-b86f-4d2b1fcfc18e
+  activity_id: 07a40937-c984-5ef7-afb8-81a63b699d35
+  extended_detail_id: 86064486-b3cd-514d-b91d-99aa89ebc83a
   activity_type: group_import_samples
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 group1_namespace_sample_destroy_activity_extended_details:
-  activity: group1_sample_destroy
-  extended_detail: group1_namespace_sample_destroy_extended_details
+  id: '089e60c6-1e6a-5b49-9556-4cc910dd6465'
+  activity_id: c53f2f12-2656-5a77-abcf-d0519b9be5a7
+  extended_detail_id: 0a4637ce-c33a-5c56-a7ac-bb67f7cda5ec
   activity_type: group_samples_destroy
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 group_sample_transfer_sample_transfer_activity_extended_details:
-  activity: group_sample_transfer_sample_transfer
-  extended_detail: group_sample_transfer_sample_transfer_extended_details
+  id: 7f615e8d-06f4-5cad-a200-59023a9b59de
+  activity_id: b774a6b7-6776-5182-8091-98b8a0452992
+  extended_detail_id: a97619a9-89e3-5cf9-b375-f85bccf60ef1
   activity_type: group_sample_transfer
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project_group_sample_transfer_sample_transfer_activity_extended_details:
-  activity: project_group_sample_transfer_sample_transfer
-  extended_detail: project_group_sample_transfer_sample_transfer_extended_details
+  id: c4b86bf1-7afe-58d8-9296-2d6d59c417aa
+  activity_id: 229b13a9-b4d5-5771-b079-ab1394a39326
+  extended_detail_id: b2d98ef3-d44d-5e7d-b9f7-53abeefdcc08
   activity_type: sample_transfer
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
 project_group_sample_transfer_target_sample_transfer_activity_extended_details:
-  activity: project_group_sample_transfer_target_sample_transfer
-  extended_detail: project_group_sample_transfer_sample_transfer_extended_details
+  id: e740e4a3-afc6-5088-b12d-d72fb56ef086
+  activity_id: a6693d55-1495-5230-ae2f-60c60d0e4cf9
+  extended_detail_id: b2d98ef3-d44d-5e7d-b9f7-53abeefdcc08
   activity_type: sample_transfer
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>

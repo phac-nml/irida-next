@@ -1,714 +1,807 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-DEFAULTS: &DEFAULTS
-  type: Project
-  metadata_summary: {}
-
 project1_namespace:
-  <<: *DEFAULTS
+  id: e38c793a-8939-5946-b08b-d4b460067164
   name: Project 1
   path: project-1
+  type: Project
   description: Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 10, "metadatafield2": 35 }
+  metadata_summary:
+    metadatafield1: 10
+    metadatafield2: 35
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAA
-  attachments_updated_at: <%= 2.hours.ago %>
-
+  attachments_updated_at: "<%= 2.hours.ago %>"
 project2_namespace:
-  <<: *DEFAULTS
+  id: 5e3395a4-3379-52fb-905c-b202c16085ab
   name: Project 2
   path: project-2
+  type: Project
   description: Project 2 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAB
-
 john_doe_project2_namespace:
-  <<: *DEFAULTS
+  id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
   name: Project 2
   path: project-2
+  type: Project
   description: Project 2 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 585120fa-2837-5b5d-917e-3d7beb4b588e
   puid: INXT_PRJ_AAAAAAAAAC
-
 john_doe_project3_namespace:
-  <<: *DEFAULTS
+  id: deceb11a-820b-5db0-9e1f-19c8cb4cf4ef
   name: Project 3
   path: project-3
+  type: Project
   description: Project 3 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 585120fa-2837-5b5d-917e-3d7beb4b588e
   puid: INXT_PRJ_AAAAAAAAAD
-
 project4_namespace:
-  <<: *DEFAULTS
+  id: e10fd25f-2c09-5583-bd63-f13262c4f88a
   name: Project 4
   path: project-4
+  type: Project
   description: Project 4 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 0e099895-881e-5828-af57-d1af72be0576
   puid: INXT_PRJ_AAAAAAAAAE
-
 project5_namespace:
-  <<: *DEFAULTS
+  id: e3c600cf-c18d-5bb6-b8ad-906459f868da
   name: Project 5
   path: project-5
+  type: Project
   description: Project 5 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 623, "metadatafield2": 71 }
+  metadata_summary:
+    metadatafield1: 623
+    metadatafield2: 71
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAF
-
 project6_namespace:
-  <<: *DEFAULTS
+  id: 1c19ac23-5f28-5c56-90f4-d63c89674050
   name: Project 6
   path: project-6
+  type: Project
   description: Project 6 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAG
-
 project7_namespace:
-  <<: *DEFAULTS
+  id: e181bd67-25aa-5b37-bfd6-6739150fc61c
   name: Project 7
   path: project-7
+  type: Project
   description: Project 7 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAH
-
 project8_namespace:
-  <<: *DEFAULTS
+  id: a9c16015-3e78-59dc-b373-687bef8d1873
   name: Project 8
   path: project-8
+  type: Project
   description: Project 8 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAI
-
 project9_namespace:
-  <<: *DEFAULTS
+  id: df3bcf1a-77f0-5acf-968f-868d38c13899
   name: Project 9
   path: project-9
+  type: Project
   description: Project 9 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAJ
-
 project10_namespace:
-  <<: *DEFAULTS
+  id: 33935d9a-1ce0-51d2-a879-38cd968f593c
   name: Project 10
   path: project-10
+  type: Project
   description: Project 10 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAK
-
 project11_namespace:
-  <<: *DEFAULTS
+  id: c4f1560c-1c68-5d5c-b342-5b06e8da530d
   name: Project 11
   path: project-11
+  type: Project
   description: Project 11 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAL
-
 project12_namespace:
-  <<: *DEFAULTS
+  id: 0c6a3cf5-9558-52c7-97d2-03dab8f7e23e
   name: Project 12
   path: project-12
+  type: Project
   description: Project 12 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAM
-
 project13_namespace:
-  <<: *DEFAULTS
+  id: 8f179802-b0fb-588a-bc99-7f3e49e7e72c
   name: Project 13
   path: project-13
+  type: Project
   description: Project 13 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAN
-
 project14_namespace:
-  <<: *DEFAULTS
+  id: 190e83f6-2f99-537b-b687-b453288265fe
   name: Project 14
   path: project-14
+  type: Project
   description: Project 14 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAO
-
 project15_namespace:
-  <<: *DEFAULTS
+  id: 83df19d7-2ba4-57a4-888f-a610f059220c
   name: Project 15
   path: project-15
+  type: Project
   description: Project 15 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAP
-
 project16_namespace:
-  <<: *DEFAULTS
+  id: 16893ed5-2084-5140-8eee-c83c533001f9
   name: Project 16
   path: project-16
+  type: Project
   description: Project 16 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAQ
-
 project17_namespace:
-  <<: *DEFAULTS
+  id: 2d7bda8c-78c1-51f2-9038-8b2c26958bc0
   name: Project 17
   path: project-17
+  type: Project
   description: Project 17 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAR
-
 project18_namespace:
-  <<: *DEFAULTS
+  id: a38bbf65-6eab-5102-8966-a8327a91cf93
   name: Project 18
   path: project-18
+  type: Project
   description: Project 18 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAS
-
 project19_namespace:
-  <<: *DEFAULTS
+  id: 3118d791-a772-5588-853d-af75ecb8bbec
   name: Project 19
   path: project-19
+  type: Project
   description: Project 19 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAT
-
 project20_namespace:
-  <<: *DEFAULTS
+  id: 843fcf88-195d-50bd-a502-7c80c221fc0c
   name: Project 20
   path: project-20
+  type: Project
   description: Project 20 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAU
-
 project21_namespace:
-  <<: *DEFAULTS
+  id: bef43b8f-1353-5bde-85a2-ee2cc679998d
   name: Project 21
   path: project-21
+  type: Project
   description: Project 21 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAV
-
 project22_namespace:
-  <<: *DEFAULTS
+  id: fb9e7fac-84ea-5c7d-bf5e-656786d7ea24
   name: Project 22
   path: project-22
+  type: Project
   description: Project 22 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 67576ac4-d9fb-594d-9791-2b4e1ae4cd1d
   puid: INXT_PRJ_AAAAAAAAAW
-
 project23_namespace:
-  <<: *DEFAULTS
+  id: 3f827314-eefb-555b-afa3-bd7d71e16fdd
   name: Project 23
   path: project-23
+  type: Project
   description: Project 23 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 171788bf-effc-53fd-a59a-0be92eb1e326
   puid: INXT_PRJ_AAAAAAAAAX
-
 project24_namespace:
-  <<: *DEFAULTS
+  id: 3d7368c5-5928-50d2-bb80-043215c039b3
   name: Project 24
   path: project-24
+  type: Project
   description: Project 24 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_PRJ_AAAAAAAAAY
-
 john_doe_project4_namespace:
-  <<: *DEFAULTS
+  id: 7363f9e7-53d3-5a58-8beb-670b4cb77275
   name: Project 4
   path: project-4
+  type: Project
   description: Project 4 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 585120fa-2837-5b5d-917e-3d7beb4b588e
   puid: INXT_PRJ_AAAAAAAAAZ
-
 project25_namespace:
-  <<: *DEFAULTS
+  id: 1becc9bd-15ec-5d29-9183-938fb5df53fa
   name: Project 25
   path: project-25
+  type: Project
   description: Project 25 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: '0780fc0c-4a35-592c-8b08-7d4e7ce25c96'
   puid: INXT_PRJ_AAAAAAAAA2
-
 project26_namespace:
-  <<: *DEFAULTS
+  id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
   name: Project 26
   path: project-26
+  type: Project
   description: Project 26 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 585120fa-2837-5b5d-917e-3d7beb4b588e
   puid: INXT_PRJ_AAAAAAAAA3
-
 project32_namespace:
-  <<: *DEFAULTS
+  id: cb5f3865-1d75-5ef4-ac01-1008396b445e
   name: Project 32
   path: project-32
+  type: Project
   description: Project 32 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: e0720a84-9ba7-5b48-aa5d-2d2d21d27da9
   puid: INXT_PRJ_AAAAAAAAA4
-
 projectA_namespace:
-  <<: *DEFAULTS
+  id: 47e272c4-71a5-5c76-88f0-343755ff77aa
   name: Project A
   path: project-a
+  type: Project
   description: Project A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
+  parent_id: 577a2c29-82f8-530b-9684-81005f2c67de
   puid: INXT_PRJ_AAAAAAAAA5
-
 namespace_group_link_group_one_project1_namespace:
-  <<: *DEFAULTS
+  id: 7b067fe8-27dd-5f64-9915-a50011295476
   name: Group One Project 1
   path: project-1
+  type: Project
   description: Group One Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
+  metadata_summary: {}
+  owner_id: ff401bf4-b618-552c-98c0-1acdbc4a3d7a
+  parent_id: b33a2b19-9daf-51b3-888c-8c469291e303
   puid: INXT_PRJ_AAAAAAAAA6
-
 namespace_group_link_group_three_project1_namespace:
-  <<: *DEFAULTS
+  id: 561848a7-d6a7-53ce-a272-ac8ebd26a65a
   name: Group Three Project 1
   path: project-1
+  type: Project
   description: Group Three Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
+  metadata_summary: {}
+  owner_id: ff401bf4-b618-552c-98c0-1acdbc4a3d7a
+  parent_id: ecb5359e-a5aa-5aec-81a4-1dbbd51929e9
   puid: INXT_PRJ_AAAAAAAAA7
-
 project28_namespace:
-  <<: *DEFAULTS
+  id: dc9e7d5a-15cb-5af4-ab36-46361dc6080e
   name: Project 28
   path: project-28
+  type: Project
   description: Project 28 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
   metadata_summary:
-    { "unique.metadata.field": 1, "metadata field with spaces": 1 }
+    unique.metadata.field: 1
+    metadata field with spaces: 1
+  owner_id: c360d970-30e6-5b09-92ed-68a3bad72f26
+  parent_id: bf438587-fc62-50e6-acb4-53557e1e86ef
   puid: INXT_PRJ_AAAAAAAABA
-
 project29_namespace:
-  <<: *DEFAULTS
+  id: 3cc7d999-7111-5fef-acd5-60ebf21fea64
   name: Project 29
   path: project-29
+  type: Project
   description: Project 29 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 600187fa-476c-56ae-8be3-2e851492b750
   puid: INXT_PRJ_AAAAAAAABB
-
 project30_namespace:
-  <<: *DEFAULTS
+  id: bf41d6db-2ee7-5816-b0a3-03301639ecae
   name: Project 30
   path: project-30
+  type: Project
   description: Project 30 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_b, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 3c39841b-a30a-510d-9f93-6800be816c24
   puid: INXT_PRJ_AAAAAAAABC
-
 project31_namespace:
-  <<: *DEFAULTS
+  id: b6000abc-ac22-5b6d-9538-a685471760ee
   name: Project 31
   path: project-31
+  type: Project
   description: Project 31 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_twelve_a_a, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 926ed661-cb67-5beb-a470-1c1fd4773221
   puid: INXT_PRJ_AAAAAAAABD
-
 user32_project1_namespace:
-  <<: *DEFAULTS
+  id: cf5dc62b-f4f2-5e85-8004-b628912d5ffe
   name: Personal Project 1
   path: personal-project-1
+  type: Project
   description: Personal Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:user32_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user32, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 56b465f0-318a-57fe-9d9c-da95a48c2ba9
+  parent_id: eae8036f-fa5f-5bea-b219-1de1d696a58a
   puid: INXT_PRJ_AAAAAAAZBD
-
 projectAlpha_namespace:
-  <<: *DEFAULTS
+  id: 915be86b-93b3-57ee-8d90-621b18ba4562
   name: Project Alpha
   path: project-alpha
+  type: Project
   description: Project Alpha description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
+  metadata_summary: {}
+  parent_id: 5feed05a-e500-5e03-9ddd-4bb8c1d9b484
   puid: INXT_PRJ_AAAAAAAABE
-
 projectBravo_namespace:
-  <<: *DEFAULTS
+  id: c82328a9-d199-5fda-b053-9130e23941eb
   name: Project Bravo
   path: project-bravo
-  description: Project Bravo description
   type: Project
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_bravo, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  description: Project Bravo description
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  parent_id: 6f3a1627-5790-5e53-bb06-fbdaac89f046
   puid: INXT_PRJ_AAAAAAAABF
-
 projectCharlie_namespace:
-  <<: *DEFAULTS
+  id: f4d86fe5-4201-5676-bd6e-77a6dc80a4fe
   name: Project Charlie
   path: project-charlie
+  type: Project
   description: Project Charlie description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_charlie, :uuid) %>
+  metadata_summary: {}
+  parent_id: 1d0afc1d-8d20-5178-9b6f-9d380718a0e0
   puid: INXT_PRJ_AAAAAAAABG
-
 projectAlpha1_namespace:
-  <<: *DEFAULTS
+  id: 42fddc06-a608-5744-93b0-3482b5afad6e
   name: Project Alpha 1
   path: project-alpha-1
+  type: Project
   description: Project Alpha 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha_subgroup1, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  metadata_summary: {}
+  owner_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  parent_id: 24695316-dc85-5c27-a427-6b8fdad6f9f7
   puid: INXT_PRJ_AAAAAAAABH
-
 projectDelta_namespace:
-  <<: *DEFAULTS
+  id: dd6d02b9-d938-513d-9e3d-fea3eb6e694a
   name: Project Delta
   path: project-delta
+  type: Project
   description: Project Delta description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
+  metadata_summary: {}
+  parent_id: 9898b409-a149-53bd-8fe4-557723a619e9
   puid: INXT_PRJ_AAAAAAAABI
-
 projectDeltaSubgroupA_namespace:
-  <<: *DEFAULTS
+  id: bd274938-9376-5662-8549-c9c0b8f639fe
   name: Project Delta Subgroup A
   path: project-delta-subgroup-a
+  type: Project
   description: Project Delta Subgroup A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_delta_subgroupA, :uuid) %>
+  metadata_summary: {}
+  parent_id: 265a5263-841d-51f5-bac1-fce8fee8f124
   puid: INXT_PRJ_AAAAAAAABJ
-
 projectEcho_namespace:
-  <<: *DEFAULTS
+  id: d31206d7-4cd9-5cb6-89f4-45edefcf656c
   name: Project Echo
   path: project-echo
+  type: Project
   description: Project Echo description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo, :uuid) %>
+  metadata_summary: {}
+  parent_id: 6ef9479b-8548-5948-8f26-e2942e89462d
   puid: INXT_PRJ_AAAAAAAABK
-
 projectEchoSubgroupB_namespace:
-  <<: *DEFAULTS
+  id: f3bdca4c-2076-5165-9519-3ca5e8703825
   name: Project Echo Subgroup B
   path: project-echo-subgroup-b
+  type: Project
   description: Project Echo Subgroup B description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_echo_subgroupB, :uuid) %>
+  metadata_summary: {}
+  parent_id: a12fd565-566d-5462-a3ec-5f07b154d55f
   puid: INXT_PRJ_AAAAAAAABL
-
 projectFoxtrotSubgroupA_namespace:
-  <<: *DEFAULTS
+  id: b705fe71-0e4d-5f41-88a9-c8f442cb56fc
   name: Project Foxtrot Subgroup A
   path: project-foxtrot-subgroup-a
+  type: Project
   description: Project Foxtrot Subgroup A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_foxtrot_subgroupA, :uuid) %>
+  metadata_summary: {}
+  parent_id: 7f32d663-24e5-5deb-aa51-c6bd882b90aa
   puid: INXT_PRJ_AAAAAAAABM
-
 user27_project1_namespace:
-  <<: *DEFAULTS
+  id: 118c309c-cd74-526c-895e-087b421ea7ce
   name: Personal Project 1
   path: personal-project-1
+  type: Project
   description: Personal Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:user27_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
+  metadata_summary: {}
+  owner_id: 42e6682c-8029-5fea-9093-7afd4fbf2143
+  parent_id: '0331822a-b87c-5f73-8f3d-c9a232d9af6a'
   puid: INXT_PRJ_AAAAAAAABN
-
 projectHotel_namespace:
-  <<: *DEFAULTS
+  id: 2861faa3-45a3-54db-bc5e-b220cdae2506
   name: Project Hotel
   path: project-hotel
+  type: Project
   description: Project Hotel description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
+  metadata_summary: {}
+  parent_id: 5c2c225a-86ae-5ffe-bc59-f530948f6b08
   puid: INXT_PRJ_AAAAAAAABO
-
 project_jeff_namespace:
-  <<: *DEFAULTS
+  id: '042679e2-d4b8-5188-b429-6b3cc44761c3'
   name: Project Uncounted
   path: project-uncounted
+  type: Project
   description: Project Uncounted description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
+  parent_id: 577a2c29-82f8-530b-9684-81005f2c67de
   puid: INXT_PRJ_AAAAAAAABP
-
 project33_namespace:
-  <<: *DEFAULTS
+  id: 1d7cfb53-76eb-5395-a093-fc3dcd747b01
   name: Project 33
   path: project-33
+  type: Project
   description: Project 33 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 5f309ff5-f33e-5873-8603-a19231835c5a
+  parent_id: 718f77be-2b78-5464-aa3e-478d25a0b00c
   puid: INXT_PRJ_AAAAAAAABQ
-
 project34_namespace:
-  <<: *DEFAULTS
+  id: 2aacd7d1-dd72-5023-97ca-0c379471886c
   name: Project 34
   path: project-34
+  type: Project
   description: Project 34 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 742cb9f0-5127-593f-8286-352a07d7ca28
   puid: INXT_PRJ_AAAAAAAABR
-
 project35_namespace:
-  <<: *DEFAULTS
+  id: 6131a377-ba3f-5956-861f-74ea1a067c55
   name: Project 35
   path: project-35
+  type: Project
   description: Project 35 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 2d49aaf2-137d-5f1b-b5fc-002e17d8fb82
   puid: INXT_PRJ_AAAAAAAABS
-
 project37_namespace:
-  <<: *DEFAULTS
+  id: 5d7db395-18ac-5622-8a9e-cbea1305b97b
   name: Project 37
   path: project-37
+  type: Project
   description: Project 37 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
+  metadata_summary: {}
+  parent_id: b2776255-1bf4-5d94-889c-d9758d90ccb7
   puid: INXT_PRJ_AAAAAAACBC
-
 project38_namespace:
-  <<: *DEFAULTS
+  id: 870cef4e-9c6d-59b7-b6e4-d2b36ff3016d
   name: Project 38
   path: project-38
+  type: Project
   description: Project 38 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_seventeen, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: 02013ffe-f49e-5959-8c90-37940069bc6e
   puid: INXT_PRJ_AAAAAAACBF
-
 user29_project1_namespace:
-  <<: *DEFAULTS
+  id: 73f89cce-8087-5ee6-8723-bcd3621c6458
   name: User 29 Project 1
   path: project-1
+  type: Project
   description: Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:user29_namespace, :uuid) %>
+  metadata_summary: {}
+  parent_id: 2c0b6a8e-c4d4-53f6-b881-2aeb316a1125
   puid: INXT_PRJ_AAAAAAACBD
-
 project_janitor_namespace:
-  <<: *DEFAULTS
+  id: 8f55a0fb-dc43-5f67-b399-8517dede289a
   name: Project EndToEnd
   path: project-end_to_end
+  type: Project
   description: Project EndToEnd description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe_group, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:janitor_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
+  parent_id: 366d46e9-31da-5470-b1b5-f13ec42afb99
   puid: INXT_PRJ_ABAAAAAAAA
-
 empty_project_namespace:
-  <<: *DEFAULTS
+  id: 65f59922-b151-5595-9b59-c7d4912c08c1
   name: Empty Project
   path: empty-project
+  type: Project
   description: Project that does not contain any samples
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:empty_group, :uuid) %>
+  metadata_summary: {}
+  parent_id: 59e17a3a-d3fc-549e-b62b-3695f8025513
   puid: INXT_PRJ_AAAAAAACBE
-
 projectIndia_namespace:
-  <<: *DEFAULTS
+  id: 1c23a9e2-acc1-544c-bf5f-545e0eff2a24
   name: Project India
   path: project-india
+  type: Project
   description: Project India description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
+  metadata_summary: {}
+  parent_id: 2d20ca61-788a-5784-8bd3-7e4d41209b2c
   puid: INXT_PRJ_AAAAAAAABT
-
 projectIndia1_namespace:
-  <<: *DEFAULTS
+  id: f8c26124-f57f-5752-85f1-2cf14c048ac4
   name: Project India 1
   path: project-india-1
+  type: Project
   description: Project India 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_india_subgroup1, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  metadata_summary: {}
+  owner_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  parent_id: a29a7ad3-9b68-594c-932a-3877f48353af
   puid: INXT_PRJ_AAAAAAAABU
-
 projectJuliett_namespace:
-  <<: *DEFAULTS
+  id: 332a2f94-870a-5103-b125-c4c1ba808530
   name: Project Juliett
   path: project-juliett
+  type: Project
   description: Project Juliett description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
+  metadata_summary: {}
+  parent_id: 17c2047b-5694-5a2a-89f4-4b508b094877
   puid: INXT_PRJ_AAAAAAAABV
-
 projectJuliett1_namespace:
-  <<: *DEFAULTS
+  id: fb9682d0-cb59-5729-8941-d71c2a7879f2
   name: Project Juliett 1
   path: project-juliett-1
+  type: Project
   description: Project Juliett 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett_subgroup1, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
+  metadata_summary: {}
+  owner_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  parent_id: ae1ed615-79e6-553b-851e-f8d3f71627dd
   puid: INXT_PRJ_AAAAAAAABW
-
 projectMike_namespace:
-  <<: *DEFAULTS
+  id: db238dfb-e060-554a-945b-fd99e8988203
   name: Project Mike
   path: project-mike
+  type: Project
   description: Project Mike description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
+  metadata_summary: {}
+  parent_id: f968727a-f05c-552d-bf73-f48ed274dd18
   puid: INXT_PRJ_AAAAAAAABX
-
 projectMikeA_namespace:
-  <<: *DEFAULTS
+  id: 54809a0c-0ffe-5aff-b49c-9bf7c8bf7ea3
   name: Project Mike A
   path: project-mike-a
+  type: Project
   description: Project Mike A description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_a, :uuid) %>
+  metadata_summary: {}
+  parent_id: 35432495-6572-5511-82f6-35e0a3aab6fa
   puid: INXT_PRJ_AAAAAAAABY
-
 projectMikeB_namespace:
-  <<: *DEFAULTS
+  id: 6df85752-1eaf-5ab0-972f-57be32e7a241
   name: Project Mike B
   path: project-mike-b
+  type: Project
   description: Project Mike B description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_mike_b, :uuid) %>
+  metadata_summary: {}
+  parent_id: 01f66fba-2054-5e90-addf-ad482d04c242
   puid: INXT_PRJ_AAAAAAAABZ
-
 projectMetadata_namespace:
-  <<: *DEFAULTS
+  id: 57e2134a-b242-5a57-b39f-c1efb141dbec
   name: Project Metadata
   path: project-metadata
+  type: Project
   description: Project Metadata description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_metadata, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   metadata_summary:
-    { "example_date": 3, "example_float": 3, "example_integer": 3 }
+    example_date: 3
+    example_float: 3
+    example_integer: 3
+  owner_id: 6c4987de-eb10-5387-8fb8-077257186443
+  parent_id: 03debc78-ffad-52c4-8904-d3155a88eb1b
   puid: INXT_PRJ_AAAAAAAACA
-
 metadata_doe_projectMetadata2_namespace:
-  <<: *DEFAULTS
+  id: 3e1e439f-0ec8-5533-a090-efdb2d7b621d
   name: Project Metadata 2
   path: project-metadata-2
+  type: Project
   description: Project Metadata 2 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
   metadata_summary:
-    { "example_date": 3, "example_float": 3, "example_integer": 3 }
+    example_date: 3
+    example_float: 3
+    example_integer: 3
+  owner_id: 6c4987de-eb10-5387-8fb8-077257186443
+  parent_id: 9213cbab-f0c8-591d-9a83-54889c80cbdf
   puid: INXT_PRJ_AAAAAAAACB
-
 project_group_sample_transfer_namespace:
-  <<: *DEFAULTS
+  id: 93aa146a-f2d2-5ad2-b1f5-e811e6fad2ca
   name: Project Group Sample Transfer
   path: project-group-sample-transfer
+  type: Project
   description: Project Group Sample Transfer description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: ac26b74c-15a6-585a-a682-7c3526fe6547
+  parent_id: ec69e7b1-ac43-57e0-b3c7-036ab0dfb32e
   puid: INXT_PRJ_AAAAAAAACC
-
 project_group_sample_transfer_target_namespace:
-  <<: *DEFAULTS
+  id: 9f9eee7f-c5c6-56b4-8b28-dd5dd864a702
   name: Project Group Sample Transfer Target
   path: project-group-sample-transfer-target
+  type: Project
   description: Project Group Sample Transfer Target description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: ac26b74c-15a6-585a-a682-7c3526fe6547
+  parent_id: 7983c87b-2ad0-56f5-9943-a12535dd2472
   puid: INXT_PRJ_AAAAAAAACD
-
 project_group_sample_actions_namespace:
-  <<: *DEFAULTS
+  id: 24250a30-1545-5c85-8779-42df84044784
   name: Project Group Sample Actions
   path: project-group-sample-actions
+  type: Project
   description: Project Group Sample Actions description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 5df0f252-38ba-5bb5-a3ca-0c1a1e225c10
+  parent_id: be3ddb03-bf9d-598f-9832-7ee8acd7ed34
   puid: INXT_PRJ_AAAAAAAACE
-
 project_subgroup_sample_actions_namespace:
-  <<: *DEFAULTS
+  id: 79c1aaaa-147c-5278-b157-87bf091cd264
   name: Project Subgroup Sample Actions
   path: project-subgroup-sample-actions
+  type: Project
   description: Subgroup Sample Actions description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 5df0f252-38ba-5bb5-a3ca-0c1a1e225c10
+  parent_id: 4e8fb03b-890d-5e85-bd31-7ddc877e4544
   puid: INXT_PRJ_AAAAAAAACF
-
 project_shared_group_sample_actions_owner_namespace:
-  <<: *DEFAULTS
+  id: 7a1488dd-3c8a-50a4-8e83-88ae964fd05e
   name: Project Shared Group Sample Actions Owner
   path: project-shared-group-sample-actions-owner
+  type: Project
   description: Project Shared Group Sample Actions Owner description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 8044e233-192b-5391-baf5-a3f887198125
+  parent_id: 36e3a81a-859e-5f27-b8e2-9ddbc3954dc4
   puid: INXT_PRJ_AAAAAAAACG
-
 project_shared_group_sample_actions_maintainer_namespace:
-  <<: *DEFAULTS
+  id: 7416edc2-50c8-5991-9cdc-b531fcc2ea6c
   name: Project Shared Group Sample Actions Maintainer
   path: project-shared-group-sample-actions-maintainer
+  type: Project
   description: Project Shared Group Sample Actions Maintainer description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 8044e233-192b-5391-baf5-a3f887198125
+  parent_id: 9e9ffebe-a707-50b7-8a45-5f37c759a801
   puid: INXT_PRJ_AAAAAAAACH
-
 project_shared_group_sample_actions_analyst_namespace:
-  <<: *DEFAULTS
+  id: fe81c5a5-9116-5f0f-bbba-bea519868a8d
   name: Project Shared Group Sample Actions Analyst
   path: project-shared-group-sample-actions-analyst
+  type: Project
   description: Project Shared Group Sample Actions Analyst description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 8044e233-192b-5391-baf5-a3f887198125
+  parent_id: d18f2244-f81a-5704-b9c0-b493d3c145d9
   puid: INXT_PRJ_AAAAAAAACI
-
 project_shared_group_sample_actions_guest_namespace:
-  <<: *DEFAULTS
+  id: ef22da98-af1d-5e28-82a8-e87784281d06
   name: Project Shared Group Sample Actions Guest
   path: project-shared-group-sample-actions-guest
+  type: Project
   description: Project Shared Group Sample Actions Guest description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  metadata_summary: { "metadatafield1": 1, "metadatafield2": 1 }
+  metadata_summary:
+    metadatafield1: 1
+    metadatafield2: 1
+  owner_id: 8044e233-192b-5391-baf5-a3f887198125
+  parent_id: 66a5309c-578b-5395-9f96-194c33a20f0f
   puid: INXT_PRJ_AAAAAAAACJ
-
 projectUser31_namespace:
-  <<: *DEFAULTS
+  id: 1b636ba4-5c0f-523d-8caa-fbd7df4e29de
   name: Project 1
   path: project-1
+  type: Project
   description: Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:user31_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6cdd89e9-6835-5a9e-9957-6dea964f7702
+  parent_id: 22f935c2-8c69-59bf-8d6f-3aafa85017f9
   puid: INXT_PRJ_AAAAAAAACK
-
 project_chunked_samples_namespace:
-  <<: *DEFAULTS
+  id: f1a963d7-8147-5d6f-901b-0467866c094a
   name: Project Chunked Samples
   path: project-chunked-samples
+  type: Project
   description: Project Chunked Samples description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe_namespace, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 60266645-1952-5ee4-acdb-f8c61bc989c2
+  parent_id: 4318cc2a-0659-5ef3-87c7-44f8003fe318
   puid: INXT_PRJ_AAAAAAAACL
-
 public_subgroup1_project1_namespace:
-  <<: *DEFAULTS
+  id: a167b4ef-96f0-5536-8437-e3479dffc024
   name: Public Group 1 Subgroup 1 Project 1
   path: public-subgroup-1-project-1
+  type: Project
   description: Project Subgroup 1 Project 1 description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  metadata_summary: {}
+  owner_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  parent_id: d34c0a6a-16b1-5045-a346-5306961c7114
   puid: INXT_PRJ_AAAAAAAACY
   public: true
-
 snvphyl_project_namespace:
-  <<: *DEFAULTS
+  id: 215360c4-03a9-5aac-8463-40f6b2253d3e
   name: SNVPhyl Project
   path: snvphyl-project
+  type: Project
   description: SNVPhyl Project description
-  parent_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid) %>
-  owner_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
-  metadata_summary: { "metadata_1": 2, "metadata_2": 2, "metadata_3": 2, "metadata_4": 2, "metadata_5": 2,
-                      "metadata_6": 2, "metadata_7": 2, "metadata_8": 2 }
+  metadata_summary:
+    metadata_1: 2
+    metadata_2: 2
+    metadata_3: 2
+    metadata_4: 2
+    metadata_5: 2
+    metadata_6: 2
+    metadata_7: 2
+    metadata_8: 2
+  owner_id: 71dc20a1-b5d5-5767-805d-5db748296c91
+  parent_id: 16e9e902-a65e-506d-8948-f14b82dfd7b9
   puid: INXT_PRJ_AAAAAAAACZ

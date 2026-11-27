@@ -1,764 +1,1228 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 group_one_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 52ccee5a-2602-5875-ba12-cd1d70f028bd
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_one_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-  expires_at: <%= 10.days.from_now %>
-
+  id: c2224539-55df-587f-bf39-f574f98ef28e
+  access_level: 50
+  expires_at: "<%= 10.days.from_now %>"
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_one_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-  expires_at: <%= 8.days.from_now %>
-
+  id: d3338f85-97eb-5ee4-b8da-6e7585ed8490
+  access_level: 40
+  expires_at: "<%= 8.days.from_now %>"
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_one_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-  expires_at: <%= 12.days.from_now %>
-
+  id: 42ffec09-4b51-5feb-a285-50935f756a64
+  access_level: 30
+  expires_at: "<%= 12.days.from_now %>"
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_one_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-  expires_at: <%= 12.days.from_now %>
-
-<% (Namespace::MAX_ANCESTORS-2).times do |n| %>
-subgroup<%= (n+1) %>_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify("subgroup#{n+1}", :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-<% end %>
-
+  id: 8e8080c3-1801-5677-9aab-ed135333ff20
+  access_level: 10
+  expires_at: "<%= 12.days.from_now %>"
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup1_member_ryan_doe:
+  id: 293b7192-647a-57e8-a98a-d61ce0d6a079
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: '0780fc0c-4a35-592c-8b08-7d4e7ce25c96'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup2_member_ryan_doe:
+  id: 006f941f-3abd-5064-bc72-ee59cab687a3
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 4b6ede50-8115-5e92-ad97-1d811606a7ba
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup3_member_ryan_doe:
+  id: bbcdd222-9a53-53f9-a8e5-6bcd6e162346
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 1814f5ad-0e88-5a33-9aa9-e2188846a2c3
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup4_member_ryan_doe:
+  id: bc237a3a-fc5e-5134-9455-b09662b1c0b5
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 35777910-0f8c-57ae-bc49-882eb8bdf5f9
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup5_member_ryan_doe:
+  id: 6ba90084-b150-5478-a4cf-2d02a98f4aad
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 9c190b66-46c3-554a-9c47-64a0fa666185
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup6_member_ryan_doe:
+  id: 863bc0e1-b124-5886-9eb2-d13db50fc6ef
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: '0845b272-bec6-579a-8482-0a16512904ed'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup7_member_ryan_doe:
+  id: 66d8be54-cd26-5177-924c-b49b1fce8d3d
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: '05093066-7591-51c3-9adc-c429f74b4790'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+subgroup8_member_ryan_doe:
+  id: 39d8a5c4-93b6-5711-bc33-c90e0a427ea6
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 0ef1e166-2cbe-5381-a798-fb912af72440
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 subgroup_six_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup6, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: cdf2ed0d-5b85-5947-a2a5-3f6426ec13d6
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: '0845b272-bec6-579a-8482-0a16512904ed'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_two_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 9f52dd6f-0d3e-5b77-8c6f-9ed77e5e9a20
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 75d4c535-69ed-58e2-8cbc-b89e36031106
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_two_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_two, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 648ba1a6-4eb2-5daf-b7d8-19736c36d176
+  access_level: 40
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: 75d4c535-69ed-58e2-8cbc-b89e36031106
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_three_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: bbe30bc0-f548-51b1-86ad-a81acd0d6c5b
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 7576bd0d-bf43-5d86-83f2-ba1d0ade4af4
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_three_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
-group_three_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 6dc2e2b5-e1c4-58c6-9c0d-9d9ffa952b2e
+  access_level: 50
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: 7576bd0d-bf43-5d86-83f2-ba1d0ade4af4
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_three_member_micha_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: '00097ecf-e5a6-5afe-8250-d4a796b4b024'
+  access_level: 40
+  user_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
+  namespace_id: 7576bd0d-bf43-5d86-83f2-ba1d0ade4af4
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_three_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 88a4bb7d-55c7-5c74-a007-f97c9b233d73
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 7576bd0d-bf43-5d86-83f2-ba1d0ade4af4
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 subgroup_one_group_three_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: dc95e32b-cb5e-585a-85ef-9f2d106646d6
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 0e099895-881e-5828-af57-d1af72be0576
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 subgroup_one_group_three_member_micha_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 4d05d53c-4df5-5fcf-af16-065e3e7517f5
+  access_level: 40
+  user_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
+  namespace_id: 0e099895-881e-5828-af57-d1af72be0576
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_one_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 9192b92b-c6cc-53ce-9648-6ad5fc576293
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_one_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: a59b262f-e4b4-5683-b1e2-d4a0e3c41c60
+  access_level: 30
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_one_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 3df379e0-bad5-5c2f-afed-17853f9d6978
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_one_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: 7b304d0c-58a4-5b64-850e-ad3c4e0ad776
+  access_level: 30
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_one_member_user_bot_account:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_bot_account0, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::UPLOADER %>
-
+  id: 3d9f3a98-9055-5962-ac6a-c94357e4d90e
+  access_level: 20
+  user_id: 93ced0c8-e21a-562c-a187-81aedac9adda
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project1_member_project_automation_bot:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:project1_automation_bot, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: a36a1277-9705-5e43-a371-b609322f249a
+  access_level: 40
+  user_id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: c9063889-a7d1-5e19-a951-90eb3ea0b6b5
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-  expires_at: <%= 15.days.from_now %>
-
+  id: '079c4e4b-f43a-5a74-8b87-e35698335908'
+  access_level: 50
+  expires_at: "<%= 15.days.from_now %>"
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-  expires_at: <%= 8.days.from_now %>
-
+  id: ad52114a-8449-5de3-8250-7f924d3babe5
+  access_level: 40
+  expires_at: "<%= 8.days.from_now %>"
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_jean_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jean_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-  expires_at: <%= 12.days.from_now %>
-
+  id: 75ad1341-b5a2-5228-8d5f-464a8ddf0391
+  access_level: 40
+  expires_at: "<%= 12.days.from_now %>"
+  user_id: 3b326607-0c2f-503b-b53b-2e2024945a93
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-  expires_at: <%= 10.days.from_now %>
-
+  id: 2d9ce2a7-5a48-5aa9-92b0-fda371f6f27f
+  access_level: 10
+  expires_at: "<%= 10.days.from_now %>"
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: '08c56a43-a267-529c-bfb6-d1626bf88b63'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_james_doe_wo_john_doe_namespace:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 9872cf31-63ec-5011-80e6-08ebc647eaf2
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 5e3395a4-3379-52fb-905c-b202c16085ab
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_john_doe_wo_john_doe_namespace:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: c209f082-7779-577b-9f8d-fdbe22b0897f
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 5e3395a4-3379-52fb-905c-b202c16085ab
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_michelle_doe_wo_john_doe_namespace:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: 490c5ebc-8629-5311-a96a-070de88289fd
+  access_level: 30
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: 5e3395a4-3379-52fb-905c-b202c16085ab
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_two_member_ryan_doe_wo_john_doe_namespace:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: eff9c8e5-9439-5d4f-ac79-696a062020f6
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 5e3395a4-3379-52fb-905c-b202c16085ab
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_three_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project3_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: fb948aca-9458-52cc-9d58-d4ba9f4a1ecf
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: deceb11a-820b-5db0-9e1f-19c8cb4cf4ef
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_four_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_project4_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: e6a78b71-3ae6-50e3-aa0e-db059e6183e2
+  access_level: 40
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: 7363f9e7-53d3-5a58-8beb-670b4cb77275
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_four_member_david_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:david_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 1baabd61-1035-5451-8482-fe78fcc727ae
+  access_level: 50
+  user_id: c360d970-30e6-5b09-92ed-68a3bad72f26
+  namespace_id: bf438587-fc62-50e6-acb4-53557e1e86ef
+  created_by_id: c360d970-30e6-5b09-92ed-68a3bad72f26
 group_five_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 8925bf5b-9f81-579a-af09-0ce837fbc88b
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 67576ac4-d9fb-594d-9791-2b4e1ae4cd1d
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_five_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 9b64a03c-e252-54f5-a98d-245a358d57ba
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 67576ac4-d9fb-594d-9791-2b4e1ae4cd1d
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_five_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: eb9ec6ab-1909-5e00-b668-a1d70df5ac43
+  access_level: 10
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: 67576ac4-d9fb-594d-9791-2b4e1ae4cd1d
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_five_member_micha_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 9cb8f2cf-c893-5850-afc5-4e2b523033f8
+  access_level: 40
+  user_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
+  namespace_id: 67576ac4-d9fb-594d-9791-2b4e1ae4cd1d
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_two_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: cb15bf4a-0851-5972-a111-e74632d546fa
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: fb9e7fac-84ea-5c7d-bf5e-656786d7ea24
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_two_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 13b8cbfd-1e85-5058-ae1d-79144dc9c8bf
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: fb9e7fac-84ea-5c7d-bf5e-656786d7ea24
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_two_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: e702b798-d632-5066-a0be-8aa350f43422
+  access_level: 10
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: fb9e7fac-84ea-5c7d-bf5e-656786d7ea24
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_two_member_micha_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project22_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: fb394f38-d213-5f42-bdb6-33745f726c3d
+  access_level: 40
+  user_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
+  namespace_id: fb9e7fac-84ea-5c7d-bf5e-656786d7ea24
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 subgroup_one_group_five_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_five, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 6f89f4aa-879e-5055-94e6-c091f267640a
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: cadf10d3-5f43-50b4-9b97-9b55a308867d
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_six_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 1b9fb1dc-8fec-51c2-a7b6-7fc27e62378d
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 171788bf-effc-53fd-a59a-0be92eb1e326
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_six_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_six, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 90a45334-4396-5042-8b31-c2186db385de
+  access_level: 10
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 171788bf-effc-53fd-a59a-0be92eb1e326
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_three_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project23_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: e5566022-2195-56e1-97fd-8a673623e36c
+  access_level: 10
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 3f827314-eefb-555b-afa3-bd7d71e16fdd
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_four_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: ed0b9f2d-a821-5b25-9bec-0ec4bbd7ccbd
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 3d7368c5-5928-50d2-bb80-043215c039b3
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_four_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project24_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: 9f735ff8-994e-5429-94da-b9d233d39634
+  access_level: 30
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: 3d7368c5-5928-50d2-bb80-043215c039b3
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_seven_group_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_seven, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
-<% 25.times do |n| %>
-group_seven_group_member<%= (n) %>:
-  user_id: <%= ActiveRecord::FixtureSet.identify("user#{n}".to_sym, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_seven, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-<% end %>
-
-<% 25.times do |n| %>
-project_twenty_six_group_member<%= (n) %>:
-  user_id: <%= ActiveRecord::FixtureSet.identify("user#{n}".to_sym, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-<% end %>
-
+  id: 0a9067ac-5b12-550d-adb2-bc251a31fa07
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member0:
+  id: e6e48eae-a3bd-5500-bc45-908e7fb9d974
+  access_level: 30
+  user_id: 879da692-70e0-59f1-92a3-c5d9611696d4
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member1:
+  id: 67c17180-4480-528e-9911-989696efcbc9
+  access_level: 30
+  user_id: 5b8fbc5d-13cb-56c0-9ea8-f9c02e132109
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member2:
+  id: 81f4db64-eb58-5483-a926-64aa76559199
+  access_level: 30
+  user_id: f0e96406-f36f-5812-93fb-4d12e5a19a2c
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member3:
+  id: ce1febd3-6827-50d1-bc42-38efe830bec8
+  access_level: 30
+  user_id: '08b8bace-4c57-5566-b6d2-a5a557e844e4'
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member4:
+  id: e89094e7-960d-5e71-80c9-617b58f00d87
+  access_level: 30
+  user_id: 1a777b52-cabf-5dc2-a89d-fbd1df03382f
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member5:
+  id: 919ab992-8d31-5199-9b98-1d5dbfc63bef
+  access_level: 30
+  user_id: 49405f1b-8dbf-59c5-92eb-923300e99831
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member6:
+  id: e188dd0c-8e49-5fd7-abd4-d3abab352242
+  access_level: 30
+  user_id: bc52ee60-97f9-56c2-a236-432dc90589a0
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member7:
+  id: cea2dfc1-408a-509e-9d36-ff99ed1a2435
+  access_level: 30
+  user_id: 4b3ea796-f809-51a0-b8eb-c8a1cda4a4be
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member8:
+  id: '090a3833-26c1-5562-b178-1752342eb94f'
+  access_level: 30
+  user_id: bc78c4b8-c4e0-5657-9923-30a6882999ac
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member9:
+  id: ccae794b-e87e-525d-8858-23c14e283988
+  access_level: 30
+  user_id: 1504097e-ed77-59b7-8341-92b10a5053e0
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member10:
+  id: 198e8174-3673-570c-aa14-c5d6524afe61
+  access_level: 30
+  user_id: 06a03ad2-2555-55c7-b97e-8786a2f87ee6
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member11:
+  id: 7ee1b9c9-a045-51f1-a446-da720ed3b119
+  access_level: 30
+  user_id: 01db7d13-f21b-599d-b843-866010c09562
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member12:
+  id: 1c6dec6e-0d9a-5922-90ab-446c8841ed23
+  access_level: 30
+  user_id: cf184b8d-4e87-55f9-bfa1-6699f88eb4c9
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member13:
+  id: 5c540cd6-9814-528d-b615-ec37e0528fea
+  access_level: 30
+  user_id: 0eac7e46-ffb0-58f3-9b75-ef1cc090217f
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member14:
+  id: 8e2f15bf-dadc-5399-a3f9-5afb7b12a4e5
+  access_level: 30
+  user_id: 709c7145-fb40-567d-94ea-bf50f9dd66d4
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member15:
+  id: 719d6b65-e200-574f-b5dd-0595d6e4b824
+  access_level: 30
+  user_id: aa952f95-4eff-5973-bddf-fc2f96fd39b7
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member16:
+  id: 457a5e85-0860-5801-b4bd-4b363d5e2e3f
+  access_level: 30
+  user_id: dee481eb-fc05-5e97-ba94-066761eeb662
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member17:
+  id: 374111b4-e5a9-50f4-8289-ed63e57f71d4
+  access_level: 30
+  user_id: cbdfd95d-046c-5877-9481-866b07315305
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member18:
+  id: b5d75e6f-2435-5264-9db9-ee9f9c76ab38
+  access_level: 30
+  user_id: a05069dc-5387-5a55-9de6-f737ec2fb655
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member19:
+  id: 5333857e-158b-5b17-a04d-bab72610c1ce
+  access_level: 30
+  user_id: 6eb4d209-3ff7-53c8-9f6b-ddc2f7e0e4ed
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member20:
+  id: b1dca7b4-f8ac-50a5-a614-48904b6d0505
+  access_level: 30
+  user_id: 5d4e9dee-a9be-5fd2-8f46-478a1fe647da
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member21:
+  id: f9157676-5397-5072-a89e-f3976a7bd1f2
+  access_level: 30
+  user_id: 11ec6521-6eb5-518a-8472-4367f4f4dc12
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member22:
+  id: 46105294-b3cf-59b1-b941-6b3913f58cc4
+  access_level: 30
+  user_id: a7c009c1-f1da-5e3c-b5d4-3ded297cb430
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member23:
+  id: 5b4daacd-234b-56f8-a553-7e8baf16c888
+  access_level: 30
+  user_id: ee594d61-b814-54a8-a99e-27b2df48e510
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_seven_group_member24:
+  id: f2ae6a11-c351-55a3-ad3f-4135afa07a6c
+  access_level: 30
+  user_id: ff401bf4-b618-552c-98c0-1acdbc4a3d7a
+  namespace_id: 3c5c41cb-4259-5339-a6ca-a269898e2015
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member0:
+  id: d8781d42-667a-57ff-82a2-4bd04ab4df53
+  access_level: 30
+  user_id: 879da692-70e0-59f1-92a3-c5d9611696d4
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member1:
+  id: 72dfa122-c9d8-5839-a342-d4564ce6d192
+  access_level: 30
+  user_id: 5b8fbc5d-13cb-56c0-9ea8-f9c02e132109
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member2:
+  id: 401ce799-cb33-537b-beae-558e2a84af92
+  access_level: 30
+  user_id: f0e96406-f36f-5812-93fb-4d12e5a19a2c
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member3:
+  id: 309ce2a6-cfb3-55b3-b50a-03e0a2ce29f9
+  access_level: 30
+  user_id: '08b8bace-4c57-5566-b6d2-a5a557e844e4'
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member4:
+  id: 251917cf-6375-5ed3-bde8-8792919127b1
+  access_level: 30
+  user_id: 1a777b52-cabf-5dc2-a89d-fbd1df03382f
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member5:
+  id: d8cb5da8-64a1-59cd-96ba-596fbc36900f
+  access_level: 30
+  user_id: 49405f1b-8dbf-59c5-92eb-923300e99831
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member6:
+  id: bcb6fbf5-aa35-547a-929e-a2c0b10d246b
+  access_level: 30
+  user_id: bc52ee60-97f9-56c2-a236-432dc90589a0
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member7:
+  id: 848afd8c-786d-5cab-b674-82a440efbb08
+  access_level: 30
+  user_id: 4b3ea796-f809-51a0-b8eb-c8a1cda4a4be
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member8:
+  id: f378f331-c7c8-5299-8961-d3a5882ab2ee
+  access_level: 30
+  user_id: bc78c4b8-c4e0-5657-9923-30a6882999ac
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member9:
+  id: 01026645-941a-53b7-bcea-c7814e1d0b27
+  access_level: 30
+  user_id: 1504097e-ed77-59b7-8341-92b10a5053e0
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member10:
+  id: 2a76f749-91c9-5dd1-8977-ca5153b166c2
+  access_level: 30
+  user_id: 06a03ad2-2555-55c7-b97e-8786a2f87ee6
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member11:
+  id: fe8f0b6e-6299-5fc7-8a89-d0549c139515
+  access_level: 30
+  user_id: 01db7d13-f21b-599d-b843-866010c09562
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member12:
+  id: 4cf1af02-af3a-54be-8279-fdaf47b4587d
+  access_level: 30
+  user_id: cf184b8d-4e87-55f9-bfa1-6699f88eb4c9
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member13:
+  id: dc9a5bee-894d-5ee6-b4f8-92d2fcf565cd
+  access_level: 30
+  user_id: 0eac7e46-ffb0-58f3-9b75-ef1cc090217f
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member14:
+  id: 10682ae2-c341-5e8e-bda4-5e34ef71d70b
+  access_level: 30
+  user_id: 709c7145-fb40-567d-94ea-bf50f9dd66d4
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member15:
+  id: 52a1c7ac-1e60-53aa-977c-7100cdba4ac5
+  access_level: 30
+  user_id: aa952f95-4eff-5973-bddf-fc2f96fd39b7
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member16:
+  id: 84ca4bd2-3ba8-5f77-b0de-60033a9cc8a6
+  access_level: 30
+  user_id: dee481eb-fc05-5e97-ba94-066761eeb662
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member17:
+  id: 5a12ddba-30e2-50c0-8b05-c90cbae0257b
+  access_level: 30
+  user_id: cbdfd95d-046c-5877-9481-866b07315305
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member18:
+  id: 5d6c0d2f-1130-5f26-a97a-86f49039acd7
+  access_level: 30
+  user_id: a05069dc-5387-5a55-9de6-f737ec2fb655
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member19:
+  id: b5e889a2-ac33-5517-82c3-73b6105d5c58
+  access_level: 30
+  user_id: 6eb4d209-3ff7-53c8-9f6b-ddc2f7e0e4ed
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member20:
+  id: d01c40ca-e004-5116-b609-4bccee8bf460
+  access_level: 30
+  user_id: 5d4e9dee-a9be-5fd2-8f46-478a1fe647da
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member21:
+  id: a296fa79-a0dd-5a6b-9c0d-ccef170f97fd
+  access_level: 30
+  user_id: 11ec6521-6eb5-518a-8472-4367f4f4dc12
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member22:
+  id: d61a7d5c-1c66-5ea0-ac58-ae8bc641473f
+  access_level: 30
+  user_id: a7c009c1-f1da-5e3c-b5d4-3ded297cb430
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member23:
+  id: 0457fd0a-0bf9-59d9-9ad6-cfca6e2a6ae4
+  access_level: 30
+  user_id: ee594d61-b814-54a8-a99e-27b2df48e510
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+project_twenty_six_group_member24:
+  id: 14d741f3-74a2-5093-b0b9-4eba11946480
+  access_level: 30
+  user_id: ff401bf4-b618-552c-98c0-1acdbc4a3d7a
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_six_group_member25:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user25, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project26_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
-<% [*("a".."z")].each do |letter| %>
-group_<%= letter %>_member_alpha_bet:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:alph_abet, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify("group_#{letter}".to_sym, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-<% end %>
-
+  id: 56d0dc02-d6df-533f-928f-d5f2a94ed7fd
+  access_level: 50
+  user_id: 5f360e48-f7c6-518e-bcb2-61afe4a4ec8d
+  namespace_id: 05b9b273-b7ba-5c81-abb9-fcf5c8b99e9b
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+group_a_member_alpha_bet:
+  id: 84235e0d-4839-51d7-a47e-10364b9ab15f
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 832c12a7-0630-5094-8991-205f777575ab
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_b_member_alpha_bet:
+  id: 650231f0-659d-572a-a38d-990da0820862
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 9947a8d2-67ee-52d2-838a-a4be8df08723
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_c_member_alpha_bet:
+  id: 6cc99319-44c1-576a-9eed-29bc1cc1d42e
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: e537248b-09df-5ec5-9e6e-36893d2c3b81
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_d_member_alpha_bet:
+  id: 84a21823-9206-5dc0-a6e5-2578f9f250d8
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 940521dd-9d5a-5469-ae9e-aea1cac0ba17
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_e_member_alpha_bet:
+  id: fa84ae68-d6a1-5be9-8a4c-25f4a14fab09
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: f6d58044-13cc-57d7-a2c7-990e372efb81
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_f_member_alpha_bet:
+  id: cae023e1-1bae-5b40-a01c-8c0a55367573
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: a0c4a419-00be-54d3-a10b-88900ad6c32e
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_g_member_alpha_bet:
+  id: 8653cb40-85ba-5e28-bf8b-4c1c98a07a87
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: bc424d3a-a1a6-5e7f-8457-1d353f6e9739
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_h_member_alpha_bet:
+  id: 971e20ca-4ec8-5609-9685-a63f58b93fae
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 869590d2-113f-5945-9578-e698a18504f2
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_i_member_alpha_bet:
+  id: 6ae74a31-782e-5f54-b57c-9b9958925de4
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: e7470a9b-116c-5518-9cd5-b9a2c67014ff
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_j_member_alpha_bet:
+  id: 57aef1d9-e62b-583f-a675-d26be7ed2556
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 2316e98b-e4ce-5d96-8fa1-a416b71ef477
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_k_member_alpha_bet:
+  id: e5eabee7-2c5b-5698-a1c7-bc26247687c5
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 5db09d7e-dbcd-5f2c-96c8-796965e896e6
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_l_member_alpha_bet:
+  id: 8b3815fc-a70e-5976-9087-1cb9d300d2a0
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 0f4236a7-c48c-5db5-ac15-734c90cda9af
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_m_member_alpha_bet:
+  id: 7c0250f3-2b82-5e91-a2bd-41a556a8d56e
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 419a4cda-af16-56f8-bffb-56dbef157eef
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_n_member_alpha_bet:
+  id: 26ebbf1c-6e19-599a-8aa5-b596abf1dbf8
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: c84f4da0-e2bc-5972-b5f3-1c4b2b85d864
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_o_member_alpha_bet:
+  id: 4fd7b79f-b87e-55f6-acb3-68551dcd8218
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: dddd15e9-92b2-5654-80a3-7302c8dc5f8c
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_p_member_alpha_bet:
+  id: e7d1d1b9-aae3-587b-b1e4-c561a780a963
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 5900ceff-b420-5e72-a779-bb3bdf70e306
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_q_member_alpha_bet:
+  id: 2b9f739d-b996-588b-ad81-e8b499f3b584
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: fa837d8d-b13c-5316-a042-65f78c6dd1d9
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_r_member_alpha_bet:
+  id: c09e20e3-d847-573c-9134-3dbec6ae5748
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 52952ce3-141b-5bfa-aec2-d3ecf87c4f23
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_s_member_alpha_bet:
+  id: bdb22007-6919-5359-b51e-ffb4da740b7e
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: ca7fd107-07a3-5b2f-b600-2aae2b2f3b17
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_t_member_alpha_bet:
+  id: 79520f21-d6a5-5081-a41b-b528c39f2ffb
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: c20c2f83-c835-537e-ba08-e7036f787cdc
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_u_member_alpha_bet:
+  id: dcdef4ee-35ea-538d-8ad7-ec34865727a0
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 2d545305-f76a-52aa-ac00-f27bd7695889
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_v_member_alpha_bet:
+  id: c956bcbf-c241-5732-a6ed-5ee9599ee30b
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: f40c4e35-4731-5f1e-a19c-5788641dcf23
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_w_member_alpha_bet:
+  id: 6c96c136-b54f-58c5-bfa7-53e1c83b72c6
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 2222c35d-5de0-5475-a35a-5c35a38c403d
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_x_member_alpha_bet:
+  id: 11df6086-7a06-514c-b281-03844f33df38
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: b6899218-6803-55f8-92b3-6797cfe2339f
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_y_member_alpha_bet:
+  id: 21780207-fb80-542b-bfdd-a673e6a4de47
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 4bb5eefc-f7dc-5366-beda-171f2d9cff04
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
+group_z_member_alpha_bet:
+  id: dbc93855-c26b-5d76-8115-bb1e0fbea501
+  access_level: 50
+  user_id: 628c1f61-62be-5621-8451-420534c1a16f
+  namespace_id: 98dd44bf-871b-564a-9447-ae2a25406611
+  created_by_id: 628c1f61-62be-5621-8451-420534c1a16f
 namespace_group_link8_member1:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 03c6eeb3-bc62-5957-991b-5dbffa142f68
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: b33a2b19-9daf-51b3-888c-8c469291e303
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 namespace_group_link_group_two_member1:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user24, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_two, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 2fd9f550-ad70-58e7-bf8f-cda37e2a267d
+  access_level: 50
+  user_id: ff401bf4-b618-552c-98c0-1acdbc4a3d7a
+  namespace_id: 69996a2a-4230-5c6c-b218-e467659d02ef
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 namespace_group_link9_member1:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user25, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:namespace_group_link_group_three, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 44812943-dde2-5d41-8140-acd4a9257dee
+  access_level: 50
+  user_id: 5f360e48-f7c6-518e-bcb2-61afe4a4ec8d
+  namespace_id: ecb5359e-a5aa-5aec-81a4-1dbbd51929e9
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_eight_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 276a0e73-0a4e-5661-b230-ff85603b3694
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: e0720a84-9ba7-5b48-aa5d-2d2d21d27da9
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_eight_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 3a0ccee2-c2c6-5e6f-b0f7-600546bb5bbd
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: e0720a84-9ba7-5b48-aa5d-2d2d21d27da9
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_eight_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 4622ba0a-5250-53a5-a4b5-d2f55529c1ab
+  access_level: 40
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: e0720a84-9ba7-5b48-aa5d-2d2d21d27da9
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_eight_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eight, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: fa8b7fb4-d209-54c3-8a62-cdfd76ee3a3a
+  access_level: 40
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: e0720a84-9ba7-5b48-aa5d-2d2d21d27da9
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_nine_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 8c275d14-4c2b-59b5-941d-04562bdebc62
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 388cbe80-34cc-5626-8751-d1c1c3951979
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_nine_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_nine, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: ef30eb34-efbb-5b42-88e8-6171b8f6cb11
+  access_level: 40
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 388cbe80-34cc-5626-8751-d1c1c3951979
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 subgroup_one_group_nine_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 4ecad774-d502-5e03-bf2c-806dd4a7cd00
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: c34455dd-1641-53fd-9a59-3ebe251fabc2
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 subgroup_one_group_nine_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_one_group_nine, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 92cb07b8-9c7b-52d5-882d-cd28287d8ad0
+  access_level: 50
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: c34455dd-1641-53fd-9a59-3ebe251fabc2
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_ten_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_ten, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 500432b8-d16b-52b1-a579-ae3ed09b3514
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: d337e2a8-3b34-5f7d-b27f-4dec1cd35208
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_ten_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_ten, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 6528c4f0-d121-5f5b-8dfc-a59a022b0d92
+  access_level: 10
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: d337e2a8-3b34-5f7d-b27f-4dec1cd35208
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_alpha_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_alpha, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: de6abd39-fc23-50c8-8500-119d38c3f40b
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: 5feed05a-e500-5e03-9ddd-4bb8c1d9b484
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_india_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_india, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 2cd55542-36a8-5f62-90f7-25759c8a79a6
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: 2d20ca61-788a-5784-8bd3-7e4d41209b2c
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_juliett_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_juliett, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 4d185c56-fbb8-5a01-8bf0-5ea980458cbe
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: 17c2047b-5694-5a2a-89f4-4b508b094877
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_kilo_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_kilo, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 797e3128-530e-5ade-8c9d-2000a690a440
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: bf2cd8db-d007-5878-ad2c-99fc33001f99
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_lima_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_lima, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: b60858fc-835a-54b0-9399-12e79fb17a4b
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: 3fd079fa-c09b-5514-97f7-44a3d37f06f5
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_mike_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_mike, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: bf9df01d-92ce-5380-956b-ee8c9ae505bd
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: f968727a-f05c-552d-bf73-f48ed274dd18
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_oscar_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_oscar, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 4a5caab1-a72d-5505-b0d9-cecccd141ce2
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: f0282b21-878e-5060-9c67-c0ab0ca9a7df
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_papa_member_private_ryan:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_ryan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_papa, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 5ddeb548-508f-56ab-a045-3f3b12b3e09f
+  access_level: 50
+  user_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  namespace_id: 1c5a91cc-941c-5135-859c-3c035bca8fd8
+  created_by_id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
 group_eleven_member_user_26:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user26, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_eleven, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 8c7256bd-c330-556d-8ad3-c57c33a6daa4
+  access_level: 50
+  user_id: b605308e-35e0-5a2a-906f-64e06a464f5d
+  namespace_id: a347797e-6ec9-52e2-a373-abdfa2fd9bc4
+  created_by_id: b605308e-35e0-5a2a-906f-64e06a464f5d
 group_twelve_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: d02f6ab0-ab81-568c-9efa-c2525a59ddcb
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: '00207591-3663-59dc-802c-00b3f8c7c97f'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_twelve_member_jane_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 0e7cf953-2c1d-59ad-804a-a016da777e95
+  access_level: 10
+  user_id: 5f309ff5-f33e-5873-8603-a19231835c5a
+  namespace_id: '00207591-3663-59dc-802c-00b3f8c7c97f'
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_nine_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: f5602bfa-fceb-5773-bcac-e1a23703c250
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 3cc7d999-7111-5fef-acd5-60ebf21fea64
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_nine_member_jane_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 353b8b49-0bd6-59a9-9e38-f3fa0339ba98
+  access_level: 40
+  user_id: 5f309ff5-f33e-5873-8603-a19231835c5a
+  namespace_id: 3cc7d999-7111-5fef-acd5-60ebf21fea64
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_twenty_nine_member_michelle_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:michelle_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: ac0abed1-33d8-502a-9434-95e36c3151e5
+  access_level: 30
+  user_id: fde7e6d1-755b-5547-9932-52d23724daa7
+  namespace_id: 3cc7d999-7111-5fef-acd5-60ebf21fea64
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_thirty_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project30_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: bda12dce-80ad-582d-b54b-1bb89ef6cc85
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: bf41d6db-2ee7-5816-b0a3-03301639ecae
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 project_thirty_one_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project31_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: ecfb5671-4b3e-59d7-8ef9-31e778438ef4
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: b6000abc-ac22-5b6d-9538-a685471760ee
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_delta_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:private_joan, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_delta, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 2acf2589-3c37-5a0a-a10e-ec0999f9b10b
+  access_level: 50
+  user_id: 0c697bc6-7a14-550e-8e1b-0973016d6cbe
+  namespace_id: 9898b409-a149-53bd-8fe4-557723a619e9
+  created_by_id: 0c697bc6-7a14-550e-8e1b-0973016d6cbe
 group_golf_member_user_27:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user27, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_golf, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 0a592f6b-dd12-53a5-8b3a-ae3ede799fef
+  access_level: 10
+  user_id: 42e6682c-8029-5fea-9093-7afd4fbf2143
+  namespace_id: fe49cf2d-f6cf-53f8-bf0c-47d51b25ba46
+  created_by_id: 42e6682c-8029-5fea-9093-7afd4fbf2143
 group_hotel_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: a0215b67-eeab-59d3-946d-8694e31c5de3
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 5c2c225a-86ae-5ffe-bc59-f530948f6b08
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_hotel_project_one_member_user_28:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user28, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_hotel, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: a2de3edb-65f1-5f18-8fde-95a3f5a39c0d
+  access_level: 40
+  user_id: 15f3ee61-77cd-53e8-88b7-5fb1b143dacf
+  namespace_id: 5c2c225a-86ae-5ffe-bc59-f530948f6b08
+  created_by_id: 15f3ee61-77cd-53e8-88b7-5fb1b143dacf
 group_thirteen_member_jane_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 7196fad9-c2fc-575c-a97c-e058ac9f7b70
+  access_level: 50
+  user_id: 5f309ff5-f33e-5873-8603-a19231835c5a
+  namespace_id: 718f77be-2b78-5464-aa3e-478d25a0b00c
+  created_by_id: 5f309ff5-f33e-5873-8603-a19231835c5a
 group_thirteen_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_thirteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: ce474759-b42c-5c37-a547-ffea81308d03
+  access_level: 10
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 718f77be-2b78-5464-aa3e-478d25a0b00c
+  created_by_id: 5f309ff5-f33e-5873-8603-a19231835c5a
 group_fourteen_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fourteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: fc94bd10-9c0a-5b21-8171-431c6a56e0be
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 742cb9f0-5127-593f-8286-352a07d7ca28
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_fifteen_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 4424d573-1b24-5da5-bbba-d1243bcb78bb
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 2d49aaf2-137d-5f1b-b5fc-002e17d8fb82
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_fifteen_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 6c48a934-9238-54da-b4d2-41637d6ef180
+  access_level: 40
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: 2d49aaf2-137d-5f1b-b5fc-002e17d8fb82
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_fifteen_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: 542345cb-e9fa-5355-ba18-50d8f2452627
+  access_level: 30
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: 2d49aaf2-137d-5f1b-b5fc-002e17d8fb82
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_fifteen_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_fifteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 4f58bb5f-809d-56fa-a40e-81089149cb5f
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 2d49aaf2-137d-5f1b-b5fc-002e17d8fb82
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_sixteen_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 3a774262-f332-537e-ae15-c46c241869f7
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: b2776255-1bf4-5d94-889c-d9758d90ccb7
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_sixteen_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 211d1bdf-63bd-5641-8c24-d813071acfc4
+  access_level: 40
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: b2776255-1bf4-5d94-889c-d9758d90ccb7
+  created_by_id: 6f705397-5319-5125-b46c-acd9b7b913a8
 group_sixteen_member_james_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: a1b393ea-ffa0-5d18-9b35-b623a3a12515
+  access_level: 30
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  namespace_id: b2776255-1bf4-5d94-889c-d9758d90ccb7
+  created_by_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
 group_sixteen_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sixteen, :uuid) %>
-  access_level: <%= Member::AccessLevel::GUEST %>
-
+  id: 144e1b52-930f-596e-8b49-d2d525f8aaf2
+  access_level: 10
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: b2776255-1bf4-5d94-889c-d9758d90ccb7
+  created_by_id: db8a370e-5e4a-53be-b116-fba83029d2d7
 group_seventeen_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_seventeen, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: ea8f502c-f6ab-5352-982c-a4039675f6fa
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 02013ffe-f49e-5959-8c90-37940069bc6e
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 group_one_member_user30:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user30, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:user30_group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 46c2b2b9-d61b-5644-b61d-b0270ccbbc2e
+  access_level: 50
+  user_id: f0404ff1-8df0-5b77-9933-31fe665f669d
+  namespace_id: a5650168-8893-559b-ae28-503861ea89dd
+  created_by_id: f0404ff1-8df0-5b77-9933-31fe665f669d
 group_one_member_user_bot_account:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:user_group_bot_account0, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::UPLOADER %>
-  expires_at: <%= 20.days.from_now %>
-
+  id: 12e4d1da-8879-5ec1-a740-8da6be10bb3d
+  access_level: 20
+  expires_at: "<%= 20.days.from_now %>"
+  user_id: a30c2714-9eb8-535e-80c4-e1f32264ddad
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 projectA_member_project_automation_bot:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:projectA_automation_bot, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 04e769b5-02dd-5a6e-a436-5b2c4d3bcfcf
+  access_level: 40
+  user_id: 60f88d78-4cbd-55a6-8f02-6b3328b5a30a
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 projectA_member_jane_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jane_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 2964f2b8-58a0-50e4-8aa5-c40ddfb1fb97
+  access_level: 40
+  user_id: 5f309ff5-f33e-5873-8603-a19231835c5a
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 projectA_member_joan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:joan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 6b7915dd-f655-5eb6-9289-b317dd59c6bb
+  access_level: 40
+  user_id: 6f705397-5319-5125-b46c-acd9b7b913a8
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 projectA_member_ryan_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:ryan_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::ANALYST %>
-
+  id: 1dcdda3b-09b2-553b-a0a9-739be7640c87
+  access_level: 30
+  user_id: db8a370e-5e4a-53be-b116-fba83029d2d7
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 project_jeff_member_user_bot_account:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::UPLOADER %>
-
+  id: c1bcb965-35ef-5a03-b138-eeae7035d1f9
+  access_level: 20
+  user_id: c4aad11e-4241-5744-a0ab-ac3dc297683a
+  namespace_id: '042679e2-d4b8-5188-b429-6b3cc44761c3'
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 empty_group_member_empty_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:empty_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:empty_group, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 559a7b3e-99f5-5464-99a0-4aa37e4e13b8
+  access_level: 50
+  user_id: ab606eb1-9ece-5f1c-b583-eec94a24e73d
+  namespace_id: 59e17a3a-d3fc-549e-b62b-3695f8025513
+  created_by_id: ab606eb1-9ece-5f1c-b583-eec94a24e73d
 group_jeff_member_jeff_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_jeff, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 66780985-6fe7-50d9-8c53-d060ca024cde
+  access_level: 50
+  user_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
+  namespace_id: a59fa570-0896-5746-ab2a-0a5c68633890
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 group_jeff_member_user_bot_account:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_jeff, :uuid) %>
-  access_level: <%= Member::AccessLevel::UPLOADER %>
-  expires_at: <%= 20.days.from_now %>
-
+  id: d8642747-c3a2-5bcd-92ad-bdcb0c368988
+  access_level: 20
+  expires_at: "<%= 20.days.from_now %>"
+  user_id: 8344c97b-e3e7-5e6d-91c7-079e03e0dfc5
+  namespace_id: a59fa570-0896-5746-ab2a-0a5c68633890
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 group_metadata_member_metadata_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_metadata, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 9aad44cc-0f9f-5f7e-a67b-f0ab732293cb
+  access_level: 50
+  user_id: 6c4987de-eb10-5387-8fb8-077257186443
+  namespace_id: 03debc78-ffad-52c4-8904-d3155a88eb1b
+  created_by_id: 6c4987de-eb10-5387-8fb8-077257186443
 project_metadata_member_metadata_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:metadata_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectMetadata_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: a1c5cb7c-eba0-5729-a010-f73ffe96efe2
+  access_level: 50
+  user_id: 6c4987de-eb10-5387-8fb8-077257186443
+  namespace_id: 57e2134a-b242-5a57-b39f-c1efb141dbec
+  created_by_id: 6c4987de-eb10-5387-8fb8-077257186443
 group_sample_transfer_member_mary_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: a2631ceb-2731-5a92-a3a2-a85a313b0e60
+  access_level: 50
+  user_id: ac26b74c-15a6-585a-a682-7c3526fe6547
+  namespace_id: ec69e7b1-ac43-57e0-b3c7-036ab0dfb32e
+  created_by_id: ac26b74c-15a6-585a-a682-7c3526fe6547
 group_sample_transfer_target_member_mary_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:mary_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_transfer_target, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: f8356bdb-d3aa-5fba-8765-3c4e24a7856d
+  access_level: 50
+  user_id: ac26b74c-15a6-585a-a682-7c3526fe6547
+  namespace_id: 7983c87b-2ad0-56f5-9943-a12535dd2472
+  created_by_id: ac26b74c-15a6-585a-a682-7c3526fe6547
 group_sample_actions_member_sample_actions_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_sample_actions, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 30152aaa-9fca-5062-a608-060d94de45a0
+  access_level: 50
+  user_id: 5df0f252-38ba-5bb5-a3ca-0c1a1e225c10
+  namespace_id: be3ddb03-bf9d-598f-9832-7ee8acd7ed34
+  created_by_id: 5df0f252-38ba-5bb5-a3ca-0c1a1e225c10
 shared_group_sample_actions_owner_member_shared_sample_actions_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_owner, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: e47e4397-c8ab-5bba-a71c-00173f19c54b
+  access_level: 50
+  user_id: 8044e233-192b-5391-baf5-a3f887198125
+  namespace_id: 36e3a81a-859e-5f27-b8e2-9ddbc3954dc4
+  created_by_id: 8044e233-192b-5391-baf5-a3f887198125
 shared_group_sample_actions_maintainer_member_shared_sample_actions_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_maintainer, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: f3587d6a-6f09-54e2-8781-946e49ce55d4
+  access_level: 50
+  user_id: 8044e233-192b-5391-baf5-a3f887198125
+  namespace_id: 9e9ffebe-a707-50b7-8a45-5f37c759a801
+  created_by_id: 8044e233-192b-5391-baf5-a3f887198125
 shared_group_sample_actions_analyst_member_shared_sample_actions_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_analyst, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 2b475c9c-3b59-5836-b683-daf3f5a27e6d
+  access_level: 50
+  user_id: 8044e233-192b-5391-baf5-a3f887198125
+  namespace_id: d18f2244-f81a-5704-b9c0-b493d3c145d9
+  created_by_id: 8044e233-192b-5391-baf5-a3f887198125
 shared_group_sample_actions_guest_member_shared_sample_actions_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:shared_sample_actions_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:shared_group_sample_actions_guest, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: a808512f-4ab1-5dcd-88cd-5040de1e2b69
+  access_level: 50
+  user_id: 8044e233-192b-5391-baf5-a3f887198125
+  namespace_id: 66a5309c-578b-5395-9f96-194c33a20f0f
+  created_by_id: 8044e233-192b-5391-baf5-a3f887198125
 subgroup_sample_actions_group_member_subgroup_sample_actions_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:sample_actions_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup_sample_actions, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: f7d0e461-a5b5-53c3-87a2-bc4478bd3b06
+  access_level: 50
+  user_id: ccd2a6b8-2341-5853-ad4c-58d042de1055
+  namespace_id: 4e8fb03b-890d-5e85-bd31-7ddc877e4544
+  created_by_id: 5df0f252-38ba-5bb5-a3ca-0c1a1e225c10
 project_1_user_31_member_micha_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:user31, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectUser31_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: cd3fffeb-13f2-5e64-9ee1-080a4c6f48a4
+  access_level: 40
+  user_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
+  namespace_id: 1b636ba4-5c0f-523d-8caa-fbd7df4e29de
+  created_by_id: 6cdd89e9-6835-5a9e-9957-6dea964f7702
 project_chunked_samples_member_chunked_samples_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:chunked_samples_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_chunked_samples_namespace, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: '099127f2-b8b5-5bdd-b959-9d6fb6dcc306'
+  access_level: 50
+  user_id: 60266645-1952-5ee4-acdb-f8c61bc989c2
+  namespace_id: f1a963d7-8147-5d6f-901b-0467866c094a
+  created_by_id: 60266645-1952-5ee4-acdb-f8c61bc989c2
 public_group_one_member_john_doe:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:public_group1, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 68bf8464-9352-528f-90c6-3ea452b570ec
+  access_level: 50
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: d34c0a6a-16b1-5045-a346-5306961c7114
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 snvphyl_group_member_snvphyl_user:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_user, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:snvphyl_group, :uuid) %>
-  access_level: <%= Member::AccessLevel::OWNER %>
-
+  id: 779b58f4-397b-52bd-bf69-049976149b77
+  access_level: 50
+  user_id: 71dc20a1-b5d5-5767-805d-5db748296c91
+  namespace_id: 16e9e902-a65e-506d-8948-f14b82dfd7b9
+  created_by_id: 71dc20a1-b5d5-5767-805d-5db748296c91
 clone_test_group_one_member_clone_test_maintainer_one:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_one, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_group_one, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: 38ebb1ae-4db3-5c89-bad0-de23f7d509e5
+  access_level: 40
+  user_id: 10f2720c-b04e-505d-a7dd-86d951206b56
+  namespace_id: 5f5cfeb7-606a-5c30-8a3a-2da381b6de02
+  created_by_id: 10f2720c-b04e-505d-a7dd-86d951206b56
 clone_test_group_two_member_clone_test_maintainer_two:
-  user_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_maintainer_two, :uuid) %>
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:clone_test_group_two, :uuid) %>
-  access_level: <%= Member::AccessLevel::MAINTAINER %>
-
+  id: e1ccef8b-3f60-5280-b23f-97001535d6ee
+  access_level: 40
+  user_id: 8f5d936c-8486-5c41-8166-46c55494f934
+  namespace_id: c510730b-c186-57a8-acf5-405f61ecc9ef
+  created_by_id: 8f5d936c-8486-5c41-8166-46c55494f934

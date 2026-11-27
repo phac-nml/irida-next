@@ -1,25 +1,180 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-<% 21.times do |n| %>
-project1_bot<%= (n) %>:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  user_id: <%= ActiveRecord::FixtureSet.identify("user_bot_account#{n}".to_sym, :uuid) %>
-<% end %>
-
-<% 21.times do |n| %>
-group1_bot<%= (n) %>:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
-  user_id: <%= ActiveRecord::FixtureSet.identify("user_group_bot_account#{n}".to_sym, :uuid) %>
-<% end %>
-
+project1_bot0:
+  id: 61849367-1d0c-56ec-a5f1-47a553f5e5be
+  user_id: 93ced0c8-e21a-562c-a187-81aedac9adda
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot1:
+  id: a3092d53-2ca7-589b-ada3-6ff9e997b74e
+  user_id: 3b47d26c-421d-57ab-ad82-e9e2b6a0b197
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot2:
+  id: a892a76e-708d-59f7-90e0-7d11340be396
+  user_id: 5bde273e-40e7-5ef3-9da0-d411253252de
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot3:
+  id: ddacace8-6144-511b-b0cb-f3d5dc1751f4
+  user_id: d22ddd7b-8a6b-50fb-bbf6-11658e96020b
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot4:
+  id: 4d60254f-a4ff-58b7-aad4-69e2eaf28ace
+  user_id: a773cd4a-9d43-5881-ac4a-7300e4aeec1c
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot5:
+  id: ddbdbf7b-0a66-545d-a6b7-a8da0155a06d
+  user_id: ec6b08e7-53ee-5035-9c3e-747e5aaad1ca
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot6:
+  id: e89d7f3a-746d-5ae4-a35e-db7da2f0cf2b
+  user_id: d758e102-dbd2-5d56-9355-98329c6d2c08
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot7:
+  id: 28355c0b-8e27-5c92-afe4-d087db57082c
+  user_id: 1ee7161e-d123-5d1c-88ee-c5feeb8aa516
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot8:
+  id: 5c61dbf2-468d-5e0b-9782-a945440d4743
+  user_id: dbcfead3-e4b5-5c9f-b64a-fe27c8ef7825
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot9:
+  id: 5f88bae6-4c59-5b82-aedb-47f5485df22d
+  user_id: 6a59d729-3da5-5b25-91f0-de2c0f76e832
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot10:
+  id: 51a36e04-bee7-5e35-b05e-143c83318796
+  user_id: 2cd13af2-4238-58bc-95a8-5db1898bd460
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot11:
+  id: d57ae7f5-75b5-5e8c-9f79-4394e61053bf
+  user_id: 150a1d12-7d4d-54fa-9c02-7c60c68ed938
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot12:
+  id: 69ca5b4d-ecc8-58ec-b935-3a52e6b2d71a
+  user_id: eaf569e6-76dc-56c1-a3c4-16bbac2372d0
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot13:
+  id: b104c10b-9d23-592e-a41e-e482a84f6ee8
+  user_id: 3f59c1c1-ae4c-591e-a813-630d72ad15e4
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot14:
+  id: d8703e56-0635-5299-97db-7b43a4b370dd
+  user_id: 56a42e31-bf7a-53e6-a3fd-63196230a28b
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot15:
+  id: 634119dc-1884-59a6-844a-907fef095740
+  user_id: 0c8d1a6b-39e4-5735-b824-8b6440780d5f
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot16:
+  id: d3b0b3a0-3bb1-5545-ba3a-8a928a7cf338
+  user_id: 920e8103-b3ae-5465-a66e-b84e4764da0d
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot17:
+  id: 20234595-ef3f-5dbd-8287-50977273a394
+  user_id: c31c55f6-14fa-53cb-8a79-ef825e105e64
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot18:
+  id: 201a587f-603c-5dbf-8e3c-797765f87b1a
+  user_id: 2241e587-237e-5681-8f81-1f1c9a26c9f6
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot19:
+  id: f27c231e-9b0a-57c3-baaf-bf0abb79cb69
+  user_id: 59427f38-19ab-53a7-a779-2560ec5e32b2
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+project1_bot20:
+  id: c9436018-2692-597f-8771-8da26489be75
+  user_id: 3e57df21-421a-5014-83da-1db1b60c7230
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+group1_bot0:
+  id: 30968a36-974f-50d3-8236-54f58f66b1c9
+  user_id: a30c2714-9eb8-535e-80c4-e1f32264ddad
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot1:
+  id: fcef9546-cca4-5e42-a21f-cf560e79415a
+  user_id: a945249a-a8d9-5213-bc53-69fd5cd33a72
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot2:
+  id: fc4976f1-36a6-5d91-af3f-0300a5cc6347
+  user_id: fe4bcba8-8712-5e26-b2ab-80814c78b4e1
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot3:
+  id: 0c2fc974-46de-5e0c-a636-8f5dcdd93783
+  user_id: 77940606-098f-5564-8e42-a1592a298f1b
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot4:
+  id: 3e0efad2-a37c-50e2-ad40-53acbd4b86e0
+  user_id: cbcdbe7d-5b03-5d65-afef-8142cb3e2b2c
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot5:
+  id: 7e33d605-dc47-5826-a652-ff479d5fbad9
+  user_id: 56f8c848-e473-50f0-9155-488d783aab87
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot6:
+  id: 148c7cb5-349c-5bfb-b1de-c86923fc4633
+  user_id: cee46fc1-18fe-5a26-9fd0-cb9a2f4c8396
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot7:
+  id: d4c957d6-fbb6-59a5-800b-e42f1aeca5cf
+  user_id: c91aa843-efe0-5c02-8dcd-6d7ea87a6171
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot8:
+  id: 8e5e6c4e-b970-5675-86af-6b7e52ef12ad
+  user_id: 7b8d5604-3a38-55e7-9eac-a5a858079f93
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot9:
+  id: 52319fed-0e96-594c-ac68-90af8ed4a527
+  user_id: ea16ee19-602f-5b80-9787-c066964d6886
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot10:
+  id: 90c705d9-136d-5d7a-b714-887ce506b0ce
+  user_id: 7910f7ad-e031-53e4-b9fc-ac79f716c4b4
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot11:
+  id: 7fde1304-b6ab-515a-981e-95b079e9ce4f
+  user_id: 0205cba3-8a19-5f5c-b71e-56a76e055f20
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot12:
+  id: 076fee98-8887-5976-bd6c-f7aa361fed16
+  user_id: 7fe98cad-60ca-5ba9-be69-fdd9db22f3d3
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot13:
+  id: 6f8aaafb-0638-5573-9b0a-387779acd815
+  user_id: 874a28ec-49c8-507b-9959-042b705b7f03
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot14:
+  id: 67ab8828-9de1-5b5f-9864-54bdff8a79ad
+  user_id: a8646e7b-accf-5166-ab08-ad774caafae9
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot15:
+  id: 21b970fa-bfea-55f4-a818-6874ee261075
+  user_id: 93e722df-08b5-58f9-ac0a-f38e18aadf3e
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot16:
+  id: f8a89a61-5b25-5881-a875-2d9fec71a360
+  user_id: 2f85dc4b-dd4b-5749-8721-e167eaab0eb4
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot17:
+  id: 2aa5c063-cea2-5e48-b6b4-02fc5d50d3d7
+  user_id: 68c4ee91-45fb-536f-91a1-8802f66c2813
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot18:
+  id: b7e08570-f961-5878-becc-3f83161c1320
+  user_id: 2a00d33d-337e-54c4-a97f-4d809ad16f91
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot19:
+  id: 7b664134-4673-5817-9601-8b50d75cf6ff
+  user_id: ede92477-62b0-5dc3-8973-6be05d92773a
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
+group1_bot20:
+  id: f14e7260-d441-5c5c-9b5f-866cefb7f22d
+  user_id: a161a253-f971-59ab-8306-412174a87816
+  namespace_id: aa899913-e3de-58b9-a238-4e8babcd153c
 invalid_user_bot:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:john_doe_namespace, :uuid) %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-
+  id: 45137c3b-54a5-54bd-a823-66aca9f8aa5b
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  namespace_id: 585120fa-2837-5b5d-917e-3d7beb4b588e
 projectJeff_bot:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project_jeff_namespace, :uuid) %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:projectJeff_bot, :uuid) %>
-
+  id: afa82ece-dfc5-583c-a41b-b84534b96de8
+  user_id: c4aad11e-4241-5744-a0ab-ac3dc297683a
+  namespace_id: '042679e2-d4b8-5188-b429-6b3cc44761c3'
 groupJeff_bot:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_jeff, :uuid) %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:groupJeff_bot, :uuid) %>
+  id: 89e04446-bd04-5ab5-b7a8-8d73e1a9d00b
+  user_id: 8344c97b-e3e7-5e6d-91c7-079e03e0dfc5
+  namespace_id: a59fa570-0896-5746-ab2a-0a5c68633890

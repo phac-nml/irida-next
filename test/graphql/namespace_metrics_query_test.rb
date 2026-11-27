@@ -11,6 +11,7 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
     query(
       $namespaceType: [String!],
       $first: Int,
+      $after: String,
       $projFirst: Int,
       $projAfter: String,
       $grpFirst: Int,
@@ -19,7 +20,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
       namespaceMetrics(
         namespaceType: $namespaceType,
         first: $first,
+        after: $after,
       ) {
+        pageInfo { hasNextPage endCursor }
         nodes {
           id
           name
@@ -57,8 +60,9 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   GRAPHQL
 
   NAMESPACE_METRICS_DIRECT_QUERY = <<~GRAPHQL
-    query($namespaceType: [String!], $first: Int, $directOnly: Boolean) {
-      namespaceMetrics(first: $first, namespaceType: $namespaceType) {
+    query($namespaceType: [String!], $first: Int, $after: String, $directOnly: Boolean) {
+      namespaceMetrics(first: $first, after: $after, namespaceType: $namespaceType) {
+        pageInfo { hasNextPage endCursor }
         nodes {
           name
           puid
@@ -286,19 +290,34 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   end
 
   test 'system user can iterate through namespace metrics and view project/group metrics' do
-    result = IridaSchema.execute(
-      NAMESPACE_METRICS_QUERY,
-      context: { current_user: @sys_user },
-      variables: { namespaceType: ['Group'], first: 1_000 },
-      max_complexity: nil
-    )
+    # The group fixture set can exceed the schema's default_max_page_size, and the
+    # underlying query has no explicit ordering, so our test group isn't guaranteed to land
+    # on the first page. Iterate through successive top-level pages via cursor until it's
+    # found, the same way a real client paginating through namespaceMetrics would.
+    metrics_group_node = nil
+    namespaces = []
+    after = nil
 
-    assert_nil result['errors'], 'query should execute without errors'
+    loop do
+      result = IridaSchema.execute(
+        NAMESPACE_METRICS_QUERY,
+        context: { current_user: @sys_user },
+        variables: { namespaceType: ['Group'], first: 50, after: after },
+        max_complexity: nil
+      )
 
-    namespaces = result['data']['namespaceMetrics']['nodes']
+      assert_nil result['errors'], 'query should execute without errors'
+
+      page = result['data']['namespaceMetrics']
+      namespaces.concat(page['nodes'])
+
+      metrics_group_node = page['nodes'].find { |n| n['name'] == @group.name }
+      break if metrics_group_node || !page['pageInfo']['hasNextPage']
+
+      after = page['pageInfo']['endCursor']
+    end
+
     assert_not_empty namespaces, 'should return at least one namespace'
-
-    metrics_group_node = namespaces.find { |n| n['name'] == @group.name }
     assert metrics_group_node, 'expected our test group to appear in the results'
 
     assert metrics_group_node['samplesCount'].is_a?(Integer)
@@ -729,16 +748,30 @@ class NamespaceMetricsQueryTest < ActiveStorageTestCase
   end
 
   test 'namespace metrics query with directOnly flag returns metrics for direct projects and samples only' do
-    result = IridaSchema.execute(
-      NAMESPACE_METRICS_DIRECT_QUERY,
-      context: { current_user: @sys_user },
-      variables: { namespaceType: ['Group'], first: 1_000, directOnly: true },
-      max_complexity: nil
-    )
-    assert_nil result['errors'], 'query should execute without errors'
-    namespaces = result['data']['namespaceMetrics']['nodes']
+    # Same page-size caveat as above: iterate through pages via cursor until our group is found.
+    metrics_group_node = nil
+    namespaces = []
+    after = nil
+
+    loop do
+      result = IridaSchema.execute(
+        NAMESPACE_METRICS_DIRECT_QUERY,
+        context: { current_user: @sys_user },
+        variables: { namespaceType: ['Group'], first: 50, after: after, directOnly: true },
+        max_complexity: nil
+      )
+      assert_nil result['errors'], 'query should execute without errors'
+
+      page = result['data']['namespaceMetrics']
+      namespaces.concat(page['nodes'])
+
+      metrics_group_node = page['nodes'].find { |n| n['name'] == @group.name }
+      break if metrics_group_node || !page['pageInfo']['hasNextPage']
+
+      after = page['pageInfo']['endCursor']
+    end
+
     assert_not_empty namespaces, 'should return at least one namespace'
-    metrics_group_node = namespaces.find { |n| n['name'] == @group.name }
     assert metrics_group_node, 'expected our test group to appear in the results'
 
     expected_projects = @group.project_namespaces.count

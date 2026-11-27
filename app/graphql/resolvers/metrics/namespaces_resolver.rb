@@ -45,7 +45,9 @@ module Resolvers
           params = { type: namespace_type }
           params.merge!(puid: puid) if puid
           params.merge!(parent_id: nil) if top_level_only
-          Namespace.where(params)
+          # Relay connections here paginate with LIMIT/OFFSET, which only returns stable,
+          # non-overlapping pages when the underlying relation has a deterministic order.
+          Namespace.where(params).order(:id)
         end
       end
     end

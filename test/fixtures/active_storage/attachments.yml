@@ -1,370 +1,444 @@
 attachment1_file_test_file_A_fastq:
+  id: efee58a5-ef42-566f-9304-6f53a46f8cb4
   name: file
-  record: attachment1 (Attachment)
-  blob: attachment1_file_test_file_A_fastq_blob
-
+  record_type: Attachment
+  record_id: 0afd5882-94d7-52b3-9642-e9a4725575eb
+  blob_id: c89e1f0e-9215-5abd-8ddf-7e7b8db9415c
 attachment2_file_test_file_B_fastq:
+  id: 61a205c8-dabc-5ca4-aa2e-95348601e814
   name: file
-  record: attachment2 (Attachment)
-  blob: attachment2_file_test_file_B_fastq_blob
-
+  record_type: Attachment
+  record_id: f3b9e68b-8c7e-5129-bad5-bcf3929b63a7
+  blob_id: 7b4f593e-ba57-51b8-8fd7-4af19a734ea1
 attachment3_file_test_file_5_fasta:
+  id: 77c15701-63fc-5661-a9c9-7542fa319ff0
   name: file
-  record: attachment3 (Attachment)
-  blob: attachment3_file_test_file_5_fasta_blob
-
+  record_type: Attachment
+  record_id: 67ee4b33-1c77-5bb9-8b8a-69a01b095d0a
+  blob_id: 7b7dec28-d2dd-59bc-bf62-0f9a55f8a7b4
 attachmentA_file_test_file_fastq:
+  id: 3346ece0-7d7e-5d40-b6d8-a30cd319c381
   name: file
-  record: attachmentA (Attachment)
-  blob: attachmentA_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 7aa06a97-700c-5383-a5a4-3735a2304787
+  blob_id: 9ece26ff-f011-5ebc-9c81-7b415902463d
 attachmentB_file_test_file_fastq:
+  id: ebc48b70-fb56-57bd-9938-0a87aa1e50bb
   name: file
-  record: attachmentB (Attachment)
-  blob: attachmentB_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 3fc1920a-a9d9-5b46-a91b-09d3e31b0acd
+  blob_id: 178f4a2b-914b-50e6-ad17-ba44e0931175
 attachmentC_file_test_file_fastq:
+  id: 9f130b45-10c3-50a8-85a6-5cf51e49d7fa
   name: file
-  record: attachmentC (Attachment)
-  blob: attachmentC_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 57624e6e-2c60-559b-9daf-eca155ba64c2
+  blob_id: edd9fecc-60e6-5dc6-be55-b3c052abafb8
 attachmentPEFWD1_file_test_file_fastq:
+  id: 62ba6c4a-0713-582b-8ebd-e7f7be7c8557
   name: file
-  record: attachmentPEFWD1 (Attachment)
-  blob: attachmentPEFWD1_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 7d648495-d6d2-5043-a42b-772f639bab6e
+  blob_id: 0c932ed3-d507-5e2d-aa9d-3d86c5708f02
 attachmentPEREV1_file_test_file_fastq:
+  id: b54c29ed-b82d-5c71-bad7-b192b582f1a6
   name: file
-  record: attachmentPEREV1 (Attachment)
-  blob: attachmentPEREV1_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 34032a0e-f335-5d59-bb03-6d19926497eb
+  blob_id: 4d4761dd-b7fb-50a3-a4a7-2a9c735e644c
 attachmentPEFWD2_file_test_file_fastq:
+  id: 2c8467b2-5d15-50af-b331-e5dc789466ca
   name: file
-  record: attachmentPEFWD2 (Attachment)
-  blob: attachmentPEFWD2_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 84a5ba98-b560-5cd6-9eac-eac4b45e9b80
+  blob_id: cb8e6e05-d166-5351-bb66-36948d9c9592
 attachmentPEREV2_file_test_file_fastq:
+  id: c15b4659-8c18-532a-92ed-beee2d9c1e71
   name: file
-  record: attachmentPEREV2 (Attachment)
-  blob: attachmentPEREV2_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 4b34807b-e920-5946-b9f7-336bd10f6a8f
+  blob_id: 0bd703ea-8eb6-5842-8a01-a56e7048f436
 attachmentPEFWD3_file_test_file_fastq:
+  id: da1fa4ac-7269-5797-9f26-9256c2f36ba3
   name: file
-  record: attachmentPEFWD3 (Attachment)
-  blob: attachmentPEFWD3_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 067447d6-c99d-571b-acc0-8dc6f31ec6d1
+  blob_id: 32e7b7fe-ce97-5c3a-a9db-0984feb95836
 attachmentPEREV3_file_test_file_fastq:
+  id: 49dafdbb-26d1-5335-abe5-34f3ee709478
   name: file
-  record: attachmentPEREV3 (Attachment)
-  blob: attachmentPEREV3_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: b6b1ac8a-7e4c-561c-a5ab-434665db91da
+  blob_id: 3102fe29-5f03-56e2-ba46-0935b76313d9
 attachmentPEFWD4_file_test_file_fastq:
+  id: 0b291d94-8f6a-5330-9585-49622d28e4f6
   name: file
-  record: attachmentPEFWD4 (Attachment)
-  blob: attachmentPEFWD4_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 660fe3f1-c991-53e9-a431-af20b26a1c6d
+  blob_id: 4d282747-cc12-57df-95d2-cffaf990bada
 attachmentPEREV4_file_test_file_fastq:
+  id: 8f4753bf-7e65-577c-b43e-62165d279cd6
   name: file
-  record: attachmentPEREV4 (Attachment)
-  blob: attachmentPEREV4_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: d15def17-496b-5b24-9e64-65b376ac6328
+  blob_id: 65ef3408-cadd-537f-9474-d54b367b98bf
 attachmentPEFWD5_file_test_file_fastq:
+  id: 45211b33-229b-57ea-87c9-9b6ccd994941
   name: file
-  record: attachmentPEFWD5 (Attachment)
-  blob: attachmentPEFWD5_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 9b259d54-2db3-5b13-9313-d73e9b683617
+  blob_id: 235be672-d40f-505c-b16a-fb464ca3ff6b
 attachmentPEREV5_file_test_file_fastq:
+  id: fc60f1d5-9534-536e-bf67-fb3c715cd9b4
   name: file
-  record: attachmentPEREV5 (Attachment)
-  blob: attachmentPEREV5_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 488e7fb3-c2ff-5e27-94de-1b15edd0d8e3
+  blob_id: c6fb6a4f-df60-56d3-a3f3-0472a965d7ad
 attachmentPEFWD6_file_test_file_fastq:
+  id: 392a9474-1e56-5dae-91cc-84c19d298cdc
   name: file
-  record: attachmentPEFWD6 (Attachment)
-  blob: attachmentPEFWD6_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 28d12df3-55ed-50b5-b6f3-e6c0fe3866d1
+  blob_id: dc5cf6ee-6e18-5c8c-a0f5-0064bf91b3df
 attachmentPEREV6_file_test_file_fastq:
+  id: db88a68d-3a1d-507c-8783-de19223f4e35
   name: file
-  record: attachmentPEREV6 (Attachment)
-  blob: attachmentPEREV6_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 363ad7ff-bac6-5ab4-b0ac-447c859ee9d0
+  blob_id: 1e77a782-278d-522a-81d5-19361bb375d2
 attachmentPEFWD7_file_test_file_fastq:
+  id: 16e6a52a-26d3-5d41-a92c-1612970332e8
   name: file
-  record: attachmentPEFWD7 (Attachment)
-  blob: attachmentPEFWD7_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: a03552e3-c6d7-5a6f-9cbd-6433ea7b936b
+  blob_id: df688bdf-df9a-5b5c-a11c-f0103943cb09
 attachmentPEREV7_file_test_file_fastq:
+  id: 86631405-bb8c-5dfb-853f-89ed6ef33d71
   name: file
-  record: attachmentPEREV7 (Attachment)
-  blob: attachmentPEREV7_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: aa17c1ce-ce5b-560f-b822-a6f9bb723a2c
+  blob_id: 6145ed19-a8e0-523f-b598-6285d7aa7e03
 attachmentD_file_test_file_fastq:
+  id: e5618324-7ece-59c7-9fed-e4475a44f786
   name: file
-  record: attachmentD (Attachment)
-  blob: attachmentD_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: a0fb8783-f57e-5abd-a6aa-50cd349617e2
+  blob_id: da12eb8d-bdd6-52e7-a3a9-fbc934105546
 attachmentE_file_test_file_fastq:
+  id: 252069c8-e818-5e5d-9b73-24c353e926d3
   name: file
-  record: attachmentE (Attachment)
-  blob: attachmentE_gz_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 3b9ecbe5-2457-5a3d-8a0c-9920ed72743c
+  blob_id: ea0b181c-78df-5625-ba50-667e54c026dc
 attachmentF_file_test_file_fastq:
+  id: a037278a-f3cf-53fc-a818-ad1f290f78cb
   name: file
-  record: attachmentF (Attachment)
-  blob: attachmentF_gz_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: fdc978db-eec8-55c6-9b09-b43f15a2fe05
+  blob_id: bb52c2f4-ff07-5bc6-ad22-10f859cbb05e
 attachmentG_file_test_file_fastq:
+  id: c11191d0-eab1-5eae-a336-0517f1a50324
   name: file
-  record: attachmentG (Attachment)
-  blob: attachmentG_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 5be98949-cdbd-5c73-84c7-a11426704c50
+  blob_id: fcb9712b-30fd-5747-9111-5d9c8655f178
 attachmentH_file_test_file_fastq:
+  id: e0925963-c34e-5e73-89af-73b43a8e5a83
   name: file
-  record: attachmentH (Attachment)
-  blob: attachmentH_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 12b16f79-37a1-5eac-b31f-ded2f4621474
+  blob_id: bbb6df4f-81ec-5f33-b511-67072be1c71e
 attachmentI_file_test_file_fastq:
+  id: b80bf70b-9cd0-58f9-8654-1c3187a38c7a
   name: file
-  record: attachmentI (Attachment)
-  blob: attachmentI_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 4339af9c-e144-5540-bed4-8de74614570a
+  blob_id: 07ed31fc-9792-5383-aa05-ad147b7d22ca
 attachmentJ_file_test_file_fastq:
+  id: b196a9d1-aecc-59ce-b8b8-c5c0bd231dcc
   name: file
-  record: attachmentJ (Attachment)
-  blob: attachmentJ_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 2b2beff0-6de8-51d4-a748-d1096f619dd4
+  blob_id: 5455da0d-0007-59f5-a6a7-28f2eeaf754c
 data_export_1_test_export:
+  id: 75e063cc-7538-5c66-b4d9-b2e0af7460db
   name: file
-  record: data_export_one (DataExport)
-  blob: data_export_1_test_export_blob
-
+  record_type: DataExport
+  record_id: c592e6f5-4f31-5cb9-9647-416139b92f43
+  blob_id: 8a107053-7f7b-5427-826b-794d45736c6a
 workflow_execution_completed_output:
+  id: 995ed5a8-d62f-56f5-bdab-93d3db6a5e8a
   name: file
-  record: workflow_execution_completed_output_attachment (Attachment)
-  blob: workflow_execution_completed_output_blob
-
+  record_type: Attachment
+  record_id: 2591f401-4bb8-5fa6-8073-4325d4760cf0
+  blob_id: 2d04c378-6207-5580-b156-5c00c7a88dbd
 samples_workflow_execution_completed_output:
+  id: ea407da4-f9f2-52a3-8176-c6910167fb95
   name: file
-  record: samples_workflow_execution_completed_output_attachment (Attachment)
-  blob: samples_workflow_execution_completed_output_blob
-
+  record_type: Attachment
+  record_id: 5371e23e-3e0c-539f-81ec-5693320cccfb
+  blob_id: d378ff2f-ed7b-5834-9242-1f42dff6c505
 samples_shared_workflow_execution_completed_output:
+  id: 9e9f2aac-2fa0-57f7-b609-6f8cd1075b47
   name: file
-  record: samples_shared_workflow_execution_completed_output_attachment (Attachment)
-  blob: samples_shared_workflow_execution_completed_output_blob
-
+  record_type: Attachment
+  record_id: a355f362-bde4-514c-b816-dacd4c1bfc04
+  blob_id: 0124b7d5-e7c4-5e93-adc3-b9693dfe2825
 samples_group_shared_workflow_execution_completed_output:
+  id: 73d77dd4-cf7f-568c-95bd-d2e6962be4db
   name: file
-  record: samples_group_shared_workflow_execution_completed_output_attachment (Attachment)
-  blob: samples_group_shared_workflow_execution_completed_output_blob
-
+  record_type: Attachment
+  record_id: 38bf9e62-c400-5809-a8ab-6a753ca5d1e3
+  blob_id: 2f272794-f8b5-57d2-8de2-65c77056274c
 data_export_7_test_export:
+  id: fc34aeed-6f58-5d3c-b1aa-a8abb1f8e060
   name: file
-  record: data_export_seven (DataExport)
-  blob: data_export_7_test_export_blob
-
+  record_type: DataExport
+  record_id: 0d75e003-44b5-5c46-b2bf-00656cad8cda
+  blob_id: ff52ddae-b1ab-52f6-abcf-37089120f0f6
 data_export_8_test_export:
+  id: 699173ca-9230-5a99-82cd-d54d3cdcfd88
   name: file
-  record: data_export_eight (DataExport)
-  blob: data_export_8_test_export_blob
-
+  record_type: DataExport
+  record_id: f0b2e768-e992-577e-bcea-157b418a3da3
+  blob_id: ab94798c-4a1b-526c-bf05-077c4f348211
 data_export_9_test_export:
+  id: d65dc23a-a93e-595f-b0a4-118446920869
   name: file
-  record: data_export_nine (DataExport)
-  blob: data_export_9_test_export_blob
-
+  record_type: DataExport
+  record_id: 7eb67539-4c71-5a3f-97e1-c21c096f0c45
+  blob_id: d207ea88-cb44-5520-916e-f231bbc963f1
 data_export_11_test_export:
+  id: 7fac5321-94a6-5fa2-8177-3eeaff837a6a
   name: file
-  record: data_export_eleven (DataExport)
-  blob: data_export_11_test_export_blob
-
+  record_type: DataExport
+  record_id: 9121e120-24c6-5e8a-ab84-60cdbac7943d
+  blob_id: 9285f9b5-a26b-5086-a2f1-3826c2985e60
 data_export_12_test_export:
+  id: 30007e62-1732-582a-a66d-4bf9c559e5ec
   name: file
-  record: data_export_twelve (DataExport)
-  blob: data_export_12_test_export_blob
-
+  record_type: DataExport
+  record_id: 3b808e97-c199-5b52-a981-c0a58e065422
+  blob_id: 6cf6cd89-a58c-5f72-858a-84e2d62f8a33
 data_export_13_test_export:
+  id: 33582dda-8ec2-5810-9a07-78a6a79d38ba
   name: file
-  record: data_export_thirteen (DataExport)
-  blob: data_export_13_test_export_blob
-
+  record_type: DataExport
+  record_id: 5400a792-8c63-582d-a2df-bf74236c526f
+  blob_id: e13cc7a0-6717-52a1-9948-1ee2f27478ba
 attachmentEndToEndFWD_file_test_file_fastq:
+  id: f3d6464e-47f2-5ff7-af75-259427eca51f
   name: file
-  record: attachmentEndToEndFWD (Attachment)
-  blob: attachmentEndToEndFWD_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 1e4e2cc7-f275-5eec-bda0-6be37f5cf28c
+  blob_id: 7be7ea9e-d8f8-573e-9daf-1279aa486961
 attachmentEndToEndREV_file_test_file_fastq:
+  id: b7add7fd-143b-5e9c-aeb8-865125d40b71
   name: file
-  record: attachmentEndToEndREV (Attachment)
-  blob: attachmentEndToEndREV_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: e4285673-406d-5dd2-9c43-c72fa5469284
+  blob_id: 12e5d89a-7bf2-50e0-9106-f7c97cf4d154
 attachmentSample43_file_test_file_fastq:
+  id: 2ff99aa3-40d0-5ea0-9988-c2f7ff5a85ea
   name: file
-  record: attachmentPEFWD43 (Attachment)
-  blob: attachment43Sample_file_test_fileA_fastq_blob
-
+  record_type: Attachment
+  record_id: 0570bc90-f1d9-5c95-865b-4eaa5dee90ec
+  blob_id: 6c3be98c-7462-5ec1-8bf0-1f6947f8a307
 attachmentSample43_file_test_file_A_fastq:
+  id: 4600fd3c-c79b-5eb1-9329-1585cc6e8b3b
   name: file
-  record: attachmentPEREV43 (Attachment)
-  blob: attachment43Sample_file_test_fileB_fastq_blob
-
+  record_type: Attachment
+  record_id: 4fbd4547-70d6-515d-bc30-ef7e80174913
+  blob_id: 2d7e98c2-f73f-5e23-a5e2-6822c0295a04
 sample22_test_file_fastq_fwd:
+  id: a0281895-6d54-58da-9a38-cec672412433
   name: file
-  record: sample22AttachmentFastqFWD (Attachment)
-  blob: sample22_test_file_fastq_fwd_blob
-
+  record_type: Attachment
+  record_id: 30dd1ca2-675a-546a-b7b8-bb3a0e4dd273
+  blob_id: 5f2cc0f0-7b68-5e8a-b049-44014bdb516b
 sample22_test_file_fastq_rev:
+  id: 4754ca99-c704-50d6-926c-56adb3924324
   name: file
-  record: sample22AttachmentFastqREV (Attachment)
-  blob: sample22_test_file_fastq_rev_blob
-
+  record_type: Attachment
+  record_id: 04bed03a-6c98-55ec-accb-ae70f3a4a048
+  blob_id: a908a951-0550-5554-b866-4e71dbd5ae29
 sample22_test_file_fasta:
+  id: f525bb38-28da-54de-bdf5-6819a22175ed
   name: file
-  record: sample22AttachmentFasta (Attachment)
-  blob: sample22_test_file_fasta_blob
-
+  record_type: Attachment
+  record_id: b1eadcd8-adb4-531f-b114-9c3758b740b1
+  blob_id: 9a966e2e-8060-5fcf-8703-234dc19136ee
 sample22_test_file_text:
+  id: 46fce45f-e98e-552d-9cd5-c3aa40c62815
   name: file
-  record: sample22AttachmentText (Attachment)
-  blob: sample22_test_file_text_blob
-
+  record_type: Attachment
+  record_id: dc3c129a-bbcf-5f91-a4fd-0305fbdf3292
+  blob_id: 2ccf5eda-f411-58eb-a7f5-797b6743b95d
 project1_attachment1_file_test_file_fastq:
+  id: 83c8093b-6a4e-567d-8c34-5efce30f9ea9
   name: file
-  record: project1Attachment1 (Attachment)
-  blob: project1_attachment1_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: eca4bbc3-e06f-5462-8499-40c81538e407
+  blob_id: a0d147a9-9276-566d-a355-5072d97ed7cd
 project1_attachment2_file_test_file_A_fastq:
+  id: e94a6bb9-df0a-5d9c-baa2-02cd6dd5a2fa
   name: file
-  record: project1Attachment2 (Attachment)
-  blob: project1_attachment2_file_data_export_8_csv_blob
-
+  record_type: Attachment
+  record_id: '01998c5b-ab05-5d55-91ba-0a2aca1c0b11'
+  blob_id: d20ccedf-e761-5207-b6a9-2d1b093681c9
 group1_attachment1_file_test_file_fastq:
+  id: 185ca3be-25ef-52bd-adba-7a44b560993e
   name: file
-  record: group1Attachment1 (Attachment)
-  blob: group1_attachment1_file_test_file_fastq_blob
-
+  record_type: Attachment
+  record_id: 73266e04-6354-54e7-8508-e5ef46fe6941
+  blob_id: 237f8c0c-179b-5c5d-af87-1de6a1faa577
 group1_attachment2_file_test_file_A_fastq:
+  id: 07c9dd8b-3871-5d41-9796-e98ce6d65c33
   name: file
-  record: group1Attachment2 (Attachment)
-  blob: group1_attachment2_file_data_export_8_csv_blob
-
+  record_type: Attachment
+  record_id: d7d6f79c-4d94-54f4-b826-b6d8f99f9539
+  blob_id: bc23a19c-a735-5478-8a7f-a4786c188a45
 gasclustering_test_file_json:
+  id: b459d2aa-45c8-5098-834c-e98374d2a652
   name: file
-  record: gasclusteringAttachment (Attachment)
-  blob: gasclustering_test_file_json_blob
-
+  record_type: Attachment
+  record_id: f615103b-b6c3-572c-b834-44f73962b1cb
+  blob_id: 5cbc374d-91f2-5036-9d60-8323541fd531
 attachment_csv:
+  id: 8b718491-d9cd-5caa-8f10-d4c4707bd1d5
   name: file
-  record: attachmentCSV (Attachment)
-  blob: attachment_csv_blob
-
+  record_type: Attachment
+  record_id: aaf550cd-0697-5438-bc42-b56896641945
+  blob_id: 2d7a88d4-050e-51dc-9dff-58f7137dfe44
 attachment_text:
+  id: 510cf814-dd18-54f8-b5ea-b7514a86f6e6
   name: file
-  record: attachmentText (Attachment)
-  blob: attachment_text_blob
-
+  record_type: Attachment
+  record_id: c5ec3675-65e1-568f-9758-cf5dcd604718
+  blob_id: cb359c8d-dcaf-52ae-884b-f7fc6d85d578
 attachment_json:
+  id: 533f8053-28b2-5fbb-952b-9741f9dbba94
   name: file
-  record: attachmentJSON (Attachment)
-  blob: attachment_json_blob
-
+  record_type: Attachment
+  record_id: 287852c1-0b65-55f1-8e7a-ae9a9f754629
+  blob_id: e78698a7-e210-514c-946b-77d08b16e754
 attachment_spreadsheet:
+  id: 0dcd2e22-292f-5590-b6d4-568c80e232d0
   name: file
-  record: attachmentSpreadsheet (Attachment)
-  blob: attachment_spreadsheet
-
+  record_type: Attachment
+  record_id: 443b16c0-ee18-5651-829f-1bf89d3b69ef
+  blob_id: f0473eaf-cc97-54a8-9386-1d2fe90dee9b
 attachment_image:
+  id: 35244ce9-3406-55bd-bea4-02429d26ed96
   name: file
-  record: attachmentImage (Attachment)
-  blob: attachment_image
-
+  record_type: Attachment
+  record_id: 6c47b1a6-5d84-5de9-97ea-18a3bc4da830
+  blob_id: 859f2196-839c-536c-b52f-45ac5f3231a4
 attachment_tsv:
+  id: 33adbe59-b254-53ef-b0f8-a4f76a3176f0
   name: file
-  record: attachmentTSV (Attachment)
-  blob: attachment_tsv_blob
-
+  record_type: Attachment
+  record_id: 4cba416c-1291-5dd9-9f23-b1c4f94b5401
+  blob_id: d2e12f64-336c-5d8c-bccd-4776860fe36a
 workflow_execution_group_shared_output_attachment:
+  id: 05ffd454-1779-5887-af73-7f0494cbcdce
   name: file
-  record: workflow_execution_group_shared_output_attachment (Attachment)
-  blob: workflow_execution_group_shared_output_attachment_blob
-
+  record_type: Attachment
+  record_id: 7c347c05-362e-5f42-b246-7dc73baa2168
+  blob_id: 7438d10a-8c79-544b-8292-3fb0519a6fe1
 workflow_execution_shared_with_project_output_attachment:
+  id: 77897fcd-f69d-59bc-a744-b168ab8831e3
   name: file
-  record: workflow_execution_shared_with_project_output_attachment (Attachment)
-  blob: workflow_execution_shared_with_project_output_attachment_blob
-
+  record_type: Attachment
+  record_id: 2c520f9b-f191-5cc6-827b-fbf9072eb781
+  blob_id: 14eba2b9-c457-57c2-adaf-d22f52979f33
 sample32_json_attachment:
+  id: 94a96c13-1096-544f-9ff6-0977a4d9330a
   name: file
-  record: sample32JsonAttachment (Attachment)
-  blob: attachment_json_blob
-
+  record_type: Attachment
+  record_id: d10946f3-e006-5635-a72d-ce128013c4b3
+  blob_id: e78698a7-e210-514c-946b-77d08b16e754
 sample_preparation_test_attachment_1_file_A_fastq:
+  id: 852cfdbf-da36-5481-b2e4-633afdd98e34
   name: file
-  record: sample_preparation_test_attachment_1 (Attachment)
-  blob: sample_preparation_test_attachment_1_blob
-
+  record_type: Attachment
+  record_id: cd43ced6-37e5-547d-bd9e-cb83f41a5772
+  blob_id: e4f4f707-28ab-5d50-98e2-6c91705e110c
 sample_preparation_test_attachment_1_file_B_fastq:
+  id: 803fcdf7-34ae-5295-825c-15273d41179c
   name: file
-  record: sample_preparation_test_attachment_1B (Attachment)
-  blob: sample_preparation_test_attachment_1B_blob
-
+  record_type: Attachment
+  record_id: a152cdca-4c06-5bc9-9e17-c5d3b5d376e2
+  blob_id: ba392fed-bab1-530b-8bd3-b6e0e6875bc2
 sample_preparation_test_attachment_2_file_A_fastq:
+  id: 882ecc85-c11b-5832-8275-e40d8e681353
   name: file
-  record: sample_preparation_test_attachment_2 (Attachment)
-  blob: sample_preparation_test_attachment_2_blob
-
+  record_type: Attachment
+  record_id: 4eb7d37a-c8d2-56dc-8e76-d2d2221cda40
+  blob_id: 210f8ab3-351f-5943-b977-4971778cac38
 sample_preparation_test_attachment_2_file_B_fastq:
+  id: bb46cf42-2e4b-50c2-8d7d-7831276552f5
   name: file
-  record: sample_preparation_test_attachment_2B (Attachment)
-  blob: sample_preparation_test_attachment_2B_blob
-
+  record_type: Attachment
+  record_id: 79503181-740d-5bba-9d01-16cbd1343217
+  blob_id: c55174fb-bf28-5961-aba9-5983a8647f98
 sample_preparation_test_attachment_3_file_A_fastq:
+  id: dddc08ba-39b2-513d-8ec0-c69456c62f7d
   name: file
-  record: sample_preparation_test_attachment_3 (Attachment)
-  blob: sample_preparation_test_attachment_3_blob
-
+  record_type: Attachment
+  record_id: aa46a0a8-26a7-5d1d-8880-598087512c56
+  blob_id: feb7e4c7-70f0-5bf0-a6d6-4d99b2ef0377
 sample_preparation_test_attachment_3_file_B_fastq:
+  id: f5ac8a4a-cf84-5f6a-a521-549aadeddabe
   name: file
-  record: sample_preparation_test_attachment_3B (Attachment)
-  blob: sample_preparation_test_attachment_3B_blob
-
+  record_type: Attachment
+  record_id: b9d2f729-5311-52e0-9bff-4cbbdfad4d20
+  blob_id: 28a2c83f-3e78-523a-a082-a0c599478147
 group16_attachment_csv:
+  id: 6b53577a-9864-50e3-b1d8-40a269dd0038
   name: file
-  record: group16AttachmentCSV (Attachment)
-  blob: attachment_csv_blob
-
+  record_type: Attachment
+  record_id: f00ec17f-1203-5443-9007-14268581b0cc
+  blob_id: 2d7a88d4-050e-51dc-9dff-58f7137dfe44
 snvphyl_sample1_attachment_fwd_file:
+  id: cb5d8e30-b35d-5be7-a520-1dc2e2d2b2dd
   name: file
-  record: snvphyl_sample1_attachment_fwd (Attachment)
-  blob: snvphyl_sample1_attachment_fwd_blob
-
+  record_type: Attachment
+  record_id: 0d60b48d-315d-5b81-b032-b0debd0b5dab
+  blob_id: 3b866a29-2c1a-5c62-a7f2-99ebe5265015
 snvphyl_sample1_attachment_rev_file:
+  id: 18cd3494-7b3e-5560-b653-c6e4bfa0bf5b
   name: file
-  record: snvphyl_sample1_attachment_rev (Attachment)
-  blob: snvphyl_sample1_attachment_rev_blob
-
+  record_type: Attachment
+  record_id: 0f75f089-f0c7-5191-9095-069f33d76cdc
+  blob_id: 65a67a6d-36a6-5ba6-9394-288dca8e8fbb
 snvphyl_sample1_attachment_ref_file:
+  id: efc8804b-5bd1-50c7-9a27-181b14e4554d
   name: file
-  record: snvphyl_sample1_attachment_ref (Attachment)
-  blob: snvphyl_sample1_attachment_ref_blob
-
+  record_type: Attachment
+  record_id: a8bb9e71-a5b4-542b-aef1-4e3cc827c21d
+  blob_id: 67900085-5591-5356-92ab-d0cf4f0b7851
 snvphyl_sample2_attachment_fwd_file:
+  id: 292002fa-785a-5fde-b9bf-a13259b17721
   name: file
-  record: snvphyl_sample2_attachment_fwd (Attachment)
-  blob: snvphyl_sample2_attachment_fwd_blob
-
+  record_type: Attachment
+  record_id: 5d8804ca-07af-51ea-ba05-27df8f8753d2
+  blob_id: a4827b10-8d3e-5a29-ad3f-8d6e53bacc23
 snvphyl_sample2_attachment_rev_file:
+  id: 6f047241-84c2-5cd7-bdc3-b29a4fb68503
   name: file
-  record: snvphyl_sample2_attachment_rev (Attachment)
-  blob: snvphyl_sample2_attachment_rev_blob
-
+  record_type: Attachment
+  record_id: 3f29a86f-8082-59d9-8124-f527cf619250
+  blob_id: 8750e79f-67ad-5edd-8333-6c65dbcee7cd
 snvphyl_project_attachment_ref_file:
+  id: 3a406c86-a523-5598-a581-c6e1788af4eb
   name: file
-  record: snvphyl_project_attachment_ref (Attachment)
-  blob: snvphyl_project_attachment_ref_blob
-
+  record_type: Attachment
+  record_id: 0dfe5e5a-0b38-57dd-bfc3-6cf0426f794e
+  blob_id: 5a312729-7b21-576f-aedc-2ee1b2b3b5ac
 snvphyl_group_attachment_ref_file:
+  id: 82312cc9-acf0-57e0-b7b0-2f1b2762d554
   name: file
-  record: snvphyl_group_attachment_ref (Attachment)
-  blob: snvphyl_group_attachment_ref_blob
-
+  record_type: Attachment
+  record_id: c8231899-2faa-537b-999e-a037e610d035
+  blob_id: bdd4df4f-67c2-5e26-a09a-7bcb7dc057ed

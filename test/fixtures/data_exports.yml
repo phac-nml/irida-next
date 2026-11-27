@@ -1,187 +1,271 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 data_export_one:
+  id: c592e6f5-4f31-5cb9-9647-416139b92f43
   name: Data Export 1
+  export_type: sample
+  status: ready
+  export_parameters:
+    ids:
+    - a97358ee-cfe4-577c-9a32-7fe348bbea93
+    - 89d0091d-d14e-5292-b04e-054eefe84140
+    namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+    attachment_formats:
+    - fasta
+    - fastq
+    - text
+    - csv
+    - tsv
+    - spreadsheet
+    - json
+    - genbank
+    - unknown
+  expires_at: "<%= 3.days.from_now %>"
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAA","type":"folder","irida-next-type":"project","irida-next-name":"Project
+    1","children":[{"name":"INXT_SAM_AAAAAAAAAA","type":"folder","irida-next-type":"sample","irida-next-name":"Project
+    1 Sample 1","children":[{"name":"INXT_ATT_AAAAAAAAAA","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_A.fastq","type":"file","metadata":{"format":"fastq"}}]},{"name":"INXT_ATT_AAAAAAAAAB","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_B.fastq","type":"file","metadata":{"format":"fastq"}}]}]}]}]}'
   basename: data-export-1
-  export_type: sample
-  status: ready
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>,
-    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
-    }
-  expires_at: <%= 3.days.from_now %>
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAA","type":"folder","irida-next-type":"project","irida-next-name":"Project 1","children":[{"name":"INXT_SAM_AAAAAAAAAA","type":"folder","irida-next-type":"sample","irida-next-name":"Project 1 Sample 1","children":[{"name":"INXT_ATT_AAAAAAAAAA","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_A.fastq","type":"file","metadata":{"format":"fastq"}}]},{"name":"INXT_ATT_AAAAAAAAAB","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_B.fastq","type":"file","metadata":{"format":"fastq"}}]}]}]}]}'
-
 data_export_two:
+  id: 3fb640ac-80b1-5707-97c0-734b494b482e
   export_type: sample
   status: processing
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sample1, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample2, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>,
-    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
-    }
+  export_parameters:
+    ids:
+    - a97358ee-cfe4-577c-9a32-7fe348bbea93
+    - 89d0091d-d14e-5292-b04e-054eefe84140
+    namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+    attachment_formats:
+    - fasta
+    - fastq
+    - text
+    - csv
+    - tsv
+    - spreadsheet
+    - json
+    - genbank
+    - unknown
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
 data_export_three:
+  id: 59d9ede0-c31f-5a01-8f8f-36d5c15263b0
   name: Data Export 3
+  export_type: sample
+  status: processing
+  export_parameters:
+    ids:
+    - 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
+    namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+    attachment_formats:
+    - fasta
+    - fastq
+    - text
+    - csv
+    - tsv
+    - spreadsheet
+    - json
+    - genbank
+    - unknown
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   basename: data-export-3
-  export_type: sample
-  status: processing
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>,
-    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
-    }
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-
 data_export_four:
+  id: f6efa992-0c2d-52da-a9e3-cd7cbdc8e3c2
   name: Data Export 4
+  export_type: sample
+  status: ready
+  export_parameters:
+    ids:
+    - df47b6c2-5c50-56b4-970c-a8ba189a5fb1
+    - 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
+    namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+    attachment_formats:
+    - fasta
+    - fastq
+    - text
+    - csv
+    - tsv
+    - spreadsheet
+    - json
+    - genbank
+    - unknown
+  expires_at: "<%= 5.days.from_now %>"
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   basename: data-export-4
-  export_type: sample
-  status: ready
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>,
-    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
-    }
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  expires_at: <%= 5.days.from_now %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-
 data_export_five:
+  id: df8c3c7c-7248-5c91-9f3c-bb9c010f13b2
   export_type: sample
   status: ready
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sampleA, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sampleB, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>,
-    attachment_formats: ['fasta', 'fastq', 'text', 'csv', 'tsv', 'spreadsheet', 'json', 'genbank', 'unknown']
-    }
+  export_parameters:
+    ids:
+    - df47b6c2-5c50-56b4-970c-a8ba189a5fb1
+    - 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
+    namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+    attachment_formats:
+    - fasta
+    - fastq
+    - text
+    - csv
+    - tsv
+    - spreadsheet
+    - json
+    - genbank
+    - unknown
+  expires_at: "<%= 5.days.from_now %>"
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  expires_at: <%= 5.days.from_now %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
-
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
 data_export_six:
+  id: 05272e9e-b0e3-5a77-9bee-5598747d2135
   name: Data Export 6
-  basename: data-export-6
   export_type: analysis
   status: processing
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
+  export_parameters:
+    ids:
+    - 8f0f7f89-8895-5b7c-ae78-678a88852a01
+    analysis_type: user
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  basename: data-export-6
 data_export_seven:
+  id: 0d75e003-44b5-5c46-b2bf-00656cad8cda
   name: Data Export 7
-  basename: data-export-7
   export_type: analysis
   status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>], analysis_type: 'user'}
+  export_parameters:
+    ids:
+    - 8f0f7f89-8895-5b7c-ae78-678a88852a01
+    analysis_type: user
+  expires_at: "<%= 5.days.from_now %>"
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:irida_next_example_completed_with_output, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABV","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 44","children":[{"name":"test_file_7.fa","type":"file"}]}]}]}'
-
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"8f0f7f89-8895-5b7c-ae78-678a88852a01",
+    "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"8f0f7f89-8895-5b7c-ae78-678a88852a01","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABV","type":"folder","irida-next-type":"sample","irida-next-name":"Sample
+    44","children":[{"name":"test_file_7.fa","type":"file"}]}]}]}'
+  basename: data-export-7
 data_export_eight:
+  id: f0b2e768-e992-577e-bcea-157b418a3da3
   name: Data Export 8
+  export_type: linelist
+  status: ready
+  export_parameters:
+    ids:
+    - b1c24394-a161-510d-91e8-18d102d8d30c
+    linelist_format: csv
+    namespace_id: 3cc7d999-7111-5fef-acd5-60ebf21fea64
+    metadata_fields:
+    - metadatafield1
+    - metadatafield2
+  expires_at: "<%= 5.days.from_now %>"
+  email_notification: true
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   basename: data-export-8
-  export_type: linelist
-  status: ready
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>],
-    linelist_format: 'csv',
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project29_namespace, :uuid) %>,
-    metadata_fields: ['metadatafield1', 'metadatafield2']
-  }
-  email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-
 data_export_nine:
+  id: 7eb67539-4c71-5a3f-97e1-c21c096f0c45
   name: Data Export 9
-  basename: data-export-9
   export_type: linelist
   status: ready
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sample32, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample33, :uuid) %>, <%= ActiveRecord::FixtureSet.identify(:sample34, :uuid) %>],
-    linelist_format: 'xlsx',
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_twelve, :uuid) %>,
-    metadata_fields: ['metadatafield1', 'non_existant_field', 'metadatafield2']
-  }
+  export_parameters:
+    ids:
+    - b1c24394-a161-510d-91e8-18d102d8d30c
+    - '01984ad3-2061-5c4d-9757-4249d601c70c'
+    - 85e69b26-3238-57e5-9dda-36e3a6efa890
+    linelist_format: xlsx
+    namespace_id: '00207591-3663-59dc-802c-00b3f8c7c97f'
+    metadata_fields:
+    - metadatafield1
+    - non_existant_field
+    - metadatafield2
+  expires_at: "<%= 5.days.from_now %>"
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  basename: data-export-9
 data_export_ten:
+  id: 26bcd16a-cc81-510a-a4f5-213870bf29d0
   name: Data Export 10
-  basename: data-export-10
   export_type: sample
   status: processing
-  export_parameters: {
-    ids: [<%= ActiveRecord::FixtureSet.identify(:sample22, :uuid) %>],
-    namespace_id: <%= ActiveRecord::FixtureSet.identify(:project2_namespace, :uuid) %>,
-    attachment_formats: ['text', 'fasta']
-  }
+  export_parameters:
+    ids:
+    - 590fbba7-3f52-5863-a927-13f93871926c
+    namespace_id: 5e3395a4-3379-52fb-905c-b202c16085ab
+    attachment_formats:
+    - text
+    - fasta
+  expires_at: "<%= 5.days.from_now %>"
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB","type":"folder","irida-next-type":"project","irida-next-name":"Project 2","children":[{"name":"INXT_SAM_AAAAAAAAAV","type":"folder","irida-next-type":"sample","irida-next-name":"Project 2 Sample 22","children":[{"name":"INXT_ATT_ABAAAAAAAI","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_14.txt","type":"file","metadata":{"format":"text"}}]},{"name":"INXT_ATT_ABAAAAAAAH","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_5.fasta","type":"file","metadata":{"format":"fasta","type":"assembly"}}]}]}]}]}'
-
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
+  manifest: '{"type":"Samples Export","date": "2024-01-01","children":[{"name":"INXT_PRJ_AAAAAAAAAB","type":"folder","irida-next-type":"project","irida-next-name":"Project
+    2","children":[{"name":"INXT_SAM_AAAAAAAAAV","type":"folder","irida-next-type":"sample","irida-next-name":"Project
+    2 Sample 22","children":[{"name":"INXT_ATT_ABAAAAAAAI","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_14.txt","type":"file","metadata":{"format":"text"}}]},{"name":"INXT_ATT_ABAAAAAAAH","type":"folder","irida-next-type":"attachment","children":[{"name":"test_file_5.fasta","type":"file","metadata":{"format":"fasta","type":"assembly"}}]}]}]}]}'
+  basename: data-export-10
 data_export_eleven:
+  id: 9121e120-24c6-5e8a-ab84-60cdbac7943d
   name: Data Export 11
+  export_type: analysis
+  status: ready
+  export_parameters:
+    ids:
+    - bc802fa0-e8b2-56d9-b7b9-c952c88036f1
+    analysis_type: user
+  expires_at: "<%= 5.days.from_now %>"
+  email_notification: true
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 3388fdf4-155d-5006-bb30-970b255e7e7c
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"bc802fa0-e8b2-56d9-b7b9-c952c88036f1",
+    "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"bc802fa0-e8b2-56d9-b7b9-c952c88036f1","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample
+    47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
   basename: data-export-11
-  export_type: analysis
-  status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
-  email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:micha_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
-
 data_export_twelve:
+  id: 3b808e97-c199-5b52-a981-c0a58e065422
   name: Data Export 12
+  export_type: analysis
+  status: ready
+  export_parameters:
+    ids:
+    - bc802fa0-e8b2-56d9-b7b9-c952c88036f1
+    analysis_type: user
+  expires_at: "<%= 5.days.from_now %>"
+  email_notification: true
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"bc802fa0-e8b2-56d9-b7b9-c952c88036f1",
+    "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"bc802fa0-e8b2-56d9-b7b9-c952c88036f1","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample
+    47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
   basename: data-export-12
-  export_type: analysis
-  status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>], analysis_type: 'user'}
-  email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
-
 data_export_thirteen:
+  id: 5400a792-8c63-582d-a2df-bf74236c526f
   name: Data Export 13
-  basename: data-export-13
   export_type: analysis
   status: ready
-  export_parameters: {ids: [<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>], analysis_type: 'user'}
+  export_parameters:
+    ids:
+    - 7287ad96-688c-50b0-abdd-ff5222b78d72
+    analysis_type: user
+  expires_at: "<%= 5.days.from_now %>"
   email_notification: true
-  created_at: <%= 1.week.ago %>
-  updated_at: <%= 1.day.ago %>
-  user_id: <%= ActiveRecord::FixtureSet.identify(:james_doe, :uuid) %>
-  expires_at: <%= 5.days.from_now %>
-  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>", "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"<%= ActiveRecord::FixtureSet.identify(:workflow_execution_completed_group_shared2, :uuid) %>","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample 47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
+  created_at: "<%= 1.week.ago %>"
+  updated_at: "<%= 1.day.ago %>"
+  user_id: 30d04ebd-2708-57ee-a0e6-776443b191b7
+  manifest: '{"type":"Analysis Export","date":"2024-01-01","children":[{"name":"7287ad96-688c-50b0-abdd-ff5222b78d72",
+    "type":"folder","irida-next-type":"workflow_execution","irida-next-name":"7287ad96-688c-50b0-abdd-ff5222b78d72","children":[{"name":"summary.txt.gz","type":"file"},{"name":"INXT_SAM_AAAAAAAABW","type":"folder","irida-next-type":"sample","irida-next-name":"Sample
+    47","children":[{"name":"INXT_SAM_AAAAAAAABW.assembly.fa.gz","type":"file"}]}]}]}'
+  basename: data-export-13

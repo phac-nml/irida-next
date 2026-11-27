@@ -1,622 +1,727 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 attachment1:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample1 (Sample)
+  id: 0afd5882-94d7-52b3-9642-e9a4725575eb
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
+  attachable_id: a97358ee-cfe4-577c-9a32-7fe348bbea93
   puid: INXT_ATT_AAAAAAAAAA
-  created_at: <%= 3.hours.ago %>
-  updated_at: <%= 3.hours.ago %>
-
 attachment2:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample1 (Sample)
+  id: f3b9e68b-8c7e-5129-bad5-bcf3929b63a7
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: a97358ee-cfe4-577c-9a32-7fe348bbea93
   puid: INXT_ATT_AAAAAAAAAB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachment3:
-  metadata: { "compression": "none", "format": "fasta" }
-  attachable: sample3 (Sample)
+  id: 67ee4b33-1c77-5bb9-8b8a-69a01b095d0a
+  metadata:
+    compression: none
+    format: fasta
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: b1b5a701-4d2b-5e0a-b5b4-e9a235044da9
   puid: INXT_ATT_BAAAAAAAAB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentA:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleA (Sample)
+  id: 7aa06a97-700c-5383-a5a4-3735a2304787
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
+  attachable_id: df47b6c2-5c50-56b4-970c-a8ba189a5fb1
   puid: INXT_ATT_AAAAAAAAAC
-  created_at: <%= 3.hours.ago %>
-  updated_at: <%= 3.hours.ago %>
-
 attachmentB:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleA (Sample)
+  id: 3fc1920a-a9d9-5b46-a91b-09d3e31b0acd
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: df47b6c2-5c50-56b4-970c-a8ba189a5fb1
   puid: INXT_ATT_AAAAAAAAAD
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentC:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleA (Sample)
+  id: 57624e6e-2c60-559b-9daf-eca155ba64c2
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
+  attachable_id: df47b6c2-5c50-56b4-970c-a8ba189a5fb1
   puid: INXT_ATT_AAAAAAAAAE
-  created_at: <%= 1.hour.ago %>
-  updated_at: <%= 1.hour.ago %>
-
 attachmentPEFWD1:
+  id: 7d648495-d6d2-5043-a42b-772f639bab6e
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV1,
-      :uuid) %>,
-    }
-  attachable: sampleB (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: 34032a0e-f335-5d59-bb03-6d19926497eb
+  attachable_type: Sample
+  created_at: "<%= 4.hour.ago %>"
+  updated_at: "<%= 4.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAF
-  created_at: <%= 4.hour.ago %>
-  updated_at: <%= 4.hour.ago %>
-
 attachmentPEREV1:
+  id: 34032a0e-f335-5d59-bb03-6d19926497eb
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD1,
-      :uuid) %>,
-    }
-  attachable: sampleB (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 7d648495-d6d2-5043-a42b-772f639bab6e
+  attachable_type: Sample
+  created_at: "<%= 4.hour.ago %>"
+  updated_at: "<%= 4.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAF
-  created_at: <%= 4.hour.ago %>
-  updated_at: <%= 4.hour.ago %>
-
 attachmentPEFWD2:
+  id: 84a5ba98-b560-5cd6-9eac-eac4b45e9b80
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV2,
-      :uuid) %>,
-    }
-  attachable: sampleB (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: 4b34807b-e920-5946-b9f7-336bd10f6a8f
+  attachable_type: Sample
+  created_at: "<%= 3.hour.ago %>"
+  updated_at: "<%= 3.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAG
-  created_at: <%= 3.hour.ago %>
-  updated_at: <%= 3.hour.ago %>
-
 attachmentPEREV2:
+  id: 4b34807b-e920-5946-b9f7-336bd10f6a8f
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD2,
-      :uuid) %>,
-    }
-  attachable: sampleB (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 84a5ba98-b560-5cd6-9eac-eac4b45e9b80
+  attachable_type: Sample
+  created_at: "<%= 3.hour.ago %>"
+  updated_at: "<%= 3.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAG
-  created_at: <%= 3.hour.ago %>
-  updated_at: <%= 3.hour.ago %>
-
 attachmentPEFWD3:
+  id: 067447d6-c99d-571b-acc0-8dc6f31ec6d1
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV3, :uuid) %>,
-    }
-  attachable: sampleB (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: b6b1ac8a-7e4c-561c-a5ab-434665db91da
+  attachable_type: Sample
+  created_at: "<%= 2.hour.ago %>"
+  updated_at: "<%= 2.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAH
-  created_at: <%= 2.hour.ago %>
-  updated_at: <%= 2.hour.ago %>
-
 attachmentPEREV3:
+  id: b6b1ac8a-7e4c-561c-a5ab-434665db91da
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD3, :uuid) %>,
-    }
-  attachable: sampleB (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 067447d6-c99d-571b-acc0-8dc6f31ec6d1
+  attachable_type: Sample
+  created_at: "<%= 2.hour.ago %>"
+  updated_at: "<%= 2.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAH
-  created_at: <%= 2.hour.ago %>
-  updated_at: <%= 2.hour.ago %>
-
 attachmentPEFWD4:
+  id: 660fe3f1-c991-53e9-a431-af20b26a1c6d
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV4, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: d15def17-496b-5b24-9e64-65b376ac6328
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAI
-
 attachmentPEREV4:
+  id: d15def17-496b-5b24-9e64-65b376ac6328
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD4, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 660fe3f1-c991-53e9-a431-af20b26a1c6d
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAI
-
 attachmentPEFWD5:
+  id: 9b259d54-2db3-5b13-9313-d73e9b683617
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV5, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: 488e7fb3-c2ff-5e27-94de-1b15edd0d8e3
+  attachable_type: Sample
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAJ
-
 attachmentPEREV5:
+  id: 488e7fb3-c2ff-5e27-94de-1b15edd0d8e3
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD5, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 9b259d54-2db3-5b13-9313-d73e9b683617
+  attachable_type: Sample
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAJ
-
 attachmentE:
-  metadata: { "compression": "gzip", "format": "fastq" }
-  attachable: sampleB (Sample)
+  id: 3b9ecbe5-2457-5a3d-8a0c-9920ed72743c
+  metadata:
+    compression: gzip
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hour.ago %>"
+  updated_at: "<%= 2.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAL
-  created_at: <%= 2.hour.ago %>
-  updated_at: <%= 2.hour.ago %>
-
 attachmentF:
-  metadata: { "compression": "gzip", "format": "fastq" }
-  attachable: sampleB (Sample)
+  id: fdc978db-eec8-55c6-9b09-b43f15a2fe05
+  metadata:
+    compression: gzip
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 1.hour.ago %>"
+  updated_at: "<%= 1.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAM
-  created_at: <%= 1.hour.ago %>
-  updated_at: <%= 1.hour.ago %>
-
 attachmentD:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleB (Sample)
+  id: a0fb8783-f57e-5abd-a6aa-50cd349617e2
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 3.hour.ago %>"
+  updated_at: "<%= 3.hour.ago %>"
+  attachable_id: 6ac0a0ab-b3ce-5a04-a6bb-e531a37c89c0
   puid: INXT_ATT_AAAAAAAAAK
-  created_at: <%= 3.hour.ago %>
-  updated_at: <%= 3.hour.ago %>
-
 attachmentG:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleC (Sample)
+  id: 5be98949-cdbd-5c73-84c7-a11426704c50
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAN
-
 attachmentH:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sampleC (Sample)
+  id: 12b16f79-37a1-5eac-b31f-ded2f4621474
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAO
-
 attachmentPEFWD6:
+  id: 28d12df3-55ed-50b5-b6f3-e6c0fe3866d1
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV6, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: 363ad7ff-bac6-5ab4-b0ac-447c859ee9d0
+  attachable_type: Sample
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAP
-
 attachmentPEREV6:
+  id: 363ad7ff-bac6-5ab4-b0ac-447c859ee9d0
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD6, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 28d12df3-55ed-50b5-b6f3-e6c0fe3866d1
+  attachable_type: Sample
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAP
-
 attachmentPEFWD7:
+  id: a03552e3-c6d7-5a6f-9cbd-6433ea7b936b
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV7, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: aa17c1ce-ce5b-560f-b822-a6f9bb723a2c
+  attachable_type: Sample
+  created_at: "<%= 30.minutes.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAQ
-
 attachmentPEREV7:
+  id: aa17c1ce-ce5b-560f-b822-a6f9bb723a2c
   metadata:
-    {
-      "type": "illumina_pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD7, :uuid) %>,
-    }
-  attachable: sampleC (Sample)
+    type: illumina_pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: a03552e3-c6d7-5a6f-9cbd-6433ea7b936b
+  attachable_type: Sample
+  created_at: "<%= 30.minutes.ago %>"
+  updated_at: "<%= 30.minutes.ago %>"
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAQ
-
 attachmentI:
-  metadata: { "compression": "gzip", "format": "fastq" }
-  attachable: sampleC (Sample)
+  id: 4339af9c-e144-5540-bed4-8de74614570a
+  metadata:
+    compression: gzip
+    format: fastq
+  attachable_type: Sample
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAR
-
 attachmentJ:
-  metadata: { "compression": "gzip", "format": "fastq" }
-  attachable: sampleC (Sample)
+  id: 2b2beff0-6de8-51d4-a748-d1096f619dd4
+  metadata:
+    compression: gzip
+    format: fastq
+  attachable_type: Sample
+  attachable_id: f2637e89-2d02-55fc-a572-60dbb5657a2f
   puid: INXT_ATT_AAAAAAAAAS
-
 workflow_execution_completed_output_attachment:
-  metadata: { "compression": "gzip", "format": "text" }
-  attachable: irida_next_example_completed_with_output (WorkflowExecution)
+  id: 2591f401-4bb8-5fa6-8073-4325d4760cf0
+  metadata:
+    compression: gzip
+    format: text
+  attachable_type: WorkflowExecution
+  attachable_id: 8f0f7f89-8895-5b7c-ae78-678a88852a01
   puid: INXT_ATT_AAAAAAAAAT
-
 samples_workflow_execution_completed_output_attachment:
-  metadata: { "type": "assembly", "format": "fasta", "compression": "none" }
-  attachable: sample46_irida_next_example_completed_with_output (SamplesWorkflowExecution)
+  id: 5371e23e-3e0c-539f-81ec-5693320cccfb
+  metadata:
+    type: assembly
+    format: fasta
+    compression: none
+  attachable_type: SamplesWorkflowExecution
+  attachable_id: 1ea6a971-9050-565a-9246-15f4d94b35b9
   puid: INXT_ATT_AAAAAAAAAU
-
 samples_shared_workflow_execution_completed_output_attachment:
-  metadata: { "type": "assembly", "format": "fasta", "compression": "gzip" }
-  attachable: sample47_workflow_execution_completed_shared2 (SamplesWorkflowExecution)
+  id: a355f362-bde4-514c-b816-dacd4c1bfc04
+  metadata:
+    type: assembly
+    format: fasta
+    compression: gzip
+  attachable_type: SamplesWorkflowExecution
+  attachable_id: 50c06513-3787-5991-85a2-767ad07c9dc9
   puid: INXT_ATT_AAAAAAAAAV
-
 samples_group_shared_workflow_execution_completed_output_attachment:
-  metadata: { "type": "assembly", "format": "fasta", "compression": "gzip" }
-  attachable: sample47_workflow_execution_completed_group_shared2 (SamplesWorkflowExecution)
+  id: 38bf9e62-c400-5809-a8ab-6a753ca5d1e3
+  metadata:
+    type: assembly
+    format: fasta
+    compression: gzip
+  attachable_type: SamplesWorkflowExecution
+  attachable_id: bdd4ddec-c33f-53ed-a43d-ad95e8cd9e0a
   puid: INXT_ATT_AAAAAAAAAW
-
 attachmentEndToEndFWD:
+  id: 1e4e2cc7-f275-5eec-bda0-6be37f5cf28c
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndREV,
-      :uuid) %>,
-    }
-  attachable: sampleEndToEnd (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: e4285673-406d-5dd2-9c43-c72fa5469284
+  attachable_type: Sample
+  attachable_id: edceef3d-4f01-5395-992a-2a9e461d7320
   puid: INXT_ATT_ABAAAAAAAA
-
 attachmentEndToEndREV:
+  id: e4285673-406d-5dd2-9c43-c72fa5469284
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentEndToEndFWD,
-      :uuid) %>,
-    }
-  attachable: sampleEndToEnd (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 1e4e2cc7-f275-5eec-bda0-6be37f5cf28c
+  attachable_type: Sample
+  attachable_id: edceef3d-4f01-5395-992a-2a9e461d7320
   puid: INXT_ATT_ABAAAAAAAB
-
 attachmentDELETE:
-  metadata: { "format": "fastq", "compression": "none" }
-  attachable: sampleDELETE (Sample)
+  id: f4738986-63e8-5bc5-b3f0-6cb51b5d7a8c
+  metadata:
+    format: fastq
+    compression: none
+  attachable_type: Sample
+  attachable_id: a10fa881-0c71-5e35-b709-36a08ebc43b8
   puid: INXT_ATT_ABAAAAAAAC
-
 attachment_completed_unclean_DELETE:
-  metadata: { "format": "fastq", "compression": "none" }
-  attachable: sample_completed_unclean_DELETE (Sample)
+  id: 71f2b216-0941-507d-9582-106a6e2bd25c
+  metadata:
+    format: fastq
+    compression: none
+  attachable_type: Sample
+  attachable_id: 17cdd9ad-5ae6-5fae-84d4-8d1d5d9c02cd
   puid: INXT_ATT_ABAAAAAAAD
-
 attachment_error_unclean_DELETE:
-  metadata: { "format": "fastq", "compression": "none" }
-  attachable: sample_error_unclean_DELETE (Sample)
+  id: f2646955-f42c-5380-8e06-c59583202e15
+  metadata:
+    format: fastq
+    compression: none
+  attachable_type: Sample
+  attachable_id: b4322b39-0abf-58d0-8927-5fc7a16e8e80
   puid: INXT_ATT_ABAAAAAAAE
-
 attachment_canceled_unclean_DELETE:
-  metadata: { "format": "fastq", "compression": "none" }
-  attachable: sample_canceled_unclean_DELETE (Sample)
+  id: b6985392-40fa-55d3-bf67-298c735afe2f
+  metadata:
+    format: fastq
+    compression: none
+  attachable_type: Sample
+  attachable_id: e815a0a2-c8fd-511b-a5fd-0fb4b1b4b806
   puid: INXT_ATT_ABAAAAAAAF
-
 attachmentPEREV43:
+  id: 4fbd4547-70d6-515d-bc30-ef7e80174913
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEFWD43,
-      :uuid) %>,
-    }
-  attachable: sample43 (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 0570bc90-f1d9-5c95-865b-4eaa5dee90ec
+  attachable_type: Sample
+  attachable_id: 3e18b2e3-1ee9-5f01-87aa-a6dea5eef280
   puid: INXT_ATT_AXDGAAAAAF
-
 attachmentPEFWD43:
+  id: 0570bc90-f1d9-5c95-865b-4eaa5dee90ec
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:attachmentPEREV43,
-      :uuid) %>,
-    }
-  attachable: sample43 (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: 4fbd4547-70d6-515d-bc30-ef7e80174913
+  attachable_type: Sample
+  attachable_id: 3e18b2e3-1ee9-5f01-87aa-a6dea5eef280
   puid: INXT_ATT_AXDGAAAAAF
-
 sample22AttachmentFastqFWD:
+  id: 30dd1ca2-675a-546a-b7b8-bb3a0e4dd273
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqREV,
-      :uuid) %>,
-    }
-  attachable: sample22 (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: none
+    associated_attachment_id: 04bed03a-6c98-55ec-accb-ae70f3a4a048
+  attachable_type: Sample
+  attachable_id: 590fbba7-3f52-5863-a927-13f93871926c
   puid: INXT_ATT_ABAAAAAAAG
-
 sample22AttachmentFastqREV:
+  id: 04bed03a-6c98-55ec-accb-ae70f3a4a048
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "none",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:sample22AttachmentFastqFWD,
-      :uuid) %>,
-    }
-  attachable: sample22 (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: none
+    associated_attachment_id: 30dd1ca2-675a-546a-b7b8-bb3a0e4dd273
+  attachable_type: Sample
+  attachable_id: 590fbba7-3f52-5863-a927-13f93871926c
   puid: INXT_ATT_ABAAAAAAAG
-
 sample22AttachmentFasta:
-  metadata: { "type": "assembly", "format": "fasta", "compression": "none" }
-  attachable: sample22 (Sample)
+  id: b1eadcd8-adb4-531f-b114-9c3758b740b1
+  metadata:
+    type: assembly
+    format: fasta
+    compression: none
+  attachable_type: Sample
+  attachable_id: 590fbba7-3f52-5863-a927-13f93871926c
   puid: INXT_ATT_ABAAAAAAAH
-
 sample22AttachmentText:
-  metadata: { "format": "text", "compression": "none" }
-  attachable: sample22 (Sample)
+  id: dc3c129a-bbcf-5f91-a4fd-0305fbdf3292
+  metadata:
+    format: text
+    compression: none
+  attachable_type: Sample
+  attachable_id: 590fbba7-3f52-5863-a927-13f93871926c
   puid: INXT_ATT_ABAAAAAAAI
-
 project1Attachment1:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: project1_namespace (Namespace)
+  id: eca4bbc3-e06f-5462-8499-40c81538e407
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Namespace
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
+  attachable_id: e38c793a-8939-5946-b08b-d4b460067164
   puid: INXT_ATT_ABAAAAAAAJ
-  created_at: <%= 3.hours.ago %>
-  updated_at: <%= 3.hours.ago %>
-
 project1Attachment2:
-  metadata: { "compression": "none", "format": "csv" }
-  attachable: project1_namespace (Namespace)
+  id: '01998c5b-ab05-5d55-91ba-0a2aca1c0b11'
+  metadata:
+    compression: none
+    format: csv
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: e38c793a-8939-5946-b08b-d4b460067164
   puid: INXT_ATT_ABAAAAAAAK
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 group1Attachment1:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: group_one (Namespace)
+  id: 73266e04-6354-54e7-8508-e5ef46fe6941
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Namespace
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
+  attachable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_ATT_ABAAAAAAAL
-  created_at: <%= 3.hours.ago %>
-  updated_at: <%= 3.hours.ago %>
-
 group1Attachment2:
-  metadata: { "compression": "none", "format": "csv" }
-  attachable: group_one (Namespace)
+  id: d7d6f79c-4d94-54f4-b826-b6d8f99f9539
+  metadata:
+    compression: none
+    format: csv
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: aa899913-e3de-58b9-a238-4e8babcd153c
   puid: INXT_ATT_ABAAAAAAAM
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 gasclusteringAttachment:
-  metadata: { "compression": "none", "format": "json" }
-  attachable: sample32 (Sample)
+  id: f615103b-b6c3-572c-b834-44f73962b1cb
+  metadata:
+    compression: none
+    format: json
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: b1c24394-a161-510d-91e8-18d102d8d30c
   puid: INXT_ATT_ABAAAAAAAN
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 sample32JsonAttachment:
-  metadata: { "compression": "none", "format": "json" }
-  attachable: sample32 (Sample)
+  id: d10946f3-e006-5635-a72d-ce128013c4b3
+  metadata:
+    compression: none
+    format: json
+  attachable_type: Sample
+  created_at: "<%= 1.hours.ago %>"
+  updated_at: "<%= 1.hours.ago %>"
+  attachable_id: b1c24394-a161-510d-91e8-18d102d8d30c
   puid: INXT_ATT_ABAAAAAAAO
-  created_at: <%= 1.hours.ago %>
-  updated_at: <%= 1.hours.ago %>
-
 attachmentCSV:
-  metadata: { "compression": "none", "format": "csv" }
-  attachable: project2_namespace (Namespace)
+  id: aaf550cd-0697-5438-bc42-b56896641945
+  metadata:
+    compression: none
+    format: csv
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   puid: INXT_ATT_ABAAAAAABA
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentText:
-  metadata: { "compression": "none", "format": "text" }
-  attachable: project2_namespace (Namespace)
+  id: c5ec3675-65e1-568f-9758-cf5dcd604718
+  metadata:
+    compression: none
+    format: text
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   puid: INXT_ATT_ABAAAAAABB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentJSON:
-  metadata: { "compression": "none", "format": "json" }
-  attachable: project2_namespace (Namespace)
+  id: 287852c1-0b65-55f1-8e7a-ae9a9f754629
+  metadata:
+    compression: none
+    format: json
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   puid: INXT_ATT_ABAAAAAABC
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentSpreadsheet:
-  metadata: { "compression": "none", "format": "spreadsheet" }
-  attachable: project2_namespace (Namespace)
+  id: 443b16c0-ee18-5651-829f-1bf89d3b69ef
+  metadata:
+    compression: none
+    format: spreadsheet
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   puid: INXT_ATT_ABAAAAAABD
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentImage:
-  metadata: { "compression": "none", "format": "image" }
-  attachable: project2_namespace (Namespace)
+  id: 6c47b1a6-5d84-5de9-97ea-18a3bc4da830
+  metadata:
+    compression: none
+    format: image
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   puid: INXT_ATT_ABAAAAAABE
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 attachmentTSV:
-  metadata: { "compression": "none", "format": "tsv" }
-  attachable: project2_namespace (Namespace)
+  id: 4cba416c-1291-5dd9-9f23-b1c4f94b5401
+  metadata:
+    compression: none
+    format: tsv
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 5e3395a4-3379-52fb-905c-b202c16085ab
   puid: INXT_ATT_ABAAAAAABF
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 workflow_execution_group_shared_output_attachment:
-  metadata: { "compression": "none", "format": "json" }
-  attachable: workflow_execution_group_shared1 (WorkflowExecution)
+  id: 7c347c05-362e-5f42-b246-7dc73baa2168
+  metadata:
+    compression: none
+    format: json
+  attachable_type: WorkflowExecution
+  attachable_id: a75576be-e8c2-52d2-bd32-fd643d45f9c5
   puid: INXT_ATT_ABAAAAAABG
-
 workflow_execution_shared_with_project_output_attachment:
-  metadata: { "compression": "none", "format": "json" }
-  attachable: workflow_execution_shared2 (WorkflowExecution)
+  id: 2c520f9b-f191-5cc6-827b-fbf9072eb781
+  metadata:
+    compression: none
+    format: json
+  attachable_type: WorkflowExecution
+  attachable_id: 0aeafca1-954f-5e83-b9a4-150f692d0b39
   puid: INXT_ATT_ABAAAAAABH
-
 sample_preparation_test_attachment_1:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample_preparation_test_1 (Sample)
+  id: cd43ced6-37e5-547d-bd9e-cb83f41a5772
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
+  attachable_id: 1e9e47a6-3d90-5434-8292-23b8e3916410
   puid: INXT_ATT_AAAAAAAAZA
-  created_at: <%= 3.hours.ago %>
-  updated_at: <%= 3.hours.ago %>
-
 sample_preparation_test_attachment_1B:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample_preparation_test_1 (Sample)
+  id: a152cdca-4c06-5bc9-9e17-c5d3b5d376e2
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 3.hours.ago %>"
+  updated_at: "<%= 3.hours.ago %>"
+  attachable_id: 1e9e47a6-3d90-5434-8292-23b8e3916410
   puid: INXT_ATT_AAAAAAAZZA
-  created_at: <%= 3.hours.ago %>
-  updated_at: <%= 3.hours.ago %>
-
 sample_preparation_test_attachment_2:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample_preparation_test_2 (Sample)
+  id: 4eb7d37a-c8d2-56dc-8e76-d2d2221cda40
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 4c586fe6-7be6-5fc5-8fe8-4a42286a620e
   puid: INXT_ATT_AAAAAAAAZB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 sample_preparation_test_attachment_2B:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample_preparation_test_2 (Sample)
+  id: 79503181-740d-5bba-9d01-16cbd1343217
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: 4c586fe6-7be6-5fc5-8fe8-4a42286a620e
   puid: INXT_ATT_AAAAAAAZZB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 sample_preparation_test_attachment_3:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample_preparation_test_3 (Sample)
+  id: aa46a0a8-26a7-5d1d-8880-598087512c56
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: b88ce0aa-ffee-5804-83ad-5d31a183fa1a
   puid: INXT_ATT_BAAAAAAAZB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 sample_preparation_test_attachment_3B:
-  metadata: { "compression": "none", "format": "fastq" }
-  attachable: sample_preparation_test_3 (Sample)
+  id: b9d2f729-5311-52e0-9bff-4cbbdfad4d20
+  metadata:
+    compression: none
+    format: fastq
+  attachable_type: Sample
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: b88ce0aa-ffee-5804-83ad-5d31a183fa1a
   puid: INXT_ATT_BAAAAAAZZB
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 group16AttachmentCSV:
-  metadata: { "compression": "none", "format": "csv" }
-  attachable: group_sixteen (Namespace)
+  id: f00ec17f-1203-5443-9007-14268581b0cc
+  metadata:
+    compression: none
+    format: csv
+  attachable_type: Namespace
+  created_at: "<%= 2.hours.ago %>"
+  updated_at: "<%= 2.hours.ago %>"
+  attachable_id: b2776255-1bf4-5d94-889c-d9758d90ccb7
   puid: INXT_ATT_ABAAAAAABI
-  created_at: <%= 2.hours.ago %>
-  updated_at: <%= 2.hours.ago %>
-
 snvphyl_sample1_attachment_fwd:
+  id: 0d60b48d-315d-5b81-b032-b0debd0b5dab
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "gzip",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:snvphyl_sample1_attachment_rev,
-      :uuid) %>,
-    }
-  attachable: snvphyl_sample1 (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: gzip
+    associated_attachment_id: 0f75f089-f0c7-5191-9095-069f33d76cdc
+  attachable_type: Sample
+  attachable_id: f9727517-27e4-5a8c-908d-1f934a8c2e9c
   puid: INXT_ATT_ABAAAAAABJ
-
 snvphyl_sample1_attachment_rev:
+  id: 0f75f089-f0c7-5191-9095-069f33d76cdc
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "gzip",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:snvphyl_sample1_attachment_fwd,
-      :uuid) %>,
-    }
-  attachable: snvphyl_sample1 (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: gzip
+    associated_attachment_id: 0d60b48d-315d-5b81-b032-b0debd0b5dab
+  attachable_type: Sample
+  attachable_id: f9727517-27e4-5a8c-908d-1f934a8c2e9c
   puid: INXT_ATT_ABAAAAAABK
-
 snvphyl_sample1_attachment_ref:
+  id: a8bb9e71-a5b4-542b-aef1-4e3cc827c21d
   metadata:
-    {
-      "type": "assembly",
-      "format": "fasta",
-      "compression": "gzip",
-    }
-  attachable: snvphyl_sample1 (Sample)
+    type: assembly
+    format: fasta
+    compression: gzip
+  attachable_type: Sample
+  attachable_id: f9727517-27e4-5a8c-908d-1f934a8c2e9c
   puid: INXT_ATT_ABAAAAAABL
-
 snvphyl_sample2_attachment_fwd:
+  id: 5d8804ca-07af-51ea-ba05-27df8f8753d2
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "forward",
-      "compression": "gzip",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:snvphyl_sample2_attachment_rev,
-      :uuid) %>,
-    }
-  attachable: snvphyl_sample2 (Sample)
+    type: pe
+    format: fastq
+    direction: forward
+    compression: gzip
+    associated_attachment_id: 3f29a86f-8082-59d9-8124-f527cf619250
+  attachable_type: Sample
+  attachable_id: 34f214d5-446d-56ac-b83c-dcc696d02bd6
   puid: INXT_ATT_ABAAAAAABM
-
 snvphyl_sample2_attachment_rev:
+  id: 3f29a86f-8082-59d9-8124-f527cf619250
   metadata:
-    {
-      "type": "pe",
-      "format": "fastq",
-      "direction": "reverse",
-      "compression": "gzip",
-      "associated_attachment_id": <%= ActiveRecord::FixtureSet.identify(:snvphyl_sample2_attachment_fwd,
-      :uuid) %>,
-    }
-  attachable: snvphyl_sample2 (Sample)
+    type: pe
+    format: fastq
+    direction: reverse
+    compression: gzip
+    associated_attachment_id: 5d8804ca-07af-51ea-ba05-27df8f8753d2
+  attachable_type: Sample
+  attachable_id: 34f214d5-446d-56ac-b83c-dcc696d02bd6
   puid: INXT_ATT_ABAAAAAABN
-
 snvphyl_project_attachment_ref:
+  id: 0dfe5e5a-0b38-57dd-bfc3-6cf0426f794e
   metadata:
-    {
-      "type": "assembly",
-      "format": "fasta",
-      "compression": "gzip",
-    }
-  attachable: snvphyl_project_namespace (Namespace)
+    type: assembly
+    format: fasta
+    compression: gzip
+  attachable_type: Namespace
+  attachable_id: 215360c4-03a9-5aac-8463-40f6b2253d3e
   puid: INXT_ATT_ABAAAAAABO
-
 snvphyl_group_attachment_ref:
+  id: c8231899-2faa-537b-999e-a037e610d035
   metadata:
-    {
-      "type": "assembly",
-      "format": "fasta",
-      "compression": "gzip",
-    }
-  attachable: snvphyl_group (Namespace)
+    type: assembly
+    format: fasta
+    compression: gzip
+  attachable_type: Namespace
+  attachable_id: 16e9e902-a65e-506d-8948-f14b82dfd7b9
   puid: INXT_ATT_ABAAAAAABP
-

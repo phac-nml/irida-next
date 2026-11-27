@@ -1,58 +1,69 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 valid_automated_workflow_execution:
-  name: "Valid Automated Workflow Execution"
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 4959c715-9329-5e3c-842b-243ee025860e
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
-  workflow_params: { "assembler": "stub" }
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    assembler: stub
   email_notification: true
   update_samples: false
-
+  name: Valid Automated Workflow Execution
 disabled_automated_workflow_execution:
-  name: "Disabled Automated Workflow Execution"
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:project1_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:john_doe, :uuid) %>
+  id: 80c56b16-3c8c-5f7f-b0b5-9a09d6db8395
+  namespace_id: e38c793a-8939-5946-b08b-d4b460067164
+  created_by_id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
-  workflow_params: { "assembler": "stub" }
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    assembler: stub
   email_notification: true
   update_samples: false
+  name: Disabled Automated Workflow Execution
   disabled: true
-
 projectA_automated_workflow_execution_one:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  id: 3a781f39-ef28-55d2-81fe-1d30e04d3f5d
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.2" }
-  workflow_params: { "assembler": "stub" }
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.2
+  workflow_params:
+    assembler: stub
   email_notification: false
   update_samples: false
-
 projectA_automated_workflow_execution_two:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  id: 1ecbec7a-fd76-5c55-82f9-88177f206414
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.1" }
-  workflow_params: { "assembler": "stub" }
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.1
+  workflow_params:
+    assembler: stub
   email_notification: false
   update_samples: false
-
 projectA_automated_workflow_execution_three:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  id: 6fcc8552-e976-5cff-be39-64f90dc9f3bf
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.0" }
-  workflow_params: { "assembler": "stub" }
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.0
+  workflow_params:
+    assembler: stub
   email_notification: false
   update_samples: false
-
 projectA_automated_workflow_execution_four:
-  namespace_id: <%= ActiveRecord::FixtureSet.identify(:projectA_namespace, :uuid) %>
-  created_by_id: <%= ActiveRecord::FixtureSet.identify(:jeff_doe, :uuid) %>
+  id: d5836e18-f551-504f-9111-6f88f9027d8e
+  namespace_id: 47e272c4-71a5-5c76-88f0-343755ff77aa
+  created_by_id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   metadata:
-    { pipeline_id: "phac-nml/iridanextexample", workflow_version: "1.0.4" }
-  workflow_params: { "assembler": "stub" }
+    pipeline_id: phac-nml/iridanextexample
+    workflow_version: 1.0.4
+  workflow_params:
+    assembler: stub
   email_notification: false
   update_samples: false

@@ -1,288 +1,875 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-DEFAULTS: &DEFAULTS
-  encrypted_password: <%= User.new.send :password_digest, "password1" %>
-  locale: en
-  user_type: human
-
 system_user:
-  <<: *DEFAULTS
+  id: 507a858e-fa91-52ab-ac5f-7e36745bb2e7
   email: system@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: System
   last_name: User
+  locale: en
+  user_type: human
   system: true
-
 john_doe:
-  <<: *DEFAULTS
+  id: 6baa496f-dd99-53f6-87e6-bc66d848154e
   email: john.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: John
   last_name: Doe
-
+  locale: en
+  user_type: human
 jane_doe:
-  <<: *DEFAULTS
+  id: 5f309ff5-f33e-5873-8603-a19231835c5a
   email: jane.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Jane
   last_name: Doe
-
+  locale: en
+  user_type: human
 jean_doe:
-  <<: *DEFAULTS
+  id: 3b326607-0c2f-503b-b53b-2e2024945a93
   email: jean.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Jean
   last_name: Doe
-
+  locale: en
+  user_type: human
 james_doe:
-  <<: *DEFAULTS
+  id: 30d04ebd-2708-57ee-a0e6-776443b191b7
   email: james.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: James
   last_name: Doe
   locale: fr
-
+  user_type: human
 joan_doe:
-  <<: *DEFAULTS
+  id: 6f705397-5319-5125-b46c-acd9b7b913a8
   email: joan.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Joan
   last_name: Doe
   locale: fr
-
+  user_type: human
 steve_doe:
-  <<: *DEFAULTS
+  id: 6fc61c66-e593-5750-bde1-23dcaf871cdd
   email: steve.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Steve
   last_name: Doe
-
+  locale: en
+  user_type: human
 michelle_doe:
-  <<: *DEFAULTS
+  id: fde7e6d1-755b-5547-9932-52d23724daa7
   email: michelle.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Michelle
   last_name: Doe
-
+  locale: en
+  user_type: human
 micha_doe:
-  <<: *DEFAULTS
+  id: 3388fdf4-155d-5006-bb30-970b255e7e7c
   email: micha.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Micha
   last_name: Doe
-
+  locale: en
+  user_type: human
 ryan_doe:
-  <<: *DEFAULTS
+  id: db8a370e-5e4a-53be-b116-fba83029d2d7
   email: ryan.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Ryan
   last_name: Doe
-
+  locale: en
+  user_type: human
 david_doe:
-  <<: *DEFAULTS
+  id: c360d970-30e6-5b09-92ed-68a3bad72f26
   email: david.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: David
   last_name: Doe
-
+  locale: en
+  user_type: human
 jeff_doe:
-  <<: *DEFAULTS
+  id: 99be4193-cc3b-5f7c-94d7-2ec9bd70b031
   email: jeff.doe@localhost
-  first_name: Jeff
-  last_name: Doe
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   provider: developer
   uid: jeff.doe@localhost
-
+  first_name: Jeff
+  last_name: Doe
+  locale: en
+  user_type: human
 alph_abet:
-  <<: *DEFAULTS
+  id: 628c1f61-62be-5621-8451-420534c1a16f
   email: alph.abet@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Alph
   last_name: Abet
-
-<% 25.times do |n| %>
-user<%= (n) %>:
-  <<: *DEFAULTS
-  email: <%= "user#{n}@localhost" %>
+  locale: en
+  user_type: human
+user0:
+  id: 879da692-70e0-59f1-92a3-c5d9611696d4
+  email: user0@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: <%= n %>
-<% end %>
-
+  last_name: 0
+  locale: en
+  user_type: human
+user1:
+  id: 5b8fbc5d-13cb-56c0-9ea8-f9c02e132109
+  email: user1@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 1
+  locale: en
+  user_type: human
+user2:
+  id: f0e96406-f36f-5812-93fb-4d12e5a19a2c
+  email: user2@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 2
+  locale: en
+  user_type: human
+user3:
+  id: '08b8bace-4c57-5566-b6d2-a5a557e844e4'
+  email: user3@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 3
+  locale: en
+  user_type: human
+user4:
+  id: 1a777b52-cabf-5dc2-a89d-fbd1df03382f
+  email: user4@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 4
+  locale: en
+  user_type: human
+user5:
+  id: 49405f1b-8dbf-59c5-92eb-923300e99831
+  email: user5@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 5
+  locale: en
+  user_type: human
+user6:
+  id: bc52ee60-97f9-56c2-a236-432dc90589a0
+  email: user6@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 6
+  locale: en
+  user_type: human
+user7:
+  id: 4b3ea796-f809-51a0-b8eb-c8a1cda4a4be
+  email: user7@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 7
+  locale: en
+  user_type: human
+user8:
+  id: bc78c4b8-c4e0-5657-9923-30a6882999ac
+  email: user8@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 8
+  locale: en
+  user_type: human
+user9:
+  id: 1504097e-ed77-59b7-8341-92b10a5053e0
+  email: user9@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 9
+  locale: en
+  user_type: human
+user10:
+  id: 06a03ad2-2555-55c7-b97e-8786a2f87ee6
+  email: user10@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 10
+  locale: en
+  user_type: human
+user11:
+  id: 01db7d13-f21b-599d-b843-866010c09562
+  email: user11@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 11
+  locale: en
+  user_type: human
+user12:
+  id: cf184b8d-4e87-55f9-bfa1-6699f88eb4c9
+  email: user12@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 12
+  locale: en
+  user_type: human
+user13:
+  id: 0eac7e46-ffb0-58f3-9b75-ef1cc090217f
+  email: user13@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 13
+  locale: en
+  user_type: human
+user14:
+  id: 709c7145-fb40-567d-94ea-bf50f9dd66d4
+  email: user14@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 14
+  locale: en
+  user_type: human
+user15:
+  id: aa952f95-4eff-5973-bddf-fc2f96fd39b7
+  email: user15@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 15
+  locale: en
+  user_type: human
+user16:
+  id: dee481eb-fc05-5e97-ba94-066761eeb662
+  email: user16@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 16
+  locale: en
+  user_type: human
+user17:
+  id: cbdfd95d-046c-5877-9481-866b07315305
+  email: user17@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 17
+  locale: en
+  user_type: human
+user18:
+  id: a05069dc-5387-5a55-9de6-f737ec2fb655
+  email: user18@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 18
+  locale: en
+  user_type: human
+user19:
+  id: 6eb4d209-3ff7-53c8-9f6b-ddc2f7e0e4ed
+  email: user19@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 19
+  locale: en
+  user_type: human
+user20:
+  id: 5d4e9dee-a9be-5fd2-8f46-478a1fe647da
+  email: user20@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 20
+  locale: en
+  user_type: human
+user21:
+  id: 11ec6521-6eb5-518a-8472-4367f4f4dc12
+  email: user21@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 21
+  locale: en
+  user_type: human
+user22:
+  id: a7c009c1-f1da-5e3c-b5d4-3ded297cb430
+  email: user22@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 22
+  locale: en
+  user_type: human
+user23:
+  id: ee594d61-b814-54a8-a99e-27b2df48e510
+  email: user23@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 23
+  locale: en
+  user_type: human
+user24:
+  id: ff401bf4-b618-552c-98c0-1acdbc4a3d7a
+  email: user24@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: User
+  last_name: 24
+  locale: en
+  user_type: human
 user25:
-  <<: *DEFAULTS
-  email: <%= "user25@localhost" %>
+  id: 5f360e48-f7c6-518e-bcb2-61afe4a4ec8d
+  email: user25@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "25"
-
-# Do not link this user to anything
+  last_name: '25'
+  locale: en
+  user_type: human
 user_no_access:
-  <<: *DEFAULTS
-  email: <%= "user_no_access@localhost" %>
+  id: 5fb13128-8056-5695-b01c-4e51c87ddbaf
+  email: user_no_access@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "No Access"
-
-user_no_access:
-  <<: *DEFAULTS
-  email: <%= "user_no_access@localhost" %>
-  first_name: User
-  last_name: "No Access"
-
+  last_name: No Access
+  locale: en
+  user_type: human
 private_ryan:
-  <<: *DEFAULTS
-  email: <%= "private.ryan@localhost" %>
+  id: 5d01cbd4-96c9-5aa3-a6b5-fd097547f781
+  email: private.ryan@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Private
   last_name: Ryan
-
+  locale: en
+  user_type: human
 user26:
-  <<: *DEFAULTS
-  email: <%= "user26@localhost" %>
+  id: b605308e-35e0-5a2a-906f-64e06a464f5d
+  email: user26@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "26"
-
+  last_name: '26'
+  locale: en
+  user_type: human
 private_joan:
-  <<: *DEFAULTS
-  email: <%= "private.joan@localhost" %>
+  id: 0c697bc6-7a14-550e-8e1b-0973016d6cbe
+  email: private.joan@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Private
   last_name: Joan
-
+  locale: en
+  user_type: human
 private_micha:
-  <<: *DEFAULTS
-  email: <%= "private.micha@localhost" %>
+  id: cf0313c4-5c50-581a-9d0f-0b0aad9dd56b
+  email: private.micha@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Private
   last_name: Micha
-
+  locale: en
+  user_type: human
 user27:
-  <<: *DEFAULTS
-  email: <%= "user27@localhost" %>
+  id: 42e6682c-8029-5fea-9093-7afd4fbf2143
+  email: user27@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "27"
-
+  last_name: '27'
+  locale: en
+  user_type: human
 user28:
-  <<: *DEFAULTS
-  email: <%= "user28@localhost" %>
+  id: 15f3ee61-77cd-53e8-88b7-5fb1b143dacf
+  email: user28@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "28"
-
-<% 22.times do |n| %>
-user_bot_account<%= (n) %>:
-  <<: *DEFAULTS
-  email: <%= "inxt_prj_aaaaaaaaaa_bot_#{format('%03d', (n + 1))}@localhost" %>
+  last_name: '28'
+  locale: en
+  user_type: human
+user_bot_account0:
+  id: 93ced0c8-e21a-562c-a187-81aedac9adda
+  email: inxt_prj_aaaaaaaaaa_bot_001@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Project
-  last_name: "Bot #{format('%03d', (n + 1))}"
-  user_type: <%= User.user_types[:project_bot] %>
-<% end %>
-
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account1:
+  id: 3b47d26c-421d-57ab-ad82-e9e2b6a0b197
+  email: inxt_prj_aaaaaaaaaa_bot_002@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account2:
+  id: 5bde273e-40e7-5ef3-9da0-d411253252de
+  email: inxt_prj_aaaaaaaaaa_bot_003@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account3:
+  id: d22ddd7b-8a6b-50fb-bbf6-11658e96020b
+  email: inxt_prj_aaaaaaaaaa_bot_004@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account4:
+  id: a773cd4a-9d43-5881-ac4a-7300e4aeec1c
+  email: inxt_prj_aaaaaaaaaa_bot_005@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account5:
+  id: ec6b08e7-53ee-5035-9c3e-747e5aaad1ca
+  email: inxt_prj_aaaaaaaaaa_bot_006@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account6:
+  id: d758e102-dbd2-5d56-9355-98329c6d2c08
+  email: inxt_prj_aaaaaaaaaa_bot_007@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account7:
+  id: 1ee7161e-d123-5d1c-88ee-c5feeb8aa516
+  email: inxt_prj_aaaaaaaaaa_bot_008@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account8:
+  id: dbcfead3-e4b5-5c9f-b64a-fe27c8ef7825
+  email: inxt_prj_aaaaaaaaaa_bot_009@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account9:
+  id: 6a59d729-3da5-5b25-91f0-de2c0f76e832
+  email: inxt_prj_aaaaaaaaaa_bot_010@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account10:
+  id: 2cd13af2-4238-58bc-95a8-5db1898bd460
+  email: inxt_prj_aaaaaaaaaa_bot_011@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account11:
+  id: 150a1d12-7d4d-54fa-9c02-7c60c68ed938
+  email: inxt_prj_aaaaaaaaaa_bot_012@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account12:
+  id: eaf569e6-76dc-56c1-a3c4-16bbac2372d0
+  email: inxt_prj_aaaaaaaaaa_bot_013@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account13:
+  id: 3f59c1c1-ae4c-591e-a813-630d72ad15e4
+  email: inxt_prj_aaaaaaaaaa_bot_014@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account14:
+  id: 56a42e31-bf7a-53e6-a3fd-63196230a28b
+  email: inxt_prj_aaaaaaaaaa_bot_015@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account15:
+  id: 0c8d1a6b-39e4-5735-b824-8b6440780d5f
+  email: inxt_prj_aaaaaaaaaa_bot_016@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account16:
+  id: 920e8103-b3ae-5465-a66e-b84e4764da0d
+  email: inxt_prj_aaaaaaaaaa_bot_017@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account17:
+  id: c31c55f6-14fa-53cb-8a79-ef825e105e64
+  email: inxt_prj_aaaaaaaaaa_bot_018@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account18:
+  id: 2241e587-237e-5681-8f81-1f1c9a26c9f6
+  email: inxt_prj_aaaaaaaaaa_bot_019@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account19:
+  id: 59427f38-19ab-53a7-a779-2560ec5e32b2
+  email: inxt_prj_aaaaaaaaaa_bot_020@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account20:
+  id: 3e57df21-421a-5014-83da-1db1b60c7230
+  email: inxt_prj_aaaaaaaaaa_bot_021@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
+user_bot_account21:
+  id: 3b291507-8c5d-529d-8f27-58e1555dac24
+  email: inxt_prj_aaaaaaaaaa_bot_022@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Project
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 1
 user29:
-  <<: *DEFAULTS
-  email: <%= "user29@localhost" %>
+  id: af89429d-9b9b-598b-982c-a3e8eb7d2e01
+  email: user29@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "29"
-
+  last_name: '29'
+  locale: en
+  user_type: human
 user30:
-  <<: *DEFAULTS
-  email: <%= "user30@localhost" %>
+  id: f0404ff1-8df0-5b77-9933-31fe665f669d
+  email: user30@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "30"
-
+  last_name: '30'
+  locale: en
+  user_type: human
 user31:
-  <<: *DEFAULTS
-  email: <%= "user31@localhost" %>
+  id: 6cdd89e9-6835-5a9e-9957-6dea964f7702
+  email: user31@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "31"
-
+  last_name: '31'
+  locale: en
+  user_type: human
 user32:
-  <<: *DEFAULTS
-  email: <%= "user32@localhost" %>
+  id: 56b465f0-318a-57fe-9d9c-da95a48c2ba9
+  email: user32@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: User
-  last_name: "32"
-
-<% 22.times do |n| %>
-user_group_bot_account<%= (n) %>:
-  <<: *DEFAULTS
-  email: <%= "inxt_grp_aaaaaaaaaa_bot#{format('%03d', (n + 1))}@localhost" %>
+  last_name: '32'
+  locale: en
+  user_type: human
+user_group_bot_account0:
+  id: a30c2714-9eb8-535e-80c4-e1f32264ddad
+  email: inxt_grp_aaaaaaaaaa_bot001@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Group
-  last_name: "Bot #{format('%03d', (n + 1))}"
-  user_type: <%= User.user_types[:group_bot] %>
-<% end %>
-
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account1:
+  id: a945249a-a8d9-5213-bc53-69fd5cd33a72
+  email: inxt_grp_aaaaaaaaaa_bot002@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account2:
+  id: fe4bcba8-8712-5e26-b2ab-80814c78b4e1
+  email: inxt_grp_aaaaaaaaaa_bot003@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account3:
+  id: 77940606-098f-5564-8e42-a1592a298f1b
+  email: inxt_grp_aaaaaaaaaa_bot004@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account4:
+  id: cbcdbe7d-5b03-5d65-afef-8142cb3e2b2c
+  email: inxt_grp_aaaaaaaaaa_bot005@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account5:
+  id: 56f8c848-e473-50f0-9155-488d783aab87
+  email: inxt_grp_aaaaaaaaaa_bot006@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account6:
+  id: cee46fc1-18fe-5a26-9fd0-cb9a2f4c8396
+  email: inxt_grp_aaaaaaaaaa_bot007@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account7:
+  id: c91aa843-efe0-5c02-8dcd-6d7ea87a6171
+  email: inxt_grp_aaaaaaaaaa_bot008@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account8:
+  id: 7b8d5604-3a38-55e7-9eac-a5a858079f93
+  email: inxt_grp_aaaaaaaaaa_bot009@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account9:
+  id: ea16ee19-602f-5b80-9787-c066964d6886
+  email: inxt_grp_aaaaaaaaaa_bot010@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account10:
+  id: 7910f7ad-e031-53e4-b9fc-ac79f716c4b4
+  email: inxt_grp_aaaaaaaaaa_bot011@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account11:
+  id: 0205cba3-8a19-5f5c-b71e-56a76e055f20
+  email: inxt_grp_aaaaaaaaaa_bot012@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account12:
+  id: 7fe98cad-60ca-5ba9-be69-fdd9db22f3d3
+  email: inxt_grp_aaaaaaaaaa_bot013@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account13:
+  id: 874a28ec-49c8-507b-9959-042b705b7f03
+  email: inxt_grp_aaaaaaaaaa_bot014@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account14:
+  id: a8646e7b-accf-5166-ab08-ad774caafae9
+  email: inxt_grp_aaaaaaaaaa_bot015@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account15:
+  id: 93e722df-08b5-58f9-ac0a-f38e18aadf3e
+  email: inxt_grp_aaaaaaaaaa_bot016@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account16:
+  id: 2f85dc4b-dd4b-5749-8721-e167eaab0eb4
+  email: inxt_grp_aaaaaaaaaa_bot017@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account17:
+  id: 68c4ee91-45fb-536f-91a1-8802f66c2813
+  email: inxt_grp_aaaaaaaaaa_bot018@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account18:
+  id: 2a00d33d-337e-54c4-a97f-4d809ad16f91
+  email: inxt_grp_aaaaaaaaaa_bot019@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account19:
+  id: ede92477-62b0-5dc3-8973-6be05d92773a
+  email: inxt_grp_aaaaaaaaaa_bot020@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account20:
+  id: a161a253-f971-59ab-8306-412174a87816
+  email: inxt_grp_aaaaaaaaaa_bot021@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
+user_group_bot_account21:
+  id: 80410b76-5689-5fdb-86a9-43ae41e37bee
+  email: inxt_grp_aaaaaaaaaa_bot022@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
+  first_name: Group
+  last_name: 'Bot #{format(''%03d'', (n + 1))}'
+  locale: en
+  user_type: 2
 project1_automation_bot:
-  <<: *DEFAULTS
-  email: <%= "inxt_prj_aaaaaaaaaa_automation_bot@localhost" %>
+  id: 58aed0ec-3c34-5d68-b116-837cb913bf7a
+  email: inxt_prj_aaaaaaaaaa_automation_bot@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: INXT_PRJ_AAAAAAAAAA
   last_name: Automation Bot
-  user_type: <%= User.user_types[:project_automation_bot] %>
-
+  locale: en
+  user_type: 3
 projectA_automation_bot:
-  <<: *DEFAULTS
-  email: <%= "inxt_prj_aaaaaaaaa5_automation_bot@localhost" %>
+  id: 60f88d78-4cbd-55a6-8f02-6b3328b5a30a
+  email: inxt_prj_aaaaaaaaa5_automation_bot@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: INXT_PRJ_AAAAAAAAA5
   last_name: Automation Bot
-  user_type: <%= User.user_types[:project_automation_bot] %>
-
+  locale: en
+  user_type: 3
 janitor_doe:
-  <<: *DEFAULTS
-  email: <%= "janitor_doe@localhost" %>
+  id: eb2c66fd-8c29-56c3-a1cc-9590ab60578b
+  email: janitor_doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: project
-  last_name: "end to end user"
-
+  last_name: end to end user
+  locale: en
+  user_type: human
 projectJeff_bot:
-  <<: *DEFAULTS
-  email: <%= "inxt_prj_aaaaaaaabp_001@localhost" %>
+  id: c4aad11e-4241-5744-a0ab-ac3dc297683a
+  email: inxt_prj_aaaaaaaabp_001@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: INXT_PRJ_AAAAAAAABP
   last_name: Bot
-  user_type: <%= User.user_types[:project_bot] %>
-
+  locale: en
+  user_type: 1
 groupJeff_bot:
-  <<: *DEFAULTS
-  email: <%= "inxt_grp_aaaaaajeff_001@localhost" %>
+  id: 8344c97b-e3e7-5e6d-91c7-079e03e0dfc5
+  email: inxt_grp_aaaaaajeff_001@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: INXT_GRP_AAAAAAJEFF
   last_name: Bot
-  user_type: <%= User.user_types[:group_bot] %>
-
+  locale: en
+  user_type: 2
 empty_doe:
-  <<: *DEFAULTS
-  email: <%= "empty_doe@localhost" %>
+  id: ab606eb1-9ece-5f1c-b583-eec94a24e73d
+  email: empty_doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Empty
   last_name: Doe
-
+  locale: en
+  user_type: human
 metadata_doe:
-  <<: *DEFAULTS
-  email: <%= "metadata_doe@localhost" %>
+  id: 6c4987de-eb10-5387-8fb8-077257186443
+  email: metadata_doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Metadata
   last_name: Doe
-
+  locale: en
+  user_type: human
 mary_doe:
-  <<: *DEFAULTS
+  id: ac26b74c-15a6-585a-a682-7c3526fe6547
   email: mary.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: Mary
   last_name: Doe
-
+  locale: en
+  user_type: human
 sample_actions_doe:
-  <<: *DEFAULTS
-  email: <%= "sample.actions.doe@localhost" %>
+  id: 5df0f252-38ba-5bb5-a3ca-0c1a1e225c10
+  email: sample.actions.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: SampleActions
   last_name: Doe
-
+  locale: en
+  user_type: human
 shared_sample_actions_doe:
-  <<: *DEFAULTS
-  email: <%= "shared.sample.actions.doe@localhost" %>
+  id: 8044e233-192b-5391-baf5-a3f887198125
+  email: shared.sample.actions.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: SharedSampleActions
   last_name: Doe
-
+  locale: en
+  user_type: human
 subgroup_sample_actions_doe:
-  <<: *DEFAULTS
-  email: <%= "subgroup.sample.actions.doe@localhost" %>
+  id: ccd2a6b8-2341-5853-ad4c-58d042de1055
+  email: subgroup.sample.actions.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: SubgroupSampleActions
   last_name: Doe
-
+  locale: en
+  user_type: human
 chunked_samples_doe:
-  <<: *DEFAULTS
-  email: <%= "chunked.samples.doe@localhost" %>
+  id: 60266645-1952-5ee4-acdb-f8c61bc989c2
+  email: chunked.samples.doe@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: ChunkedSamples
   last_name: Doe
-
+  locale: en
+  user_type: human
 snvphyl_user:
-  <<: *DEFAULTS
-  email: <%= "snvphyl.user@localhost" %>
+  id: 71dc20a1-b5d5-5767-805d-5db748296c91
+  email: snvphyl.user@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: SNVPhyl
   last_name: User
-
+  locale: en
+  user_type: human
 clone_test_maintainer_one:
-  <<: *DEFAULTS
-  email: <%= "clone.test.maintainer.one@localhost" %>
+  id: 10f2720c-b04e-505d-a7dd-86d951206b56
+  email: clone.test.maintainer.one@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: CloneTestMaintainer
   last_name: One
-
+  locale: en
+  user_type: human
 clone_test_maintainer_two:
-  <<: *DEFAULTS
-  email: <%= "clone.test.maintainer.two@localhost" %>
+  id: 8f5d936c-8486-5c41-8166-46c55494f934
+  email: clone.test.maintainer.two@localhost
+  encrypted_password: <%= User.new.send(:password_digest, "password1") %>
   first_name: CloneTestMaintainer
   last_name: Two
+  locale: en
+  user_type: human

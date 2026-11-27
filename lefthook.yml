@@ -63,3 +63,10 @@ pre-commit:
         - "config/locales/**/*.yaml"
       run: bundle exec i18n-tasks normalize
       stage_fixed: true
+
+    - name: fixturebot_compile
+      glob:
+        - "test/fixtures/*.rb"
+        - "test/fixtures/**/*.rb"
+      run: RAILS_ENV=test bin/rails fixturebot:compile && git add -- 'test/fixtures/*.yml' 'test/fixtures/**/*.yml'
+      stage_fixed: true
