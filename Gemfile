@@ -217,6 +217,9 @@ group :development do
 
   # git hooks
   gem 'lefthook', '~> 2.2', require: false
+
+  # Benchmarking namespace traversal/row-rendering strategies [https://github.com/evanphx/benchmark-ips]
+  gem 'benchmark-ips', require: false
 end
 
 group :test do

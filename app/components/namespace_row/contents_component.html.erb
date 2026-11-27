@@ -32,7 +32,7 @@
     <%= render Viral::PillComponent.new(
       text:
         t(
-          :"members.access_levels.level_#{Member.effective_access_level(@namespace, Current.user)}",
+          :"members.access_levels.level_#{effective_access_level}",
         ),
       color: "transparent",
       border: true,
@@ -56,7 +56,7 @@
           text:
             t(
               :"components.namespace_row.contents_component.subnamespaces.tooltip",
-              count: @namespace.children.count,
+              count: children_count,
               namespace_name: @namespace.human_name,
             ),
           placement: :left,
@@ -68,7 +68,7 @@
           size: :sm,
           class: "mr-0.5 text-amber-700 dark:text-amber-200" %>
 
-            <%= @namespace.children.count %>
+            <%= children_count %>
           </span>
         <% end %>
         <%= render Pathogen::Link.new(href: namespace_path(@namespace), data: top_frame_link_data, 'aria-label': t(:"components.namespace_row.contents_component.projects.aria-label", namespace_type: @namespace.model_name.human.downcase, namespace_puid: @namespace.puid, count: @namespace.project_namespaces.count), class: "group pill-focus-reset") do |component| %>
@@ -76,7 +76,7 @@
           text:
             t(
               :"components.namespace_row.contents_component.projects.tooltip",
-              count: @namespace.project_namespaces.count,
+              count: project_namespaces_count,
               namespace_name: @namespace.human_name,
             ),
           placement: :left,
@@ -88,7 +88,7 @@
           size: :sm,
           class: "mr-0.5 text-fuchsia-700 dark:text-fuchsia-200" %>
 
-            <%= @namespace.project_namespaces.count %>
+            <%= project_namespaces_count %>
           </span>
         <% end %>
         <%= render Pathogen::Link.new(href: helpers.group_samples_path(@namespace), data: top_frame_link_data, 'aria-label': t(:"components.namespace_row.contents_component.samples.aria-label", namespace_type: @namespace.model_name.human.downcase, namespace_puid: @namespace.puid, count: @namespace.aggregated_samples_count), class: "group pill-focus-reset") do |component| %>
@@ -96,7 +96,7 @@
           text:
             t(
               :"components.namespace_row.contents_component.samples.tooltip",
-              count: @namespace.aggregated_samples_count,
+              count: aggregated_samples_count,
               namespace_name: @namespace.human_name,
             ),
           placement: :left,
@@ -108,7 +108,7 @@
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
 
-            <%= @namespace.aggregated_samples_count %>
+            <%= aggregated_samples_count %>
           </span>
         <% end %>
       <% end %>
@@ -119,7 +119,7 @@
           text:
             t(
               :"components.namespace_row.contents_component.samples.tooltip",
-              count: @namespace.project.samples.size,
+              count: samples_count,
               namespace_name: @namespace.name,
             ),
           placement: :left,
@@ -131,7 +131,7 @@
           size: :sm,
           class: "mr-0.5 text-blue-700 dark:text-blue-200" %>
 
-            <%= @namespace.project.samples.size %>
+            <%= samples_count %>
           </span>
         <% end %>
       <% end %>
