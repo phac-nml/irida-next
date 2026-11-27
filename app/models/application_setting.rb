@@ -4,12 +4,20 @@
 # application initialization.
 class ApplicationSetting < ApplicationRecord
   USER_OPT_IN_FEATURES_JSON_SCHEMA = Rails.root.join('config/schemas/user_opt_in_features.json')
+  WORKFLOW_EXECUTION_FIELDS_JSON_SCHEMA = Rails.root.join('config/schemas/workflow_execution_fields.json')
+
+  # Tag names that IRIDA Next sets on every workflow execution. Admin-defined workflow execution
+  # fields may not reuse these keys, otherwise they would overwrite system tags sent to WES.
+  RESERVED_WORKFLOW_EXECUTION_FIELD_KEYS = %w[createdBy namespaceId samplesCount].freeze
 
   validate :only_one_instance, on: :create
   validates :max_data_export_size_gigabytes,
             numericality: { only_integer: true, greater_than: 0 }
   validates :user_opt_in_features,
             json: { message: ->(errors) { errors }, schema: USER_OPT_IN_FEATURES_JSON_SCHEMA }
+  validates :workflow_execution_fields,
+            json: { message: ->(errors) { errors }, schema: WORKFLOW_EXECUTION_FIELDS_JSON_SCHEMA }
+  validate :workflow_execution_fields_keys_not_reserved
 
   def self.current
     first
@@ -22,7 +30,8 @@ class ApplicationSetting < ApplicationRecord
       cleanup_inactive_access_tokens_after_days: 30,
       require_personal_access_token_expiry: false,
       max_personal_access_token_lifetime_in_days: 365,
-      max_data_export_size_gigabytes: 30
+      max_data_export_size_gigabytes: 30,
+      workflow_execution_fields: {}
     }
   end
 
@@ -114,5 +123,16 @@ class ApplicationSetting < ApplicationRecord
     return unless ApplicationSetting.count >= 1
 
     errors.add(:base, 'Only one instance of ApplicationSetting is allowed')
+  end
+
+  def workflow_execution_fields_keys_not_reserved
+    return unless workflow_execution_fields.is_a?(Hash)
+
+    reserved = workflow_execution_fields.keys.map(&:to_s) & RESERVED_WORKFLOW_EXECUTION_FIELD_KEYS
+    return if reserved.empty?
+
+    reserved.each do |key|
+      errors.add(:workflow_execution_fields, "key '#{key}' is reserved and cannot be used")
+    end
   end
 end
