@@ -6,7 +6,11 @@ class Namespace < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include HasPuid
   include Routable
   include TrackActivity
+  # RouteBased is included before Linear so that Linear's methods take
+  # precedence; Linear falls back to RouteBased via `super` when
+  # `traversal_ids` is blank.
   include Namespaces::Traversal::RouteBased
+  include Namespaces::Traversal::Linear
 
   has_logidze
   acts_as_paranoid
