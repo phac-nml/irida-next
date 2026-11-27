@@ -6,13 +6,20 @@ namespace_group_link1:
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
   namespace_type: "Project"
 
+# namespace_group_link2, namespace_group_link3, namespace_group_link5 and namespace_group_link14
+# are explicitly assigned ids below (rather than relying on ActiveRecord::FixtureSet's generated
+# uuid) so that their relative order is deterministic when sorted on a column they share tied
+# values on (e.g. group_access_level, expires_at), per
+# Projects::GroupLinksTest#test_should_apply_default_sort_and_support_sorting_project_group_links.
 namespace_group_link2:
+  id: <%= '00000000-0000-0000-0000-000000000002' %>
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_three, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:subgroup1, :uuid) %>
   group_access_level: <%= Member::AccessLevel::ANALYST %>
   namespace_type: "Group"
 
 namespace_group_link3:
+  id: <%= '00000000-0000-0000-0000-000000000003' %>
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_five, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:project25_namespace, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
@@ -25,6 +32,7 @@ namespace_group_link4:
   namespace_type: "Group"
 
 namespace_group_link5:
+  id: <%= '00000000-0000-0000-0000-000000000005' %>
   group_id: <%= ActiveRecord::FixtureSet.identify(:david_doe_group_four, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   group_access_level: <%= Member::AccessLevel::GUEST %>
@@ -79,6 +87,7 @@ namespace_group_link13:
   namespace_type: "Group"
 
 namespace_group_link14:
+  id: <%= '00000000-0000-0000-0000-000000000014' %>
   group_id: <%= ActiveRecord::FixtureSet.identify(:group_eleven, :uuid) %>
   namespace_id: <%= ActiveRecord::FixtureSet.identify(:group_one, :uuid) %>
   group_access_level: <%= Member::AccessLevel::MAINTAINER %>
