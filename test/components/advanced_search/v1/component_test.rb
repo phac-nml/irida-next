@@ -28,6 +28,38 @@ module AdvancedSearch
 
         assert_equal 'combobox-datepicker--v1--input', datepicker['data-controller']
       end
+
+      test 'uses standard enum operators for metadata enum fields when metadata operators are disabled' do
+        Flipper.disable(:advanced_search_metadata_operators)
+
+        search = Sample::Query.new(
+          groups: [
+            Sample::SearchGroup.new(
+              conditions: [Sample::SearchCondition.new(field: 'metadata.country', operator: 'in', value: %w[Canada])]
+            )
+          ]
+        )
+        fields = AdvancedSearch::Fields.build(
+          options: [%w[Country metadata.country]],
+          groups: {},
+          enum_fields: {
+            'metadata.country' => { values: %w[Canada Mexico] }
+          }
+        )
+
+        html = ApplicationController.render(
+          AdvancedSearch::V1::Component.new(form: build_form(search), search:, fields:),
+          layout: false
+        )
+        fragment = Nokogiri::HTML::DocumentFragment.parse(html)
+        metadata_fieldset = fragment.at_css('fieldset[data-advanced-search-selected-field="metadata.country"]')
+        operator_values = metadata_fieldset.css('select[name*="[operator]"] option').map { |o| o['value'] } # rubocop:disable Rails/Pluck
+
+        assert_not_empty operator_values
+        assert_includes operator_values, 'in'
+        assert_includes operator_values, 'not_in'
+        assert_not_includes operator_values, 'text_equals'
+      end
     end
   end
 end
