@@ -10,35 +10,35 @@ const ARIA = {
 
 const TEMPLATES = `
   <template data-${P}-target="sampleCloneTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
   </tr></template>
   <template data-${P}-target="workflowTableRow"><tr>
     <td><span data-${P}-target="workflowName"></span></td>
     <td><span data-${P}-target="workflowId"></span></td>
   </tr></template>
   <template data-${P}-target="importSampleTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
     <td><span data-${P}-target="projectId"></span></td>
   </tr></template>
   <template data-${P}-target="groupSampleTransferTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="transferredFrom"></span><span></span></td>
-    <td><span data-${P}-target="transferredTo"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="transferredFrom"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="transferredTo"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
   </tr></template>
   <template data-${P}-target="destroySampleTableRow"><tr>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="projectName"></span><span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="projectName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
   </tr></template>
   <template data-${P}-target="groupSampleCloneTableRow"><tr>
-    <td><span data-${P}-target="projectId"></span><span></span></td>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
-    <td><span data-${P}-target="projectId"></span><span></span></td>
-    <td><span data-${P}-target="sampleName"></span><span></span></td>
+    <td><span data-${P}-target="projectId"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="projectId"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
+    <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></td>
   </tr></template>
   <template data-${P}-target="listRow"><li>
     <span data-${P}-target="itemName"></span>
-    <p><span></span><span></span></p>
+    <div><span></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Copy to clipboard value: __PUID__"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Copy to clipboard value: __PUID__</span></span></div>
   </li></template>`;
 
 describe("activities ExtendedDetailsController", () => {
@@ -53,6 +53,7 @@ describe("activities ExtendedDetailsController", () => {
     data = [],
     mode = "table",
     withData = true,
+    templates = TEMPLATES,
   } = {}) {
     const dataTarget = withData
       ? `<pre data-${P}-target="extendedDetailsData"></pre>`
@@ -71,7 +72,7 @@ describe("activities ExtendedDetailsController", () => {
         <div data-${P}-target="ariaLabels"></div>
         ${dataTarget}
         ${container}
-        ${TEMPLATES}
+        ${templates}
       </div>`;
 
     const element = document.querySelector(`[data-controller='${P}']`);
@@ -109,9 +110,24 @@ describe("activities ExtendedDetailsController", () => {
   }
 
   function cellText(tbody) {
-    return Array.from(tbody.querySelectorAll("td")).map((td) =>
-      Array.from(td.querySelectorAll("span")).map((span) => span.textContent),
-    );
+    const labelSelector = [
+      `[data-${P}-target='sampleName']`,
+      `[data-${P}-target='projectName']`,
+      `[data-${P}-target='projectId']`,
+      `[data-${P}-target='transferredFrom']`,
+      `[data-${P}-target='transferredTo']`,
+      `[data-${P}-target='workflowName']`,
+      `[data-${P}-target='workflowId']`,
+    ].join(", ");
+
+    return Array.from(tbody.querySelectorAll("td")).map((td) => {
+      const label = td.querySelector(labelSelector)?.textContent;
+      const copyable = td.querySelector(
+        '[data-pathogen--copyable-value-target="text"]',
+      )?.textContent;
+
+      return [label, copyable].filter((value) => value?.length);
+    });
   }
 
   it("does nothing without an extended-details data target", async () => {
@@ -248,7 +264,111 @@ describe("activities ExtendedDetailsController", () => {
     expect(
       item.querySelector(`[data-${P}-target='itemName']`).textContent,
     ).toBe("S1");
-    expect(item.querySelector("p > span:nth-child(2)").textContent).toBe("P1");
+    expect(
+      item.querySelector('[data-pathogen--copyable-value-target="text"]')
+        .textContent,
+    ).toBe("P1");
+  });
+
+  it("skips copyable updates when the copyable text target is missing", async () => {
+    const templates = `
+      <template data-${P}-target="sampleCloneTableRow"><tr>
+        <td><span data-${P}-target="sampleName"></span></td>
+        <td><span data-${P}-target="sampleName"></span></td>
+      </tr></template>
+      <template data-${P}-target="pagination"><span class="pager">pager</span></template>
+      <template data-${P}-target="workflowTableRow"></template>
+      <template data-${P}-target="importSampleTableRow"></template>
+      <template data-${P}-target="groupSampleTransferTableRow"></template>
+      <template data-${P}-target="destroySampleTableRow"></template>
+      <template data-${P}-target="groupSampleCloneTableRow"></template>
+      <template data-${P}-target="listRow"></template>`;
+
+    const { tbody } = await mount({
+      data: [{ sample_name: "S1", sample_puid: "P1", clone_puid: "C1" }],
+      templates,
+    });
+
+    expect(tbody.rows.length).toBe(1);
+  });
+
+  it("updates text when copyable container is missing", async () => {
+    const templates = `
+      <template data-${P}-target="sampleCloneTableRow"><tr>
+        <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
+        <td><span data-${P}-target="sampleName"></span><span data-pathogen--copyable-value-target="text"></span></td>
+      </tr></template>
+      <template data-${P}-target="pagination"><span class="pager">pager</span></template>
+      <template data-${P}-target="workflowTableRow"></template>
+      <template data-${P}-target="importSampleTableRow"></template>
+      <template data-${P}-target="groupSampleTransferTableRow"></template>
+      <template data-${P}-target="destroySampleTableRow"></template>
+      <template data-${P}-target="groupSampleCloneTableRow"></template>
+      <template data-${P}-target="listRow"></template>`;
+
+    const { tbody } = await mount({
+      data: [{ sample_name: "S1", sample_puid: "P1", clone_puid: "C1" }],
+      templates,
+    });
+
+    expect(
+      tbody.querySelector('[data-pathogen--copyable-value-target="text"]')
+        .textContent,
+    ).toBe("P1");
+  });
+
+  it("updates copy tooltip content when placeholder is present", async () => {
+    const { tbody } = await mount({
+      data: [{ sample_name: "S1", sample_puid: "P1", clone_puid: "C1" }],
+    });
+
+    const copyableContainer = tbody.querySelector(
+      '[data-controller~="pathogen--copyable-value"]',
+    );
+    expect(
+      copyableContainer.getAttribute(
+        "data-pathogen--copyable-value-copy-tooltip-message-value",
+      ),
+    ).toContain("P1");
+    expect(
+      copyableContainer.querySelector(
+        "[data-pathogen-copyable-value-tooltip-text]",
+      ).textContent,
+    ).toContain("P1");
+  });
+
+  it("keeps copy tooltip content when placeholder is absent", async () => {
+    const templates = `
+      <template data-${P}-target="sampleCloneTableRow"><tr>
+        <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Static tooltip"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Static tooltip</span></span></td>
+        <td><span data-${P}-target="sampleName"></span><span data-controller="pathogen--copyable-value" data-pathogen--copyable-value-copy-tooltip-message-value="Static tooltip"><span data-pathogen--copyable-value-target="text"></span><span data-pathogen-copyable-value-tooltip-text="true">Static tooltip</span></span></td>
+      </tr></template>
+      <template data-${P}-target="pagination"><span class="pager">pager</span></template>
+      <template data-${P}-target="workflowTableRow"></template>
+      <template data-${P}-target="importSampleTableRow"></template>
+      <template data-${P}-target="groupSampleTransferTableRow"></template>
+      <template data-${P}-target="destroySampleTableRow"></template>
+      <template data-${P}-target="groupSampleCloneTableRow"></template>
+      <template data-${P}-target="listRow"></template>`;
+
+    const { tbody } = await mount({
+      data: [{ sample_name: "S1", sample_puid: "P1", clone_puid: "C1" }],
+      templates,
+    });
+
+    const copyableContainer = tbody.querySelector(
+      '[data-controller~="pathogen--copyable-value"]',
+    );
+    expect(
+      copyableContainer.getAttribute(
+        "data-pathogen--copyable-value-copy-tooltip-message-value",
+      ),
+    ).toBe("Static tooltip");
+    expect(
+      copyableContainer.querySelector(
+        "[data-pathogen-copyable-value-tooltip-text]",
+      ).textContent,
+    ).toBe("Static tooltip");
   });
 
   it("paginates through pages and toggles button states", async () => {

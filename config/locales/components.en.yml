@@ -397,8 +397,6 @@ en:
       screen_reader_context: 'Dashboard for project: %{project_name}'
       view_more_activity: View more activity
       view_more_samples: View more samples
-    puid:
-      title: 'Copy to clipboard value: %{puid}'
     ransack:
       sort_dropdown_component:
         prefix: Sort by

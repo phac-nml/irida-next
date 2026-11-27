@@ -88,10 +88,10 @@
                       value: project.id,
                       label: project.name,
                     ) do %>
-                      <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
+                      <div class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
                         <%= project.name %>
-                        <%= render PuidComponent.new(puid: project.puid, show_clipboard: false) %>
-                      </span>
+                        <%= render Pathogen::CopyableValue.new(value: project.puid) %>
+                      </div>
 
                       <span class="pointer-events-none block text-slate-600 dark:text-white">
                         <%= project.full_path %>

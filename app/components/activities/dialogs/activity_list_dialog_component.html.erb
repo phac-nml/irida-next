@@ -47,10 +47,10 @@
 
     <template id="listRow" data-activities--extended-details-target="listRow">
       <li class="pt-3 pb-3 sm:pt-4 sm:pb-4">
-        <p class="inline-flex truncate text-sm text-slate-500 dark:text-slate-400">
+        <div class="flex items-center truncate text-sm text-slate-500 dark:text-slate-400">
           <span class="mr-2" data-activities--extended-details-target="itemName"></span>
-          <%= render PuidComponent.new(puid: "", show_clipboard: false) %>
-        </p>
+          <%= render Pathogen::CopyableValue.new(value: "__PUID__") %>
+        </div>
       </li>
     </template>
 

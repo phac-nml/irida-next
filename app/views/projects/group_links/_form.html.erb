@@ -40,10 +40,10 @@ if Flipper.enabled?(:v2_select2, Current.user)
                       value: group.id,
                       label: group.name,
                     ) do %>
-            <span class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
+            <div class="pointer-events-none block font-semibold text-slate-900 dark:text-slate-400">
               <%= group.name %>
-              <%= render PuidComponent.new(puid: group.puid, show_clipboard: false) %>
-            </span>
+              <%= render Pathogen::CopyableValue.new(value: group.puid) %>
+            </div>
 
             <span class="pointer-events-none block text-slate-600 dark:text-white"><%= group.full_path %></span>
           <% end %>

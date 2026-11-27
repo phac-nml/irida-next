@@ -40,7 +40,7 @@ class DropdownComponentPreview < ViewComponent::Preview
   def with_custom_button_styles
     render(DropdownComponent.new(
              label: 'Custom Button',
-             styles: { button: 'bg-emerald-800 text-white px-4 py-2 flex gap-2 rounded-full cursor-pointer' },
+             styles: { button: 'bg-slate-200! text-slate-900! px-4 py-2 flex gap-2 rounded-full cursor-pointer' },
              caret: true
            )) do |dropdown|
       dropdown.with_item(label: 'Item 1', url: '#')

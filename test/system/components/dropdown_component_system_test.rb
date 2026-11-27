@@ -62,8 +62,8 @@ class DropdownComponentSystemTest < ApplicationSystemTestCase
     visit('/rails/view_components/dropdown_component/with_custom_button_styles')
     within('.Viral-Preview > [data-controller-connected="true"]') do
       button = find('button')
-      assert button[:class].include?('bg-emerald-800'), 'Expected custom button style to be applied'
-      assert button[:class].include?('text-white'), 'Expected custom button style to be applied'
+      assert button[:class].include?('bg-slate-200!'), 'Expected custom button style to be applied'
+      assert button[:class].include?('text-slate-900!'), 'Expected custom button style to be applied'
       assert_text 'Custom Button'
       click_on 'Custom Button'
       assert_text 'Item 1'

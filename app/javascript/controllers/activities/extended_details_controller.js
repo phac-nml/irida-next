@@ -32,6 +32,8 @@ export default class extends Controller {
   #currentDataIndexes = [];
   #data = [];
   #paginationAriaLabels = {};
+  #copyablePuidPlaceholder = "__PUID__";
+  #copyableTextSelector = '[data-pathogen--copyable-value-target="text"]';
 
   connect() {
     if (this.hasExtendedDetailsDataTarget) {
@@ -180,6 +182,38 @@ export default class extends Controller {
     }
   }
 
+  #updateCopyableValue(container, puid) {
+    const copyableText = container.querySelector(this.#copyableTextSelector);
+    if (!copyableText) return;
+
+    copyableText.textContent = puid;
+
+    const copyableContainer = copyableText.closest(
+      '[data-controller~="pathogen--copyable-value"]',
+    );
+    if (!copyableContainer) return;
+
+    const tooltipMessage = copyableContainer.getAttribute(
+      "data-pathogen--copyable-value-copy-tooltip-message-value",
+    );
+    if (tooltipMessage?.includes(this.#copyablePuidPlaceholder)) {
+      copyableContainer.setAttribute(
+        "data-pathogen--copyable-value-copy-tooltip-message-value",
+        tooltipMessage.replace(this.#copyablePuidPlaceholder, puid),
+      );
+    }
+
+    const tooltipText = copyableContainer.querySelector(
+      "[data-pathogen-copyable-value-tooltip-text]",
+    );
+    if (tooltipText?.textContent?.includes(this.#copyablePuidPlaceholder)) {
+      tooltipText.textContent = tooltipText.textContent.replace(
+        this.#copyablePuidPlaceholder,
+        puid,
+      );
+    }
+  }
+
   // Generate table rows in format <td>SAMPLE_NAME <SAMPLE_PUID></td><td>SAMPLE_NAME <CLONE_PUID></td>
   #generateTableRows(table_data) {
     /* v8 ignore next -- feature detection: <template>.content is always supported in target browsers and jsdom */
@@ -188,7 +222,6 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
         "span[data-activities--extended-details-target='sampleName']";
-      const puidSelector = "span:nth-child(2)";
 
       table_data.forEach((data) => {
         const clone = template.content.cloneNode(true);
@@ -197,7 +230,7 @@ export default class extends Controller {
         const updateTextContent = (tdIndex, sampleName, puid) => {
           const td = tds[tdIndex];
           td.querySelector(sampleNameSelector).textContent = sampleName;
-          td.querySelector(puidSelector).textContent = puid;
+          this.#updateCopyableValue(td, puid);
         };
 
         updateTextContent(0, data["sample_name"], data["sample_puid"]);
@@ -224,8 +257,7 @@ export default class extends Controller {
         li.querySelector(
           "span[data-activities--extended-details-target='itemName']",
         ).textContent = data["sample_name"];
-        li.querySelector("p > span:nth-child(2)").textContent =
-          data["sample_puid"];
+        this.#updateCopyableValue(li, data["sample_puid"]);
 
         fragment.appendChild(clone);
       });
@@ -270,7 +302,6 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
         "span[data-activities--extended-details-target='sampleName']";
-      const puidSelector = "span:nth-child(2)";
       const projectNameSelector =
         "span[data-activities--extended-details-target='projectName']";
 
@@ -285,7 +316,7 @@ export default class extends Controller {
           } else {
             td.querySelector(projectNameSelector).textContent = name;
           }
-          td.querySelector(puidSelector).textContent = puid;
+          this.#updateCopyableValue(td, puid);
         };
         updateTextContent(0, data["sample_name"], data["sample_puid"]);
         updateTextContent(1, data["project_name"], data["project_puid"]);
@@ -304,7 +335,6 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
         "span[data-activities--extended-details-target='sampleName']";
-      const puidSelector = "span:nth-child(2)";
       const projectIdSelector =
         "span[data-activities--extended-details-target='projectId']";
 
@@ -316,7 +346,7 @@ export default class extends Controller {
           const td = tds[tdIndex];
           if (tdIndex === 0) {
             td.querySelector(sampleNameSelector).textContent = sampleName;
-            td.querySelector(puidSelector).textContent = puid;
+            this.#updateCopyableValue(td, puid);
           } else {
             td.querySelector(projectIdSelector).textContent =
               data["project_puid"];
@@ -340,7 +370,6 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
         "span[data-activities--extended-details-target='sampleName']";
-      const puidSelector = "span:nth-child(2)";
       const transferredFromSelector =
         "span[data-activities--extended-details-target='transferredFrom']";
       const transferredToSelector =
@@ -354,13 +383,13 @@ export default class extends Controller {
           const td = tds[tdIndex];
           if (tdIndex === 0) {
             td.querySelector(sampleNameSelector).textContent = data;
-            td.querySelector(puidSelector).textContent = puid;
+            this.#updateCopyableValue(td, puid);
           } else if (tdIndex === 1) {
             td.querySelector(transferredFromSelector).textContent = data;
-            td.querySelector(puidSelector).textContent = puid;
+            this.#updateCopyableValue(td, puid);
           } else {
             td.querySelector(transferredToSelector).textContent = data;
-            td.querySelector(puidSelector).textContent = puid;
+            this.#updateCopyableValue(td, puid);
           }
         };
 
@@ -390,7 +419,6 @@ export default class extends Controller {
       const fragment = document.createDocumentFragment();
       const sampleNameSelector =
         "span[data-activities--extended-details-target='sampleName']";
-      const puidSelector = "span:nth-child(2)";
       const projectIdSelector =
         "span[data-activities--extended-details-target='projectId']";
 
@@ -402,10 +430,10 @@ export default class extends Controller {
           const td = tds[tdIndex];
           if (tdIndex === 0 || tdIndex === 2) {
             td.querySelector(projectIdSelector).textContent = objectName;
-            td.querySelector(puidSelector).textContent = objectPuid;
+            this.#updateCopyableValue(td, objectPuid);
           } else {
             td.querySelector(sampleNameSelector).textContent = objectName;
-            td.querySelector(puidSelector).textContent = objectPuid;
+            this.#updateCopyableValue(td, objectPuid);
           }
         };
         updateTextContent(

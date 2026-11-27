@@ -277,8 +277,8 @@ module Groups
           assert_select 'template' do
             sample_ids.first(20).each do |sample_id|
               sample = Sample.find(sample_id)
-              assert_select 'p', text: /#{Regexp.escape(sample.name)}/
-              assert_select 'p', text: /#{Regexp.escape(sample.puid)}/
+              assert_select 'div', text: /#{Regexp.escape(sample.name)}/
+              assert_select '[data-pathogen--copyable-value-target="text"]', text: /#{Regexp.escape(sample.puid)}/
             end
           end
         end

@@ -39,8 +39,8 @@ module Activities
                           text: I18n.t(:'components.activity.dialog.sample_destroy.description.project',
                                        user: @user.email, count: 1)
           assert_selector 'li', count: 1
-          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
-          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: 'Project 1 Sample 1'
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: 'INXT_SAM_AAAAAAAAAA'
         end
       end
 
@@ -70,8 +70,8 @@ module Activities
                                        target_project_puid: 'INXT_PRJ_AAAAAAAAAB')
 
           assert_selector 'li', count: 1
-          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
-          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: 'Project 1 Sample 1'
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: 'INXT_SAM_AAAAAAAAAA'
         end
       end
 
@@ -97,8 +97,8 @@ module Activities
                                        source_project_puid: 'INXT_PRJ_AAAAAAAAAA')
 
           assert_selector 'li', count: 1
-          assert_selector 'li > p > span:nth-child(1)', text: 'Project 1 Sample 1'
-          assert_selector 'li > p > span:nth-child(2)', text: 'INXT_SAM_AAAAAAAAAA'
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: 'Project 1 Sample 1'
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: 'INXT_SAM_AAAAAAAAAA'
         end
       end
 
@@ -126,8 +126,8 @@ module Activities
                                        user: 'System', count: 1)
 
           assert_selector 'li', count: 1
-          assert_selector 'li > p > span:nth-child(1)', text: 'sample name'
-          assert_selector 'li > p > span:nth-child(2)', text: 'sample puid'
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: 'sample name'
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: 'sample puid'
         end
       end
 
@@ -159,10 +159,10 @@ module Activities
                                        user: @user.email, count: 2)
 
           assert_selector 'li', count: 2
-          assert_selector 'li > p > span:nth-child(1)', text: sample34.name
-          assert_selector 'li > p > span:nth-child(2)', text: sample34.puid
-          assert_selector 'li > p > span:nth-child(1)', text: sample35.name
-          assert_selector 'li > p > span:nth-child(2)', text: sample35.puid
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: sample34.name
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: sample34.puid
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: sample35.name
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: sample35.puid
         end
       end
 
@@ -199,8 +199,8 @@ module Activities
                                        user: @user.email, count: 1)
 
           assert_selector 'li', count: 1
-          assert_selector 'li > p > span:nth-child(1)', text: sample33.name
-          assert_selector 'li > p > span:nth-child(2)', text: sample33.puid
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: sample33.name
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: sample33.puid
         end
 
         # verify project 31 activity
@@ -222,10 +222,10 @@ module Activities
                                        user: @user.email, count: 2)
 
           assert_selector 'li', count: 2
-          assert_selector 'li > p > span:nth-child(1)', text: sample34.name
-          assert_selector 'li > p > span:nth-child(2)', text: sample34.puid
-          assert_selector 'li > p > span:nth-child(1)', text: sample35.name
-          assert_selector 'li > p > span:nth-child(2)', text: sample35.puid
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: sample34.name
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: sample34.puid
+          assert_selector 'li [data-activities--extended-details-target="itemName"]', text: sample35.name
+          assert_selector 'li [data-pathogen--copyable-value-target="text"]', text: sample35.puid
         end
       end
     end
